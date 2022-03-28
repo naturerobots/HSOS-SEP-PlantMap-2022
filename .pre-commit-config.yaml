@@ -1,0 +1,129 @@
+# To use:
+#
+#     pre-commit run -a
+#
+# Or:
+#
+#     pre-commit install  # (runs every time you commit in git)
+#
+# To update this file:
+#
+#     pre-commit autoupdate
+#
+# See https://github.com/pre-commit/pre-commit
+
+repos:
+  # Standard hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+      - id: check-merge-conflict
+      - id: check-shebang-scripts-are-executable
+      - id: check-symlinks
+      - id: check-vcs-permalinks
+      - id: check-xml
+      - id: check-yaml
+      - id: check-json
+      - id: debug-statements
+      - id: end-of-file-fixer
+        exclude: &excludes |
+          (?x)^(
+              .*\.blend|
+              .*\.dae|
+              .*\.mtl|
+              .*\.obj|
+              .*\.pgm|
+              .*\.step|
+              .*\.stl
+          )$
+      - id: fix-byte-order-marker
+      - id: mixed-line-ending
+        exclude: *excludes
+      - id: trailing-whitespace
+        exclude: *excludes
+      - id: detect-private-key
+
+  - repo: https://github.com/psf/black
+    rev: 22.1.0
+    hooks:
+      - id: black
+
+  - repo: https://github.com/detailyang/pre-commit-shell
+    rev: 1.0.5
+    hooks:
+    - id: shell-lint
+      args: [--external-sources]
+
+  - repo: https://github.com/markdownlint/markdownlint
+    rev: v0.11.0
+    hooks:
+    - id: markdownlint
+
+  - repo: https://github.com/pryorda/dockerfilelint-precommit-hooks
+    rev: v0.1.0
+    hooks:
+    - id: dockerfilelint
+
+  - repo: local
+    hooks:
+      - id: clang-format
+        name: clang-format
+        description: Format files with ClangFormat.
+        entry: clang-format-10
+        language: system
+        files: \.(c|cc|cxx|cpp|frag|glsl|h|hpp|hxx|ih|ispc|ipp|java|js|m|proto|vert)$
+        args: [ "-fallback-style=none", "-i" ]
+      # - id: catkin_lint
+      #   name: catkin_lint
+      #   description: Check package.xml and cmake files
+      #   entry: catkin_lint .
+      #   language: system
+      #   always_run: true
+      #   pass_filenames: false
+      #   args: [ "--strict" ]
+
+  - repo: https://github.com/ecugol/pre-commit-hooks-django
+    rev: v0.4.0  # Use the ref you want to point at
+    hooks:
+    -   id: check-untracked-migrations
+        # Optional, if specified, hook will work only on these branches
+        # otherwise it will work on all branches
+        # args: ["--branches", "main", "other_branch"]
+    # -   id: check-unapplied-migrations
+    # -   id: check-absent-migrations
+    -   id: po-location-format
+        # Mandatory, select one of the following options:
+        # file: show only the file path as location
+        # never: remove all locations
+        args: ["--add-location", "file"]
+
+  -   repo: https://github.com/asottile/seed-isort-config
+      rev: v2.2.0
+      hooks:
+      -   id: seed-isort-config
+  -   repo: https://github.com/pre-commit/mirrors-isort
+      rev: v5.10.1
+      hooks:
+      -   id: isort
+
+  -   repo: https://github.com/pre-commit/mirrors-prettier
+      rev: 'v2.6.1'  # Use the sha / tag you want to point at
+      hooks:
+      -   id: prettier
+  -   repo: https://github.com/pre-commit/mirrors-eslint
+      rev: 'v8.12.0'  # Use the sha / tag you want to point at
+      hooks:
+      - id: eslint
+        files: \.([jt]sx?|vue)$  # *.js, *.jsx, *.ts, *.tsx and *.vue
+        types: [file]
+        additional_dependencies:
+        -   eslint@7.31.0
+        -   typescript@4.3.5
+        -   "@typescript-eslint/eslint-plugin@4.28.5"
+        -   "@typescript-eslint/parser@4.28.5"
+        -   eslint-plugin-vue@7.14.0
+        -   vue-eslint-parser@7.9.0
+        -   eslint-config-prettier@8.3.0
