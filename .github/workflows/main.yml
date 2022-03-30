@@ -68,7 +68,7 @@ jobs:
     # run in docker container on ubuntu
     runs-on: ubuntu-20.04
     container:
-      image: ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME:main
+      image: ghcr.io/${{ github.repository_owner }}/hsos-sep-plant-map-2022:main
       options: --user docker --workdir /home/docker
 
     # Steps represent a sequence of tasks that will be executed as part of the job
