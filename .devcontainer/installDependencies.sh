@@ -28,7 +28,7 @@ apt-get update -qq && apt-get install -y -qq --no-install-recommends \
     python3-pip \
     ruby shellcheck \
     clang-format-10 \
-    python3-catkin-lint
+    python3-catkin-lint \
 pip3 install --upgrade pip
 pip3 install pre-commit
 
@@ -89,7 +89,7 @@ pip3 install --upgrade protobuf
 echo '####################################################'
 echo '#misc'
 echo '####################################################'
-# apt-get update && apt install 
+# apt-get update && apt install
 # TOD Vue, Django
 
 # remove apt lists so that they are not saved in the image layers

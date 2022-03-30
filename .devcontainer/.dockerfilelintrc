@@ -1,2 +1,2 @@
 rules:
-  sudo_usage: on
+  sudo_usage: off
