@@ -85,7 +85,5 @@ jobs:
       #pre-commit checks
       - name: run pre-commit tests
         run: |
-          source /opt/ros/noetic/setup.bash
-          source $GITHUB_WORKSPACE/devel/setup.bash
-          cd $GITHUB_WORKSPACE/src/seerep; pre-commit run -a
+          pre-commit run -a
         shell: bash
