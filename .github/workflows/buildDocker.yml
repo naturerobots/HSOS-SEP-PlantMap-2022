@@ -5,6 +5,9 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  IMAGE_NAME: hsos-sep-plant-map-2022
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # builds the docker image if the corresponding files changed
@@ -20,7 +23,7 @@ jobs:
           fetch-depth: 2
 
       - name: Build image
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+        run: docker build .devcontainer --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
 
       - name: Log in to registry
         # This is where you will update the PAT to GITHUB_TOKEN

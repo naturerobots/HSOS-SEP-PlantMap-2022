@@ -2,17 +2,17 @@ name: CI
 
 # Controls when the action will run.
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
+  # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 env:
-  IMAGE_NAME: software_engineering_project_plantmap
+  IMAGE_NAME: hsos-sep-plant-map-2022
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -37,7 +37,7 @@ jobs:
             .devcontainer/installDependencies.sh
       - name: Build image
         if: steps.changed-files-specific.outputs.any_changed == 'true'
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+        run: docker build .devcontainer --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
 
       - name: Log in to registry
         if: steps.changed-files-specific.outputs.any_changed == 'true'
@@ -56,7 +56,7 @@ jobs:
           # Strip "v" prefix from tag name
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
           # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
+          [ "$VERSION" == "main" ] && VERSION=latest
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
@@ -68,7 +68,7 @@ jobs:
     # run in docker container on ubuntu
     runs-on: ubuntu-20.04
     container:
-      image: TODO_IMAGE_NAME
+      image: ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME:main
       options: --user docker --workdir /home/docker
 
     # Steps represent a sequence of tasks that will be executed as part of the job

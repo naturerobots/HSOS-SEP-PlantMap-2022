@@ -1,5 +1,5 @@
 {
-  "image": "naturerobots/software-engineering-project:latest",
+  "image": "ghcr.io/naturerobots/hsos-sep-plant-map-2022:main",
   "name": "software-engineering-project",
   "extensions": [
     "ms-vscode.cpptools",
@@ -20,8 +20,7 @@
   ],
   "containerUser": "docker",
   "mounts": [
-    "source=vscode-extensions,target=/home/docker/.vscode-server,type=volume",
-    "source=${localWorkspaceFolder}/../seerep-data,target=/home/docker/workspace/seerep-data,type=bind,consistency=cached"
+    "source=vscode-extensions,target=/home/docker/.vscode-server,type=volume"
   ],
   "workspaceMount": "source=${localWorkspaceFolder},target=/home/docker/workspace/src,type=bind,consistency=cached",
   "workspaceFolder": "/home/docker/workspace",
