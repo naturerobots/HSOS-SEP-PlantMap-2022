@@ -2,7 +2,7 @@
 
 ## Quick Start
 
-### VS Code devcontainer
+### VS Code Devcontainer
 
 1. Clone this repo and open it in VS Code.
 2. Install the extensions `ms-vscode-remote.remote-containers` and `ms-azuretools.vscode-docker`.
@@ -17,7 +17,28 @@
 
 5. default user: `docker` with password: `docker`
 
-## pre-commit formatting checks
+### Login to GitHub Container Registry
+
+Login to the GitHub Container Docker Registry with `docker login ghrc.io`
+
+If you have 2-factor auth active create a access token, see [https://github.com/settings/tokens](https://github.com/settings/tokens)
+
+And use your token and the `ghcr.io` container registry as follows:
+
+```bash
+docker login ghcr.io -u USERNAME --password YOUR_TOKEN
+```
+
+or
+
+```bash
+export CR_PAT=YOUR_TOKEN
+echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
+```
+
+Try to pull the docker image manually: `docker pull ghcr.io/naturerobots/hsos-sep-plant-map-2022:latest`
+
+## Pre-Commit Formatting Checks
 
 This repo has a [pre-commit](https://pre-commit.com/) check that runs in CI. You can use this locally and set it up to
 run automatically before you commit something. In the devcontainer it is already pre-installed. To install, use pip:
