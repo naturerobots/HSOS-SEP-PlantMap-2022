@@ -21,9 +21,9 @@
 
 Login to the GitHub Container Docker Registry with `docker login ghrc.io`
 
-If you have 2-factor auth active create a access token, see [https://github.com/settings/tokens](https://github.com/settings/tokens)
+If you have enabled 2-factor authentication, create an access token, see [https://github.com/settings/tokens](https://github.com/settings/tokens)
 
-And use your token and the `ghcr.io` container registry as follows:
+Use your generated token and the `ghcr.io` container registry as follows:
 
 ```bash
 docker login ghcr.io -u USERNAME --password YOUR_TOKEN
