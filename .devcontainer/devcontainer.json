@@ -1,6 +1,6 @@
 {
   "image": "ghcr.io/naturerobots/hsos-sep-plant-map-2022:main",
-  "name": "software-engineering-project",
+  "name": "hsos-sep-plant-map-2022",
   "extensions": [
     "ms-vscode.cpptools",
     "betwo.b2-catkin-tools",
@@ -16,7 +16,8 @@
     "GitHub.vscode-pull-request-github",
     "eamodio.gitlens",
     "batisteo.vscode-django",
-    "jcbuisson.vue"
+    "jcbuisson.vue",
+    "davidanson.vscode-markdownlint"
   ],
   "containerUser": "docker",
   "mounts": [
