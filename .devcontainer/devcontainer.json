@@ -1,5 +1,5 @@
 {
-  "image": "ghcr.io/naturerobots/hsos-sep-plant-map-2022:main",
+  "image": "ghcr.io/lucaslootalot/hsos-sep-plant-map-2022:main",
   "name": "hsos-sep-plant-map-2022",
   "extensions": [
     "ms-vscode.cpptools",
