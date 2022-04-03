@@ -39,6 +39,13 @@ echo '####################################################'
 bash <(curl -s https://apt.kitware.com/kitware-archive.sh)
 apt-get update -q && apt-get install -qy cmake
 
+echo '####################################################'
+echo '#install django'
+echo '####################################################'
+pip3 install django
+pip3 install django-rest-framework
+pip3 install django-cors-headers
+
 # echo '####################################################'
 # echo '#install flatbuffer'
 # echo '####################################################'
