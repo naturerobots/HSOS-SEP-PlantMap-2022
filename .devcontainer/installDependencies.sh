@@ -42,9 +42,9 @@ apt-get update -q && apt-get install -qy cmake
 echo '####################################################'
 echo '#install django'
 echo '####################################################'
-pip3 install django
+pip3 install django==4.0
 pip3 install djangorestframework
-pip3 install djangocorsheaders
+pip3 install django-cors-headers
 
 # echo '####################################################'
 # echo '#install flatbuffer'
