@@ -43,8 +43,8 @@ echo '####################################################'
 echo '#install django'
 echo '####################################################'
 pip3 install django
-pip3 install django-rest-framework
-pip3 install django-cors-headers
+pip3 install djangorestframework
+pip3 install djangocorsheaders
 
 # echo '####################################################'
 # echo '#install flatbuffer'
