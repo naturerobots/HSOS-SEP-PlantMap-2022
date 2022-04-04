@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package seerep;
+
+import "project_info.proto";
+import "geodetic_position.proto";
+import "geometry_info.proto";
+
+message ProjectDetails
+{
+  // general project infos
+  ProjectInfo info = 1;
+
+  // geodetic georeference for this project
+  GeodeticPosition geolocation = 2;
+
+  // info about geometries that are part of the project
+  repeated GeometryInfo geometries = 3;
+}

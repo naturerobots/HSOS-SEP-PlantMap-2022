@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package seerep;
+
+message ProjectInfo
+{
+  // human readable name of the project
+  string name = 1;
+
+  // the project's uuid
+  string uuid = 2;
+}

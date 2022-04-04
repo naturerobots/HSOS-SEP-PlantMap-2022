@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package seerep;
+
+import "google/protobuf/timestamp.proto";
+
+message GeometryInfo
+{
+  // human readable name of the geometry
+  string name = 1;
+
+  // uuid of the geometry (differs from the project's uuid)
+  string uuid = 2;
+
+  // type of the geometry. e.g. "pointcloud", "mesh", or "image"
+  string type = 3;
+
+  // tf-frame of the geometry
+  string frame_id = 4;
+
+  // timestamp of the data
+  google.protobuf.Timestamp stamp = 5;
+}

@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package seerep;
+
+import "point_cloud_2.proto";
+import "query.proto";
+import "geometry_query.proto";
+
+/**
+ * service to query 3D pointclouds
+ */
+service PointCloudService
+{
+  // query a pointcloud from SEEREP
+  rpc GetPointCloud2(Query) returns (stream PointCloud2);
+
+  // get a pointcloud by its uuid
+  rpc GetPointCloud2ByUUID(GeometryQuery) returns (stream PointCloud2);
+}

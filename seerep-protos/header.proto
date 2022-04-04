@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package seerep;
+
+import "google/protobuf/timestamp.proto";
+
+/**
+ * Standard metadata for higher-level stamped data types.
+ * This is generally used to communicate timestamped data
+ * in a particular coordinate frame.
+ */
+message Header
+{
+  // sequence id, consecutively increasing id
+  uint32 seq = 1;
+
+  // time this data is associated with
+  google.protobuf.Timestamp stamp = 2;
+
+  // name of the coordinate frame this data is associated with
+  string frame_id = 3;
+
+  // uuid of the project the msgs should be stored in
+  string uuid_project = 4;
+
+  //(optional) uuid of this msgs
+  string uuid_msgs = 5;
+}
