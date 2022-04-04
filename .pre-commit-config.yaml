@@ -91,7 +91,7 @@ repos:
       - id: check-untracked-migrations
         # Optional, if specified, hook will work only on these branches
         # otherwise it will work on all branches
-        # args: ["--branches", "main", "other_branch"]
+        args: ["--branches", "main"]
       # -   id: check-unapplied-migrations
       # -   id: check-absent-migrations
       - id: po-location-format
