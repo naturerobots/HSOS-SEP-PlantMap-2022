@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package seerep;
+
+message GeodeticPosition
+{
+  // reference coordinate system (e.g. "EPSG::4326")
+  string coordinate_system = 1;
+
+  // reference ellipsoid (e.g. "EPSG::7030")
+  string ellipsoid = 2;
+
+  double latitude = 3;
+  double longitude = 4;
+  double altitude = 5;
+}

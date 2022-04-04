@@ -58,3 +58,14 @@ To run pre-commit automatically before committing in the local repo, install the
 ```bash
 pre-commit install
 ```
+
+## SEEREP instance
+
+In order to provide you spatial, temporal and semantical information about gardens, we host a public SEEREP instance.
+This instance is available under `https://seerep.naturerobots.de` and can be queried using a gRPC interface in
+combination with Protobuf messages. All required protofiles (with inline documentation) are located in the the folder
+[seerep-protos](seerep-protos).
+
+If you like to get an overview of the API before using it in your code, we recomment the free tool [Kreya](https://kreya.app/).
+Just add a Kreya project, import the protos from the seerep-protos directory and add the endpoint `https://seerep.naturerobots.de`
+in the project settings and you are ready to try the API.

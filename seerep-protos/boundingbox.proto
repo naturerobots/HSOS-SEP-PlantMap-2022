@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package seerep;
+
+import "header.proto";
+import "point.proto";
+
+message Boundingbox
+{
+  Header header = 1;
+
+  // corner with min coordinates of the bounding box
+  Point point_min = 2;
+
+  // corner with max coordinates of the bounding box
+  Point point_max = 3;
+}

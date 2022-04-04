@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package seerep;
+
+import "google/protobuf/empty.proto";
+
+import "project_infos.proto";
+import "project_details.proto";
+import "project_query.proto";
+
+/**
+ * service to query metadata of projects
+ */
+service MetaOperations
+{
+  // get a list of all projects contained in the SEEREP instance
+  rpc GetProjects(google.protobuf.Empty) returns (ProjectInfos);
+
+  // get details for a project including info about all geometries it contains
+  rpc GetProjectDetails(ProjectQuery) returns (ProjectDetails);
+}

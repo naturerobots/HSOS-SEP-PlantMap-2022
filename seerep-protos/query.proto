@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package seerep;
+
+import "time_interval.proto";
+import "boundingbox.proto";
+
+message Query
+{
+  // geometry is in bounding box
+  Boundingbox boundingbox = 1;
+
+  // ... AND the geometries timestamp is within interval
+  TimeInterval timeinterval = 2;
+
+  // ... AND geometry contains labels
+  repeated string label = 3;
+
+  // ... AND geometry is part of project
+  string projectuuid = 4;
+}
