@@ -2,29 +2,21 @@
   "image": "ghcr.io/naturerobots/hsos-sep-plant-map-2022:main",
   "name": "hsos-sep-plant-map-2022",
   "extensions": [
-    "ms-vscode.cpptools",
-    "betwo.b2-catkin-tools",
     "compulim.compulim-vscode-closetag",
-    "twxs.cmake",
-    "ms-vscode.cmake-tools",
     "ms-azuretools.vscode-docker",
     "mhutchie.git-graph",
-    "ms-iot.vscode-ros",
     "zxh404.vscode-proto3",
     "gaborv.flatbuffers",
     "vscode-icons-team.vscode-icons",
     "GitHub.vscode-pull-request-github",
     "eamodio.gitlens",
     "batisteo.vscode-django",
-    "jcbuisson.vue",
+    "octref.vetur",
     "davidanson.vscode-markdownlint"
   ],
   "containerUser": "docker",
-  "mounts": [
-    "source=vscode-extensions,target=/home/docker/.vscode-server,type=volume"
-  ],
   "workspaceMount": "source=${localWorkspaceFolder},target=/home/docker/workspace/src,type=bind,consistency=cached",
-  "workspaceFolder": "/home/docker/workspace",
+  "workspaceFolder": "/home/docker/workspace/src",
   "runArgs": ["--network=host"],
-  "postStartCommand": "git -C ./src pull || git clone git@github.com:agri-gaia/seerep.git ./src; ./src/.devcontainer/postCreateCommand.sh"
+  "postStartCommand": ".devcontainer/postCreateCommand.sh"
 }
