@@ -4,6 +4,7 @@
 cp -r /home/docker/workspace/src/.devcontainer/.vscode/* /home/docker/workspace/src/.vscode/
 
 #install pre-commit in the git repo
+mkdir -p build/gRPC
 cd /home/docker/workspace/src || exit 1
 pre-commit install --install-hooks
 

@@ -1,5 +1,5 @@
 {
-  "image": "ghcr.io/naturerobots/hsos-sep-plant-map-2022:main",
+  "image": "ghcr.io/naturerobots/hsos-sep-plant-map-2022:dev",
   "name": "hsos-sep-plant-map-2022",
   "extensions": [
     "compulim.compulim-vscode-closetag",
