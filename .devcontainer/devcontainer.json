@@ -11,7 +11,8 @@
     "GitHub.vscode-pull-request-github",
     "eamodio.gitlens",
     "batisteo.vscode-django",
-    "octref.vetur",
+    "johnsoncodehk.volar",
+    "johnsoncodehk.vscode-typescript-vue-plugin",
     "davidanson.vscode-markdownlint"
   ],
   "containerUser": "docker",
