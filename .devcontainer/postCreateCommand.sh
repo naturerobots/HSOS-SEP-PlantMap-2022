@@ -14,3 +14,6 @@ python3 -m grpc_tools.protoc \
         --python_out=build/gRPC  \
         --grpc_python_out=build/gRPC \
         protobuf-msgs/*
+
+cd frontend || exit 1
+npm install
