@@ -69,3 +69,7 @@ combination with Protobuf messages. All required protofiles (with inline documen
 If you like to get an overview of the API before using it in your code, we recomment the free tool [Kreya](https://kreya.app/).
 Just add a Kreya project, import the protos from the seerep-protos directory and add the endpoint `https://seerep.naturerobots.de`
 in the project settings and you are ready to try the API.
+
+## Quality management
+
+- [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
