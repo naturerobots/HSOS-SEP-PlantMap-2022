@@ -2,11 +2,15 @@ name: CI
 
 # Controls when the action will run.
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
+  # Triggers the workflow on push or pull request events but only for the main or dev branch
   push:
-    branches: [main]
+    branches: 
+    - main
+    - dev
   pull_request:
-    branches: [main]
+    branches:
+    - main
+    - dev
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -56,7 +60,7 @@ jobs:
           # Strip "v" prefix from tag name
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
           # Use Docker `latest` tag convention
-          [ "$VERSION" == "main" ] && VERSION=latest
+          # [ "$VERSION" == "main" ] && VERSION=latest
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
@@ -68,7 +72,7 @@ jobs:
     # run in docker container on ubuntu
     runs-on: ubuntu-20.04
     container:
-      image: ghcr.io/${{ github.repository_owner }}/hsos-sep-plant-map-2022:main
+      image: ghcr.io/${{ github.repository_owner }}/hsos-sep-plant-map-2022:${{ github.ref_name }}
       options: --user docker --workdir /home/docker
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -77,10 +81,10 @@ jobs:
       - uses: actions/checkout@v2
 
       #build workspace
-      # - name: Build the ros workspace
-      #   run: |
-      #     TODO
-      #   shell: bash
+      - name: Build the proto files
+        run: |
+          python3 -m grpc_tools.protoc -I=protobuf-msgs --python_out=build/gRPC --grpc_python_out=build/gRPC protobuf-msgs/*
+        shell: bash
 
       #pre-commit checks
       - name: run pre-commit tests
