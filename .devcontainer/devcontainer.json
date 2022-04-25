@@ -11,6 +11,7 @@
     "GitHub.vscode-pull-request-github",
     "eamodio.gitlens",
     "batisteo.vscode-django",
+    "octref.vetur",
     "davidanson.vscode-markdownlint"
   ],
   "containerUser": "docker",
