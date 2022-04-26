@@ -67,14 +67,9 @@ npm i --save @fortawesome/free-solid-svg-icons
 npm i --save @fortawesome/vue-fontawesome@prerelease
 
 echo '####################################################'
-echo '#install sass'
-echo '####################################################'
-npm i sass
-
-echo '####################################################'
 echo '#install tailwindcss'
 echo '####################################################'
-npm i tailwindcss
+npm i tailwindcss postcss autoprefixer
 
 echo '####################################################'
 echo '#install daisyui'
