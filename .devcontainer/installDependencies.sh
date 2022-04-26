@@ -50,36 +50,36 @@ npm install -g create-vue
 echo '####################################################'
 echo '#install axios'
 echo '####################################################'
-npm install --prefix ./frontend --save axios
-npm install --prefix ./frontend --save vue-axios
+npm install --save axios
+npm install --save vue-axios
 
 echo '####################################################'
 echo '#install leaflet'
 echo '####################################################'
-npm i --prefix ./frontend leaflet
-npm i --prefix ./frontend @types/leaflet
+npm i leaflet
+npm i @types/leaflet
 
 echo '####################################################'
 echo '#install fortawesome'
 echo '####################################################'
-npm i --prefix ./frontend --save @fortawesome/fontawesome-svg-core
-npm i --prefix ./frontend --save @fortawesome/free-solid-svg-icons
-npm i --prefix ./frontend --save @fortawesome/vue-fontawesome@prerelease
+npm i --save @fortawesome/fontawesome-svg-core
+npm i --save @fortawesome/free-solid-svg-icons
+npm i --save @fortawesome/vue-fontawesome@prerelease
 
 echo '####################################################'
 echo '#install sass'
 echo '####################################################'
-npm i --prefix ./frontend sass
+npm i sass
 
 echo '####################################################'
 echo '#install tailwindcss'
 echo '####################################################'
-npm i --prefix ./frontend -D tailwindcss
+npm i tailwindcss
 
 echo '####################################################'
 echo '#install daisyui'
 echo '####################################################'
-npm i --prefix ./frontend daisyui
+npm i daisyui
 
 # remove apt lists so that they are not saved in the image layers
 rm -rf /var/lib/apt/lists/*
