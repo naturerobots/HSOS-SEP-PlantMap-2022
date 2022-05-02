@@ -21,3 +21,15 @@
   position: relative;
   font-weight: normal;
 }
+
+.sidebar {
+  @apply h-screen block shadow-lg relative;
+}
+
+.sidebar-content {
+  @apply flex flex-row h-full;
+}
+
+.sidebar-nav {
+  @apply w-20 h-screen justify-between flex flex-col;
+}
