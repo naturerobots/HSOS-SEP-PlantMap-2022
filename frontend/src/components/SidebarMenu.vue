@@ -1,5 +1,3 @@
-<script setup lang="ts"></script>
-
 <template>
   <div class="sidebar">
     <div class="sidebar-content">
@@ -15,8 +13,12 @@
           <div class="mt-10">
             <ul>
               <!-- ToDo: Edit icons & links -->
-              <li class="my-12 text-center">1</li>
-              <li class="my-12 text-center">2</li>
+              <li class="my-12 text-center">
+                <router-link to="/dashboard"> 1 </router-link>
+              </li>
+              <li class="my-12 text-center">
+                <router-link to="/crops"> 2 </router-link>
+              </li>
             </ul>
           </div>
         </div>
@@ -24,3 +26,5 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts"></script>
