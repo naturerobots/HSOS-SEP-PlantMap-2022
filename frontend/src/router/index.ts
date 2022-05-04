@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
-import DashboardView from "../views/DashboardView.vue";
-import CropsView from "../views/CropsView.vue";
-import Crops3dView from "../views/Crops3dView.vue";
+import DashboardView from "@/views/DashboardView.vue";
+import CropsView from "@/views/CropsView.vue";
+import Crops3dView from "@/views/Crops3dView.vue";
+import LoginView from "@/views/LoginView.vue";
+import Sidebar from "@/components/SidebarMenu.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,17 +15,31 @@ const router = createRouter({
     {
       path: "/dashboard",
       name: "dashboard",
-      component: DashboardView,
+      components: {
+        default: DashboardView,
+        sidebar: Sidebar,
+      },
     },
     {
       path: "/crops",
       name: "crops",
-      component: CropsView,
+      components: {
+        default: CropsView,
+        sidebar: Sidebar,
+      },
     },
     {
       path: "/3d",
       name: "3d",
-      component: Crops3dView,
+      components: {
+        default: Crops3dView,
+        sidebar: Sidebar,
+      },
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: LoginView,
     },
   ],
 });
