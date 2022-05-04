@@ -1,6 +1,13 @@
 module.exports = {
   content: ["./src/**/*.{vue,js,ts}"],
   plugins: [require("daisyui")],
+  theme: {
+    extend: {
+      colors: {
+        light: "#F8FAF9" /* not the best solution for colors */,
+      },
+    },
+  },
   daisyui: {
     themes: [
       {
