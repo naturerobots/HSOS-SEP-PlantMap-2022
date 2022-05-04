@@ -3,7 +3,7 @@ import type { Weather } from "@/types/weather";
 import { getWeatherInformation } from "@/services/openWeatherApi";
 
 export const weatherStore = defineStore({
-  id: "weather",
+  id: "weatherStore",
   state: () => ({
     weather: {} as Weather,
   }),
@@ -12,10 +12,18 @@ export const weatherStore = defineStore({
   },
   actions: {
     async loadDataFromApi() {
-      //this.weather = localStorage.getItem("weather");
-      //console.log(this.weather);
+      const weatherData = localStorage.getItem("weather");
 
-      this.weather = await getWeatherInformation(1, 1); //.then(value => this.weather = value);
+      //The data is loaded from the local memory if it exists there.
+      //The data should have a timestamp so that the data can be updated after a certain time.
+      //For now, it is sufficient if the data is in the local memory and the API is not always called.
+      //To refresh the data, the local memory must be deleted.
+      if (weatherData) {
+        this.weather = JSON.parse(weatherData);
+      } else {
+        this.weather = await getWeatherInformation(1, 1);
+        localStorage.setItem("weather", JSON.stringify(this.weather));
+      }
     },
   },
 });
