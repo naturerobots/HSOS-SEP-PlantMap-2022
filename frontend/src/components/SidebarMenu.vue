@@ -5,7 +5,7 @@
         <div class="mt-10 mb-10">
           <router-link :to="'/dashboard'">
             <img
-              src="@/assets/img/logo_small.svg"
+              src="@/assets/img/logo_small_white.svg"
               class="w-10 h-10 mb-3 mx-auto"
             />
             <!-- ToDo: Create Image Component & custom class for this -->
