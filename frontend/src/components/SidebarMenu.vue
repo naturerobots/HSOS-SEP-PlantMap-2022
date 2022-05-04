@@ -3,7 +3,7 @@
     <div class="sidebar-content">
       <nav class="bg-primary sidebar-nav">
         <div class="mt-10 mb-10">
-          <router-link :to="'/home'">
+          <router-link :to="'/dashboard'">
             <img
               src="@/assets/img/logo_small.svg"
               class="w-10 h-10 mb-3 mx-auto"
@@ -18,6 +18,9 @@
               </li>
               <li class="my-12 text-center">
                 <router-link to="/crops"> 2 </router-link>
+              </li>
+              <li class="my-12 text-center">
+                <router-link to="/3d"> 3 </router-link>
               </li>
             </ul>
           </div>
