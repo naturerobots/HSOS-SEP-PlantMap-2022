@@ -1,14 +1,12 @@
 #! /bin/bash
 
 #copy vs code config to root
-cp -r /home/docker/workspace/src/.devcontainer/.vscode/* /home/docker/workspace/src/.vscode/
-
+cp -r /PlantMap/src/.devcontainer/.vscode/ /PlantMap/.vscode/
 #install pre-commit in the git repo
-mkdir -p build/gRPC
-cd /home/docker/workspace/src || exit 1
 pre-commit install --install-hooks
 
 #generate python classes from protobuf messages
+mkdir -p build/gRPC
 python3 -m grpc_tools.protoc \
         -I=protobuf-msgs \
         --python_out=build/gRPC  \

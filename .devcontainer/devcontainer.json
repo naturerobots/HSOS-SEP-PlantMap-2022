@@ -16,8 +16,11 @@
     "davidanson.vscode-markdownlint"
   ],
   "containerUser": "docker",
-  "workspaceMount": "source=${localWorkspaceFolder},target=/home/docker/workspace/src,type=bind,consistency=cached",
-  "workspaceFolder": "/home/docker/workspace/src",
+  "mounts": [
+    "source=PlantMap-vscode-extensions,target=/PlantMap.vscode-server/extensions,type=volume"
+  ],
+  "workspaceMount": "source=${localWorkspaceFolder},target=/PlantMap/src,type=bind,consistency=cached",
+  "workspaceFolder": "/PlantMap/src",
   "runArgs": ["--network=host"],
   "postStartCommand": ".devcontainer/postCreateCommand.sh"
 }
