@@ -3,9 +3,12 @@ export interface Weather {
   forecast: WeatherForecast[];
 }
 
+//Current and Forecast could be combined into one interface
 export interface WeatherCurrent {
+  name: string;
   dt: number;
-  temp: number;
+  tempMin: number;
+  tempMax: number;
   description: string;
   icon: string;
 }
