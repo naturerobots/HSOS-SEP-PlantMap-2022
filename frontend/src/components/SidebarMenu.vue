@@ -14,16 +14,31 @@
             <ul>
               <!-- ToDo: Edit icons & links -->
               <li class="my-12 text-center">
-                <router-link to="/dashboard"> 1 </router-link>
+                <router-link to="/dashboard">
+                  <img
+                    src="@/assets/icons/dashboard.svg"
+                    class="w-6 h-6 mx-auto"
+                  />
+                </router-link>
               </li>
               <li class="my-12 text-center">
-                <router-link to="/crops"> 2 </router-link>
+                <router-link to="/crops">
+                  <img src="@/assets/icons/crops.svg" class="w-6 h-6 mx-auto" />
+                </router-link>
               </li>
               <li class="my-12 text-center">
-                <router-link to="/3d"> 3 </router-link>
+                <router-link to="/3d">
+                  <img src="@/assets/icons/3d.svg" class="w-6 h-6 mx-auto" />
+                </router-link>
               </li>
             </ul>
           </div>
+        </div>
+        <!-- if the navbar has more items later, the profile item can be added to it-->
+        <div class="mb-10">
+          <router-link to="/profile">
+            <img src="@/assets/icons/user.svg" class="w-6 h-6 mx-auto" />
+          </router-link>
         </div>
       </nav>
     </div>
