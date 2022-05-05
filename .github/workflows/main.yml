@@ -24,6 +24,8 @@ jobs:
   build-docker:
     # run on ubuntu
     runs-on: ubuntu-20.04
+    outputs:
+      docker_tag: ${{ steps.image-push.outputs.docker_tag || github.base_ref || github.ref_name }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -34,11 +36,12 @@ jobs:
       # check if Dockerfile or installDependencies have changed
       - name: Get changed files
         id: changed-files-specific
-        uses: tj-actions/changed-files@v8.1
+        uses: tj-actions/changed-files@v19
         with:
           files: |
             .devcontainer/Dockerfile
             .devcontainer/installDependencies.sh
+
       - name: Build image
         if: steps.changed-files-specific.outputs.any_changed == 'true'
         run: docker build .devcontainer --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
@@ -49,22 +52,20 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Push image
+        id: image-push
         if: steps.changed-files-specific.outputs.any_changed == 'true'
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
 
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-          # Use Docker `latest` tag convention
-          # [ "$VERSION" == "main" ] && VERSION=latest
+          # Set Docker tag from branch
+          VERSION=${{ github.head_ref || github.ref_name }}
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
+          echo "::set-output name=docker_tag::$VERSION"
 
   # builds the code
   build:
@@ -72,7 +73,7 @@ jobs:
     # run in docker container on ubuntu
     runs-on: ubuntu-20.04
     container:
-      image: ghcr.io/${{ github.repository_owner }}/hsos-sep-plant-map-2022:${{ github.base_ref || github.ref_name }}
+      image: ghcr.io/${{ github.repository_owner }}/hsos-sep-plant-map-2022:${{ needs.build-docker.outputs.docker_tag }}
       options: --user docker --workdir /home/docker
 
     # Steps represent a sequence of tasks that will be executed as part of the job
