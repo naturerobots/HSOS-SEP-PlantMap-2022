@@ -46,35 +46,5 @@ echo '#install create-vue'
 echo '####################################################'
 npm install -g create-vue
 
-
-echo '####################################################'
-echo '#install axios'
-echo '####################################################'
-npm install --save axios
-npm install --save vue-axios
-
-echo '####################################################'
-echo '#install leaflet'
-echo '####################################################'
-npm i leaflet
-npm i @types/leaflet
-
-echo '####################################################'
-echo '#install fortawesome'
-echo '####################################################'
-npm i --save @fortawesome/fontawesome-svg-core
-npm i --save @fortawesome/free-solid-svg-icons
-npm i --save @fortawesome/vue-fontawesome@prerelease
-
-echo '####################################################'
-echo '#install tailwindcss'
-echo '####################################################'
-npm i tailwindcss postcss autoprefixer
-
-echo '####################################################'
-echo '#install daisyui'
-echo '####################################################'
-npm i daisyui
-
 # remove apt lists so that they are not saved in the image layers
 rm -rf /var/lib/apt/lists/*
