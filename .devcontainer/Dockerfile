@@ -52,13 +52,6 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - \
 ####################################################
 # Install frontend dependencies
 ####################################################
-RUN npm install create-vue
-RUN npm install --save axios vue-axios
-RUN npm install leaflet @types/leaflet
-RUN npm install --save @fortawesome/fontawesome-svg-core \
-        --save @fortawesome/free-solid-svg-icons \
-        --save @fortawesome/free-solid-svg-icons
-RUN npm install tailwindcss postcss autoprefixer
-RUN npm install daisyui
+RUN npm install -g create-vue
 
 ENTRYPOINT [ "/bin/sh", "-c", "while sleep 1000; do :; done" ]
