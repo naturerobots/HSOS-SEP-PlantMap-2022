@@ -61,6 +61,8 @@ jobs:
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           # Set Docker tag from branch
           VERSION=${{ github.head_ref || github.ref_name }}
+          # Replace slashes
+          VERSION=$(echo $VERSION | tr '/' '-')
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
