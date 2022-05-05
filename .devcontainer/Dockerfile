@@ -6,7 +6,7 @@ RUN useradd -u 1000 --create-home --shell /bin/bash docker && echo "docker:docke
 RUN mkdir -p /home/docker/.vscode-server/extensions \
     && chown -R docker /home/docker/.vscode-server \
     && mkdir -p /PlantMap \
-    && chown -R docker PlantMap
+    && chown -R docker /PlantMap
 
 WORKDIR /PlantMap
 
