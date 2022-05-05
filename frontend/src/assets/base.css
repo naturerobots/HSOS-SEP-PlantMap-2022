@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
 /* TAILWINDCSS */
 @tailwind base;
 @tailwind components;
@@ -20,4 +22,9 @@
   margin: 0;
   position: relative;
   font-weight: normal;
+  font-family: Poppins, sans-serif;
+}
+
+.weather-forecasts {
+  @apply mt-2 text-primary-focus text-sm;
 }
