@@ -40,7 +40,6 @@ jobs:
         with:
           files: |
             .devcontainer/Dockerfile
-            .devcontainer/installDependencies.sh
 
       - name: Build image
         if: steps.changed-files-specific.outputs.any_changed == 'true'
@@ -93,7 +92,7 @@ jobs:
       - name: Build the frontend
         run: |
           cd frontend
-          npm install
+          npm ci
           npm run build
         shell: bash
 
