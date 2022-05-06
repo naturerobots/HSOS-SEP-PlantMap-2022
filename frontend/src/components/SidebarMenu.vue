@@ -13,22 +13,31 @@
           <div class="mt-10">
             <ul>
               <!-- ToDo: Edit icons & links -->
-              <li class="my-12 text-center">
+              <li class="my-8 text-center text-sm text-white">
                 <router-link to="/dashboard">
                   <img
                     src="@/assets/icons/dashboard.svg"
-                    class="w-6 h-6 mx-auto"
+                    class="w-6 h-6 mx-auto mb-1"
                   />
+                  <p>Dashboard</p>
                 </router-link>
               </li>
-              <li class="my-12 text-center">
+              <li class="my-8 text-center text-sm text-white">
                 <router-link to="/crops">
-                  <img src="@/assets/icons/crops.svg" class="w-6 h-6 mx-auto" />
+                  <img
+                    src="@/assets/icons/crops.svg"
+                    class="w-6 h-6 mx-auto mb-1"
+                  />
+                  <p>Crops</p>                  
                 </router-link>
               </li>
-              <li class="my-12 text-center">
+              <li class="my-8 text-center text-sm text-white">
                 <router-link to="/3d">
-                  <img src="@/assets/icons/3d.svg" class="w-6 h-6 mx-auto" />
+                  <img
+                    src="@/assets/icons/3d.svg"
+                    class="w-6 h-6 mx-auto mb-1"
+                  />
+                  <p>3D</p>                  
                 </router-link>
               </li>
             </ul>
