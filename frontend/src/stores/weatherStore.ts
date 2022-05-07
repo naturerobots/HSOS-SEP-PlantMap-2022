@@ -21,7 +21,7 @@ export const weatherStore = defineStore({
       if (weatherData) {
         this.weather = JSON.parse(weatherData);
       } else {
-        this.weather = await getWeatherInformation(1, 1);
+        this.weather = await getWeatherInformation(52.2799, 8.0471788);
         localStorage.setItem("weather", JSON.stringify(this.weather));
       }
     },

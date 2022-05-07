@@ -1,6 +1,8 @@
 import axios from "axios";
 import type { Weather, WeatherCurrent, WeatherForecast } from "@/types/weather";
 
+//TODO: Checking if the request was successful
+
 //TODO: Find a solution that the token is not directly implemented
 const appid = "a8b46be95a90a7e303aa7edd4fc1463e";
 const baseURL = "https://api.openweathermap.org/data/2.5";
