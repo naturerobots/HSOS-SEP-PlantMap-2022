@@ -28,7 +28,7 @@
                     src="@/assets/icons/crops.svg"
                     class="w-6 h-6 mx-auto mb-1"
                   />
-                  <p>Crops</p>                  
+                  <p>Crops</p>
                 </router-link>
               </li>
               <li class="my-8 text-center text-sm text-white">
@@ -37,7 +37,7 @@
                     src="@/assets/icons/3d.svg"
                     class="w-6 h-6 mx-auto mb-1"
                   />
-                  <p>3D</p>                  
+                  <p>3D</p>
                 </router-link>
               </li>
             </ul>
