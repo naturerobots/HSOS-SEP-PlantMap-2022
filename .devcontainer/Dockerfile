@@ -1,13 +1,5 @@
 FROM ubuntu:20.04
 
-# add non root user
-RUN useradd -u 1000 --create-home --shell /bin/bash docker && echo "docker:docker" | chpasswd && adduser docker sudo
-
-RUN mkdir -p /home/docker/.vscode-server/extensions \
-    && chown -R docker /home/docker/.vscode-server \
-    && mkdir -p /PlantMap \
-    && chown -R docker /PlantMap
-
 WORKDIR /PlantMap
 
 RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
@@ -53,5 +45,12 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - \
 # Install frontend dependencies
 ####################################################
 RUN npm install -g create-vue
+
+RUN useradd -u 1001 --create-home --shell /bin/bash docker && echo "docker:docker" | chpasswd && adduser docker sudo
+
+RUN mkdir -p /home/docker/.vscode-server/extensions \
+    && chown -R docker /home/docker/.vscode-server \
+    && mkdir -p /PlantMap \
+    && chown -R docker /PlantMap
 
 ENTRYPOINT [ "/bin/sh", "-c", "while sleep 1000; do :; done" ]
