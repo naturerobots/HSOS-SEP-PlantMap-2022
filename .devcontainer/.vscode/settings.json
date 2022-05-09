@@ -1,5 +1,5 @@
 {
   "editor.formatOnSave": true,
   "editor.formatOnType": true,
-  "git-graph.maxDepthOfRepoSearch": 1,
+  "git-graph.maxDepthOfRepoSearch": 1
 }
