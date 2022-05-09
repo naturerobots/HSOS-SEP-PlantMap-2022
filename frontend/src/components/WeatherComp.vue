@@ -19,9 +19,17 @@ TODO: date needs to be formatted and added -> https://coderrocketfuel.com/articl
           />
         </figure>
         <div class="card-body">
-          <h2 class="font-bold text-primary-focus">Montag, 21.05.2022</h2>
+          <h2 class="font-bold text-primary-focus">
+            {{
+              new Date(weather.current.dt * 1000).toLocaleString(
+                "de-DE",
+                dateOptions
+              )
+            }}
+          </h2>
           <p class="mt-2 text-primary-focus text-2xl">
-            {{ weather.current.tempMin }} / {{ weather.current.tempMax }}°C
+            {{ weather.current.tempMin.toFixed(1) }} /
+            {{ weather.current.tempMax.toFixed(1) }}°C
           </p>
           <p class="mt-2 text-primary-focus">
             {{ weather.current.description }}
@@ -53,12 +61,17 @@ TODO: date needs to be formatted and added -> https://coderrocketfuel.com/articl
 //####################################
 //Test for weather / can be cleaned up
 import type { Ref } from "vue";
-
+import type { Weather } from "../types/weather";
 import { storeToRefs } from "pinia";
 import { weatherStore } from "../stores/weatherStore";
-import type { Weather } from "../types/weather";
-
 import WeatherForecast from "@/components/WeatherForecast.vue";
+
+const dateOptions: Intl.DateTimeFormatOptions = {
+  weekday: "long",
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+};
 
 const weather: Ref<Weather> = storeToRefs(weatherStore()).getWeather;
 //####################################
