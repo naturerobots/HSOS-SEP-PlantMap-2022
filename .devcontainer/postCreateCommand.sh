@@ -14,5 +14,5 @@ python3 -m grpc_tools.protoc \
         protobuf-msgs/*
 
 # use npm ci to install all exact verion dependencies from package-lock.json
-cd frontend || exit 1
+cd vue  || exit 1
 npm ci

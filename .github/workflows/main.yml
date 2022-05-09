@@ -88,9 +88,9 @@ jobs:
           python3 -m grpc_tools.protoc -I=protobuf-msgs --python_out=build/gRPC --grpc_python_out=build/gRPC protobuf-msgs/*
         shell: bash
 
-      - name: Build the frontend
+      - name: Build vue
         run: |
-          cd frontend
+          cd vue
           npm ci
           npm run build
         shell: bash
