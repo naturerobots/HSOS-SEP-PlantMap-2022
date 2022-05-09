@@ -47,9 +47,9 @@ the component should be extended to include a message indicating that no weather
         </div>
       </div> -->
       <div class="grid grid-cols-3 mt-5">
-        <weather-forecast :forecast="weather.forecast[0]"></weather-forecast>
         <weather-forecast :forecast="weather.forecast[1]"></weather-forecast>
         <weather-forecast :forecast="weather.forecast[2]"></weather-forecast>
+        <weather-forecast :forecast="weather.forecast[3]"></weather-forecast>
       </div>
     </div>
   </div>
