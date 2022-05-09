@@ -1,8 +1,6 @@
 <!---
 TODO: If no weather information is available because the API is not accessible or the location cannot be found,
 the component should be extended to include a message indicating that no weather data is available.
-
-TODO: date needs to be formatted and added -> https://coderrocketfuel.com/article/convert-a-unix-timestamp-to-a-date-in-vanilla-javascript
 -->
 
 <template>
