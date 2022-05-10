@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package seerep;
+
+import "measurement_data.proto";
+
+message InstanceInfos
+{
+  // human readable name of the instance
+  string name = 1;
+
+  // uuid of the instance (used for queries)
+  string uuid = 2;
+
+  // uuid of the class this instance belongs to
+  string classuuid = 3;
+
+  // attributes attached to this instance
+  map<string, MeasurementData> attributes = 4;
+}

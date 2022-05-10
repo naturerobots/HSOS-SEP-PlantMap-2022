@@ -20,4 +20,7 @@ message GeometryInfo
 
   // timestamp of the data
   google.protobuf.Timestamp stamp = 5;
+
+  // labels contained in the geometry
+  repeated string labels = 6;
 }
