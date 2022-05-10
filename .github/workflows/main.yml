@@ -38,9 +38,7 @@ jobs:
         id: changed-files-specific
         uses: tj-actions/changed-files@v19
         with:
-          files: |
-            .devcontainer/Dockerfile
-            .devcontainer/installDependencies.sh
+          files: .devcontainer/Dockerfile
 
       - name: Build image
         if: steps.changed-files-specific.outputs.any_changed == 'true'
@@ -76,7 +74,7 @@ jobs:
     runs-on: ubuntu-20.04
     container:
       image: ghcr.io/${{ github.repository_owner }}/hsos-sep-plant-map-2022:${{ needs.build-docker.outputs.docker_tag }}
-      options: --user docker --workdir /home/docker
+      options: --user docker --workdir /PlantMap
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -90,10 +88,10 @@ jobs:
           python3 -m grpc_tools.protoc -I=protobuf-msgs --python_out=build/gRPC --grpc_python_out=build/gRPC protobuf-msgs/*
         shell: bash
 
-      - name: Build the frontend
+      - name: Build vue
         run: |
-          cd frontend
-          npm install
+          cd vue
+          npm ci
           npm run build
         shell: bash
 
