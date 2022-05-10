@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  # Update this to the name of the service you want to work with in your docker-compose.yml file
+  PlantMap:
+    build: .
+    image: ghcr.io/naturerobots/hsos-sep-plant-map-2022:dev
+    volumes:
+      - ..:/workspace:cached
+    depends_on:
+      - PostgreSQL
+    network_mode: service:PostgreSQL
+    command: /bin/sh -c "while sleep 1000; do :; done"
+
+  PostgreSQL:
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
+    # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
+volumes:
+  postgres-data:

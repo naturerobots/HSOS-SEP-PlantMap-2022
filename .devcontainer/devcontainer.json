@@ -1,6 +1,8 @@
 {
-  "image": "ghcr.io/naturerobots/hsos-sep-plant-map-2022:dev",
   "name": "hsos-sep-plant-map-2022",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "PlantMap",
+  "workspaceFolder": "/workspace",
   "extensions": [
     "compulim.compulim-vscode-closetag",
     "ms-azuretools.vscode-docker",
@@ -15,12 +17,6 @@
     "vue.vscode-typescript-vue-plugin",
     "davidanson.vscode-markdownlint"
   ],
-  "containerUser": "docker",
-  "mounts": [
-    "source=PlantMap-vscode-extensions,target=/PlantMap.vscode-server/extensions,type=volume"
-  ],
-  "workspaceMount": "source=${localWorkspaceFolder},target=/PlantMap/src,type=bind,consistency=cached",
-  "workspaceFolder": "/PlantMap/src",
-  "runArgs": ["--network=host"],
-  "postStartCommand": ".devcontainer/postCreateCommand.sh"
+  "postStartCommand": ".devcontainer/postCreateCommand.sh",
+  "forwardPorts": [5432]
 }
