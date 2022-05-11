@@ -1,15 +1,13 @@
 version: "3.8"
 services:
-  # Update this to the name of the service you want to work with in your docker-compose.yml file
   PlantMap:
-    build: .
     image: ghcr.io/naturerobots/hsos-sep-plant-map-2022:dev
     volumes:
-      - ..:/workspace:cached
+      - ..:/PlantMap:cached
     depends_on:
       - PostgreSQL
+    # use network of postgreSQL container to be able to forward the port to localhost
     network_mode: service:PostgreSQL
-    command: /bin/sh -c "while sleep 1000; do :; done"
 
   PostgreSQL:
     image: postgres:latest

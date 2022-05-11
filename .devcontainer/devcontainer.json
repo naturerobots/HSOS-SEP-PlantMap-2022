@@ -2,7 +2,8 @@
   "name": "hsos-sep-plant-map-2022",
   "dockerComposeFile": "docker-compose.yml",
   "service": "PlantMap",
-  "workspaceFolder": "/workspace",
+  "remoteUser": "docker",
+  "workspaceFolder": "/PlantMap",
   "extensions": [
     "compulim.compulim-vscode-closetag",
     "ms-azuretools.vscode-docker",

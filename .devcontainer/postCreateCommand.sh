@@ -1,7 +1,5 @@
 #! /bin/bash
 
-#copy vs code config to root
-cp -r /PlantMap/src/.devcontainer/.vscode/ /PlantMap/.vscode/
 #install pre-commit in the git repo
 pre-commit install --install-hooks
 
