@@ -12,6 +12,7 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         gcc \
         python3-pip \
         python3-dev \
+        libpq-dev \
         gpg \
         && rm -rf /var/lib/apt/lists/*
 
@@ -27,7 +28,7 @@ RUN pip3 install pre-commit
 ####################################################
 # Install django
 ####################################################
-RUN pip3 install django==4.0 djangorestframework django-cors-headers
+RUN pip3 install django==4.0 djangorestframework django-cors-headers psycopg2==2.9.3
 
 ####################################################
 # Install python gRPC
