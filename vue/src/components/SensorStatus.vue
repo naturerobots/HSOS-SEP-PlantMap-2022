@@ -1,5 +1,6 @@
 <!---
 TODO: hover effect
+TODO: fix template string for img src -> "@/" doesnt worked in first attempt
 --->
 <template>
   <div>
@@ -12,8 +13,7 @@ TODO: hover effect
         <div class="flex-none w-16">Moisture</div>
         <div class="flex-none w-8 text-right ml-1">{{ moisture }}%</div>
         <div class="flex-none ml-1">
-          {{ icons }}
-          <img src="@/assets/icons/triangle_small_up_green.svg" />
+          <img :src="`src/assets/icons/triangle_small_${icons[0]}.svg`" />
         </div>
       </div>
 
@@ -21,7 +21,7 @@ TODO: hover effect
         <div class="flex-none w-12">Temp</div>
         <div class="flex-none w-12 text-right ml-1">{{ temp }}°C</div>
         <div class="flex-none ml-1">
-          <img class="" src="@/assets/icons/triangle_small_down_red.svg" />
+          <img :src="`src/assets/icons/triangle_small_${icons[1]}.svg`" />
         </div>
       </div>
 
@@ -29,7 +29,7 @@ TODO: hover effect
         <div class="flex-none w-12">EC</div>
         <div class="flex-none w-12 text-right ml-1">{{ ec }}mS</div>
         <div class="flex-none ml-1">
-          <img class="" src="@/assets/icons/triangle_small_down_green.svg" />
+          <img :src="`src/assets/icons/triangle_small_${icons[2]}.svg`" />
         </div>
       </div>
     </div>
