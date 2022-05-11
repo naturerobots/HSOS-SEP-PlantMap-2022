@@ -38,11 +38,16 @@ jobs:
         id: changed-files-specific
         uses: tj-actions/changed-files@v19
         with:
-          files: .devcontainer/Dockerfile
+          files: |
+            .devcontainer/Dockerfile
+            vue/package-lock.json
 
       - name: Build image
         if: steps.changed-files-specific.outputs.any_changed == 'true'
-        run: docker build .devcontainer --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+        run: |
+          cp vue/package.json .devcontainer
+          cp vue/package-lock.json .devcontainer
+          docker build .devcontainer --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
 
       - name: Log in to registry
         if: steps.changed-files-specific.outputs.any_changed == 'true'
@@ -91,7 +96,6 @@ jobs:
       - name: Build vue
         run: |
           cd vue
-          npm ci
           npm run build
         shell: bash
 

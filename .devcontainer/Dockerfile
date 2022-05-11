@@ -28,7 +28,7 @@ RUN pip3 install pre-commit
 ####################################################
 # Install django
 ####################################################
-RUN pip3 install django==4.0 djangorestframework django-cors-headers psycopg2==2.9.3
+RUN pip3 install django djangorestframework django-cors-headers django-oauth-toolkit psycopg2==2.9.3
 
 ####################################################
 # Install python gRPC
@@ -52,6 +52,14 @@ RUN useradd -u 1001 --create-home --shell /bin/bash docker && echo "docker:docke
 RUN mkdir -p /home/docker/.vscode-server/extensions \
     && chown -R docker /home/docker/.vscode-server \
     && mkdir -p /PlantMap \
-    && chown -R docker /PlantMap
+    && chown -R docker /PlantMap \
+    && mkdir -p /node \
+    && chown -R docker /node
 
+USER docker
+COPY package-lock.json /node
+COPY package.json /node
+RUN cd /node && npm ci
+
+USER root
 ENTRYPOINT [ "/bin/sh", "-c", "while sleep 1000; do :; done" ]
