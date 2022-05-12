@@ -1,6 +1,6 @@
 <template>
-  <div class="card w-96 bg-light shadow-xl m-2">
-    <div class="card-body px-2 py-3">
+  <div class="card h-full w-full shadow-sm bg-[#fdfff9]">
+    <div class="card-body p-5">
       <h2 class="text-base text-center text-primary-focus">Soil parameters</h2>
       <div class="grid grid-cols-3 gap-3">
         <sensor-status
