@@ -4,7 +4,10 @@ the component should be extended to include a message indicating that no weather
 -->
 
 <template>
-  <div v-if="weather.forecast" class="card w-96 shadow-xl m-2">
+  <div
+    v-if="weather.forecast"
+    class="card h-full w-full shadow-sm bg-[#fdfff9]"
+  >
     <div class="card-body p-5">
       <h2 class="text-xl text-center text-primary-focus">
         Wetter {{ weather.current.name }}
