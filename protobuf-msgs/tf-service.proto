@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package seerep;
+
+import "transform_stamped.proto";
+import "transform_stamped_query.proto";
+
+import "frame_infos.proto";
+import "frame_query.proto";
+
+/**
+ * service to query the tf-tree of the SEEREP instance
+ */
+service TfService
+{
+  // get all frames from one projects tf-tree
+  rpc GetFrames(FrameQuery) returns (FrameInfos);
+
+  // get the transformation between two frames at a given timestamp
+  rpc GetTransformStamped(TransformStampedQuery) returns (TransformStamped);
+}

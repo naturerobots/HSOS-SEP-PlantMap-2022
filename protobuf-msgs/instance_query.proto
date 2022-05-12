@@ -2,11 +2,11 @@ syntax = "proto3";
 
 package seerep;
 
-message GeometryQuery
+message InstanceQuery
 {
   // uuid of the project to query
   string projectuuid = 1;
 
-  // uuid of the geometry to query
-  string geometryuuid = 2;
+  // uuid of the instance to query
+  string instanceuuid = 2;
 }

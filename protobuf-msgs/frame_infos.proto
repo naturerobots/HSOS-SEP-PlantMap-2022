@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package seerep;
+
+message FrameInfos
+{
+  // frames of the project's tf-tree (see http://wiki.ros.org/tf2)
+  repeated string frames = 1;
+}

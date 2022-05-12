@@ -15,5 +15,5 @@ service PointCloudService
   rpc GetPointCloud2(Query) returns (stream PointCloud2);
 
   // get a pointcloud by its uuid
-  rpc GetPointCloud2ByUUID(GeometryQuery) returns (stream PointCloud2);
+  rpc GetPointCloud2ByUUID(GeometryQuery) returns (PointCloud2);
 }
