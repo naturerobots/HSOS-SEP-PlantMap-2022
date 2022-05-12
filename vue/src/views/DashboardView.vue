@@ -1,20 +1,20 @@
 <template>
-  <!-- <h1>Dashboard</h1> -->
-  <!--Test for weather / can be removed-->
-  <weather-comp></weather-comp>
-
-  <!-- <div class="grid grid-cols-3 gap-4 place-items-stretch h-fit p-3">
+  <div class="px-3 py-5 text-3xl text-primary-focus">
+    <h1>Dashboard</h1>
+  </div>
+  <div class="grid grid-cols-3 gap-4 place-items-stretch h-fit p-3">
     <div>
-      <div class="bg-gray-200 h-96 p-2">Weather</div>
+      <weather-comp></weather-comp>
     </div>
     <div class="col-span-2 row-span-2">
-      <div class="bg-gray-200 h-full p-2">Garden</div>
+      <div class="bg-[#fdfff9] h-full p-2 rounded-xl shadow-sm">Garden</div>
     </div>
     <div>
-      <div class="bg-gray-200 h-48 p-2">Sensor</div>
+      <sensor-comp></sensor-comp>
     </div>
-  </div> -->
+  </div>
 
+  <!-- DEMO LAYOUTS -->
   <!-- <div class="grid grid-cols-3 gap-4 place-items-stretch h-fit p-3">
     <div>
       <div class="bg-gray-200 h-96 p-2">Weather</div>
@@ -56,6 +56,7 @@ import { onMounted } from "vue";
 import { weatherStore } from "../stores/weatherStore";
 
 import WeatherComp from "@/components/WeatherComp.vue";
+import SensorComp from "@/components/SensorComp.vue";
 
 onMounted(() => {
   weatherStore().loadDataFromApi();
