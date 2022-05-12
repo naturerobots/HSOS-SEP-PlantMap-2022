@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package seerep;
+
+import "instance_query.proto";
+import "instance_infos.proto";
+
+import "class_query.proto";
+import "class_infos.proto";
+
+/**
+ * service to query labels (instances and classes)
+ */
+service LabelService
+{
+  // query information of an instance
+  rpc GetInstance(InstanceQuery) returns (InstanceInfos);
+
+  // query information of a class
+  rpc GetClass(ClassQuery) returns (ClassInfos);
+}

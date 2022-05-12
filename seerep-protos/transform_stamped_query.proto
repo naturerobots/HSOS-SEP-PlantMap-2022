@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package seerep;
+
+import "header.proto";
+
+message TransformStampedQuery
+{
+  Header header = 1;
+
+  // tf-frame the data is currently using (which needs to be transformed to header.frame_id)
+  string child_frame_id = 2;
+}

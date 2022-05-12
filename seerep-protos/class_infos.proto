@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package seerep;
+
+import "measurement_data.proto";
+
+message ClassInfos
+{
+  // human readable name of the class
+  string name = 1;
+
+  // uuid of the class (used for queries)
+  string uuid = 2;
+
+  // attributes attqched to this class
+  map<string, MeasurementData> attributes = 4;
+}

@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package seerep;
+
+import "vector3.proto";
+import "quaternion.proto";
+
+message Transform
+{
+  Vector3 translation = 1;
+  Quaternion rotation = 2;
+}

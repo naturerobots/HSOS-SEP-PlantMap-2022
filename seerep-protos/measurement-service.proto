@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package seerep;
+
+import "geometry_query.proto";
+import "measurement.proto";
+import "query.proto";
+
+/**
+ * service to query measurements
+ */
+service MeasurementService
+{
+  // query a measurement from SEEREP
+  rpc GetMeasurement(Query) returns (stream Measurement);
+
+  // get a measurement by its uuid
+  rpc GetMeasurementByUUID(GeometryQuery) returns (Measurement);
+}

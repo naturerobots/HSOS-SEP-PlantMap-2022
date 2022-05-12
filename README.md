@@ -69,3 +69,109 @@ combination with Protobuf messages. All required protofiles (with inline documen
 If you like to get an overview of the API before using it in your code, we recomment the free tool [Kreya](https://kreya.app/).
 Just add a Kreya project, import the protos from the seerep-protos directory and add the endpoint `https://seerep.naturerobots.de`
 in the project settings and you are ready to try the API.
+
+![](doc/seerep.png)
+
+### Example queries
+
+#### seerep.MetaOperations.GetProjects
+
+```json
+{}
+```
+
+#### seerep.MetaOperations.GetProjectDetails
+
+```json
+{
+  "projectuuid": "e1ef73b1258b475a996d2b72924c27ac"
+}
+```
+
+#### seerep.TfService.GetFrames
+
+```json
+{
+  "projectuuid": "e1ef73b1258b475a996d2b72924c27ac"
+}
+```
+
+#### seerep.TfService.GetTransformStamped
+
+```json
+{
+  "header": {
+    "seq": 42,
+    "stamp": "1970-01-01T00:02:03.000000123Z",
+    "frameId": "map",
+    "uuidProject": "e1ef73b1258b475a996d2b72924c27ac",
+    "uuidMsgs": ""
+  },
+  "childFrameId": "ground"
+}
+```
+
+#### seerep.PointCloudService.GetPointCloud2ByUUID
+
+```json
+{
+  "projectuuid": "e1ef73b1258b475a996d2b72924c27ac",
+  "geometryuuid": "0d927fa6b3534f9580d1db73d483b254"
+}
+```
+
+#### seerep.PointCloudService.GetPointCloud2
+
+```json
+{
+  "timeinterval": {
+    "timeMin": "1626967568000000000",
+    "timeMax": "1626967568000000000"
+  },
+  "label": [
+    "e793d6a3f0af49f49e91d431e1b62b68",
+    "8f460e87b27e4fb385e84f4a7dba677f"
+  ],
+  "projectuuid": "e1ef73b1258b475a996d2b72924c27ac"
+}
+```
+
+#### seerep.MeasurementService.GetMeasurementByUUID
+
+```json
+{
+  "projectuuid": "e1ef73b1258b475a996d2b72924c27ac",
+  "geometryuuid": "25816c5842f14fe98b1ebc85a4908934"
+}
+```
+
+#### seerep.MeasurementService.GetMeasurement
+
+```json
+{
+  "timeinterval": {
+    "timeMin": "1626967568000000000",
+    "timeMax": "1626967568000000000"
+  },
+  "label": ["8f460e87b27e4fb385e84f4a7dba677f"],
+  "projectuuid": "e1ef73b1258b475a996d2b72924c27ac"
+}
+```
+
+#### seerep.LabelService.GetClass
+
+```json
+{
+  "projectuuid": "e1ef73b1258b475a996d2b72924c27ac",
+  "classuuid": "8f460e87b27e4fb385e84f4a7dba677f"
+}
+```
+
+#### seerep.LabelService.GetInstance
+
+```json
+{
+  "projectuuid": "e1ef73b1258b475a996d2b72924c27ac",
+  "instanceuuid": "e793d6a3f0af49f49e91d431e1b62b68"
+}
+```

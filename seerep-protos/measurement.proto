@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package seerep;
+
+import "header.proto";
+import "measurement_data.proto";
+
+message Measurement
+{
+  Header header = 1;
+
+  // attribute map containing measurements
+  map<string, MeasurementData> data = 2;
+
+  // (optional) labels
+  repeated string labels_general = 3;
+}
