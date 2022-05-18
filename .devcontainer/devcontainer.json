@@ -13,7 +13,8 @@
     "batisteo.vscode-django",
     "vue.volar",
     "vue.vscode-typescript-vue-plugin",
-    "davidanson.vscode-markdownlint"
+    "davidanson.vscode-markdownlint",
+    "gruntfuggly.todo-tree"
   ],
   "containerUser": "docker",
   "mounts": [
