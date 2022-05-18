@@ -4,16 +4,12 @@ the component should be extended to include a message indicating that no weather
 -->
 
 <template>
-  <div
-    v-if="weather.forecast"
-    class="card h-full w-full shadow-sm bg-[#fdfff9]"
-  >
+  <div v-if="weather.current" class="card h-full w-full shadow-sm bg-[#fdfff9]">
     <div class="card-body p-5">
       <h2 class="text-xl text-center text-primary-focus">
         Wetter {{ weather.current.name }}
       </h2>
       <div class="card card-side">
-        <!-- <font-awesome-icon icon="fa-solid fa-cloud-hail-mixed" /> -->
         <figure>
           <img
             :src="`http://openweathermap.org/img/wn/${weather.current.icon}@2x.png`"
@@ -21,12 +17,7 @@ the component should be extended to include a message indicating that no weather
         </figure>
         <div class="card-body">
           <h2 class="font-bold text-primary-focus">
-            {{
-              new Date(weather.current.dt * 1000).toLocaleString(
-                "de-DE",
-                dateOptions
-              )
-            }}
+            {{ weather.current.dt.toLocaleString("de-DE", dateOptions) }}
           </h2>
           <p class="mt-2 text-primary-focus text-2xl">
             {{ weather.current.tempMin.toFixed(1) }} /
@@ -37,30 +28,20 @@ the component should be extended to include a message indicating that no weather
           </p>
         </div>
       </div>
-      <!-- <div class="grid grid-cols-5 mt-5">
-        <div class="col-span-2">
-          <figure>
-          <img src="http://openweathermap.org/img/wn/10d@2x.png" />
-        </figure>
-        </div>
-        <div class="col-span-3">
-          <h2 class="font-bold text-primary-focus">Montag, 21.05.2022</h2>
-          <p class="mt-2 text-primary-focus text-2xl">3 / 6°C</p>
-          <p class="mt-2 text-primary-focus">leichter Regen</p>
-        </div>
-      </div> -->
       <div class="grid grid-cols-3 mt-5">
-        <weather-forecast :forecast="weather.forecast[1]"></weather-forecast>
-        <weather-forecast :forecast="weather.forecast[2]"></weather-forecast>
-        <weather-forecast :forecast="weather.forecast[3]"></weather-forecast>
+        <div
+          :key="forecast.dt.getDate"
+          v-for="forecast in weather.forecast.slice(1, 4)"
+        >
+          <!--slice parameters could be added to later settings -->
+          <weather-forecast :forecast="forecast"></weather-forecast>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-//####################################
-//Test for weather / can be cleaned up
 import type { Ref } from "vue";
 import type { Weather } from "../types/weather";
 import { storeToRefs } from "pinia";
@@ -75,5 +56,4 @@ const dateOptions: Intl.DateTimeFormatOptions = {
 };
 
 const weather: Ref<Weather> = storeToRefs(weatherStore()).getWeather;
-//####################################
 </script>

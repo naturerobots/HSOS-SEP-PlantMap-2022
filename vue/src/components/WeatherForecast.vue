@@ -4,7 +4,7 @@ TODO: Create the date in the store or service. Must then also be changed in Weat
 <template>
   <div class="text-center">
     <h2 class="font-bold text-primary-focus">
-      {{ new Date(forecast.dt * 1000).toLocaleString("de-DE", dateOptions) }}
+      {{ forecast.dt.toLocaleString("de-DE", dateOptions) }}
     </h2>
     <figure>
       <img :src="`http://openweathermap.org/img/wn/${forecast.icon}@2x.png`" />
@@ -26,6 +26,18 @@ const dateOptions: Intl.DateTimeFormatOptions = {
   month: "2-digit",
 };
 
+//runtime declaration
+//https://vuejs.org/guide/typescript/composition-api.html#typing-component-props
+//https://frontendsociety.com/using-a-typescript-interfaces-and-types-as-a-prop-type-in-vuejs-508ab3f83480
+//https://github.com/vuejs/vue/pull/6856
+/*defineProps({
+  forecast: {
+    type: Object as PropType<WeatherForecast>,
+    required: true,
+  }
+});*/
+
+//type-based declaration
 defineProps<{
   forecast: WeatherForecast;
 }>();
