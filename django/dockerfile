@@ -1,0 +1,28 @@
+FROM ubuntu:20.04
+
+ENV PYTHONUNBUFFERED 1
+
+# make sure everthing can be build on arm devices
+RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
+        gcc \
+        python3-pip \
+        python3-dev \
+        python3.8-venv \
+        libpq-dev \
+        gpg \
+        && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /django
+COPY . /django/
+
+WORKDIR /django
+EXPOSE 8000
+
+RUN python3 -m venv /py && \
+    /py/bin/pip install --upgrade pip && \
+    /py/bin/pip install -r requirements.txt && \
+    adduser --disabled-password --no-create-home docker
+
+ENV PATH="/py/bin:$PATH"
+
+USER docker
