@@ -11,7 +11,7 @@ export const weatherStore = defineStore({
     getWeather: (state) => state.weather,
   },
   actions: {
-    async loadDataFromApi() {
+    async loadDataFromApi(): Promise<void> {
       const weatherData = localStorage.getItem("weather");
 
       //The data is loaded from the local memory if it exists there.
