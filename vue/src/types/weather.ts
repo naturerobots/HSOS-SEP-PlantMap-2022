@@ -6,7 +6,7 @@ export interface Weather {
 //Current and Forecast could be combined into one interface
 export interface WeatherCurrent {
   name: string;
-  dt: number;
+  dt: Date;
   tempMin: number;
   tempMax: number;
   description: string;
@@ -14,7 +14,7 @@ export interface WeatherCurrent {
 }
 
 export interface WeatherForecast {
-  dt: number;
+  dt: Date;
   tempMin: number;
   tempMax: number;
   description: string;
