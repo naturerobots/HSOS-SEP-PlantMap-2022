@@ -4,11 +4,20 @@ services:
   django-backend:
     build:
       context: ./django
-    container_name: django-backend
     volumes:
       - ./django:/django
+    container_name: django-backend
     ports:
       - 8000:8000
+
+  vue-frontend:
+    build:
+      context: ./vue
+    volumes:
+      - ./vue:/vue
+    container_name: vue-frontend
+    ports:
+      - 80:80
 
   postgreSQL:
     image: postgres:13-bullseye
