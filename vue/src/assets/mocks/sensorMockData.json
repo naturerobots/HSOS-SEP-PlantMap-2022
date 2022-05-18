@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "A",
+    "moisture_value": 100,
+    "moisture_trend": "up_green",
+    "temp_value": 20,
+    "temp_trend": "down_green",
+    "ec_value": 400,
+    "ec_trend": "up_red"
+  },
+  {
+    "id": 2,
+    "name": "B",
+    "moisture_value": 15,
+    "moisture_trend": "down_red",
+    "temp_value": 5,
+    "temp_trend": "up_green",
+    "ec_value": 99,
+    "ec_trend": "down_green"
+  },
+  {
+    "id": 3,
+    "name": "C",
+    "moisture_value": 34,
+    "moisture_trend": "up_red",
+    "temp_value": -3,
+    "temp_trend": "down_red",
+    "ec_value": 3,
+    "ec_trend": "up_green"
+  },
+  {
+    "id": 4,
+    "name": "D",
+    "moisture_value": 5,
+    "moisture_trend": "down_green",
+    "temp_value": 100,
+    "temp_trend": "up_red",
+    "ec_value": 122,
+    "ec_trend": "down_red"
+  }
+]
