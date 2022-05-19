@@ -1,5 +1,5 @@
 <!---
-TODO: hover effect
+TODO: add hover effect to sensor
 FIXME: fix template string for img src -> "@/" doesnt worked in first attempt
 --->
 <template>
