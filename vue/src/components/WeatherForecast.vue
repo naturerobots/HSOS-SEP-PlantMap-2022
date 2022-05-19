@@ -1,9 +1,7 @@
-<!---
-TODO: Create the date in the store or service. Must then also be changed in WeatherComp.
--->
 <template>
   <div class="text-center">
     <h2 class="font-bold text-primary-focus">
+      <!--TODO: Maybe move language and date options to settings?-->
       {{ forecast.dt.toLocaleString("de-DE", dateOptions) }}
     </h2>
     <figure>

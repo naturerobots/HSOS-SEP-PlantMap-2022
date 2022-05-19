@@ -14,14 +14,15 @@ export async function getWeatherInformation(lat: number, lon: number) {
     forecast: [] as WeatherForecast[],
   };
 
-  //TODO: Checking if the request was successful
+  //TODO: Checking if the requests were successful
+  //      -> What to do if the request failed?
+
   //API call for the current weather data
   let response = await axios.get(baseURL + "/weather", {
     params: { lat, lon, lang, units, appid },
   });
   weather.current = createWeatherCurrentObj(response.data);
 
-  //TODO: Checking if the request was successful
   //API call for the 7 days forecast data
   response = await axios.get(baseURL + "/onecall", {
     params: { lat, lon, exclude, lang, units, appid },

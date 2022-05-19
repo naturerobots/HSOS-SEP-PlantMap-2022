@@ -17,6 +17,7 @@ the component should be extended to include a message indicating that no weather
         </figure>
         <div class="card-body">
           <h2 class="font-bold text-primary-focus">
+            <!--TODO: Maybe move language and date options to settings?-->
             {{ weather.current.dt.toLocaleString("de-DE", dateOptions) }}
           </h2>
           <p class="mt-2 text-primary-focus text-2xl">
@@ -29,11 +30,11 @@ the component should be extended to include a message indicating that no weather
         </div>
       </div>
       <div class="grid grid-cols-3 mt-5">
+        <!--TODO: slice parameters could be added to later settings -->
         <div
           :key="forecast.dt.getDate"
           v-for="forecast in weather.forecast.slice(1, 4)"
         >
-          <!--slice parameters could be added to later settings -->
           <weather-forecast :forecast="forecast"></weather-forecast>
         </div>
       </div>
