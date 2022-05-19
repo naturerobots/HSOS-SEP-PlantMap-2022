@@ -19,6 +19,6 @@
     "davidanson.vscode-markdownlint"
   ],
   "workspaceFolder": "/workdir",
-  "postStartCommand": ".devcontainer/post-create-setup.sh",
+  "postCreateCommand": ".devcontainer/post-create-setup.sh",
   "forwardPorts": [5432]
 }
