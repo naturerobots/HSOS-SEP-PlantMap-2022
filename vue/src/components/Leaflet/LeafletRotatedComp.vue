@@ -10,7 +10,7 @@ import { onMounted } from "vue";
 import { useRouter } from "vue-router";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import "./Leaflet.ImageOverlay.Rotated.js";
+import "./LeafletRotation.ts";
 
 const router = useRouter();
 let leafletMap = {} as L.Map;
