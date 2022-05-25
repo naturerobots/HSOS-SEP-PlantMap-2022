@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-7@hi=#79vlx=3h&ln^p)=$lao1b(toui9mz103n+t!e#7lo7j6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1', 'localhost']
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -84,7 +84,7 @@ DATABASES = {
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': '0.0.0.0',
+        'HOST': 'postgres',
         'PORT': '5432',
     }
 }

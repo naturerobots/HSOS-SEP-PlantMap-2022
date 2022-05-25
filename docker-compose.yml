@@ -1,35 +1,38 @@
 version: "3.9"
 
 services:
-  django-backend:
-    build:
-      context: ./django
-    volumes:
-      - ./django:/django
-    container_name: django-backend
-    ports:
-      - 8000:8000
-
-  vue-frontend:
-    build:
-      context: ./vue
-    volumes:
-      - ./vue:/vue
-    container_name: vue-frontend
-    ports:
-      - 80:80
-
-  postgreSQL:
-    image: postgres:13-bullseye
-    restart: unless-stopped
+  postgres:
+    image: postgres:13-alpine
+    restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_DB: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
       - postgres-data:/var/lib/postgresql/data
-    container_name: postgresql
     ports:
-      - 5432:543
+      - 5432:5432
+
+  django-backend:
+    build:
+      context: .
+      dockerfile: ./django/dockerfile
+    volumes:
+      - ./django:/django
+    ports:
+      - 8000:8000
+    command: bash -c "while !</dev/tcp/postgres/5432; do sleep 1; done;
+      python3 django/manage.py migrate;
+      python3 django/manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      - postgres
+
+  vue-frontend:
+    build:
+      context: ./vue
+    volumes:
+      - ./vue:/vue
+    ports:
+      - 80:80
 volumes:
   postgres-data:

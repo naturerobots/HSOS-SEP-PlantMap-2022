@@ -13,16 +13,24 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /django
-COPY . /django/
-
-WORKDIR /django
-EXPOSE 8000
+COPY django /django
 
 RUN python3 -m venv /py && \
     /py/bin/pip install --upgrade pip && \
-    /py/bin/pip install -r requirements.txt && \
+    /py/bin/pip install -r django/requirements.txt && \
     adduser --disabled-password --no-create-home docker
 
 ENV PATH="/py/bin:$PATH"
+
+RUN mkdir -p build/gRPC
+COPY protobuf-msgs build/gRPC
+
+RUN python3 -m grpc_tools.protoc \
+        --proto_path=build/gRPC \
+        --python_out=build/gRPC \
+        --grpc_python_out=build/gRPC \
+        build/gRPC/*.proto
+
+EXPOSE 8000
 
 USER docker
