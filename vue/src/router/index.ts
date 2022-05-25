@@ -3,6 +3,7 @@ import DashboardView from "@/views/DashboardView.vue";
 import CropsView from "@/views/CropsView.vue";
 import Crops3dView from "@/views/Crops3dView.vue";
 import LoginView from "@/views/LoginView.vue";
+import ImageUploadView from "@/views/ImageUploadView.vue";
 import Sidebar from "@/components/SidebarMenu.vue";
 
 const router = createRouter({
@@ -33,6 +34,14 @@ const router = createRouter({
       name: "3d",
       components: {
         default: Crops3dView,
+        sidebar: Sidebar,
+      },
+    },
+    {
+      path: "/imageupload",
+      name: "imageupload",
+      components: {
+        default: ImageUploadView,
         sidebar: Sidebar,
       },
     },
