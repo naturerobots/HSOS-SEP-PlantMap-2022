@@ -1,7 +1,5 @@
 FROM ubuntu:20.04
 
-WORKDIR /workspace
-
 RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
     bash-completion \
         curl \
@@ -59,5 +57,7 @@ RUN mkdir -p /home/docker/.vscode-server/extensions \
     && chown -R docker /home/docker/.vscode-server \
     && mkdir -p /PlantMap \
     && chown -R docker /PlantMap
+
+USER docker
 
 ENTRYPOINT [ "/bin/sh", "-c", "while sleep 1000; do :; done" ]
