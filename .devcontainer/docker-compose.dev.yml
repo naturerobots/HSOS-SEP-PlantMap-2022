@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  plant-map-dev:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile.dev
+    volumes:
+      - ..:/workdir:cached
+    depends_on:
+      - postgres
+    # use network of postgreSQL container to be able to forward the port to localhost
+    network_mode: service:postgres
+
+  postgres:
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
+volumes:
+  postgres-data:

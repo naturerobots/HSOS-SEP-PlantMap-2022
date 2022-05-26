@@ -1,7 +1,5 @@
 FROM ubuntu:20.04
 
-WORKDIR /PlantMap
-
 RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
     bash-completion \
         curl \
@@ -27,14 +25,22 @@ RUN pip3 install pre-commit
 ####################################################
 # Install django
 ####################################################
-RUN pip3 install django==4.0 djangorestframework django-cors-headers
+RUN pip3 install \
+        django==4.0.1\
+        djangorestframework==3.13.1 \
+        django-cors-headers==3.12.0 \
+        django-oauth-toolkit==2.0.0\
+        psycopg2-binary==2.9.3 \
+        tzdata==2022.1
 
 ####################################################
 # Install python gRPC
 ####################################################
-RUN pip3 install grpcio grpcio-tools
+RUN pip3 install \
+        grpcio==1.46.1 \
+        grpcio-tools==1.46.1
 
-####################################################
+
 # Install npm 14.x
 ####################################################
 RUN curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - \
@@ -52,5 +58,7 @@ RUN mkdir -p /home/docker/.vscode-server/extensions \
     && chown -R docker /home/docker/.vscode-server \
     && mkdir -p /PlantMap \
     && chown -R docker /PlantMap
+
+USER docker
 
 ENTRYPOINT [ "/bin/sh", "-c", "while sleep 1000; do :; done" ]
