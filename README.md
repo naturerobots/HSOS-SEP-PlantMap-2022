@@ -1,179 +1,202 @@
 # README
 
-## Quick Start
+<br />
+<div align="center">
+  <a href="https://github.com/othneildrew/Best-README-Template">
+    <img src="doc/plant-map-logo.png" alt="Logo" height="80">
+  </a>
 
-### VS Code Devcontainer
+  <h3 align="center">Project PlantMap</h3>
 
-1. Clone this repo and open it in VS Code.
-2. Install the extensions `ms-vscode-remote.remote-containers` and `ms-azuretools.vscode-docker`.
-3. Press `F1` or `CTRL + SHIFT + P` and enter `Remote-Containers: Reopen Folder in Container`
-4. This creates a docker container based on
-   [ghcr.io/naturerobots/hsos-sep-plant-map-2022:main](https://github.com/naturerobots/HSOS-SEP-PlantMap-2022/pkgs/container/hsos-sep-plant-map-2022),
-   installs all necessary VS Code extensions, builds the workspace a first time, sets up
-   Intellisense, installs the [pre-commit](#precommit) hooks and opens it in VS Code.
+  <p align="center">
+    A tool for support sustainable farming
+    <br />
+    <a href="https://github.com/naturerobots/HSOS-SEP-PlantMap-2022/wiki"><strong>Explore the Wiki»</strong></a>
+    <br />
+    ·
+    <a href="https://github.com/naturerobots/HSOS-SEP-PlantMap-2022/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/naturerobots/HSOS-SEP-PlantMap-2022/issues">Request Feature</a>
+  </p>
+</div>
 
-   Use `pre-commit run -a` in the workspace folder to check the code style before commiting. In the Docker image the
-   pre-commit checks are installed in the git so a commit is just possible if the checks succeed.
+## Table of Contents
 
-5. default user: `docker` with password: `docker`
+- [About the project](#about-the-project)
+- [Getting Started](#overview-of-seerep)
+  - [Preequisites](#preequisites)
+  - [Running the Application](#running-the-application)
+  - [Development Container](#vs-code-development-container)
+  - [GitHub Container Registry](#github-container-registry)
+- [Architecture](#architecture-overview)
+- [Contributing](#contributing)
+  - [Pre-Commit Checks](#pre-commit-formatting-checks)
+  - [Conventional Commit Messages](#conventional-commit-messages)
+- [License](#license)
 
-### Login to GitHub Container Registry
+## About The Project
 
-Login to the GitHub Container Docker Registry with `docker login ghrc.io`
+The goal of this project is to develop a platform to support sustainable
+([biointensive]()) vegetable gardeners. This involves the creation of a digital
+twin of the vegetable gardens to monitor various aspects like the growth and the
+health of the plants. The necessary data is gathered by autonomous robots
+driving around the gardens, which are currently in development. This allows for
+an early detection and treatment of diseases, as well ass optimizations of yield
+estimates and bed planning.
 
-If you have enabled 2-factor authentication, create an access token, see [https://github.com/settings/tokens](https://github.com/settings/tokens)
+## Getting started
 
-Use your generated token and the `ghcr.io` container registry as follows:
+### Preequisites
 
-```bash
-docker login ghcr.io -u USERNAME --password YOUR_TOKEN
+In order to use the application you need to install:
+
+- docker >= 20.10.16
+- docker compose >= 2.5.0
+- vs-code
+
+### Running the application
+
+If you just want to have a look at the running PlantMap application, you can run
+`docker compose` in the root folder. For that use, the following steps:
+
+```sh
+git clone https://github.com/naturerobots/HSOS-SEP-PlantMap-2022.git
+cd HSOS-SEP-PlantMap-2022
+docker-compose run (Windows, Mac)
+docker compose run (Linux)
 ```
 
-or
+The web-page should now be available at
+[http://localhost:80](http://localhost:80) and the REST-API at
+[http://localhost:8000](http://localhost:8000)
+
+### VS-Code Development Container
+
+1. Clone this repository and open it in VS Code.
+
+   ```sh
+   git clone https://github.com/naturerobots/HSOS-SEP-PlantMap-2022.git
+   cd HSOS-SEP-PlantMap-2022
+   code .
+   ```
+
+2. Install the `ms-vscode-remote.remote-containers` and
+   `ms-azuretools.vscode-docker` extensions.
+
+   ```sh
+   code --install-extension ms-vscode-remote.remote-containers
+   code --install-extension ms-azuretools.vscode-docker
+   ```
+
+3. Press `F1` or `CTRL+SHIFT+P` and enter `Remote-Containers: Reopen Folder in Container`
+4. This creates a docker container for the development of the PlantMap application and
+   starts the needed [PostgreSQL](ttps://www.postgresql.org/) database. Additionally
+   all necessary VS Code extensions and npm packages from the `package.json` are
+   installed. Further git pre-commit hooks are set up.
+5. The default user for the container is:
+
+   ```
+   user: `docker`
+   password: `docker`
+   ```
+
+### GitHub Container Registry
+
+The docker images for _vue_ and _django_ are published to the
+GitHub Container Registry. In order to download them, you first need to log in:
+
+If you have enabled 2-factor authentication, please create an access token:
+[https://github.com/settings/tokens](https://github.com/settings/tokens)
+
+Use your password or generated token and the `ghcr.io` container registry as
+follows:
 
 ```bash
-export CR_PAT=YOUR_TOKEN
-echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
+docker login ghcr.io -u USERNAME --password PASSWORD/TOKEN
 ```
 
-Try to pull the docker image manually: `docker pull ghcr.io/naturerobots/hsos-sep-plant-map-2022:latest`
+Now you call pull the images with `docker pull`.
 
-## Pre-Commit Formatting Checks
+## Architecture Overview
 
-This repo has a [pre-commit](https://pre-commit.com/) check that runs in CI. You can use this locally and set it up to
-run automatically before you commit something. In the devcontainer it is already pre-installed. To install, use pip:
+The frontend of the PlantMap project is build with [Vue.js](https://vuejs.org/),
+[daisyUI](https://daisyui.com/) and [Leaflet](https://leafletjs.com/) for the
+integration of maps. The [Django](https://www.djangoproject.com/) server is used
+as a backend for data management. It provides an REST-API to retrieve data
+from a [PostgresSQL](https://www.postgresql.org/download/) database and SEEREP.
+PostgreSQL is used to store general user specific information. SEEREP provides a
+semantic environment representation of the gardens and can accept
+spatio-temporal-semantic queries. SEEREP is currently in development and will also
+be open-sourced soon. [gRPC](https://grpc.io/) is used to query and retrieve
+data from SEEREP, currently [Protocol
+Buffers](https://developers.google.com/protocol-buffers) are used as the
+messaging format. The data for SEEREP is recorded by an autonomous driving robot which is also developed by [naturerobots](https://naturerobots.de/).
 
-```bash
-pip3 install --user pre-commit
-```
+![](doc/plant-map-architecture.png)
 
-To run over all the files in the repo manually:
+## Contributing
+
+Contributions are what make the open source community such an amazing place to
+learn and inspire. Any contributions you make are **greatly appreciated**.
+
+If you have a suggestion that would make this better, please fork the repo and
+create a pull request. You can also simply open an issue with the tag
+"enhancement". Don't forget to give the project a star!
+
+### Pre-Commit Formatting Checks
+
+This repository uses [pre-commit](https://pre-commit.com/) checks to verify the
+code style before committing. Since the pre-commit checks are automatically
+installed in the development container, commits from inside the container are
+only possible if the checks succeed.
+
+To run over all the files in the repo manually, use:
 
 ```bash
 pre-commit run -a
 ```
 
-To run pre-commit automatically before committing in the local repo, install the git hooks (run it in the repo folder):
+If you want to set up the pre-commit checks locally, use pip:
+
+```bash
+pip3 install --user pre-commit
+```
+
+To run pre-commit automatically before committing localy, install the git hooks
+(run it in the root folder of the repository:
 
 ```bash
 pre-commit install
 ```
 
-## SEEREP instance
+### Conventional Commit Messages
 
-In order to provide you spatial, temporal and semantical information about gardens, we host a public SEEREP instance.
-This instance is available under `https://seerep.naturerobots.de` and can be queried using a gRPC interface in
-combination with Protobuf messages. All required protofiles (with inline documentation) are located in the the folder
-[seerep-protos](seerep-protos).
+This repository uses [Conventional
+Commits](https://www.conventionalcommits.org/en/v1.0.0/) for a more readable and
+explicit commit history. A quick summary is provided here, for more details,
+visit their [website](https://www.conventionalcommits.org/en/v1.0.0/).
 
-If you like to get an overview of the API before using it in your code, we recomment the free tool [Kreya](https://kreya.app/).
-Just add a Kreya project, import the protos from the seerep-protos directory and add the endpoint `https://seerep.naturerobots.de`
-in the project settings and you are ready to try the API.
+Conventional Commits consists of an easy set of rules, which basically state
+that each commit should have the following structure:
 
-### Example queries
+```
+<type>(optional scope): <description>
 
-#### seerep.MetaOperations.GetProjects
+[optional body]
 
-```json
-{}
+[optional footer(s)]
 ```
 
-#### seerep.MetaOperations.GetProjectDetails
+Some accepted types are `feat`, `fix`, `build`, `docs`, `refactor`, `test`, if
+their intended use cases are not obvious to you, look into the
+[documentation](https://www.conventionalcommits.org/en/v1.0.0/). An example for
+a conventional commit would be:
 
-```json
-{
-  "projectuuid": "e1ef73b1258b475a996d2b72924c27ac"
-}
+```
+feat(api): create bed information endpoint
 ```
 
-#### seerep.TfService.GetFrames
+## License
 
-```json
-{
-  "projectuuid": "e1ef73b1258b475a996d2b72924c27ac"
-}
-```
-
-#### seerep.TfService.GetTransformStamped
-
-```json
-{
-  "header": {
-    "seq": 42,
-    "stamp": "1970-01-01T00:02:03.000000123Z",
-    "frameId": "map",
-    "uuidProject": "e1ef73b1258b475a996d2b72924c27ac",
-    "uuidMsgs": ""
-  },
-  "childFrameId": "ground"
-}
-```
-
-#### seerep.PointCloudService.GetPointCloud2ByUUID
-
-```json
-{
-  "projectuuid": "e1ef73b1258b475a996d2b72924c27ac",
-  "geometryuuid": "0d927fa6b3534f9580d1db73d483b254"
-}
-```
-
-#### seerep.PointCloudService.GetPointCloud2
-
-```json
-{
-  "timeinterval": {
-    "timeMin": "1626967568000000000",
-    "timeMax": "1626967568000000000"
-  },
-  "label": [
-    "e793d6a3f0af49f49e91d431e1b62b68",
-    "8f460e87b27e4fb385e84f4a7dba677f"
-  ],
-  "projectuuid": "e1ef73b1258b475a996d2b72924c27ac"
-}
-```
-
-#### seerep.MeasurementService.GetMeasurementByUUID
-
-```json
-{
-  "projectuuid": "e1ef73b1258b475a996d2b72924c27ac",
-  "geometryuuid": "25816c5842f14fe98b1ebc85a4908934"
-}
-```
-
-#### seerep.MeasurementService.GetMeasurement
-
-```json
-{
-  "timeinterval": {
-    "timeMin": "1626967568000000000",
-    "timeMax": "1626967568000000000"
-  },
-  "label": ["8f460e87b27e4fb385e84f4a7dba677f"],
-  "projectuuid": "e1ef73b1258b475a996d2b72924c27ac"
-}
-```
-
-#### seerep.LabelService.GetClass
-
-```json
-{
-  "projectuuid": "e1ef73b1258b475a996d2b72924c27ac",
-  "classuuid": "8f460e87b27e4fb385e84f4a7dba677f"
-}
-```
-
-#### seerep.LabelService.GetInstance
-
-```json
-{
-  "projectuuid": "e1ef73b1258b475a996d2b72924c27ac",
-  "instanceuuid": "e793d6a3f0af49f49e91d431e1b62b68"
-}
-```
-
-## Quality management
-
-- [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
+Distributed under the BSD 3-Clause License. See `LICENSE.txt` for more
+information.
