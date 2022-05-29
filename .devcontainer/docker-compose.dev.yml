@@ -8,8 +8,12 @@ services:
       - ..:/workdir:cached
     depends_on:
       - postgres
-    # use network of postgreSQL container to be able to forward the port to localhost
-    network_mode: service:postgres
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:latest
+    ports:
+      - 5672:5672
 
   postgres:
     image: postgres:latest

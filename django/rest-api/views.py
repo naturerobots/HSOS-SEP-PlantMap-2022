@@ -1,6 +1,8 @@
 import string
 import sys
 
+from . import tasks
+
 # there is definitly a better way to add an import path
 sys.path.append(r'../build/gRPC/')
 
@@ -30,3 +32,10 @@ def list_project_detials(request, uuid: string) -> Response:
     if request.method == 'GET':
         response = stub.GetProjectDetails(ProjectQuery(projectuuid=uuid))
         return Response(MessageToDict(response))
+
+
+@api_view(['POST'])
+def make_task(request) -> Response:
+    if request.method == 'POST':
+        result = tasks.add.delay(4, 4)
+        return Response(result.get(timeout=1))
