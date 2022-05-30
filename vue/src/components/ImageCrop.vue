@@ -8,7 +8,7 @@
 
   <hr class="my-5" />
 
-  <div v-if="uploaded.image.src.length != 0" style="width: 20%">
+  <div v-if="uploaded && uploadedSrc.length > 0" style="width: 20%">
     <button @click="rotate" class="btn btn-primary">Rotate</button>
     <button @click="crop" class="btn btn-primary">Crop</button>
 
@@ -17,38 +17,39 @@
     <cropper
       ref="cropperChild"
       class="cropper"
-      :src="imgSource"
-      @change="change"
+      :src="uploadedSrc"
       :style="{
-        width: uploaded.image.width + 'px',
-        heigth: uploaded.image.height + 'px',
+        width: uploaded.width + 'px',
+        heigth: uploaded.height + 'px',
       }"
     />
 
     <hr class="my-5" />
 
-    <img :src="cropped.image.src" />
+    <img :src="cropped?.src" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { Cropper, type Coordinates } from "vue-advanced-cropper";
+import { Cropper } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
 
-import { reactive, computed, ref } from "vue";
+import { computed, ref } from "vue";
 
-const uploaded = reactive({ image: new Image() });
-const cropped = reactive({ image: new Image() });
+let uploaded = ref<HTMLImageElement>(new Image());
+let cropped = ref<HTMLImageElement>();
 
 //https://stackoverflow.com/questions/65002098/how-to-define-type-for-refbinding-on-template-in-vue3-using-typescript
 const cropperChild = ref<InstanceType<typeof Cropper>>();
 
-const imgSource = computed<string>({
-  get: () => uploaded.image.src,
+const uploadedSrc = computed<string>({
+  get: () => uploaded.value?.src || "",
   set: (src: string) => {
+    if (src.length == 0) return;
+
     let newImage = new Image();
     newImage.src = src;
-    uploaded.image = newImage;
+    uploaded.value = newImage;
   },
 });
 
@@ -61,7 +62,7 @@ function crop() {
   newImage.src = cropperChild.value
     ?.getResult()
     .canvas?.toDataURL("image/png") as string;
-  cropped.image = newImage;
+  cropped.value = newImage;
 }
 
 function loadImage(event: Event) {
@@ -80,15 +81,7 @@ function loadImage(event: Event) {
   reader.readAsDataURL(file.files[0]);
 
   reader.onload = (event) => {
-    imgSource.value = event.target?.result as string;
+    uploadedSrc.value = event.target?.result as string;
   };
 }
-
-function change(coordinates: Coordinates) {
-  console.log("---");
-  console.log(coordinates);
-  console.log("---");
-}
 </script>
-
-<style></style>
