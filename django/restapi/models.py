@@ -6,7 +6,7 @@ class Garden(models.Model):
     name = models.CharField(max_length=32)
 
     class Meta:
-        app_label = 'rest-api'
+        app_label = 'restapi'
         db_table = 'Garden'
         managed = True
 
@@ -20,7 +20,7 @@ class Company(models.Model):
     gardens = models.ManyToManyField(Garden)
 
     class Meta:
-        app_label = 'rest-api'
+        app_label = 'restapi'
         db_table = 'Company'
         managed = True
 
@@ -35,7 +35,7 @@ class User(models.Model):
     companies = models.ManyToManyField(Company)
 
     class Meta:
-        app_label = 'rest-api'
+        app_label = 'restapi'
         db_table = 'User'
         managed = True
 
