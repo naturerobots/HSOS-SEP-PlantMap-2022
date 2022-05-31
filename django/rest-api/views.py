@@ -8,6 +8,7 @@ sys.path.append(r'../build/gRPC/')
 
 import grpc
 import meta_operations_service_pb2_grpc as metaOperations
+import point_cloud_service_pb2_grpc as PointCloudService
 from google.protobuf import empty_pb2
 from google.protobuf.json_format import MessageToDict
 from project_query_pb2 import ProjectQuery
@@ -35,7 +36,9 @@ def list_project_detials(request, uuid: string) -> Response:
 
 
 @api_view(['POST'])
-def make_task(request) -> Response:
+def make_task(request, uuid: string) -> Response:
     if request.method == 'POST':
-        result = tasks.add.delay(4, 4)
-        return Response(result.get(timeout=1))
+        response = stub.GetProjectDetails(ProjectQuery(projectuuid=uuid))
+        geometries = MessageToDict(response)['geometries']
+        tasks.dl_pcloud.delay(geometries, uuid)
+        return Response(status=202)

@@ -6,6 +6,6 @@ from . import views
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', views.list_projects),
-    path('task', views.make_task),
+    path('<str:uuid>/task', views.make_task),
     path('<str:uuid>', views.list_project_detials),
 ]
