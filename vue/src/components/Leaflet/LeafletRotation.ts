@@ -15,7 +15,8 @@ L.ImageOverlay.Rotated = L.ImageOverlay.extend({
     L.setOptions(this, options);
   },
 
-  onAdd: function (map) {
+  //TODO: Explicit Type?
+  onAdd: function (map: any) {
     if (!this._image) {
       this._initImage();
 
@@ -35,6 +36,7 @@ L.ImageOverlay.Rotated = L.ImageOverlay.extend({
     this._reset();
   },
 
+  //TODO: Explicit Types?
   onRemove: function (map) {
     map.off("zoomend resetview", this._reset, this);
     L.ImageOverlay.prototype.onRemove.call(this, map);
@@ -148,6 +150,7 @@ L.ImageOverlay.Rotated = L.ImageOverlay.extend({
       ")";
   },
 
+  //TODO: Explicit Types?
   reposition: function (topleft, topright, bottomleft) {
     this._topLeft = L.latLng(topleft);
     this._topRight = L.latLng(topright);
@@ -155,6 +158,7 @@ L.ImageOverlay.Rotated = L.ImageOverlay.extend({
     this._reset();
   },
 
+  //TODO: Explicit Types?
   setUrl: function (url) {
     this._url = url;
 

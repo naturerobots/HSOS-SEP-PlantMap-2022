@@ -7,12 +7,14 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./LeafletRotation.ts";
 
 const router = useRouter();
+const route = useRoute();
+
 let leafletMap = {} as L.Map;
 let markers: L.Marker[] = [];
 let counter = 0;
@@ -48,7 +50,8 @@ function repositionImage() {
   }
 }
 
-function setMarker(e): void {
+//TODO: Explicit Type?
+function setMarker(e: any): void {
   if (counter < 3) {
     let point = L.latLng(e.latlng.lat, e.latlng.lng);
     let marker: L.Marker = L.marker(point, {
@@ -66,7 +69,7 @@ function setMarker(e): void {
 
 function setImage(): void {
   overlay = L.imageOverlay.rotated(
-    "https://cloud.naturerobots.de/apps/files_sharing/publicpreview/xZj9ytRt8WKr5cw?file=/goeoentueuegs_ibbenbueren_new2.jpg&fileId=28565&x=2736&y=1824&a=true",
+    route.params.src,
     markers[0].getLatLng(),
     markers[1].getLatLng(),
     markers[2].getLatLng(),
@@ -81,6 +84,7 @@ function setImage(): void {
 }
 
 function saveImage(): void {
+  //TODO: Please write TODO instead of ToDo
   //ToDo: Router to dashBoard, send to Server pos + img
   router.push({ path: "/dashboard" });
 }
