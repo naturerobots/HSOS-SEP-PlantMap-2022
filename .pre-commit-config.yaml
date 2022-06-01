@@ -15,7 +15,7 @@
 repos:
   # Standard hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0
+    rev: v4.2.0
     hooks:
       - id: check-added-large-files
       - id: check-case-conflict
@@ -104,17 +104,19 @@ repos:
     rev: v2.2.0
     hooks:
       - id: seed-isort-config
+
   - repo: https://github.com/pre-commit/mirrors-isort
     rev: v5.10.1
     hooks:
       - id: isort
 
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: "v2.6.1" # Use the sha / tag you want to point at
+    rev: "v2.6.2" # Use the sha / tag you want to point at
     hooks:
       - id: prettier
+
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: "v8.12.0" # Use the sha / tag you want to point at
+    rev: "v8.16.0" # Use the sha / tag you want to point at
     hooks:
       - id: eslint
         files: \.([jt]sx?|vue)$ # *.js, *.jsx, *.ts, *.tsx and *.vue
