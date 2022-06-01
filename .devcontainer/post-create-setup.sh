@@ -1,7 +1,5 @@
 #! /bin/bash
 
-#copy vs code config to root
-cp -r /PlantMap/src/.devcontainer/.vscode/ /PlantMap/.vscode/
 #install pre-commit in the git repo
 pre-commit install --install-hooks
 
@@ -14,5 +12,4 @@ python3 -m grpc_tools.protoc \
         protobuf-msgs/*
 
 # use npm ci to install all exact verion dependencies from package-lock.json
-cd vue  || exit 1
-npm ci
+cd vue  && npm ci
