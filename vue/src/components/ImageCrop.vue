@@ -69,7 +69,7 @@ function crop() {
 }
 
 function place() {
-  if (cropped.value.src != undefined) {
+  if (cropped.value && cropped.value.src.length > 0) {
     router.push({ name: "imageupload", params: { src: cropped.value.src } });
   }
 }

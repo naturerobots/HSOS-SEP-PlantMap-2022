@@ -14,6 +14,7 @@ import "./LeafletRotation.ts";
 
 const router = useRouter();
 const route = useRoute();
+
 let leafletMap = {} as L.Map;
 let markers: L.Marker[] = [];
 let counter = 0;
@@ -49,7 +50,8 @@ function repositionImage() {
   }
 }
 
-function setMarker(e): void {
+//TODO: Explicit Type?
+function setMarker(e: any): void {
   if (counter < 3) {
     let point = L.latLng(e.latlng.lat, e.latlng.lng);
     let marker: L.Marker = L.marker(point, {
@@ -82,6 +84,7 @@ function setImage(): void {
 }
 
 function saveImage(): void {
+  //TODO: Please write TODO instead of ToDo
   //ToDo: Router to dashBoard, send to Server pos + img
   router.push({ path: "/dashboard" });
 }
