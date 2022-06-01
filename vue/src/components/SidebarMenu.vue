@@ -8,11 +8,11 @@
               src="@/assets/img/logo_small_white.svg"
               class="w-10 h-10 mb-3 mx-auto"
             />
-            <!-- ToDo: Create Image Component & custom class for this -->
+            <!-- TODO: Create Image Component & custom class for this -->
           </router-link>
           <div class="mt-10">
             <ul>
-              <!-- ToDo: Edit icons & links -->
+              <!-- TODO: Edit icons & links -->
               <li class="my-8 text-center text-sm text-white">
                 <router-link to="/dashboard">
                   <img
@@ -38,6 +38,11 @@
                     class="w-6 h-6 mx-auto mb-1"
                   />
                   <p>3D</p>
+                </router-link>
+              </li>
+              <li class="my-8 text-center text-sm text-white">
+                <router-link to="/cropimage">
+                  <p>Crop Image</p>
                 </router-link>
               </li>
             </ul>

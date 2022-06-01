@@ -54,12 +54,14 @@
 //Test for weather / can be cleaned up
 import { onMounted } from "vue";
 import { weatherStore } from "../stores/weatherStore";
+import { sensorStore } from "../stores/sensorStore";
 
 import WeatherComp from "@/components/WeatherComp.vue";
 import SensorComp from "@/components/SensorComp.vue";
 
 onMounted(() => {
   weatherStore().loadDataFromApi();
+  sensorStore().loadDataFromApi();
 });
 //####################################
 </script>
