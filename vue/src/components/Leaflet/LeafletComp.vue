@@ -5,8 +5,8 @@
       v-model:zoom="zoom"
       :center="center"
       :options="{ zoomControl: false }"
-      @move="log('move')"
-      ><!-- [52.317628, 7.63112] -->
+    >
+      <!-- [52.317628, 7.63112] -->
       <l-image-overlay
         url="src/assets/img/demo_image.png"
         :bounds="bounds"
@@ -28,7 +28,7 @@
     </l-map>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import {
   LMap,
   LTileLayer,
@@ -36,40 +36,19 @@ import {
   LImageOverlay,
 } from "@vue-leaflet/vue-leaflet";
 import "leaflet/dist/leaflet.css";
-export default {
-  components: {
-    LMap,
-    LTileLayer,
-    LMarker,
-    LImageOverlay,
-  },
-  setup() {
-    const bounds = [
-      [52.31705535218097, 7.630129751278906],
-      [52.317206461376706, 7.630606037986071],
-      [52.31704187031269, 7.6307588913140405],
-      [
-        52.31688241444382, 7.630275079858925,
-      ] /* [52.317118, 7.630613],[52.318119, 7.631614] */,
-    ];
-    const center = [
-      (bounds[0][0] + bounds[1][0]) / 2,
-      (bounds[0][1] + bounds[1][1]) / 2,
-    ];
-    return {
-      center,
-      bounds,
-    };
-  },
-  data() {
-    return {
-      zoom: 20,
-    };
-  },
-  methods: {
-    log(a) {
-      console.log(a);
-    },
-  },
-};
+
+const bounds = [
+  [52.31705535218097, 7.630129751278906],
+  [52.317206461376706, 7.630606037986071],
+  [52.31704187031269, 7.6307588913140405],
+  [
+    52.31688241444382, 7.630275079858925,
+  ] /* [52.317118, 7.630613],[52.318119, 7.631614] */,
+];
+const center = [
+  (bounds[0][0] + bounds[1][0]) / 2,
+  (bounds[0][1] + bounds[1][1]) / 2,
+];
+
+const zoom = 20;
 </script>
