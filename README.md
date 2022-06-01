@@ -36,7 +36,7 @@ SOFTWARE.
   <h3 align="center">Project PlantMap</h3>
 
   <p align="center">
-    A tool for support sustainable farming
+    A tool to support sustainable farming
     <br />
     <a href="https://github.com/naturerobots/HSOS-SEP-PlantMap-2022/wiki"><strong>Explore the Wiki»</strong></a>
     <br />
@@ -67,8 +67,8 @@ The goal of this project is to develop a platform to support sustainable
 ([biointensive]()) vegetable gardeners. This involves the creation of a digital
 twin of the vegetable gardens to monitor various aspects like the growth and the
 health of the plants. The necessary data is gathered by autonomous robots
-driving around the gardens, which are currently in development. This allows for
-an early detection and treatment of diseases, as well ass optimizations of yield
+driving around in the gardens, which are currently in development. This allows for
+an early detection and treatment of diseases, as well as optimizations of yield
 estimates and bed planning.
 
 ## Getting started
@@ -149,8 +149,8 @@ Now you call pull the images with `docker pull`.
 The frontend of the PlantMap project is build with [Vue.js](https://vuejs.org/),
 [daisyUI](https://daisyui.com/) and [Leaflet](https://leafletjs.com/) for the
 integration of maps. The [Django](https://www.djangoproject.com/) server is used
-as a backend for data management. It provides an REST-API to retrieve data
-from a [PostgresSQL](https://www.postgresql.org/download/) database and SEEREP.
+as a backend for data management. It provides a REST-API to retrieve data
+from a [PostgreSQL](https://www.postgresql.org/download/) database and SEEREP.
 PostgreSQL is used to store general user specific information. SEEREP provides a
 semantic environment representation of the gardens and can accept
 spatio-temporal-semantic queries. SEEREP is currently in development and will also
