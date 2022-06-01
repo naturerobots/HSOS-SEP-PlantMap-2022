@@ -9,8 +9,9 @@
   <hr class="my-5" />
 
   <div v-if="uploaded && uploadedSrc.length > 0" style="width: 20%">
-    <button @click="rotate" class="btn btn-primary">Rotate</button>
-    <button @click="crop" class="btn btn-primary">Crop</button>
+    <button @click="rotate" class="btn btn-primary mr-2">Rotate</button>
+    <button @click="crop" class="btn btn-primary mr-2">Crop</button>
+    <button @click="place" class="btn btn-primary">Place</button>
 
     <hr class="my-5" />
 
@@ -33,9 +34,11 @@
 <script setup lang="ts">
 import { Cropper } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
+import { useRouter } from "vue-router";
 
 import { computed, ref } from "vue";
 
+const router = useRouter();
 let uploaded = ref<HTMLImageElement>();
 let cropped = ref<HTMLImageElement>();
 
@@ -63,6 +66,12 @@ function crop() {
     ?.getResult()
     .canvas?.toDataURL("image/png") as string;
   cropped.value = newImage;
+}
+
+function place() {
+  if (cropped.value.src != undefined) {
+    router.push({ name: "imageupload", params: { src: cropped.value.src } });
+  }
 }
 
 function loadImage(event: Event) {
