@@ -1,54 +1,71 @@
 <template>
-  <div style="height: 539px; width: 200px">
-    <l-map
-      v-model="zoom"
-      v-model:zoom="zoom"
-      :center="center"
-      :options="{ zoomControl: false }"
-    >
-      <!-- [52.317628, 7.63112] -->
-      <l-image-overlay
-        url="src/assets/img/demo_image.png"
-        :bounds="bounds"
-      ></l-image-overlay>
-      <l-tile-layer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        layer-type="satellite"
-        name="OpenStreetMap"
-      ></l-tile-layer>
-
-      <l-marker :lat-lng="[52.317206461376706, 7.630606037986071]"> </l-marker>
-      <!-- Oben Links -->
-      <l-marker :lat-lng="[52.31704187031269, 7.6307588913140405]"> </l-marker>
-      <!-- Oben Rechts -->
-      <l-marker :lat-lng="[52.31705535218097, 7.630129751278906]"> </l-marker>
-      <!-- Unten Links -->
-      <l-marker :lat-lng="[52.31688241444382, 7.630275079858925]"> </l-marker>
-      <!-- Unten Rechts -->
-    </l-map>
+  <div class="map-container w-full h-full absolute">
+    <div id="map"></div>
   </div>
 </template>
+
 <script setup lang="ts">
-import {
-  LMap,
-  LTileLayer,
-  LMarker,
-  LImageOverlay,
-} from "@vue-leaflet/vue-leaflet";
 import "leaflet/dist/leaflet.css";
+import { onMounted } from "vue";
+import L from "leaflet";
+import "./LeafletRotation.ts";
+import type { MapImage } from "@/types/mapImage";
 
-const bounds = [
-  [52.31705535218097, 7.630129751278906],
-  [52.317206461376706, 7.630606037986071],
-  [52.31704187031269, 7.6307588913140405],
-  [
-    52.31688241444382, 7.630275079858925,
-  ] /* [52.317118, 7.630613],[52.318119, 7.631614] */,
-];
-const center = [
-  (bounds[0][0] + bounds[1][0]) / 2,
-  (bounds[0][1] + bounds[1][1]) / 2,
-];
+let leafletMap = {} as L.Map;
 
-const zoom = 20;
+const props = defineProps({
+  maxZoom: {
+    type: Number,
+    default: 24,
+  },
+  zoom: {
+    type: Number,
+    default: 13,
+  },
+  mapImage: {
+    type: Object as () => MapImage,
+  },
+});
+
+onMounted(() => {
+  leafletMap = L.map("map", {
+    zoomControl: false,
+    attributionControl: false,
+    zoomDelta: 0.25,
+    zoomSnap: 0.25,
+  });
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxNativeZoom: 18,
+    maxZoom: props.maxZoom,
+  }).addTo(leafletMap);
+
+  if (props.mapImage != undefined) {
+    let overlay = L.imageOverlay.rotated(
+      props.mapImage.src,
+      props.mapImage.top_left,
+      props.mapImage.top_right,
+      props.mapImage.bottom_left,
+      {
+        opacity: 1,
+      }
+    );
+    leafletMap.addLayer(overlay);
+    const bounds = L.latLngBounds(
+      props.mapImage.bottom_left,
+      props.mapImage.top_right
+    );
+    var point = L.point(0, 0);
+    leafletMap.fitBounds(bounds, { animate: false, padding: point });
+  }
+});
 </script>
+
+<style>
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+</style>
