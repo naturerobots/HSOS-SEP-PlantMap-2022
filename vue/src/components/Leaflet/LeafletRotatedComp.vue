@@ -7,12 +7,13 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./LeafletRotation.ts";
 
 const router = useRouter();
+const route = useRoute();
 let leafletMap = {} as L.Map;
 let markers: L.Marker[] = [];
 let counter = 0;
@@ -66,7 +67,7 @@ function setMarker(e): void {
 
 function setImage(): void {
   overlay = L.imageOverlay.rotated(
-    "https://cloud.naturerobots.de/apps/files_sharing/publicpreview/xZj9ytRt8WKr5cw?file=/goeoentueuegs_ibbenbueren_new2.jpg&fileId=28565&x=2736&y=1824&a=true",
+    route.params.src,
     markers[0].getLatLng(),
     markers[1].getLatLng(),
     markers[2].getLatLng(),
