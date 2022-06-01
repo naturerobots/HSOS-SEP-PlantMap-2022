@@ -2,6 +2,7 @@
 
 #install pre-commit in the git repo
 pre-commit install --install-hooks
+pre-commit install --hook-type commit-msg
 
 #generate python classes from protobuf messages
 mkdir -p build/gRPC
