@@ -36,7 +36,7 @@ import "vue-advanced-cropper/dist/style.css";
 
 import { computed, ref } from "vue";
 
-let uploaded = ref<HTMLImageElement>(new Image());
+let uploaded = ref<HTMLImageElement>();
 let cropped = ref<HTMLImageElement>();
 
 //https://stackoverflow.com/questions/65002098/how-to-define-type-for-refbinding-on-template-in-vue3-using-typescript
