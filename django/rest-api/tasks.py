@@ -9,7 +9,9 @@ from celery import Celery
 from geometry_query_pb2 import GeometryQuery
 from google.protobuf.json_format import MessageToDict
 
-app = Celery('tasks', backend='rpc://', broker='amqp://rabbitmq')
+# Start Celery worker from 'django' directory with "celery -A rest-api.tasks worker --loglevel=info"
+app = Celery('tasks')
+app.config_from_object('celeryconfig')
 
 SERVER_URL = "seerep.naturerobots.de:5000"
 channel = grpc.insecure_channel(SERVER_URL)
