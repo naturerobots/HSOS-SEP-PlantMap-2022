@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import LeafletComp from "@/components/leaflet/LeafletComp.vue";
+import LeafletComp from "@/components/Leaflet/LeafletComp.vue";
 import type { MapImage } from "@/types/mapImage";
 import type { PropType } from "vue";
 
