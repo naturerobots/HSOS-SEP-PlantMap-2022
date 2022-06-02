@@ -67,7 +67,7 @@ function setMarker(e: LeafletMouseEvent): void {
 
 function setImage(): void {
   overlay = L.imageOverlay.rotated(
-    "https://cloud.naturerobots.de/apps/files_sharing/publicpreview/xZj9ytRt8WKr5cw?file=/goeoentueuegs_ibbenbueren_new2.jpg&fileId=28565&x=2736&y=1824&a=true",
+    route.params.src,
     markers[0].getLatLng(),
     markers[1].getLatLng(),
     markers[2].getLatLng(),
@@ -82,7 +82,7 @@ function setImage(): void {
 }
 
 function saveImage(): void {
-  //ToDo: Router to dashBoard, send to Server pos + img
+  //TODO: Router to dashBoard, send to Server pos + img
   router.push({ path: "/dashboard" });
 }
 </script>
