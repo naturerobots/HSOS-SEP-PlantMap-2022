@@ -147,7 +147,7 @@ Now you call pull the images with `docker pull`.
 ## Architecture Overview
 
 The frontend of the PlantMap project is build with [Vue.js](https://vuejs.org/),
-[daisyUI](https://daisyui.com/) and [Leaflet](https://leafletjs.com/) for the
+[Quasar](https://quasar.dev/) and [Leaflet](https://leafletjs.com/) for the
 integration of maps. The [Django](https://www.djangoproject.com/) server is used
 as a backend for data management. It provides a REST-API to retrieve data
 from a [PostgreSQL](https://www.postgresql.org/download/) database and SEEREP.
