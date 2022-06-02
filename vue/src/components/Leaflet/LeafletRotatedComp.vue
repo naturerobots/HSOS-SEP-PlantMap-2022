@@ -7,12 +7,13 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { useRouter } from "vue-router";
-import L, { LatLng, type LeafletMouseEvent } from "leaflet";
+import { useRouter, useRoute } from "vue-router";
+import L, { type LeafletMouseEvent } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./LeafletRotation.ts";
 
 const router = useRouter();
+const route = useRoute();
 let leafletMap: L.Map;
 let markers: L.Marker[];
 let overlay: L.ImageOverlay.Rotated;

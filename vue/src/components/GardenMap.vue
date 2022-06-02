@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import BaseMap from "@/components/BaseMap.vue";
 import type { MapImage } from "@/types/mapImage";
-import L, { LatLng } from "leaflet";
+import { LatLng } from "leaflet";
 
 const mapImage: MapImage = {
   src: "https://cloud.naturerobots.de/apps/files_sharing/publicpreview/xZj9ytRt8WKr5cw?file=/goeoentueuegs_ibbenbueren_new2.jpg&fileId=28565&x=1920&y=1080&a=true",
