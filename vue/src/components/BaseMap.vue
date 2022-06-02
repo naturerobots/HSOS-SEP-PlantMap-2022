@@ -13,6 +13,7 @@
 <script setup lang="ts">
 import LeafletComp from "@/components/leaflet/LeafletComp.vue";
 import type { MapImage } from "@/types/mapImage";
+import type { PropType } from "vue";
 
 defineProps({
   maxZoom: {
@@ -22,7 +23,7 @@ defineProps({
     type: Number,
   },
   mapImage: {
-    type: Object as () => MapImage,
+    type: Object as PropType<MapImage>,
     required: true,
   },
 });
