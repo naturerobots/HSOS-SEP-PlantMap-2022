@@ -1,5 +1,5 @@
 <template>
-  <div class="map-container w-full h-full absolute">
+  <div class="map-container w-full h-full relative">
     <div id="map"></div>
   </div>
 </template>
@@ -11,7 +11,7 @@ import L from "leaflet";
 import "./LeafletRotation.ts";
 import type { MapImage } from "@/types/mapImage";
 
-let leafletMap = {} as L.Map;
+let leafletMap: L.Map;
 
 const props = defineProps({
   maxZoom: {
@@ -52,23 +52,16 @@ onMounted(() => {
     );
 
     leafletMap.addLayer(overlay);
-    const bounds = L.latLngBounds(
-      props.mapImage.bottom_left,
-      props.mapImage.top_right
-    );
 
-    var point = L.point(0, 0);
-    leafletMap.fitBounds(bounds, { animate: false, padding: point });
+    //Not the best solution
+    setTimeout(function () {
+      leafletMap.invalidateSize(true);
+      const bounds = L.latLngBounds(
+        props.mapImage.bottom_left,
+        props.mapImage.top_right
+      );
+      leafletMap.fitBounds(bounds, { animate: true });
+    }, 100);
   }
 });
 </script>
-
-<style>
-#map {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 100% !important;
-  height: 100% !important;
-}
-</style>
