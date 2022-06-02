@@ -40,6 +40,11 @@
                   <p>3D</p>
                 </router-link>
               </li>
+              <li class="my-8 text-center text-sm text-white">
+                <router-link to="/cropimage">
+                  <p>Crop Image</p>
+                </router-link>
+              </li>
             </ul>
           </div>
         </div>
