@@ -1,5 +1,5 @@
-import { defineStore } from "pinia";
 import type { Weather } from "@/types/weather";
+import { defineStore } from "pinia";
 import { getWeatherInformation } from "@/services/openWeatherApi";
 
 export const weatherStore = defineStore({
@@ -8,7 +8,10 @@ export const weatherStore = defineStore({
     weather: {} as Weather,
   }),
   getters: {
-    getWeather: (state) => state.weather,
+    //Getter not necessary
+    getWeather(state) {
+      return state.weather;
+    },
   },
   actions: {
     async loadDataFromApi(): Promise<void> {

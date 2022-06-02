@@ -43,11 +43,12 @@ the component should be extended to include a message indicating that no weather
 </template>
 
 <script setup lang="ts">
-import type { Ref } from "vue";
-import type { Weather } from "../types/weather";
 import { storeToRefs } from "pinia";
 import { weatherStore } from "../stores/weatherStore";
 import WeatherForecast from "@/components/WeatherForecast.vue";
+
+//const weather: Ref<Weather> = storeToRefs(weatherStore()).getWeather;
+const { weather } = storeToRefs(weatherStore());
 
 const dateOptions: Intl.DateTimeFormatOptions = {
   weekday: "long",
@@ -55,6 +56,4 @@ const dateOptions: Intl.DateTimeFormatOptions = {
   month: "2-digit",
   year: "numeric",
 };
-
-const weather: Ref<Weather> = storeToRefs(weatherStore()).getWeather;
 </script>
