@@ -1,5 +1,5 @@
 <template>
-  <div class="card w-full h-full bg-white shadow-xl">
+  <div class="card w-full h-full drop-shadow bg-white">
     <div class="card-body p-0">
       <leaflet-comp
         :maxZoom="maxZoom"

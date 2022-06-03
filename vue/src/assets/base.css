@@ -8,6 +8,7 @@
 
 :root {
   /* color light mode */
+  background-color: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {

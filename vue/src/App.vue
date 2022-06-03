@@ -1,8 +1,8 @@
 <template>
-  <div class="h-screen overflow-hidden relative">
+  <div class="relative">
     <div class="flex items-start justify-between">
       <router-view name="sidebar"></router-view>
-      <main class="flex flex-col w-full p-2">
+      <main class="flex flex-col w-full">
         <div>
           <router-view></router-view>
         </div>

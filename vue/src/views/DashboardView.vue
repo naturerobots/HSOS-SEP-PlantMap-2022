@@ -1,8 +1,6 @@
 <template>
-  <div class="px-3 py-5 text-3xl text-primary-focus">
-    <h1>Dashboard</h1>
-  </div>
-  <div class="grid grid-cols-3 gap-4 place-items-stretch h-fit p-3">
+  <header-bar title="Dashboard"></header-bar>
+  <div class="grid grid-cols-3 gap-4 place-items-stretch h-fit p-6">
     <div>
       <weather-comp></weather-comp>
     </div>
@@ -61,6 +59,7 @@ import { sensorStore } from "../stores/sensorStore";
 import WeatherComp from "@/components/WeatherComp.vue";
 import SensorComp from "@/components/SensorComp.vue";
 import GardenMap from "@/components/GardenMap.vue";
+import HeaderBar from "@/components/HeaderBar.vue";
 
 onMounted(() => {
   weatherStore().loadDataFromApi();
