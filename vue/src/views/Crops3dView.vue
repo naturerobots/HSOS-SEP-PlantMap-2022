@@ -1,5 +1,8 @@
 <template>
-  <h1>3d</h1>
+  <header-bar title="3D"></header-bar>
+  <div class="p-6"></div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import HeaderBar from "@/components/HeaderBar.vue";
+</script>
