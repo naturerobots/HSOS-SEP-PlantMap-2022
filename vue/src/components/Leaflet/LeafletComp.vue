@@ -53,7 +53,7 @@ onMounted(() => {
 
     leafletMap.addLayer(overlay);
 
-    //Not the best solution
+    //TODO not the best solution, map doens't appear right on first load with 100% height. For now it worked with setTimeout and invalidateSize.
     setTimeout(function () {
       leafletMap.invalidateSize(true);
       const bounds = L.latLngBounds(
