@@ -7,7 +7,9 @@
       <weather-comp></weather-comp>
     </div>
     <div class="col-span-2 row-span-2">
-      <div class="bg-[#fdfff9] h-full p-2 rounded-xl shadow-sm">Garden</div>
+      <div class="h-full">
+        <garden-map></garden-map>
+      </div>
     </div>
     <div>
       <sensor-comp></sensor-comp>
@@ -58,6 +60,7 @@ import { sensorStore } from "../stores/sensorStore";
 
 import WeatherComp from "@/components/WeatherComp.vue";
 import SensorComp from "@/components/SensorComp.vue";
+import GardenMap from "@/components/GardenMap.vue";
 
 onMounted(() => {
   weatherStore().loadDataFromApi();

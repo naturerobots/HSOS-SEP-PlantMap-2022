@@ -8,17 +8,16 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import L from "leaflet";
+import L, { type LeafletMouseEvent } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "./LeafletRotation.ts";
 
 const router = useRouter();
 const route = useRoute();
-
-let leafletMap = {} as L.Map;
-let markers: L.Marker[] = [];
+let leafletMap: L.Map;
+let markers: L.Marker[];
+let overlay: L.ImageOverlay.Rotated;
 let counter = 0;
-let overlay = {} as L.Overlay;
 
 const greenIcon: L.Icon = new L.Icon({
   iconUrl: "src/assets/marker/marker_green.svg",
@@ -32,6 +31,7 @@ onMounted(() => {
     new L.LatLng(52.27264, 8.0498),
     13
   );
+
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxNativeZoom: 18,
     maxZoom: 24,
@@ -50,8 +50,7 @@ function repositionImage() {
   }
 }
 
-//TODO: Explicit Type?
-function setMarker(e: any): void {
+function setMarker(e: LeafletMouseEvent): void {
   if (counter < 3) {
     let point = L.latLng(e.latlng.lat, e.latlng.lng);
     let marker: L.Marker = L.marker(point, {
@@ -84,8 +83,7 @@ function setImage(): void {
 }
 
 function saveImage(): void {
-  //TODO: Please write TODO instead of ToDo
-  //ToDo: Router to dashBoard, send to Server pos + img
+  //TODO: Router to dashBoard, send to Server pos + img
   router.push({ path: "/dashboard" });
 }
 </script>
