@@ -28,6 +28,7 @@ const props = withDefaults(
 defineExpose({
   addTileLayer,
   addMarker,
+  addPolygon,
   setView,
 });
 
@@ -75,6 +76,10 @@ function addTileLayer(tileLayer: L.TileLayer) {
 
 function addMarker(marker: L.Marker): void {
   marker.addTo(leafletMap);
+}
+
+function addPolygon(polygon: L.Polygon): void {
+  polygon.addTo(leafletMap);
 }
 
 function setView(latlng: L.LatLng, zoom: number): void {
