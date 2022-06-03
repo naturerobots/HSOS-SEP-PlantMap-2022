@@ -64,11 +64,11 @@ defineProps({
 });
 
 const chartData = {
-  labels: ["January", "February", "March", "April", "May", "June", "July"],
+  labels: ["23%", "29%", "58%", "75%", "33%", "30%", "73%", "49%"],
   datasets: [
     {
-      label: "Data One",
-      data: [40, 39, 10, 40, 39, 80, 40],
+      label: "Forecast",
+      data: [23, 29, 58, 75, 33, 30, 73, 49],
       fill: true,
       backgroundColor: "rgba(71, 183,132,.5)",
       tension: 0.3,
@@ -84,10 +84,13 @@ const chartOptions = {
     y: {
       ticks: {
         display: false,
+        stepSize: 10,
       },
       grid: {
         display: false,
       },
+      min: 0,
+      max: 100,
     },
     /*x: {
             grid: {
