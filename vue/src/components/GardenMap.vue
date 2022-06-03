@@ -28,8 +28,10 @@ const sensorIcon: L.Icon = new L.Icon({
   shadowSize: [41, 41],
 });
 onMounted(() => {
-  addSensorMarker(new LatLng(52.31699002877383, 7.630380744986272));
-  addSensorMarker(new LatLng(52.31700002877383, 7.630480744986272));
+  addSensorMarker(new LatLng(52.317033021766406, 7.630251717595675));
+  addSensorMarker(new LatLng(52.317114252857905, 7.630492335061585));
+  addSensorMarker(new LatLng(52.31696187881402, 7.630343068498895));
+  addSensorMarker(new LatLng(52.31704148238147, 7.630583773056744));
 });
 
 function addSensorMarker(latlng: L.LatLng) {
