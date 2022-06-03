@@ -27,9 +27,14 @@ defineProps<{
 
 defineExpose({
   addMarker,
+  addPolygon,
 });
 
 function addMarker(marker: L.Marker): void {
   leafletRef.value?.addMarker(marker);
+}
+
+function addPolygon(polygon: L.Polygon): void {
+  leafletRef.value?.addPolygon(polygon);
 }
 </script>
