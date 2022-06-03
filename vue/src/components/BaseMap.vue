@@ -15,8 +15,8 @@ import LeafletComp from "@/components/Leaflet/LeafletComp.vue";
 import type { MapImage } from "@/types/mapImage";
 
 defineProps<{
-  maxZoom?: number
-  zoom?: number
-  mapImage: MapImage
+  maxZoom?: number;
+  zoom?: number;
+  mapImage: MapImage;
 }>();
 </script>
