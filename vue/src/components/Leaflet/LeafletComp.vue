@@ -6,25 +6,30 @@
 
 <script setup lang="ts">
 import "leaflet/dist/leaflet.css";
-import { onMounted, type PropType } from "vue";
+import { onMounted } from "vue";
 import L from "leaflet";
 import "./LeafletRotation.ts";
 import type { MapImage } from "@/types/mapImage";
 
 let leafletMap: L.Map;
 
-const props = defineProps({
-  maxZoom: {
-    type: Number,
-    default: 24,
-  },
-  zoom: {
-    type: Number,
-    default: 13,
-  },
-  mapImage: {
-    type: Object as PropType<MapImage>,
-  },
+const props = withDefaults(
+  defineProps<{
+    maxZoom: number;
+    zoom: number;
+    mapImage: MapImage;
+  }>(),
+  {
+    maxZoom: 24,
+    zoom: 13,
+  }
+);
+
+defineExpose({
+  addTileLayer,
+  addMarker,
+  addPolygon,
+  setView,
 });
 
 onMounted(() => {
@@ -64,4 +69,20 @@ onMounted(() => {
     }, 100);
   }
 });
+
+function addTileLayer(tileLayer: L.TileLayer) {
+  tileLayer.addTo(leafletMap);
+}
+
+function addMarker(marker: L.Marker): void {
+  marker.addTo(leafletMap);
+}
+
+function addPolygon(polygon: L.Polygon): void {
+  polygon.addTo(leafletMap);
+}
+
+function setView(latlng: L.LatLng, zoom: number): void {
+  leafletMap.setView(latlng, zoom);
+}
 </script>
