@@ -29,27 +29,26 @@ the component should be extended to include a message indicating that no weather
           </p>
         </div>
       </div>
-      <!--<div class="grid grid-cols-3 mt-5">
-        TODO: slice parameters could be added to later settings
+      <div class="grid grid-cols-3 mt-5">
+        <!-- TODO: slice parameters could be added to later settings -->
         <div
           :key="forecast.dt.getDate"
           v-for="forecast in weather.forecast.slice(1, 4)"
         >
           <weather-forecast :forecast="forecast"></weather-forecast>
         </div>
-      </div>-->
+      </div>
     </div>
 
-    <test-line-chart></test-line-chart>
+    <!-- <test-line-chart></test-line-chart> -->
   </div>
 </template>
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { weatherStore } from "@/stores/weatherStore";
-//import WeatherForecast from "@/components/WeatherForecast.vue";
-//import TestBarChart from "@/components/TestBarChart.vue";
-import TestLineChart from "@/components/Weather/TestLineChart.vue";
+import WeatherForecast from "@/components/Weather/WeatherForecast.vue";
+//import TestLineChart from "@/components/Weather/TestLineChart.vue";
 
 //const weather: Ref<Weather> = storeToRefs(weatherStore()).getWeather;
 const { weather } = storeToRefs(weatherStore());
