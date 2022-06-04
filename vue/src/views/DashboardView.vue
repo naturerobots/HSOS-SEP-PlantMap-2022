@@ -56,7 +56,7 @@ import { onMounted } from "vue";
 import { weatherStore } from "../stores/weatherStore";
 import { sensorStore } from "../stores/sensorStore";
 
-import WeatherComp from "@/components/WeatherComp.vue";
+import WeatherComp from "@/components/Weather/WeatherComp.vue";
 import SensorComp from "@/components/SensorComp.vue";
 
 onMounted(() => {
