@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import type { PropType } from "vue";
-import type { Plugin } from "chart.js";
+import type { ChartOptions, Plugin, Tick } from "chart.js";
 import { Line } from "vue-chartjs";
 import {
   Chart as ChartJS,
@@ -25,6 +25,7 @@ import {
   CategoryScale,
   Filler,
 } from "chart.js";
+import type { TChartData } from "vue-chartjs/dist/types";
 
 ChartJS.register(
   Title,
@@ -63,23 +64,40 @@ defineProps({
   },
 });
 
+let data = [23, 29, 58, 75, 33, 30, 73, 49];
+let labels = [
+  "23%;Now",
+  "29%;11:00",
+  "58%;12:00",
+  "75%;13:00",
+  "33%;14:00",
+  "30%;15:00",
+  "73%;16:00",
+  "49%;17:00",
+];
+
 const chartData = {
-  labels: ["23%", "29%", "58%", "75%", "33%", "30%", "73%", "49%"],
+  labels: labels,
   datasets: [
     {
       label: "Forecast",
-      data: [23, 29, 58, 75, 33, 30, 73, 49],
+      data: data,
       fill: true,
       backgroundColor: "rgba(71, 183,132,.5)",
       tension: 0.3,
     },
+    {
+      label: "ForecastTest",
+      xAxisID: "xTwo",
+    },
   ],
-};
+} as TChartData<"line">;
 
 //https://stackoverflow.com/questions/28716464/hiding-labels-on-y-axis-in-chart-js --> Answer Merouane T.
 const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
+  events: [],
   scales: {
     y: {
       ticks: {
@@ -92,11 +110,28 @@ const chartOptions = {
       min: 0,
       max: 100,
     },
-    /*x: {
-            grid: {
-                display: false
-            }
-        },*/
+    x: {
+      grid: {
+        display: true,
+      },
+      position: "bottom",
+      ticks: {
+        callback: (index: number) => {
+          return labels[index].split(";")[0];
+        },
+      },
+    },
+    xTwo: {
+      position: "top",
+      grid: {
+        display: true,
+      },
+      ticks: {
+        callback: (index: number) => {
+          return labels[index].split(";")[1];
+        },
+      },
+    },
   },
-};
+} as ChartOptions<"line">;
 </script>
