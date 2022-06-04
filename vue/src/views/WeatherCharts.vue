@@ -9,7 +9,6 @@
 import { onMounted } from "vue";
 import { weatherStore } from "../stores/weatherStore";
 
-import WeatherComp from "@/components/Weather/WeatherComp.vue";
 import ChartRainPop from "@/components/Weather/ChartRainPop.vue";
 
 onMounted(() => {

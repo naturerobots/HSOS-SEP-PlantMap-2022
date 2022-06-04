@@ -8,9 +8,6 @@
             :chart-options="chartOptions"
             :chart-data="chartData"
             :chart-id="chartId"
-            :plugins="plugins"
-            :css-classes="cssClasses"
-            :styles="styles"
             :width="width"
             :height="height"
           />
@@ -21,10 +18,9 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType } from "vue";
-import type { ChartOptions, Plugin } from "chart.js";
-import { Line } from "vue-chartjs";
+import type { TChartData } from "vue-chartjs/dist/types";
 import { storeToRefs } from "pinia";
+import { Line } from "vue-chartjs";
 import {
   Chart as ChartJS,
   Title,
@@ -35,16 +31,18 @@ import {
   CategoryScale,
   Filler,
 } from "chart.js";
-import type { TChartData } from "vue-chartjs/dist/types";
+import ChartJsPluginDataLabelsfrom from "chartjs-plugin-datalabels";
 
 import { weatherStore } from "@/stores/weatherStore";
 
+//const lineChart = ref<InstanceType<typeof Line>>();
 const { weather } = storeToRefs(weatherStore());
 
 ChartJS.register(
   Title,
   Tooltip,
   Filler,
+  ChartJsPluginDataLabelsfrom,
   LineElement,
   LinearScale,
   PointElement,
@@ -64,30 +62,18 @@ defineProps({
     type: Number,
     default: 100,
   },
-  cssClasses: {
-    type: String,
-    default: "",
-  },
-  styles: {
-    type: Object as PropType<Partial<CSSStyleDeclaration>>,
-    default: {} as Partial<CSSStyleDeclaration>,
-  },
-  plugins: {
-    type: Array as PropType<Plugin<"line">[]>,
-    default: [] as Plugin<"line">[],
-  },
 });
 
-let data = [23, 29, 58, 75, 33, 30, 73, 49];
+let data = [23, 29, 58, 75, 33, 100, 73, 49];
 let labels = [
-  "23%;Now",
-  "29%;11:00",
-  "58%;12:00",
-  "75%;13:00",
-  "33%;14:00",
-  "30%;15:00",
-  "73%;16:00",
-  "49%;17:00",
+  "Now",
+  "11:00",
+  "12:00",
+  "13:00",
+  "14:00",
+  "15:00",
+  "16:00",
+  "17:00",
 ];
 
 const chartData = {
@@ -100,18 +86,18 @@ const chartData = {
       backgroundColor: "rgba(71, 183,132,.5)",
       tension: 0.3,
     },
-    {
-      label: "ForecastTest",
-      xAxisID: "xTwo",
-    },
   ],
 } as TChartData<"line">;
 
-//https://stackoverflow.com/questions/28716464/hiding-labels-on-y-axis-in-chart-js --> Answer Merouane T.
 const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
   events: [],
+  layout: {
+    padding: {
+      top: 20,
+    },
+  },
   scales: {
     y: {
       ticks: {
@@ -120,32 +106,38 @@ const chartOptions = {
       },
       grid: {
         display: false,
+        drawBorder: false,
       },
       min: 0,
-      max: 100,
+      //max: 100,
     },
     x: {
       grid: {
-        display: true,
+        display: false,
       },
       position: "bottom",
       ticks: {
-        callback: (index: number) => {
-          return labels[index].split(";")[0];
-        },
-      },
-    },
-    xTwo: {
-      position: "top",
-      grid: {
-        display: true,
-      },
-      ticks: {
-        callback: (index: number) => {
+        /*callback: (index: number) => {
           return labels[index].split(";")[1];
-        },
+        },*/
       },
     },
   },
-} as ChartOptions<"line">;
+  plugins: {
+    datalabels: {
+      anchor: "end",
+      align: "top",
+      offset: "-2",
+      color: "black",
+      //textAlign: "left",
+      font: {
+        size: 10,
+      },
+      formatter: function (value: string) {
+        // context: Object
+        return value + "%"; //return context.chart.data.labels[context.dataIndex]; -> gibt die label namen zurück
+      },
+    },
+  },
+} as any; //don't know the right type
 </script>

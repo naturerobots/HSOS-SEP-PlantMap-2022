@@ -13,7 +13,8 @@
 
 <script setup lang="ts">
 import type { PropType } from "vue";
-import type { ChartOptions, Plugin, Tick } from "chart.js";
+import type { ChartOptions, Plugin } from "chart.js";
+import type { TChartData } from "vue-chartjs/dist/types";
 import { Line } from "vue-chartjs";
 import {
   Chart as ChartJS,
@@ -25,7 +26,6 @@ import {
   CategoryScale,
   Filler,
 } from "chart.js";
-import type { TChartData } from "vue-chartjs/dist/types";
 
 ChartJS.register(
   Title,
