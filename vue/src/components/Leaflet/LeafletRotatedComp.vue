@@ -14,8 +14,9 @@ import "./LeafletRotation.ts";
 
 const router = useRouter();
 const route = useRoute();
+const markers: L.Marker[] = [];
+
 let leafletMap: L.Map;
-let markers: L.Marker[];
 let overlay: L.ImageOverlay.Rotated;
 let counter = 0;
 
@@ -57,8 +58,10 @@ function setMarker(e: LeafletMouseEvent): void {
       draggable: true,
       icon: greenIcon,
     }).addTo(leafletMap);
+
     markers.push(marker);
     marker.on("drag dragend", repositionImage);
+
     counter += 1;
     if (counter == 3) {
       setImage();
