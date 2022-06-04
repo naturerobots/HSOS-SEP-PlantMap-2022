@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.26.1",
     "chart.js": "^3.8.0",
+    "chartjs-plugin-datalabels": "^2.0.0",
     "daisyui": "^2.15.2",
     "leaflet": "^1.8.0",
     "pinia": "^2.0.14",
