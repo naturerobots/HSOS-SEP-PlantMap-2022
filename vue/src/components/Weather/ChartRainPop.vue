@@ -91,6 +91,7 @@ const chartData = {
 
 const chartOptions = {
   responsive: true,
+  animation: false,
   maintainAspectRatio: false,
   events: [],
   layout: {
