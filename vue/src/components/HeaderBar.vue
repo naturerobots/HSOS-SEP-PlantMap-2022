@@ -2,7 +2,7 @@
   <div class="px-6 py-3 border-b">
     <div class="pl-3 py-3 h-16 w-full flex items-center justify-between">
       <div class="text-3xl text-black">
-        <h1>{{ title }}</h1>
+        <div>{{ title }}</div>
       </div>
       <div class="flex items-center">
         <!--TODO: Add Quasar components (Button, Avatar)-->

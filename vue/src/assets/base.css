@@ -28,20 +28,21 @@
 }
 
 .weather-forecasts {
-  @apply mt-2 text-primary-focus text-sm;
+  @apply mt-2 text-primary_hover text-sm;
 }
 
 .sidebar {
   @apply h-screen block shadow-lg relative;
+  /* width: 120px; */
 }
 
-.sidebar-content {
+/* .sidebar-content {
   @apply flex flex-row h-full;
 }
 
 .sidebar-nav {
   @apply w-20 h-screen justify-between flex flex-col;
-}
+} */
 
 #map {
   position: absolute;

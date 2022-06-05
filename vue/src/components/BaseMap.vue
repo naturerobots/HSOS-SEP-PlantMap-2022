@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="card w-full h-full drop-shadow bg-white">
     <div class="card-body p-0">
       <leaflet-comp
@@ -9,6 +9,17 @@
       ></leaflet-comp>
     </div>
   </div>
+</template> -->
+
+<template>
+  <q-card class="w-full h-full shadow-1 bg-white">
+    <leaflet-comp
+      :maxZoom="maxZoom"
+      :zoom="zoom"
+      :map-image="mapImage"
+      ref="leafletRef"
+    ></leaflet-comp>
+  </q-card>
 </template>
 
 <script setup lang="ts">

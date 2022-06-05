@@ -1,14 +1,16 @@
 <template>
-  <div class="relative">
-    <div class="flex items-start justify-between">
-      <router-view name="sidebar"></router-view>
-      <main class="flex flex-col w-full">
-        <div>
-          <router-view></router-view>
-        </div>
-      </main>
+  <q-layout view="lHh lpr lFf">
+    <div class="relative">
+      <div class="flex items-start justify-between">
+        <!-- <router-view name="sidebar"></router-view> -->
+        <main class="flex flex-col w-full">
+          <div>
+            <router-view></router-view>
+          </div>
+        </main>
+      </div>
     </div>
-  </div>
+  </q-layout>
 </template>
 
 <script setup lang="ts"></script>

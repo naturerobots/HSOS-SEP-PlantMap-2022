@@ -1,11 +1,17 @@
+<!---
+TODO: Create the date in the store or service. Must then also be changed in WeatherComp.
+-->
 <template>
   <div class="text-center">
-    <h2 class="font-bold text-primary-focus">
+    <div class="text-weight-bold text-primary_hover">
       <!--TODO: Maybe move language and date options to settings?-->
       {{ forecast.dt.toLocaleString("de-DE", dateOptions) }}
-    </h2>
+    </div>
     <figure>
-      <img :src="`http://openweathermap.org/img/wn/${forecast.icon}@2x.png`" />
+      <q-img
+        :src="`http://openweathermap.org/img/wn/${forecast.icon}@2x.png`"
+        style="width: 90px"
+      />
     </figure>
     <p class="weather-forecasts">
       {{ forecast.tempMin.toFixed(1) }} / {{ forecast.tempMax.toFixed(1) }}°C
@@ -24,18 +30,6 @@ const dateOptions: Intl.DateTimeFormatOptions = {
   month: "2-digit",
 };
 
-//runtime declaration
-//https://vuejs.org/guide/typescript/composition-api.html#typing-component-props
-//https://frontendsociety.com/using-a-typescript-interfaces-and-types-as-a-prop-type-in-vuejs-508ab3f83480
-//https://github.com/vuejs/vue/pull/6856
-/*defineProps({
-  forecast: {
-    type: Object as PropType<WeatherForecast>,
-    required: true,
-  }
-});*/
-
-//type-based declaration
 defineProps<{
   forecast: WeatherForecast;
 }>();

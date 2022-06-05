@@ -4,7 +4,8 @@ import CropsView from "@/views/CropsView.vue";
 import Crops3dView from "@/views/Crops3dView.vue";
 import LoginView from "@/views/LoginView.vue";
 import ImageUploadView from "@/views/ImageUploadView.vue";
-import Sidebar from "@/components/SidebarMenu.vue";
+// import Sidebar from "@/components/SidebarMenu.vue";
+import Sidebar from "@/components/SidebarMenuQuasar.vue";
 import CropImageView from "@/views/CropImageView.vue";
 
 const router = createRouter({
