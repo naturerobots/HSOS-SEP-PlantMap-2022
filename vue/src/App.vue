@@ -11,4 +11,13 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onBeforeMount, onMounted } from "vue";
+import { weatherDataStore } from "@/stores/weatherDataStore";
+
+onMounted(async () => {
+  console.log("onBeforeMount start");
+  weatherDataStore().initWeatherData();
+  console.log("onBeforeMount end");
+});
+</script>
