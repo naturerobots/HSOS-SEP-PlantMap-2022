@@ -7,4 +7,6 @@ export interface Sensor {
   temp_trend: string;
   ec_value: number;
   ec_trend: string;
+  lat: number;
+  lng: number;
 }
