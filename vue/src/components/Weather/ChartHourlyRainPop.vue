@@ -33,12 +33,13 @@ import {
   CategoryScale,
   Filler,
   type ChartData,
+  type ChartDataset,
+  type ChartOptions,
 } from "chart.js";
 import ChartJsPluginDataLabelsfrom from "chartjs-plugin-datalabels";
 
 import { weatherDataStore } from "@/stores/weatherDataStore";
 
-const lineChart = ref<InstanceType<typeof Line>>();
 const { forecast } = storeToRefs(weatherDataStore());
 
 ChartJS.register(
@@ -71,10 +72,10 @@ const props = defineProps({
   },
 });
 
-let data = storeToRefs(weatherDataStore()).getForecastPops;
+let data = storeToRefs(weatherDataStore()).getHourlyRainPop;
 
 const chartData = ref<ChartData<"line">>({
-  datasets: [],
+  datasets: [] as ChartDataset<"line">[],
 });
 
 watch(data, () => {
@@ -92,7 +93,7 @@ let labels = [
   "17:00",
 ];
 
-function setChartData() {
+function setChartData(): void {
   const updatedChartData = {
     labels: labels,
     datasets: [
@@ -100,23 +101,25 @@ function setChartData() {
         label: "Forecast",
         data: data.value,
         fill: true,
-        backgroundColor: "rgba(71, 183,132,.5)",
+        pointBackgroundColor: "rgba(41,166,183,1)",
+        pointBorderColor: "rgba(41,166,183,1)",
+        backgroundColor: "rgba(101,191,203,1)",
         tension: 0.3,
       },
     ],
-  };
+  } as ChartData<"line">;
 
   chartData.value = { ...updatedChartData };
 }
 
 const chartOptions = {
-  responsive: true,
   animation: false,
-  maintainAspectRatio: false,
   events: [],
+  maintainAspectRatio: false,
+  responsive: true,
   layout: {
     padding: {
-      top: 20,
+      top: 25,
     },
   },
   scales: {
@@ -137,22 +140,17 @@ const chartOptions = {
         display: false,
       },
       position: "bottom",
-      ticks: {
-        /*callback: (index: number) => {
-          return labels[index].split(";")[1];
-        },*/
-      },
     },
   },
   plugins: {
     datalabels: {
       anchor: "end",
       align: "top",
-      offset: "-2",
+      offset: -2,
       color: "black",
       //textAlign: "left",
       font: {
-        size: 10,
+        size: 14,
       },
       formatter: function (value: string) {
         // context: Object
@@ -160,7 +158,7 @@ const chartOptions = {
       },
     },
   },
-} as any; //don't know the right type
+} as ChartOptions<"line">;
 
 onMounted(() => {
   setChartData();

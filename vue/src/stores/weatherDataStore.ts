@@ -36,21 +36,15 @@ export const weatherDataStore = defineStore({
     getHourly(state) {
       return state.forecast.hourly;
     },
-    getForecastPops(state): number[] {
-      /*let popValues: number[] = [];
-      popValues;
-      const hourlyForecast = state.forecast.hourly.splice(0, 8);
-
-      hourlyForecast.forEach((value) => {
-        popValues.push(value.pop * 100);
-      });
-
-      console.log(popValues);
-      */
-      //return popValues;
+    getHourlyRainPop(state): number[] {
       return state.forecast.hourly
         .slice(0, 8)
         .map((value) => Math.round(value.pop * 100));
+    },
+    getHourlyTemp(state): number[] {
+      return state.forecast.hourly
+        .slice(0, 8)
+        .map((value) => Math.round(value.temp));
     },
   },
   actions: {
