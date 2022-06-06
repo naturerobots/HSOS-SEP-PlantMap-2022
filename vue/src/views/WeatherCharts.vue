@@ -6,12 +6,6 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
-import { weatherStore } from "../stores/weatherStore";
-
+//import { weatherDataStore } from "@/stores/weatherDataStore";
 import ChartRainPop from "@/components/Weather/ChartRainPop.vue";
-
-onMounted(() => {
-  weatherStore().loadDataFromApi();
-});
 </script>

@@ -1,10 +1,11 @@
 <template>
-  <div v-if="weather.current" class="card h-full w-full shadow-sm bg-[#fdfff9]">
+  <div v-if="forecast" class="card h-full w-full shadow-sm bg-[#fdfff9]">
     <div class="card-body p-5">
       <h2 class="text-xl text-center text-primary-focus">Rain pop</h2>
       <div class="card card-side">
         <div class="card-body">
           <Line
+            ref="lineChart"
             :chart-options="chartOptions"
             :chart-data="chartData"
             :chart-id="chartId"
@@ -18,9 +19,10 @@
 </template>
 
 <script setup lang="ts">
-import type { TChartData } from "vue-chartjs/dist/types";
+import { ref, watch, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { Line } from "vue-chartjs";
+
 import {
   Chart as ChartJS,
   Title,
@@ -30,13 +32,14 @@ import {
   PointElement,
   CategoryScale,
   Filler,
+  type ChartData,
 } from "chart.js";
 import ChartJsPluginDataLabelsfrom from "chartjs-plugin-datalabels";
 
-import { weatherStore } from "@/stores/weatherStore";
+import { weatherDataStore } from "@/stores/weatherDataStore";
 
-//const lineChart = ref<InstanceType<typeof Line>>();
-const { weather } = storeToRefs(weatherStore());
+const lineChart = ref<InstanceType<typeof Line>>();
+const { forecast } = storeToRefs(weatherDataStore());
 
 ChartJS.register(
   Title,
@@ -49,7 +52,11 @@ ChartJS.register(
   CategoryScale
 );
 
-defineProps({
+const props = defineProps({
+  /*data: {
+    type: Array as PropType<number[]>,
+    default: [] as number[],
+  },*/
   chartId: {
     type: String,
     default: "line-chart",
@@ -64,7 +71,16 @@ defineProps({
   },
 });
 
-let data = [23, 29, 58, 75, 33, 100, 73, 49];
+let data = storeToRefs(weatherDataStore()).getForecastPops;
+
+const chartData = ref<ChartData<"line">>({
+  datasets: [],
+});
+
+watch(data, () => {
+  setChartData();
+});
+
 let labels = [
   "Now",
   "11:00",
@@ -76,18 +92,22 @@ let labels = [
   "17:00",
 ];
 
-const chartData = {
-  labels: labels,
-  datasets: [
-    {
-      label: "Forecast",
-      data: data,
-      fill: true,
-      backgroundColor: "rgba(71, 183,132,.5)",
-      tension: 0.3,
-    },
-  ],
-} as TChartData<"line">;
+function setChartData() {
+  const updatedChartData = {
+    labels: labels,
+    datasets: [
+      {
+        label: "Forecast",
+        data: data.value,
+        fill: true,
+        backgroundColor: "rgba(71, 183,132,.5)",
+        tension: 0.3,
+      },
+    ],
+  };
+
+  chartData.value = { ...updatedChartData };
+}
 
 const chartOptions = {
   responsive: true,
@@ -110,7 +130,7 @@ const chartOptions = {
         drawBorder: false,
       },
       min: 0,
-      //max: 100,
+      //max: 110,
     },
     x: {
       grid: {
@@ -141,4 +161,8 @@ const chartOptions = {
     },
   },
 } as any; //don't know the right type
+
+onMounted(() => {
+  setChartData();
+});
 </script>
