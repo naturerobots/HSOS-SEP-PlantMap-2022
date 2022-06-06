@@ -11,4 +11,13 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted } from "vue";
+import { weatherStore } from "@/stores/weatherStore";
+import { sensorStore } from "@/stores/sensorStore";
+
+onMounted(() => {
+  weatherStore().loadDataFromApi();
+  sensorStore().loadDataFromApi();
+});
+</script>
