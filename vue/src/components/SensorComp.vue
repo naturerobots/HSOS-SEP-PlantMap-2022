@@ -12,12 +12,10 @@
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import { sensorStore } from "@/stores/sensorStore";
 import SensorStatus from "@/components/SensorStatus.vue";
-
-import type { Ref } from "vue";
 import type { Sensor } from "@/types/sensor";
 
-const sensors: Ref<Sensor[]> = storeToRefs(sensorStore()).getSensors;
+defineProps<{
+  sensors: Sensor[];
+}>();
 </script>
