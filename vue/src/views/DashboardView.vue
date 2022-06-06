@@ -6,11 +6,11 @@
     </div>
     <div class="col-span-2 row-span-2">
       <div class="h-full">
-        <garden-map></garden-map>
+        <garden-map :sensors="sensors" @sensor-click="sensorClick"></garden-map>
       </div>
     </div>
     <div>
-      <sensor-comp></sensor-comp>
+      <sensor-comp :sensors="sensors"></sensor-comp>
     </div>
   </div>
 
@@ -52,18 +52,24 @@
 <script setup lang="ts">
 //####################################
 //Test for weather / can be cleaned up
-import { onMounted } from "vue";
-import { weatherStore } from "../stores/weatherStore";
-import { sensorStore } from "../stores/sensorStore";
+import { sensorStore } from "@/stores/sensorStore";
 
 import WeatherComp from "@/components/WeatherComp.vue";
 import SensorComp from "@/components/SensorComp.vue";
 import GardenMap from "@/components/GardenMap.vue";
 import HeaderBar from "@/components/HeaderBar.vue";
 
-onMounted(() => {
-  weatherStore().loadDataFromApi();
-  sensorStore().loadDataFromApi();
-});
+import { storeToRefs } from "pinia";
+import type { Ref } from "vue";
+import type { Sensor } from "@/types/sensor";
+
+const sensors: Ref<Sensor[]> = storeToRefs(sensorStore()).getSensors;
+
+//same works for sensorEnter, sensorLeave
+function sensorClick(sensorId: number) {
+  //TODO: handle sensorId, for example for highlighting the table row
+  console.log(sensorId);
+}
+
 //####################################
 </script>
