@@ -16,7 +16,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 SERVER_URL = "seerep.naturerobots.de:5000"
-channel = grpc.insecure_channel(SERVER_URL)
+options = [('grpc.max_receive_message_length', 100 * 1024 * 1024)]  # https://github.com/tensorflow/serving/issues/1382
+channel = grpc.insecure_channel(SERVER_URL, options=options)
 
 stub = metaOperations.MetaOperationsStub(channel)
 
