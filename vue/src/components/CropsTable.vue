@@ -118,8 +118,8 @@ import { ref } from "vue";
 const crops: Ref<Crop[]> = storeToRefs(cropsStore()).getCrops;
 let input = ref("");
 
-function rowclicked(evt: Event, row: any) {
-  console.log("rowClicked: " + row);
+function rowclicked() {
+  console.log("rowClicked");
 }
 const columns = [
   {
