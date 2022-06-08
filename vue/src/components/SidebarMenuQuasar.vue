@@ -7,7 +7,7 @@
     </div>
     <ul>
       <router-link to="/dashboard" custom v-slot="{ href, navigate, isActive }">
-        <li class="text-center">
+        <li class="text-center hover">
           <a
             class="block py-7"
             v-bind:class="{ active: isActive }"
@@ -36,7 +36,7 @@
         </li>
       </router-link>
       <router-link to="/crops" custom v-slot="{ href, navigate, isActive }">
-        <li class="text-center">
+        <li class="text-center hover">
           <a
             class="block py-7"
             v-bind:class="{ active: isActive }"
@@ -64,7 +64,7 @@
         </li>
       </router-link>
       <router-link to="/3d" custom v-slot="{ href, navigate, isActive }">
-        <li class="text-center">
+        <li class="text-center hover">
           <a
             class="block py-7"
             v-bind:class="{ active: isActive }"
@@ -131,11 +131,17 @@ const route = useRoute();
 
 <style lang="scss">
 .active {
-  background-color: #79b729;
+  background-color: $primary;
   color: white;
 }
 
 .active-svg {
   fill: white !important;
+}
+
+.hover {
+  &:hover {
+    background-color: rgba($primary, 0.1);
+  }
 }
 </style>
