@@ -139,9 +139,7 @@ const route = useRoute();
   fill: white !important;
 }
 
-.hover {
-  &:hover {
-    background-color: rgba($primary, 0.1);
-  }
+.hover:hover {
+  background-color: rgba($primary, 0.1);
 }
 </style>
