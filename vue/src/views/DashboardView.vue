@@ -55,7 +55,8 @@
 import { sensorStore } from "@/stores/sensorStore";
 
 import WeatherComp from "@/components/WeatherComp.vue";
-import SensorComp from "@/components/SensorComp.vue";
+// import SensorComp from "@/components/SensorComp.vue";
+import SensorComp from "@/components/SensorCompQuasar.vue";
 import GardenMap from "@/components/GardenMap.vue";
 import HeaderBar from "@/components/HeaderBar.vue";
 

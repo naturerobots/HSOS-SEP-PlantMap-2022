@@ -10,14 +10,17 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@quasar/extras": "^1.14.0",
     "axios": "^0.26.1",
     "daisyui": "^2.14.2",
     "pinia": "^2.0.13",
+    "quasar": "^2.7.1",
     "vue": "^3.2.31",
     "vue-advanced-cropper": "^2.8.1",
     "vue-router": "^4.0.14"
   },
   "devDependencies": {
+    "@quasar/vite-plugin": "^1.0.10",
     "@rushstack/eslint-patch": "^1.1.0",
     "@types/jsdom": "^16.2.14",
     "@types/leaflet": "^1.7.10",
@@ -36,6 +39,7 @@
     "leaflet": "^1.8.0",
     "postcss": "^8.4.12",
     "prettier": "^2.5.1",
+    "sass": "^1.32.12",
     "tailwindcss": "^3.0.24",
     "typescript": "~4.6.3",
     "vite": "^2.9.6",

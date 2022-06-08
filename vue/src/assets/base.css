@@ -17,31 +17,30 @@
   }
 }
 
-*,
+/* *,
 *::before,
 *::after {
   box-sizing: border-box;
   margin: 0;
-  /*position: relative;*/
+  position: relative;
   font-weight: normal;
   font-family: Poppins, sans-serif;
-}
+} */
 
 .weather-forecasts {
-  @apply mt-2 text-primary-focus text-sm;
+  @apply mt-2 text-primary_hover text-sm;
 }
 
 .sidebar {
-  @apply h-screen block shadow-lg relative;
 }
 
-.sidebar-content {
+/* .sidebar-content {
   @apply flex flex-row h-full;
 }
 
 .sidebar-nav {
   @apply w-20 h-screen justify-between flex flex-col;
-}
+} */
 
 #map {
   position: absolute;

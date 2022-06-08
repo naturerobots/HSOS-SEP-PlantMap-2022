@@ -4,31 +4,38 @@ the component should be extended to include a message indicating that no weather
 -->
 
 <template>
-  <div v-if="weather.current" class="card h-full w-full drop-shadow bg-white">
-    <div class="card-body p-5">
-      <h2 class="text-xl text-center text-primary-focus">
+  <q-card class="shadow-1" v-if="weather.forecast">
+    <q-card-section>
+      <div class="text-h6 text-center text-primary_hover">
         Wetter {{ weather.current.name }}
-      </h2>
-      <div class="card card-side">
-        <figure>
-          <img
-            :src="`http://openweathermap.org/img/wn/${weather.current.icon}@2x.png`"
-          />
-        </figure>
-        <div class="card-body">
-          <h2 class="font-bold text-primary-focus">
+      </div>
+    </q-card-section>
+    <q-card-section>
+      <div class="row q-mt-lg">
+        <div class="col-4">
+          <figure>
+            <img
+              :src="`http://openweathermap.org/img/wn/${weather.current.icon}@2x.png`"
+            />
+          </figure>
+        </div>
+        <div class="col-8">
+          <div class="text-xl font-bold text-primary_hover">
             <!--TODO: Maybe move language and date options to settings?-->
             {{ weather.current.dt.toLocaleString("de-DE", dateOptions) }}
-          </h2>
-          <p class="mt-2 text-primary-focus text-2xl">
+          </div>
+          <!-- </div> -->
+          <p class="q-mt-sm text-primary_hover text-subtitle1">
             {{ weather.current.tempMin.toFixed(1) }} /
             {{ weather.current.tempMax.toFixed(1) }}°C
           </p>
-          <p class="mt-2 text-primary-focus">
+          <p class="q-mt-sm text-primary_hover text-subtitle1">
             {{ weather.current.description }}
           </p>
         </div>
       </div>
+    </q-card-section>
+    <q-card-section>
       <div class="grid grid-cols-3 mt-5">
         <!--TODO: slice parameters could be added to later settings -->
         <div
@@ -38,11 +45,13 @@ the component should be extended to include a message indicating that no weather
           <weather-forecast :forecast="forecast"></weather-forecast>
         </div>
       </div>
-    </div>
-  </div>
+    </q-card-section>
+  </q-card>
 </template>
 
 <script setup lang="ts">
+//####################################
+//Test for weather / can be cleaned up
 import type { Ref } from "vue";
 import type { Weather } from "../types/weather";
 import { storeToRefs } from "pinia";
@@ -57,4 +66,5 @@ const dateOptions: Intl.DateTimeFormatOptions = {
 };
 
 const weather: Ref<Weather> = storeToRefs(weatherStore()).getWeather;
+//####################################
 </script>

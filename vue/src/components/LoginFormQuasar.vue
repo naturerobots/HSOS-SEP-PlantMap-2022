@@ -1,12 +1,12 @@
 <template>
-  <div class="card w-96 bg-light shadow-xl">
+  <q-card class="w-96 bg-background shadow-xl">
     <div class="card-body">
       <img
         src="@/assets/img/logo_small_color.svg"
         class="w-16 h-16 mb-3 mx-auto"
       />
       <div class="grid justify-items-center">
-        <h2 class="card-title">Login to your account</h2>
+        <div class="text-3xl">Login to your account</div>
       </div>
       <div class="py-4">
         <div class="form-control">
@@ -36,7 +36,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </q-card>
 </template>
 
 <script setup lang="ts"></script>
