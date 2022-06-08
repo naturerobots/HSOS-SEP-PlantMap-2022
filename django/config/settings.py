@@ -138,16 +138,22 @@ LOGGING = {
     'disable_existing_loggers': False,
     'loggers': {
         'django': {
-            'handlers': ['file', 'console'],
+            'handlers': ['debugFile', 'infoFile', 'console'],
             'level': 'DEBUG',
             'propagate': True,
         },
     },
     'handlers': {
-        'file': {
+        'debugFile': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': './storage/logs/django/debug.log',
+            'formatter': 'extended',
+        },
+        'infoFile': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': './storage/logs/django/info.log',
             'formatter': 'extended',
         },
         'console': {'level': 'INFO', 'class': 'logging.StreamHandler', 'formatter': 'simple'},
