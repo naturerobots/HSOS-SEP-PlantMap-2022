@@ -16,7 +16,11 @@
       </div>
     </div>
     <div>
-      <sensor-comp :sensors="sensors"></sensor-comp>
+      <sensor-comp
+        :sensors="sensors"
+        @row-enter="tableSensorEnter"
+        @row-leave="tableSensorLeave"
+      ></sensor-comp>
     </div>
   </div>
 
