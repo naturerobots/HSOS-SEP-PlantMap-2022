@@ -7,7 +7,7 @@
       <q-table
         separator="none"
         flat
-        class="header-table"
+        class="header-table body-table"
         :rows="sensors"
         :columns="columns"
         row-key="name"
@@ -76,3 +76,9 @@ const columns = [
   },
 ];
 </script>
+
+<style lang="scss">
+.body-table tbody {
+  font-weight: bold;
+}
+</style>
