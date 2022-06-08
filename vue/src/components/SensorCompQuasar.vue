@@ -8,38 +8,71 @@
         separator="none"
         flat
         class="header-table"
-        :rows="rows"
+        :rows="sensors"
         :columns="columns"
         row-key="name"
-      />
+      >
+        <template v-slot:body="props">
+          <q-tr
+            :props="props"
+            @mouseenter="rowEnter(props.row.id)"
+            @mouseleave="rowLeave(props.row.id)"
+          >
+            <q-td key="name" :props="props">
+              {{ props.row.name }}
+            </q-td>
+            <q-td key="moisture_value" :props="props">
+              {{ props.row.moisture_value }}
+            </q-td>
+            <q-td key="temp_value" :props="props">
+              {{ props.row.temp_value }}
+            </q-td>
+          </q-tr>
+        </template>
+      </q-table>
     </q-card-section>
   </q-card>
 </template>
 
 <script setup lang="ts">
+import type { Sensor } from "@/types/sensor";
+
+defineProps<{
+  sensors: Sensor[];
+}>();
+
+const emit = defineEmits<{
+  (event: "rowEnter", sensorId: number): void;
+  (event: "rowLeave", sensorId: number): void;
+}>();
 //icons for testing
 const upGreen = "up_green";
 const downGreen = "down_green";
 const upRed = "up_red";
 const downRed = "down_red";
 
+function rowEnter(sensorId: number) {
+  emit("rowEnter", sensorId);
+}
+
+function rowLeave(sensorId: number) {
+  emit("rowLeave", sensorId);
+}
+
+//TODO: columns
 const columns = [
-  { name: "probe", label: "Probe", field: "probe", align: "left" },
-  { name: "moisture", label: "Moisture", field: "moisture", align: "left" },
+  { name: "name", label: "Name", field: "name", align: "left" },
   {
-    name: "temperature",
-    label: "Temperature",
-    field: "temperature",
+    name: "moisture_value",
+    label: "Moisture",
+    field: "moisture_value",
     align: "left",
   },
-  { name: "ph", label: "PH", field: "ph", align: "left" },
-];
-
-const rows = [
-  { probe: "A", moisture: "59%", temperature: "8°C", ph: "4,5" },
-  { probe: "B", moisture: "30%", temperature: "9°C", ph: "7,9" },
-  { probe: "C", moisture: "48%", temperature: "6°C", ph: "7,5" },
+  {
+    name: "temp_value",
+    label: "Temperature",
+    field: "temp_value",
+    align: "left",
+  },
 ];
 </script>
-
-<style lang="sass"></style>
