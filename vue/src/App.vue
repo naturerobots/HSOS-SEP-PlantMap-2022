@@ -1,9 +1,10 @@
 <template>
   <q-layout view="lHh lpr lFf">
     <div class="relative">
-      <div class="flex items-start justify-between">
-        <!-- <router-view name="sidebar"></router-view> -->
-        <main class="flex flex-col w-full">
+      <div class="row flex justify-between">
+        <!--items-start-->
+        <router-view name="sidebar" class=""></router-view>
+        <main class="flex flex-col ml-28 w-full">
           <div>
             <router-view></router-view>
           </div>

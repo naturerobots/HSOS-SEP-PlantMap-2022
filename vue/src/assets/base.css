@@ -17,23 +17,21 @@
   }
 }
 
-*,
+/* *,
 *::before,
 *::after {
   box-sizing: border-box;
   margin: 0;
-  /*position: relative;*/
+  position: relative;
   font-weight: normal;
   font-family: Poppins, sans-serif;
-}
+} */
 
 .weather-forecasts {
   @apply mt-2 text-primary_hover text-sm;
 }
 
 .sidebar {
-  @apply h-screen block shadow-lg relative;
-  /* width: 120px; */
 }
 
 /* .sidebar-content {

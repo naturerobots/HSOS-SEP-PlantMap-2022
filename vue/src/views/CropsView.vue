@@ -13,7 +13,7 @@
       <CropsTable />
     </div>
     <div class="col-4 pl-2">
-      <q-card>
+      <q-card class="shadow-1">
         <img src="../assets/img/gardenDummy.png" alt="" />
       </q-card>
     </div>
