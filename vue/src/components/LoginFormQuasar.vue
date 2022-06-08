@@ -1,5 +1,5 @@
 <template>
-  <div class="p-12 mr-24 bg-light rounded-2xl shadow-2 w-100">
+  <div class="card p-12 mr-24 bg-light shadow-2 w-100">
     <div class="mb-6">
       <img
         src="@/assets/img/logo_small_color.svg"

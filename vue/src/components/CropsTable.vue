@@ -1,18 +1,34 @@
 <template>
-  <q-card class="h-full w-full shadow-1 bg-light">
-    <div class="overflow-x-auto overflow-y-auto">
+  <div class="card h-full w-full p-4 mr-24 shadow-1">
+    <!-- <q-card class="h-full w-full shadow-1 bg-light"> -->
+    <div class="overflow-x-auto overflow-y-auto rounded-2xl">
       <q-table
         @row-click="rowclicked()"
         separator="none"
-        class="header-table"
+        class="header-table no-shadow"
         title="Overview"
         :rows="crops"
         :columns="columns"
+        no-data-label="I didn't find anything for you"
         row-key="name"
         :filter="input"
         :visible-columns="visibleColumns"
       >
         <template v-slot:top-right>
+          <q-select
+            v-model="visibleColumns"
+            multiple
+            outlined
+            dense
+            options-dense
+            :display-value="$q.lang.table.columns"
+            emit-value
+            map-options
+            :options="columns"
+            option-value="name"
+            style="min-width: 150px"
+            class="mx-2"
+          />
           <q-input outlined dense v-model="input" placeholder="Search">
             <template v-slot:append>
               <q-icon name="search" />
@@ -87,25 +103,10 @@
             </div>
           </q-td>
         </template>
-
-        <template v-slot:top-left>
-          <q-select
-            v-model="visibleColumns"
-            multiple
-            outlined
-            dense
-            options-dense
-            :display-value="$q.lang.table.columns"
-            emit-value
-            map-options
-            :options="columns"
-            option-value="name"
-            style="min-width: 150px"
-          />
-        </template>
       </q-table>
     </div>
-  </q-card>
+    <!-- </q-card> -->
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -124,7 +125,7 @@ function rowclicked() {
 const columns = [
   {
     name: "id",
-    required: true,
+    // required: true,
     label: "ID",
     align: "left",
     field: (row: any) => row.id,
@@ -211,8 +212,15 @@ let visibleColumns = ref([
   fill: $primary;
 }
 
-.header-table .q-table__top,
-.q-table__bottom,
+.header-table thead th:first-child {
+  border-top-left-radius: 1rem;
+}
+
+.header-table thead th:last-child {
+  border-top-right-radius: 1rem;
+}
+
+.header-table .q-table__bottom,
 thead tr:first-child th,
 tbody tr:nth-child(even) {
   background-color: #f8f8fa;

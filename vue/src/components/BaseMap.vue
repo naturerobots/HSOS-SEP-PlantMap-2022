@@ -12,14 +12,16 @@
 </template> -->
 
 <template>
-  <q-card class="w-full h-full shadow-1 bg-white">
+  <!-- <q-card class="w-full h-full shadow-1 bg-white"> -->
+  <div class="card w-full h-full shadow-1">
     <leaflet-comp
       :maxZoom="maxZoom"
       :zoom="zoom"
       :map-image="mapImage"
       ref="leafletRef"
     ></leaflet-comp>
-  </q-card>
+  </div>
+  <!-- </q-card> -->
 </template>
 
 <script setup lang="ts">

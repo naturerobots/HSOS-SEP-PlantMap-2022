@@ -31,7 +31,12 @@
   @apply mt-2 text-primary_hover text-sm;
 }
 
-.sidebar {
+.card {
+  @apply rounded-2xl overflow-x-auto overflow-y-auto;
+}
+
+.card-title {
+  @apply my-2 text-center;
 }
 
 /* .sidebar-content {

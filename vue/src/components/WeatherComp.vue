@@ -4,12 +4,8 @@ the component should be extended to include a message indicating that no weather
 -->
 
 <template>
-  <q-card class="shadow-1" v-if="weather.forecast">
-    <q-card-section>
-      <div class="text-h6 text-center text-primary_hover">
-        Wetter {{ weather.current.name }}
-      </div>
-    </q-card-section>
+  <div class="card shadow-1 bg-white p-4" v-if="weather.forecast">
+    <div class="card-title text-h6">Wetter {{ weather.current.name }}</div>
     <q-card-section>
       <div class="row q-mt-lg">
         <div class="col-4">
@@ -24,7 +20,6 @@ the component should be extended to include a message indicating that no weather
             <!--TODO: Maybe move language and date options to settings?-->
             {{ weather.current.dt.toLocaleString("de-DE", dateOptions) }}
           </div>
-          <!-- </div> -->
           <p class="q-mt-sm text-primary_hover text-subtitle1">
             {{ weather.current.tempMin.toFixed(1) }} /
             {{ weather.current.tempMax.toFixed(1) }}°C
@@ -46,7 +41,7 @@ the component should be extended to include a message indicating that no weather
         </div>
       </div>
     </q-card-section>
-  </q-card>
+  </div>
 </template>
 
 <script setup lang="ts">

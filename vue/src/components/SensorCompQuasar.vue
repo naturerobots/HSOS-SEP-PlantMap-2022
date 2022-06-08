@@ -1,9 +1,7 @@
 <template>
-  <q-card class="shadow-1">
-    <q-card-section>
-      <div class="text-center text-h6 text-primary_hover">Soil parameters</div>
-    </q-card-section>
-    <q-card-section>
+  <div class="card p-4 bg-white shadow-1">
+    <div class="card-title text-h6">Soil parameters</div>
+    <div class="rounded-xl overflow-x-auto overflow-y-auto">
       <q-table
         separator="none"
         flat
@@ -30,8 +28,8 @@
           </q-tr>
         </template>
       </q-table>
-    </q-card-section>
-  </q-card>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
