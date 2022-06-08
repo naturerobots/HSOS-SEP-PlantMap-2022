@@ -131,6 +131,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+# LOGGING Configuration
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -152,7 +154,7 @@ LOGGING = {
     },
     'formatters': {
         'simple': {
-            'format': '{levelname} {message}',
+            'format': '{levelname} {asctime} {message}',
             'style': '{',
         },
         'extended': {
