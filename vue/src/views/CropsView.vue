@@ -10,12 +10,10 @@
   <header-bar title="Crops"></header-bar>
   <div class="row p-6">
     <div class="col-8">
-      <CropsTable />
+      <crops-table></crops-table>
     </div>
     <div class="col-4 pl-2">
-      <q-card class="shadow-1">
-        <img src="../assets/img/gardenDummy.png" alt="" />
-      </q-card>
+      <crops-map></crops-map>
     </div>
   </div>
 </template>
@@ -25,7 +23,7 @@ import CropsTable from "../components/CropsTable.vue";
 import { onMounted } from "vue";
 import { cropsStore } from "@/stores/cropsStore";
 import HeaderBar from "@/components/HeaderBar.vue";
-
+import CropsMap from "@/components/CropsMap.vue";
 onMounted(() => {
   cropsStore().loadDataFromApi();
 });
