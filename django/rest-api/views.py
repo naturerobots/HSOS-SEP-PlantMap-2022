@@ -7,7 +7,6 @@ from . import tasks
 sys.path.append(r'../build/gRPC/')
 
 import logging
-import traceback
 
 import grpc
 import meta_operations_service_pb2_grpc as metaOperations
@@ -44,7 +43,7 @@ def list_project_detials(request, uuid: string) -> Response:
 @api_view(['POST'])
 def make_task(request, uuid: string) -> Response:
     if request.method == 'POST':
-        logger.info("make_task POST")
+        logger.info("views.py make_task POST")
         response = stub.GetProjectDetails(ProjectQuery(projectuuid=uuid))
         geometries = MessageToDict(response)['geometries']
         tasks.dl_pcloud.delay(geometries, uuid)
