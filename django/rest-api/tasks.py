@@ -56,6 +56,7 @@ def dl_pcloud(geometries, puuid):
 
 
 def save_ply(pcloud: PointCloud2, puuid: String, uuid: String):
+    print("save_ply")
     try:
         endianness = "big" if pcloud.is_bigendian else "little"
         point_amount = pcloud.width * pcloud.height
