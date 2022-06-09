@@ -11,12 +11,12 @@
           :sensors="sensors"
           @sensor-enter="mapSensorEnter"
           @sensor-leave="mapSensorLeave"
-        >
-        </garden-map>
+        ></garden-map>
       </div>
     </div>
     <div>
       <sensor-comp
+        ref="sensorCompRef"
         :sensors="sensors"
         @row-enter="tableSensorEnter"
         @row-leave="tableSensorLeave"
@@ -77,15 +77,15 @@ import type { Sensor } from "@/types/sensor";
 
 const sensors: Ref<Sensor[]> = storeToRefs(sensorStore()).getSensors;
 const gardenMapRef = ref<InstanceType<typeof GardenMap> | null>(null);
+const sensorCompRef = ref<InstanceType<typeof SensorComp> | null>(null);
 
+// Sensor - Map interaction
 function mapSensorEnter(sensorId: number) {
-  //TODO: handle sensorId, for example for highlighting the table row
-  console.log(sensorId);
+  sensorCompRef.value?.setRowActive(sensorId);
 }
 
 function mapSensorLeave(sensorId: number) {
-  //TODO: handle sensorId, for example for highlighting the table row
-  console.log(sensorId);
+  sensorCompRef.value?.setRowInactive(sensorId);
 }
 
 function tableSensorEnter(sensorId: number) {
