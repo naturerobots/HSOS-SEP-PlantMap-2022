@@ -13,7 +13,7 @@
 
 <template>
   <!-- <q-card class="w-full h-full shadow-1 bg-white"> -->
-  <div class="card w-full h-full shadow-1">
+  <div class="card w-full h-full drop-shadow shadow-1">
     <leaflet-comp
       :maxZoom="maxZoom"
       :zoom="zoom"
