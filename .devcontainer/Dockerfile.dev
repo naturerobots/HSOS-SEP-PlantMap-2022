@@ -2,6 +2,7 @@ FROM ubuntu:20.04
 
 RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
     bash-completion \
+    build-essential \
         curl \
         git \
         sudo \
