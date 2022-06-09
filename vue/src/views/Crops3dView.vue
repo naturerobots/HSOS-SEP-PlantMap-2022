@@ -1,8 +1,19 @@
 <template>
   <header-bar title="3D"></header-bar>
-  <div class="p-6"></div>
+  <div class="row p-6">
+    <div class="col-5">
+      <crops-table title="Plants" :visible-columns="columns"></crops-table>
+    </div>
+    <div class="col-7 pl-2">
+      <crops-map></crops-map>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import HeaderBar from "@/components/HeaderBar.vue";
+import CropsTable from "../components/CropsTable.vue";
+import CropsMap from "@/components/CropsMap.vue";
+
+let columns: string[] = ["id", "plant", "location"];
 </script>
