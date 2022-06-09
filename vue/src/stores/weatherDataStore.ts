@@ -1,10 +1,9 @@
 import type {
   WeatherDataForecast,
   WeatherDataCurrent,
+  Hourly,
 } from "@/types/weatherData";
 import { defineStore } from "pinia";
-import type { PropType } from "vue";
-import { computed } from "vue";
 
 import {
   getWeatherDataCurrent,
@@ -24,27 +23,48 @@ export const weatherDataStore = defineStore({
   }),
   getters: {
     //Getter not necessary
-    getWeatherData(state) {
+    getWeatherData(state: any) {
       return state;
     },
-    getCurrent(state) {
+    getCurrent(state: any) {
       return Object.keys(state.current).length > 0 ? state.current : undefined;
     },
-    getForecast(state) {
+    getForecast(state: any) {
       return state.forecast;
     },
-    getHourly(state) {
+    getHourly(state: any) {
       return state.forecast.hourly;
     },
-    getHourlyRainPop(state): number[] {
+    getTimeLabels(state: any) {
       return state.forecast.hourly
         .slice(0, 8)
-        .map((value) => Math.round(value.pop * 100));
+        .map((value: Hourly, index: any) => {
+          if (index === 0) {
+            return "Now";
+          }
+
+          return new Date(value.dt * 1000).toLocaleString("de-DE", {
+            hour: "numeric",
+            minute: "numeric",
+          });
+        });
     },
-    getHourlyTemp(state): number[] {
+    getHourlyRainPop(state: any): number[] {
       return state.forecast.hourly
         .slice(0, 8)
-        .map((value) => Math.round(value.temp));
+        .map((value: Hourly) => Math.round(value.pop * 100));
+    },
+    getHourlyTemp(state: any): number[] {
+      return state.forecast.hourly
+        .slice(0, 8)
+        .map((value: Hourly) => Math.round(value.temp));
+    },
+    getHourlyWind(state: any): string[] {
+      return state.forecast.hourly
+        .slice(0, 8)
+        .map(
+          (value: Hourly) => value.wind_deg + ";" + Math.round(value.wind_speed)
+        );
     },
   },
   actions: {

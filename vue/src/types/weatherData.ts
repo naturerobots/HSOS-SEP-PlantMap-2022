@@ -93,7 +93,7 @@ export interface Daily {
   uvi: number;
 }
 
-interface Hourly {
+export interface Hourly {
   dt: number;
   temp: number;
   feels_like: number;

@@ -75,14 +75,6 @@ const props = defineProps({
 
 let data = storeToRefs(weatherDataStore()).getHourlyTemp;
 
-const chartData = ref<ChartData<"line">>({
-  datasets: [] as ChartDataset<"line">[],
-});
-
-watch(data, () => {
-  setChartData();
-});
-
 let labels = [
   "Now",
   "11:00",
@@ -93,6 +85,14 @@ let labels = [
   "16:00",
   "17:00",
 ];
+
+const chartData = ref<ChartData<"line">>({
+  datasets: [] as ChartDataset<"line">[],
+});
+
+watch(data, () => {
+  setChartData();
+});
 
 function setChartData(): void {
   const updatedChartData = {
@@ -148,14 +148,14 @@ const chartOptions = {
       anchor: "end",
       align: "top",
       offset: -2,
-      color: "black",
-      //textAlign: "left",
+      color: "rgba(112,112,112,1)",
       font: {
         size: 14,
+        weight: "bold",
       },
       formatter: function (value: string) {
         // context: Object
-        return value + "%"; //return context.chart.data.labels[context.dataIndex]; -> gibt die label namen zurück
+        return value + "°"; //return context.chart.data.labels[context.dataIndex]; -> gibt die label namen zurück
       },
     },
   },
