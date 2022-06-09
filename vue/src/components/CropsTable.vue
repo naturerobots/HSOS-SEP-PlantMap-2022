@@ -13,6 +13,7 @@
         row-key="name"
         :filter="input"
         :visible-columns="visibleColumns"
+        :pagination="pagination()"
       >
         <template v-slot:top-right>
           <q-select
@@ -118,6 +119,13 @@ import { ref } from "vue";
 
 const crops: Ref<Crop[]> = storeToRefs(cropsStore()).getCrops;
 let input = ref("");
+
+function pagination() {
+  return {
+    sortBy: "id",
+    rowsPerPage: 10,
+  };
+}
 
 function rowclicked() {
   console.log("rowClicked");
