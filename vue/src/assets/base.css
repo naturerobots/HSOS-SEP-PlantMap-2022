@@ -8,6 +8,7 @@
 
 :root {
   /* color light mode */
+  background-color: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -40,4 +41,13 @@
 
 .sidebar-nav {
   @apply w-20 h-screen justify-between flex flex-col;
+}
+
+#map {
+  position: absolute;
+  height: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }

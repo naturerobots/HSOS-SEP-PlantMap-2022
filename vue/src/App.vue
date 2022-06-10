@@ -1,8 +1,8 @@
 <template>
-  <div class="h-screen overflow-hidden relative">
+  <div class="relative">
     <div class="flex items-start justify-between">
       <router-view name="sidebar"></router-view>
-      <main class="flex flex-col w-full p-2">
+      <main class="flex flex-col w-full">
         <div>
           <router-view></router-view>
         </div>
@@ -12,12 +12,12 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, onMounted } from "vue";
+import { onMounted } from "vue";
 import { weatherDataStore } from "@/stores/weatherDataStore";
+import { sensorStore } from "@/stores/sensorStore";
 
-onMounted(async () => {
-  console.log("onBeforeMount start");
+onMounted(() => {
   weatherDataStore().initWeatherData();
-  console.log("onBeforeMount end");
+  sensorStore().loadDataFromApi();
 });
 </script>

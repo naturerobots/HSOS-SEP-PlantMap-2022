@@ -1,5 +1,8 @@
 <template>
-  <h1>Crops</h1>
+  <header-bar title="Crops"></header-bar>
+  <div class="p-6"></div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import HeaderBar from "@/components/HeaderBar.vue";
+</script>

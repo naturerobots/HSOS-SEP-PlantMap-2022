@@ -46,6 +46,7 @@ const router = createRouter({
         default: ImageUploadView,
         sidebar: Sidebar,
       },
+      props: true,
     },
     {
       path: "/cropimage",
