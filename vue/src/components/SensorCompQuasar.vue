@@ -1,17 +1,21 @@
 <template>
   <div class="card p-4 bg-white shadow-1">
-    <div class="card-title text-h6">Soil parameters</div>
+    <div class="card-title text-h6">Soil Parameter</div>
     <div class="rounded-xl overflow-x-auto overflow-y-auto">
       <q-table
+        ref="table"
         separator="none"
         flat
-        class="header-table body-table"
+        class="sensor-table"
         :rows="sensors"
         :columns="columns"
         row-key="name"
       >
         <template v-slot:body="props">
           <q-tr
+            class="hover:sensor-row-active"
+            no-hover
+            :key="props.row.id"
             :props="props"
             @mouseenter="rowEnter(props.row.id)"
             @mouseleave="rowLeave(props.row.id)"
@@ -20,10 +24,13 @@
               {{ props.row.name }}
             </q-td>
             <q-td key="moisture_value" :props="props">
-              {{ props.row.moisture_value }}
+              {{ props.row.moisture_value }} {{ props.row.moisture_unit }}
             </q-td>
             <q-td key="temp_value" :props="props">
-              {{ props.row.temp_value }}
+              {{ props.row.temp_value }} {{ props.row.temp_unit }}
+            </q-td>
+            <q-td key="ph_value" :props="props">
+              {{ props.row.ph_value }}
             </q-td>
           </q-tr>
         </template>
@@ -34,6 +41,9 @@
 
 <script setup lang="ts">
 import type { Sensor } from "@/types/sensor";
+import type { QTable, QTableProps } from "quasar";
+import { ref } from "vue";
+const table = ref<InstanceType<typeof QTable> | null>(null);
 
 defineProps<{
   sensors: Sensor[];
@@ -43,11 +53,43 @@ const emit = defineEmits<{
   (event: "rowEnter", sensorId: number): void;
   (event: "rowLeave", sensorId: number): void;
 }>();
+
+defineExpose({
+  setRowActive,
+  setRowInactive,
+});
+
 //icons for testing
 const upGreen = "up_green";
 const downGreen = "down_green";
 const upRed = "up_red";
 const downRed = "down_red";
+
+function getRowBySensorId(sensorId: number): HTMLTableRowElement | undefined {
+  if (table.value?.rows?.length) {
+    for (let i = 0; i < table.value?.rows?.length; i++) {
+      if (sensorId == table.value.rows[i].id) {
+        return document
+          .getElementsByClassName("q-table")[0]
+          .getElementsByTagName("tr")[i + 1];
+      }
+    }
+  }
+}
+
+function setRowActive(sensorId: number) {
+  const row: HTMLTableRowElement | undefined = getRowBySensorId(sensorId);
+  if (row) {
+    row.classList.add("sensor-row-active");
+  }
+}
+
+function setRowInactive(sensorId: number) {
+  const row: HTMLTableRowElement | undefined = getRowBySensorId(sensorId);
+  if (row) {
+    row.classList.remove("sensor-row-active");
+  }
+}
 
 function rowEnter(sensorId: number) {
   emit("rowEnter", sensorId);
@@ -56,27 +98,31 @@ function rowEnter(sensorId: number) {
 function rowLeave(sensorId: number) {
   emit("rowLeave", sensorId);
 }
-
 //TODO: columns
-const columns = [
-  { name: "name", label: "Name", field: "name", align: "left" },
+const columns: QTableProps["columns"] = [
+  {
+    name: "name",
+    label: "Name",
+    field: "name",
+    align: "center",
+  },
   {
     name: "moisture_value",
     label: "Moisture",
     field: "moisture_value",
-    align: "left",
+    align: "center",
   },
   {
     name: "temp_value",
     label: "Temperature",
     field: "temp_value",
-    align: "left",
+    align: "center",
+  },
+  {
+    name: "ph_value",
+    label: "PH",
+    field: "ph_value",
+    align: "center",
   },
 ];
 </script>
-
-<style lang="scss">
-.body-table tbody {
-  font-weight: bold;
-}
-</style>

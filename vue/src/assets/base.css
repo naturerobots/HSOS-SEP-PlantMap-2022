@@ -6,6 +6,34 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  /* SENSOR MAP ICON */
+  .sensor-icon {
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    border-radius: 50%;
+    font-size: 10px;
+    color: #000;
+    text-align: center;
+    background: #fff;
+    margin-left: -12.5px;
+    margin-top: -12.5px;
+    font-weight: bold;
+  }
+
+  .sensor-icon-active {
+    background: #bbe784;
+    /* TODO: discuss color, add to tailwind colors */
+  }
+
+  /* SENSOR TABLE */
+  .sensor-row-active td {
+    background-color: #bbe784 !important;
+    /* TODO: discuss color, add to tailwind colors */
+  }
+}
+
 :root {
   /* color light mode */
   background-color: #ffffff;
@@ -47,6 +75,7 @@
   @apply w-20 h-screen justify-between flex flex-col;
 } */
 
+/* MAP */
 #map {
   position: absolute;
   height: 100%;
@@ -56,21 +85,30 @@
   left: 0;
 }
 
-@layer utilities {
-  .sensor-icon {
-    width: 25px;
-    height: 25px;
-    line-height: 25px;
-    border-radius: 50%;
-    font-size: 10px;
-    color: #000;
-    text-align: center;
-    background: #fff;
-    margin-left: -12.5px;
-    margin-top: -12.5px;
-  }
+/* SENSOR TABLE */
+.sensor-table thead th {
+  @apply uppercase font-bold;
+  color: #6b7280;
+  /* TODO: discuss color, add to tailwind colors */
+}
 
-  .sensor-icon-active {
-    background: #addb73;
-  }
+.sensor-table tbody {
+  font-weight: bold;
+}
+
+.sensor-table thead tr:first-child th,
+.sensor-table tbody tr:nth-child(2n) td {
+  @apply bg-background;
+}
+
+.sensor-table tbody tr {
+  @apply bg-white;
+}
+
+.sensor-table tbody tr td:first-child {
+  @apply rounded-l-lg;
+}
+
+.sensor-table .q-table__bottom {
+  @apply border-none;
 }

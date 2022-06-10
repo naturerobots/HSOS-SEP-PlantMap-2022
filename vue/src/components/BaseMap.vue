@@ -56,14 +56,14 @@ defineExpose({
 function addMarker(marker: L.Marker): void {
   marker.on("click", emitMarkerClick);
   marker.on("mouseover", emitMarkerEnter);
-  marker.on("mouseleave", emitMarkerLeave);
+  marker.on("mouseout", emitMarkerLeave);
   leafletRef.value?.addMarker(marker);
 }
 
 function addPolygon(polygon: L.Polygon): void {
   polygon.on("click", emitPolygonClick);
   polygon.on("mouseover", emitPolygonEnter);
-  polygon.on("mouseleave", emitPolygonLeave);
+  polygon.on("mouseout", emitPolygonLeave);
   leafletRef.value?.addPolygon(polygon);
 }
 
