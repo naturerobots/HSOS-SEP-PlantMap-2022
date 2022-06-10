@@ -1,21 +1,12 @@
 <template>
-  <div class="card h-full w-full shadow-sm bg-[#fdfff9]">
-    <div class="card-body p-5">
-      <h2 class="text-xl text-center text-primary-focus">Weather</h2>
-      <div class="card card-side">
-        <div class="card-body">
-          <Line
-            ref="lineChart"
-            :chart-options="chartOptions"
-            :chart-data="chartData"
-            :chart-id="'weather-chart'"
-            :width="width"
-            :height="height"
-          />
-        </div>
-      </div>
-    </div>
-  </div>
+  <Line
+    ref="lineChart"
+    :chart-options="chartOptions"
+    :chart-data="chartData"
+    :chart-id="'weather-chart'"
+    :width="width"
+    :height="height"
+  />
 </template>
 
 <script setup lang="ts">

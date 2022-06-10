@@ -1,8 +1,37 @@
 <template>
-  <WeatherLineChart
-    :chart-data="chartData"
-    :chart-options="chartOptions"
-  ></WeatherLineChart>
+  <div class="card h-full w-full shadow-sm bg-[#fdfff9]">
+    <div class="card-body p-5">
+      <h2 class="text-xl text-center text-primary-focus">Weather</h2>
+      <div class="card card-side">
+        <div class="card-body">
+          <div class="grid grid-cols-3 gap-4">
+            <button
+              class="btn btn-sm btn-ghost link"
+              @click="changeChartType('rainPop')"
+            >
+              RainPop
+            </button>
+            <button
+              class="btn btn-sm btn-ghost link"
+              @click="changeChartType('temp')"
+            >
+              Temp
+            </button>
+            <button
+              class="btn btn-sm btn-ghost link"
+              @click="changeChartType('wind')"
+            >
+              Wind
+            </button>
+          </div>
+          <LineChart
+            :chart-data="chartData"
+            :chart-options="chartOptions"
+          ></LineChart>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -21,10 +50,7 @@ import {
 } from "vue";
 import { storeToRefs } from "pinia";
 import { weatherDataStore } from "@/stores/weatherDataStore";
-import WeatherLineChart from "@/components/Weather/WeatherLineChart.vue";
-
-const useWeatherDataStore: ToRefs<any> = storeToRefs(weatherDataStore());
-const hourly: Ref<Hourly> = useWeatherDataStore.getHourly;
+import LineChart from "@/components/Weather/LineChart.vue";
 
 const props = defineProps({
   chartType: {
@@ -33,12 +59,22 @@ const props = defineProps({
   },
 });
 
+const useWeatherDataStore: ToRefs<any> = storeToRefs(weatherDataStore());
+const hourly: Ref<Hourly> = useWeatherDataStore.getHourly;
+let currChartType = ref(props.chartType);
+
 const data = {
   labels: useWeatherDataStore.getTimeLabels as Ref<string[]>,
   rainPop: useWeatherDataStore.getHourlyRainPop as Ref<string[]>,
   temp: useWeatherDataStore.getHourlyTemp as Ref<string[]>,
   wind: useWeatherDataStore.getHourlyWind as Ref<string[]>,
 };
+
+const chartOptions = ref<ChartOptions<"line">>({});
+
+const chartData = ref<ChartData<"line">>({
+  datasets: [] as ChartDataset<"line">[],
+});
 
 const updateData = {
   rainPop: () => setChartDataRainPop(),
@@ -52,14 +88,6 @@ const updateOptions = {
   wind: () => setChartOptionsWind(),
 };
 
-const chartOptions = ref<ChartOptions<"line">>({});
-
-const chartData = ref<ChartData<"line">>({
-  datasets: [] as ChartDataset<"line">[],
-});
-
-let currChartType = ref(props.chartType);
-
 onMounted(() => {
   updateData[currChartType.value]();
   updateOptions[currChartType.value]();
@@ -69,13 +97,11 @@ watch(hourly.value, () => {
   updateData[currChartType.value]();
 });
 
-watch(currChartType, (newValue, oldValue) => {
-  if (newValue !== oldValue) {
-    currChartType.value = newValue;
-    updateOptions[currChartType.value]();
-  }
+function changeChartType(chartType: ChartType) {
+  currChartType.value = chartType;
+  updateOptions[currChartType.value]();
   updateData[currChartType.value]();
-});
+}
 
 /**
  * ### CHART DATA
@@ -131,10 +157,6 @@ function setChartDataWind(): void {
         backgroundColor: "rgba(0, 0, 0, 0)",
         showLine: false,
       },
-      {
-        label: "HourlyWindSpeed",
-        xAxisID: "xTwo",
-      },
     ],
   } as ChartData<"line">;
 
@@ -153,6 +175,8 @@ function setChartOptionsRainPop() {
     layout: {
       padding: {
         top: 25,
+        left: 25,
+        right: 25,
       },
     },
     scales: {
@@ -203,6 +227,8 @@ function setChartOptionsTemp() {
     layout: {
       padding: {
         top: 25,
+        left: 25,
+        right: 25,
       },
     },
     scales: {
@@ -250,6 +276,13 @@ function setChartOptionsWind() {
     events: [],
     maintainAspectRatio: false,
     responsive: true,
+    layout: {
+      padding: {
+        top: 25,
+        left: 25,
+        right: 25,
+      },
+    },
     scales: {
       y: {
         ticks: {
@@ -270,35 +303,40 @@ function setChartOptionsWind() {
           drawBorder: false,
         },
       },
-      xTwo: {
-        position: "top",
-        grid: {
-          display: false,
-          drawBorder: false,
-        },
-        ticks: {
-          callback: (index: number) => {
-            if (!data.wind.value[index]) return;
-            return !data.wind.value[index].split(";")[1] + " km/h";
-          },
-        },
-      },
     },
     plugins: {
       datalabels: {
-        color: "rgba(112,112,112,1)",
-        font: {
-          size: 50,
-          weight: "bold",
-        },
-        formatter: function (value: string) {
-          return "\u279e";
-        },
-        rotation: function (ctx: Context): number {
-          return (
-            Number(ctx.dataset.data[ctx.dataIndex]) *
-            Number(data.wind.value[ctx.dataIndex].split(";")[0])
-          );
+        labels: {
+          arrows: {
+            color: "rgba(112,112,112,1)",
+            font: {
+              size: 40,
+              weight: "bold",
+            },
+            formatter: function (value: string) {
+              return "\u27A2";
+            },
+            rotation: function (ctx: Context): number {
+              return (
+                Number(ctx.dataset.data[ctx.dataIndex]) *
+                Number(data.wind.value[ctx.dataIndex].split(";")[0])
+              );
+            },
+          },
+          values: {
+            anchor: "start",
+            align: "top",
+            offset: 25,
+            color: "rgba(112,112,112,1)",
+            font: {
+              size: 14,
+              weight: "bold",
+            },
+            formatter: function (value: number, ctx: Context) {
+              if (!data.wind.value[ctx.dataIndex]) return;
+              return data.wind.value[ctx.dataIndex].split(";")[1] + " km/h";
+            },
+          },
         },
       },
     },
@@ -307,159 +345,3 @@ function setChartOptionsWind() {
   chartOptions.value = updatedChartOptions;
 }
 </script>
-
-<!--
-function setChartOptions(options: ChartOptions<"line">): void {
-  chartOptions.value = options;
-}
--->
-
-<!--
-  const chartOptionsAll = {
-  rainPop: {
-    animation: false,
-    events: [],
-    maintainAspectRatio: false,
-    responsive: true,
-    layout: {
-      padding: {
-        top: 25,
-      },
-    },
-    scales: {
-      y: {
-        ticks: {
-          display: false,
-          stepSize: 10,
-        },
-        grid: {
-          display: false,
-          drawBorder: false,
-        },
-        min: 0,
-      },
-      x: {
-        grid: {
-          display: false,
-        },
-        position: "bottom",
-      },
-    },
-    plugins: {
-      datalabels: {
-        anchor: "end",
-        align: "top",
-        offset: -2,
-        color: "rgba(112,112,112,1)",
-        font: {
-          size: 14,
-          weight: "bold",
-        },
-        formatter: (value: string) => {
-          return value + "%";
-        },
-      },
-    },
-  } as ChartOptions<"line">,
-  temp: {
-    animation: false,
-    events: [],
-    maintainAspectRatio: false,
-    responsive: true,
-    layout: {
-      padding: {
-        top: 25,
-      },
-    },
-    scales: {
-      y: {
-        ticks: {
-          display: false,
-          stepSize: 10,
-        },
-        grid: {
-          display: false,
-          drawBorder: false,
-        },
-        min: 0,
-      },
-      x: {
-        grid: {
-          display: false,
-        },
-        position: "bottom",
-      },
-    },
-    plugins: {
-      datalabels: {
-        anchor: "end",
-        align: "top",
-        offset: -2,
-        color: "rgba(112,112,112,1)",
-        font: {
-          size: 14,
-          weight: "bold",
-        },
-        formatter: function (value: string) {
-          return value + "°";
-        },
-      },
-    },
-  } as ChartOptions<"line">,
-  wind: {
-    animation: false,
-    events: [],
-    maintainAspectRatio: false,
-    responsive: true,
-    scales: {
-      y: {
-        ticks: {
-          display: false,
-          stepSize: 10,
-        },
-        grid: {
-          display: false,
-          drawBorder: false,
-        },
-        min: 0,
-        max: 100,
-      },
-      x: {
-        position: "bottom",
-        grid: {
-          display: false,
-          drawBorder: false,
-        },
-      },
-      xTwo: {
-        position: "top",
-        grid: {
-          display: false,
-          drawBorder: false,
-        },
-        ticks: {
-          callback: (index: number) => {
-            if (!data.wind.value[index]) return;
-            return data.wind.value[index].split(";")[1] + " km/h";
-          },
-        },
-      },
-    },
-    plugins: {
-      datalabels: {
-        color: "rgba(112,112,112,1)",
-        font: {
-          size: 50,
-          weight: "bold",
-        },
-        formatter: function (value: string) {
-          return "\u279e";
-        },
-        rotation: function (ctx: Context): number {
-          return Number(ctx.dataset.data[ctx.dataIndex]) * Number(data.wind.value[ctx.dataIndex].split(";")[0]);
-        },
-      },
-    },
-  } as ChartOptions<"line">,
-}; //dont know type
--->

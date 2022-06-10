@@ -1,3 +1,4 @@
+<!--DO NOT DELETE-->
 <template>
   <div v-if="forecast" class="card h-full w-full shadow-sm bg-[#fdfff9]">
     <div class="card-body p-5">
