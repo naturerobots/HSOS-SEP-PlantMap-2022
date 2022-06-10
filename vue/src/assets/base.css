@@ -132,6 +132,12 @@ tbody tr:nth-child(even) {
   background-color: #f9fafb;
 }
 
+.crops-table .q-table__bottom,
+thead tr:first-child th,
+tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
 .crops-table thead tr th {
   position: sticky;
   z-index: 1;
@@ -140,11 +146,19 @@ tbody tr:nth-child(even) {
 }
 
 .crops-table tbody tr:hover {
-  background: #e5e7eb;
+  background-color: #e5e7eb;
+}
+
+.crops-table tbody tr td:first-child {
+  @apply rounded-l-lg;
 }
 
 /* this is when the loading indicator appears */
 .crops-table .q-table--loading thead tr:last-child th {
   /* height of all previous header rows */
   top: 48px;
+}
+
+.crops3d-icon-active:hover {
+  fill: #79b729;
 }
