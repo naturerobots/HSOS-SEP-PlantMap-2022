@@ -60,11 +60,15 @@
 }
 
 .card {
-  @apply rounded-2xl overflow-x-auto overflow-y-auto;
+  @apply rounded-2xl overflow-x-auto overflow-y-auto p-4 shadow-card;
+}
+
+.card-map {
+  @apply rounded-2xl overflow-x-auto overflow-y-auto drop-shadow shadow-card;
 }
 
 .card-title {
-  @apply my-2 text-center;
+  @apply my-2 text-center text-xl;
 }
 
 /* .sidebar-content {
@@ -111,4 +115,36 @@
 
 .sensor-table .q-table__bottom {
   @apply border-none;
+}
+
+/* CROPS TABLE */
+.crops-table thead th:first-child {
+  border-top-left-radius: 1rem;
+}
+
+.crops-table thead th:last-child {
+  border-top-right-radius: 1rem;
+}
+
+.crops-table .q-table__bottom,
+thead tr:first-child th,
+tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.crops-table thead tr th {
+  position: sticky;
+  z-index: 1;
+  font-weight: bold;
+  color: #9c9b9b;
+}
+
+.crops-table tbody tr:hover {
+  background: #e5e7eb;
+}
+
+/* this is when the loading indicator appears */
+.crops-table .q-table--loading thead tr:last-child th {
+  /* height of all previous header rows */
+  top: 48px;
 }

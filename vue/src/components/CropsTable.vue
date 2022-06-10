@@ -1,11 +1,10 @@
 <template>
-  <div class="card h-full w-full p-4 mr-24 shadow-1">
-    <!-- <q-card class="h-full w-full shadow-1 bg-light"> -->
+  <div class="card h-full w-full mr-24">
     <div class="overflow-x-auto overflow-y-auto rounded-2xl">
       <q-table
         @row-click="rowclicked()"
         separator="none"
-        class="header-table no-shadow"
+        class="crops-table no-shadow"
         :title="title"
         :rows="crops"
         :columns="columns"
@@ -106,7 +105,6 @@
         </template>
       </q-table>
     </div>
-    <!-- </q-card> -->
   </div>
 </template>
 
@@ -116,6 +114,7 @@ import type { Crop } from "../types/crop";
 import { storeToRefs } from "pinia";
 import { cropsStore } from "../stores/cropsStore";
 import { ref } from "vue";
+import type { QTableProps } from "quasar";
 
 const crops: Ref<Crop[]> = storeToRefs(cropsStore()).getCrops;
 let input = ref("");
@@ -137,7 +136,7 @@ function pagination() {
 function rowclicked() {
   console.log("rowClicked");
 }
-const columns = [
+const columns: QTableProps["columns"] = [
   {
     name: "id",
     // required: true,
@@ -221,44 +220,3 @@ const columns = [
 //   columns[9].name,
 // ]);
 </script>
-
-<style lang="scss">
-.hover-icon:hover {
-  fill: $primary;
-}
-
-.header-table thead th:first-child {
-  border-top-left-radius: 1rem;
-}
-
-.header-table thead th:last-child {
-  border-top-right-radius: 1rem;
-}
-
-.header-table .q-table__bottom,
-thead tr:first-child th,
-tbody tr:nth-child(even) {
-  background-color: #f9fafb;
-}
-
-.header-table thead tr th {
-  position: sticky;
-  z-index: 1;
-  font-weight: bold;
-  color: #9c9b9b;
-}
-
-// .header-table tbody tr:nth-child(even) {
-//     background-color: #F5F5F5;
-// }
-
-.header-table tbody tr:hover {
-  background: #e5e7eb;
-}
-
-/* this is when the loading indicator appears */
-.header-table .q-table--loading thead tr:last-child th {
-  /* height of all previous header rows */
-  top: 48px;
-}
-</style>

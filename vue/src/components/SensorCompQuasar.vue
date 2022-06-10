@@ -1,6 +1,6 @@
 <template>
-  <div class="card p-4 bg-white shadow-1">
-    <div class="card-title text-h6">Soil Parameter</div>
+  <div class="card bg-white">
+    <div class="card-title">Soil Parameter</div>
     <div class="rounded-xl overflow-x-auto overflow-y-auto">
       <q-table
         ref="table"

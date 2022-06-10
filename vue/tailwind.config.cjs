@@ -13,6 +13,9 @@ module.exports = {
         secondary_hover: "#7A8882",
         secondary_disable: "#B0BAB6",
       },
+      boxShadow: {
+        card: "0px 0px 3px 1px rgb(0 0 0 / 0.1)",
+      },
     },
   },
   daisyui: {

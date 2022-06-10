@@ -4,8 +4,8 @@ the component should be extended to include a message indicating that no weather
 -->
 
 <template>
-  <div class="card shadow-1 bg-white p-4" v-if="weather.forecast">
-    <div class="card-title text-h6">Wetter {{ weather.current.name }}</div>
+  <div class="card bg-white" v-if="weather.forecast">
+    <div class="card-title">Wetter {{ weather.current.name }}</div>
     <q-card-section>
       <div class="row q-mt-lg">
         <div class="col-4">
