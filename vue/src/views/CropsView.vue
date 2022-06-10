@@ -10,7 +10,7 @@
   <header-bar title="Crops"></header-bar>
   <div class="row p-6">
     <div class="col-8">
-      <crops-table></crops-table>
+      <crops-table title="Overview" :visibleColumns="columns"></crops-table>
     </div>
     <div class="col-4 pl-2">
       <crops-map></crops-map>
@@ -27,4 +27,17 @@ import CropsMap from "@/components/CropsMap.vue";
 onMounted(() => {
   cropsStore().loadDataFromApi();
 });
+
+let columns: string[] = [
+  "id",
+  "plant",
+  "location",
+  "variety",
+  "soilHumidity",
+  "health",
+  "status",
+  "harvest",
+  "yield",
+  "3d",
+];
 </script>

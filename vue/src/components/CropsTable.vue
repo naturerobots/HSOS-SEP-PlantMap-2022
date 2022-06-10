@@ -6,18 +6,18 @@
         @row-click="rowclicked()"
         separator="none"
         class="header-table no-shadow"
-        title="Overview"
+        :title="title"
         :rows="crops"
         :columns="columns"
         no-data-label="I didn't find anything for you"
         row-key="name"
         :filter="input"
-        :visible-columns="visibleColumns"
+        :visible-columns="visCols"
         :pagination="pagination()"
       >
         <template v-slot:top-right>
           <q-select
-            v-model="visibleColumns"
+            v-model="visCols"
             multiple
             outlined
             dense
@@ -120,6 +120,13 @@ import { ref } from "vue";
 const crops: Ref<Crop[]> = storeToRefs(cropsStore()).getCrops;
 let input = ref("");
 
+const props = defineProps<{
+  title: string;
+  visibleColumns: string[] | undefined;
+}>();
+
+let visCols = ref(props.visibleColumns);
+
 function pagination() {
   return {
     sortBy: "id",
@@ -201,18 +208,18 @@ const columns = [
   { name: "3d", align: "left", label: "3D", field: "3d", sortable: false },
 ];
 
-let visibleColumns = ref([
-  columns[0].name,
-  columns[1].name,
-  columns[2].name,
-  columns[3].name,
-  columns[4].name,
-  columns[5].name,
-  columns[6].name,
-  columns[7].name,
-  columns[8].name,
-  columns[9].name,
-]);
+// let visibleColumns = ref([
+//   columns[0].name,
+//   columns[1].name,
+//   columns[2].name,
+//   columns[3].name,
+//   columns[4].name,
+//   columns[5].name,
+//   columns[6].name,
+//   columns[7].name,
+//   columns[8].name,
+//   columns[9].name,
+// ]);
 </script>
 
 <style lang="scss">
@@ -231,7 +238,7 @@ let visibleColumns = ref([
 .header-table .q-table__bottom,
 thead tr:first-child th,
 tbody tr:nth-child(even) {
-  background-color: #f8f8fa;
+  background-color: #f9fafb;
 }
 
 .header-table thead tr th {
@@ -246,7 +253,7 @@ tbody tr:nth-child(even) {
 // }
 
 .header-table tbody tr:hover {
-  background: #f4f4f8;
+  background: #e5e7eb;
 }
 
 /* this is when the loading indicator appears */
