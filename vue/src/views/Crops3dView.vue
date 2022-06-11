@@ -1,10 +1,10 @@
 <template>
   <header-bar title="3D"></header-bar>
   <div class="row p-6">
-    <div class="col-5">
+    <div class="col-4">
       <crops-table title="Plants" :visibleColumns="columns"></crops-table>
     </div>
-    <div class="col-7 pl-2">
+    <div class="col-8 pl-2">
       <crops-map></crops-map>
     </div>
   </div>

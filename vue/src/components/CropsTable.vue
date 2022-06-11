@@ -4,7 +4,7 @@
       <q-table
         @row-click="rowclicked()"
         separator="none"
-        class="crops-table no-shadow"
+        class="crops-table no-shadow crops-table-hover"
         :title="title"
         :rows="crops"
         :columns="columns"
@@ -15,9 +15,19 @@
         :pagination="pagination()"
       >
         <template #body="props">
-          <q-tr no-hover :props="props">
-            <q-td key="id" :props="props">
+          <q-tr
+            no-hover
+            :props="props"
+            :key="props.row.plant"
+            @mouseenter="rowEnter(props.row.plant)"
+            @mouseleave="rowLeave(props.row.plant)"
+          >
+            <!-- <q-td key="id" :props="props">
               {{ props.row.id }}
+            </q-td> -->
+
+            <q-td key="location" :props="props">
+              {{ props.row.location }}
             </q-td>
 
             <q-td key="plant" :props="props">
@@ -28,16 +38,19 @@
               {{ props.row.variety }}
             </q-td>
 
-            <q-td key="location" :props="props">
-              {{ props.row.location }}
-            </q-td>
-
             <q-td key="soilHumidity" :props="props">
               {{ props.row.soilHumidity }}
             </q-td>
 
             <q-td key="health" :props="props">
-              {{ props.row.health }}
+              <q-badge
+                :class="{
+                  'bg-red': props.row.health == 'Bad',
+                  'bg-green': props.row.health == 'Good',
+                  'bg-warning': props.row.health == 'Okay',
+                }"
+                :label="props.row.health"
+              />
             </q-td>
 
             <q-td key="status" :props="props">
@@ -116,17 +129,23 @@
             map-options
             :options="columns"
             option-value="name"
-            style="min-width: 150px"
+            style="min-width: 120px"
             class="mx-2"
           />
-          <q-input outlined dense v-model="input" placeholder="Search">
+          <q-input
+            outlined
+            dense
+            v-model="input"
+            placeholder="Search"
+            style="width: 150px"
+          >
             <template v-slot:append>
               <q-icon name="search" />
             </template>
           </q-input>
         </template>
 
-        <template v-slot:body-cell-health="props">
+        <!-- <template v-slot:body-cell-health="props">
           <q-td :props="props">
             <div>
               <q-badge
@@ -139,7 +158,7 @@
               />
             </div>
           </q-td>
-        </template>
+        </template> -->
 
         <!-- <template v-slot:body-cell-3d="props">
           <q-td :props="props">
@@ -218,22 +237,37 @@ let visCols = ref(props.visibleColumns);
 
 function pagination() {
   return {
-    sortBy: "id",
+    sortBy: "location",
     rowsPerPage: 10,
   };
+}
+
+function rowEnter(plant: string) {
+  console.log(plant);
+}
+
+function rowLeave(plant: string) {
+  console.log(plant);
 }
 
 function rowclicked() {
   console.log("rowClicked");
 }
 const columns: QTableProps["columns"] = [
+  // {
+  //   name: "id",
+  //   // required: true,
+  //   label: "ID",
+  //   align: "left",
+  //   field: (row: any) => row.id,
+  //   format: (val: any) => `${val}`,
+  //   sortable: true,
+  // },
   {
-    name: "id",
-    // required: true,
-    label: "ID",
+    name: "location",
     align: "left",
-    field: (row: any) => row.id,
-    format: (val: any) => `${val}`,
+    label: "LOCATION",
+    field: "location",
     sortable: true,
   },
   {
@@ -250,13 +284,7 @@ const columns: QTableProps["columns"] = [
     field: "variety",
     sortable: true,
   },
-  {
-    name: "location",
-    align: "left",
-    label: "LOCATION",
-    field: "location",
-    sortable: true,
-  },
+
   {
     name: "soilHumidity",
     align: "left",

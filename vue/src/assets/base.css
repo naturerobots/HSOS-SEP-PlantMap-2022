@@ -132,21 +132,11 @@ tbody tr:nth-child(even) {
   background-color: #f9fafb;
 }
 
-.crops-table .q-table__bottom,
-thead tr:first-child th,
-tbody tr:nth-child(even) {
-  background-color: #f9fafb;
-}
-
 .crops-table thead tr th {
   position: sticky;
   z-index: 1;
   font-weight: bold;
-  color: #9c9b9b;
-}
-
-.crops-table tbody tr:hover {
-  background-color: #e5e7eb;
+  color: #6b7280;
 }
 
 .crops-table tbody tr td:first-child {
@@ -162,3 +152,17 @@ tbody tr:nth-child(even) {
 .crops3d-icon-active:hover {
   fill: #79b729;
 }
+
+/* -- layout table-head when hovered/clicked -- */
+.crops-table thead tr th.sorted {
+  color: black;
+}
+
+.crops-table thead tr th.sortable:hover {
+  color: black;
+}
+
+.crops-table tbody tr:hover {
+  background-color: #e5e7eb;
+}
+/* ----------- */
