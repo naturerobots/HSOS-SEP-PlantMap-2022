@@ -1,4 +1,4 @@
-name: Build Docker from scratch unconditionally
+name: build docker images from scratch
 
 # Controls when the action will run.
 on:
