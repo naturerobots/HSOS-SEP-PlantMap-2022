@@ -50,11 +50,11 @@
 </template>
 
 <script setup lang="ts">
-//####################################
-//Test for weather / can be cleaned up
-import { sensorStore } from "@/stores/sensorStore";
+import { onMounted } from "vue";
+import { weatherDataStore } from "../stores/weatherDataStore";
+import { sensorStore } from "../stores/sensorStore";
 
-import WeatherComp from "@/components/WeatherComp.vue";
+import WeatherComp from "@/components/Weather/WeatherComp.vue";
 import SensorComp from "@/components/SensorComp.vue";
 import GardenMap from "@/components/GardenMap.vue";
 import HeaderBar from "@/components/HeaderBar.vue";
@@ -70,6 +70,4 @@ function sensorClick(sensorId: number) {
   //TODO: handle sensorId, for example for highlighting the table row
   console.log(sensorId);
 }
-
-//####################################
 </script>
