@@ -10,7 +10,6 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType } from "vue";
 import { Line } from "vue-chartjs";
 
 import {
@@ -38,24 +37,16 @@ ChartJS.register(
   CategoryScale
 );
 
-defineProps({
-  chartData: {
-    type: Object as PropType<
-      ChartData<"line", DefaultDataPoint<"line">, unknown>
-    >,
-    required: true,
-  },
-  chartOptions: {
-    type: Object as PropType<ChartOptions<"line">>,
-    required: true,
-  },
-  width: {
-    type: Number,
-    default: 400,
-  },
-  height: {
-    type: Number,
-    default: 100,
-  },
-});
+withDefaults(
+  defineProps<{
+    chartData: ChartData<"line", DefaultDataPoint<"line">, unknown>;
+    chartOptions: ChartOptions<"line">;
+    width: number;
+    height: number;
+  }>(),
+  {
+    width: 400,
+    height: 100,
+  }
+);
 </script>

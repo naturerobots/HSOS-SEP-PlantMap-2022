@@ -58,24 +58,18 @@ ChartJS.register(
   CategoryScale
 );
 
-const props = defineProps({
-  /*data: {
-    type: Array as PropType<number[]>,
-    default: [] as number[],
-  },*/
-  chartId: {
-    type: String,
-    default: "line-chart",
-  },
-  width: {
-    type: Number,
-    default: 400,
-  },
-  height: {
-    type: Number,
-    default: 100,
-  },
-});
+withDefaults(
+  defineProps<{
+    chartId: string;
+    width: number;
+    height: number;
+  }>(),
+  {
+    chartId: "line-chart",
+    width: 400,
+    height: 100,
+  }
+);
 
 let data: Ref<string[]> = storeToRefs(weatherDataStore()).getHourlyWind;
 let labels: Ref<string[]> = storeToRefs(weatherDataStore()).getTimeLabels;
@@ -163,7 +157,7 @@ const chartOptions = {
         size: 50,
         weight: "bold",
       },
-      formatter: function (value: string) {
+      formatter: function (value: string): string {
         return "\u279e";
       },
       rotation: function (ctx: Context): number {

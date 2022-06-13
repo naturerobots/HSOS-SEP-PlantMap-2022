@@ -39,14 +39,7 @@ export type ChartType = "rainPop" | "temp" | "wind";
 
 import type { ChartData, ChartDataset, ChartOptions } from "chart.js";
 import type { Hourly } from "@/types/weatherData";
-import {
-  ref,
-  watch,
-  onMounted,
-  type Ref,
-  type ToRefs,
-  type PropType,
-} from "vue";
+import { ref, watch, onMounted, type Ref, type ToRefs } from "vue";
 import { storeToRefs } from "pinia";
 import { weatherDataStore } from "@/stores/weatherDataStore";
 import LineChart from "@/components/Weather/LineChart.vue";
@@ -60,12 +53,14 @@ import {
   getChartOptionsWind,
 } from "@/components/Weather/ChartSettings";
 
-const props = defineProps({
-  chartType: {
-    type: String as PropType<ChartType>,
-    default: "rainPop",
-  },
-});
+const props = withDefaults(
+  defineProps<{
+    chartType: ChartType;
+  }>(),
+  {
+    chartType: "rainPop",
+  }
+);
 
 const useWeatherDataStore: ToRefs<any> = storeToRefs(weatherDataStore());
 const hourly: Ref<Hourly> = useWeatherDataStore.getHourly;
@@ -118,7 +113,7 @@ watch(hourly.value, () => {
   updateData[currChartType.value]();
 });
 
-function changeChartType(chartType: ChartType) {
+function changeChartType(chartType: ChartType): void {
   currChartType.value = chartType;
   updateOptions[currChartType.value]();
   updateData[currChartType.value]();
