@@ -45,6 +45,11 @@
                   <p>Crop Image</p>
                 </router-link>
               </li>
+              <li class="my-8 text-center text-sm text-white">
+                <router-link to="/weathercharts">
+                  <p>Weather Charts</p>
+                </router-link>
+              </li>
             </ul>
           </div>
         </div>

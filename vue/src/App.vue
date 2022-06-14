@@ -16,11 +16,11 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { weatherStore } from "@/stores/weatherStore";
+import { weatherDataStore } from "@/stores/weatherDataStore";
 import { sensorStore } from "@/stores/sensorStore";
 
 onMounted(() => {
-  weatherStore().loadDataFromApi();
+  weatherDataStore().initWeatherData();
   sensorStore().loadDataFromApi();
 });
 </script>

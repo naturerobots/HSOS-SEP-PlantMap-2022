@@ -60,11 +60,11 @@
 </template>
 
 <script setup lang="ts">
-//####################################
-//Test for weather / can be cleaned up
-import { sensorStore } from "@/stores/sensorStore";
+import { onMounted } from "vue";
+import { weatherDataStore } from "../stores/weatherDataStore";
+import { sensorStore } from "../stores/sensorStore";
 
-import WeatherComp from "@/components/WeatherComp.vue";
+import WeatherComp from "@/components/Weather/WeatherComp.vue";
 // import SensorComp from "@/components/SensorComp.vue";
 import SensorComp from "@/components/SensorCompQuasar.vue";
 import GardenMap from "@/components/GardenMap.vue";
