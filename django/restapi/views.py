@@ -2,6 +2,8 @@ import json
 import string
 import sys
 
+from . import tasks
+
 # there is definitly a better way to add an import path
 sys.path.append(r'../build/gRPC/')
 
