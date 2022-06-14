@@ -14,6 +14,7 @@ from geometry_query_pb2 import GeometryQuery
 from google.protobuf.json_format import MessageToDict
 from point_cloud_2_pb2 import PointCloud2
 
+from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.storage import FileSystemStorage, default_storage
 
@@ -107,7 +108,11 @@ def save_ply(pcloud: PointCloud2, puuid: String, uuid: String):
         '''
 
         # https://docs.djangoproject.com/en/4.0/topics/files/
+
         file_path = 'storage/media/pointclouds/ply/' + puuid + '/' + uuid + '.ply'
+        # file_path = settings.MEDIA_ROOT + 'pointclouds/ply/' + puuid + '/' + uuid + '.ply'
+
+        logger.info("file_path " + str(file_path))
 
         if not default_storage.exists(file_path):
             # file_content = ContentFile(header.encode('utf-8') + '\r\n'.encode('utf-8') + pcloud.data)
