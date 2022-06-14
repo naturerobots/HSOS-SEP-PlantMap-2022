@@ -10,7 +10,7 @@ urlpatterns = [
     path('login', views.login),
     path('register', views.register),
     path('users/<int:user_id>', views.getUsers),
-    path('companies/<int:company_id>', views.getCompany),
+    path('companies/<int:company_id>', views.getCompanies),
     path('companies/<int:company_id>/gardens', views.getGardens),
     path('companies/<int:company_id>/gardens/<int:garden_id>', views.getGardenInfo),
     path('companies/<int:company_id>/gardens/<int:garden_id>/image', views.gardenImage),
