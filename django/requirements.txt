@@ -7,3 +7,4 @@ psycopg2-binary==2.9.3
 grpcio==1.46.1
 grpcio-tools==1.46.1
 tzdata==2022.1
+celery==5.2.6

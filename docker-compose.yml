@@ -13,6 +13,11 @@ services:
     ports:
       - 5432:5432
 
+  rabbitmq:
+    image: rabbitmq:3-alpine
+    ports:
+      - 5672:5672
+
   django-backend:
     platform: linux/amd64
     build:
@@ -23,10 +28,13 @@ services:
     ports:
       - 8000:8000
     command: bash -c "while !</dev/tcp/postgres/5432; do sleep 1; done;
-      python3 django/manage.py migrate;
-      python3 django/manage.py runserver 0.0.0.0:8000"
+      cd django;
+      celery -A rest-api.tasks worker -D;
+      python3 manage.py migrate;
+      python3 manage.py runserver 0.0.0.0:8000"
     depends_on:
       - postgres
+      - rabbitmq
 
   vue-frontend:
     platform: linux/amd64

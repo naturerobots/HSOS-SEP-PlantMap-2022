@@ -21,6 +21,5 @@
     "gruntfuggly.todo-tree"
   ],
   "workspaceFolder": "/workdir",
-  "postStartCommand": ".devcontainer/post-create-setup.sh",
-  "forwardPorts": [5432]
+  "postStartCommand": ".devcontainer/post-create-setup.sh"
 }

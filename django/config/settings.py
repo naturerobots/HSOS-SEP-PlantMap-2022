@@ -131,3 +131,42 @@ MEDIA_URL = 'media/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# LOGGING Configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'loggers': {
+        'django': {
+            'handlers': ['debugFile', 'infoFile', 'console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+    'handlers': {
+        'debugFile': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': './storage/logs/django/debug.log',
+            'formatter': 'extended',
+        },
+        'infoFile': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': './storage/logs/django/info.log',
+            'formatter': 'extended',
+        },
+        'console': {'level': 'INFO', 'class': 'logging.StreamHandler', 'formatter': 'simple'},
+    },
+    'formatters': {
+        'simple': {
+            'format': '{levelname} {asctime} {message}',
+            'style': '{',
+        },
+        'extended': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+    },
+}

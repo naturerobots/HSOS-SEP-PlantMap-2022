@@ -12,5 +12,8 @@ python3 -m grpc_tools.protoc \
         --grpc_python_out=build/gRPC \
         protobuf-msgs/*
 
+# Create Storage Logs Folder
+mkdir -p django/storage/logs/django
+
 # use npm ci to install all exact verion dependencies from package-lock.json
 cd vue  && npm ci

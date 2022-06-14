@@ -2,8 +2,12 @@ import json
 import string
 import sys
 
+from . import tasks
+
 # there is definitly a better way to add an import path
 sys.path.append(r'../build/gRPC/')
+
+import logging
 
 import grpc
 import meta_operations_service_pb2_grpc as metaOperations
@@ -19,8 +23,11 @@ from django.template import loader
 
 from .models import Bed, Company, Garden, User
 
+logger = logging.getLogger('django')
+
 SERVER_URL = "seerep.naturerobots.de:5000"
-channel = grpc.insecure_channel(SERVER_URL)
+options = [('grpc.max_receive_message_length', 100 * 1024 * 1024)]  # https://github.com/tensorflow/serving/issues/1382
+channel = grpc.insecure_channel(SERVER_URL, options=options)
 
 stub = metaOperations.MetaOperationsStub(channel)
 
@@ -201,3 +208,13 @@ def getSensors(request, company_id: string, garden_id: string):
 @api_view(['GET'])
 def getSensorInfo(request, company_id: string, garden_id: string, sensor_id: string):
     return JsonResponse({})
+
+
+@api_view(['POST'])
+def make_task(request, uuid: string) -> Response:
+    if request.method == 'POST':
+        logger.info("views.py make_task POST")
+        response = stub.GetProjectDetails(ProjectQuery(projectuuid=uuid))
+        geometries = MessageToDict(response)['geometries']
+        tasks.dl_pcloud.delay(geometries, uuid)
+        return Response(status=202)
