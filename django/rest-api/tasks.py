@@ -108,7 +108,8 @@ def save_ply(pcloud: PointCloud2, puuid: String, uuid: String):
 
         # https://docs.djangoproject.com/en/4.0/topics/files/
         file_path = 'storage/media/pointclouds/ply/' + puuid + '/' + uuid + '.ply'
-        file_content = ContentFile(header.encode('utf-8') + '\r\n'.encode('utf-8') + pcloud.data)
+        # file_content = ContentFile(header.encode('utf-8') + '\r\n'.encode('utf-8') + pcloud.data)
+        file_content = ContentFile(header.encode('utf-8') + pcloud.data)
         default_storage.save(file_path, file_content)
 
     except Exception as e:
