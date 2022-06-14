@@ -5,12 +5,22 @@ from tokenize import String
 # there is definitly a better way to add an import path
 sys.path.append(r'../build/gRPC/')
 
+import logging
+
 import grpc
 import point_cloud_service_pb2_grpc as PointCloudService
 from celery import Celery
 from geometry_query_pb2 import GeometryQuery
 from google.protobuf.json_format import MessageToDict
 from point_cloud_2_pb2 import PointCloud2
+
+from django.core.files.base import ContentFile
+from django.core.files.storage import FileSystemStorage, default_storage
+
+# from django.conf import settings
+# settings.configure()
+
+logger = logging.getLogger('django')
 
 # Start Celery worker from 'django' directory with "celery -A rest-api.tasks worker --loglevel=info"
 app = Celery('tasks')
@@ -36,13 +46,15 @@ def dl_pcloud(geometries, puuid):
             save_ply(response, puuid, geometry['uuid'])
             # success.append({"geometry": str(geometry), "responseDict": str(dictionary)})
             success.append({"geometry": str(geometry)})
-            print("SUCCESS: " + str(index) + " " + str(geometry))
+            # print("SUCCESS: " + str(index) + " " + str(geometry))
+            logger.info("SUCCESS: " + str(index) + " " + str(geometry))
         # except:
         except Exception as e:
             # e = sys.exc_info()[0]
             failed.append({"geometry": str(geometry), "error": str(e)})
             # failed.append(f"geometry: {geometry['uuid']} error: {e}\n")
-            print("FAILED: " + str(index) + " " + str(geometry))
+            # print("FAILED: " + str(index) + " " + str(geometry))
+            logger.info("FAILED: " + str(index) + " " + str(geometry) + " ERROR: " + str(e))
     response = {
         "stats": {
             "total": len(success) + len(failed),
@@ -87,9 +99,17 @@ def save_ply(pcloud: PointCloud2, puuid: String, uuid: String):
 
         header = f"ply\nformat binary_{endianness}_endian 1.0\nelement vertex {point_amount}\n{properties}end_header\n"
 
+        '''
         Path(f"plys/{puuid}").mkdir(parents=True, exist_ok=True)
         file = open(f"plys/{puuid}/{uuid}", "wb")
         file.write(header.encode('utf-8'))
         file.write(pcloud.data)
+        '''
+
+        # https://docs.djangoproject.com/en/4.0/topics/files/
+        file_path = 'storage/media/pointclouds/ply/' + puuid + '/' + uuid + '.ply'
+        file_content = ContentFile(header.encode('utf-8') + '\r\n'.encode('utf-8') + pcloud.data)
+        default_storage.save(file_path, file_content)
+
     except Exception as e:
         print(e)
