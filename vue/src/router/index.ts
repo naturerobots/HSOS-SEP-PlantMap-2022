@@ -3,7 +3,10 @@ import DashboardView from "@/views/DashboardView.vue";
 import CropsView from "@/views/CropsView.vue";
 import Crops3dView from "@/views/Crops3dView.vue";
 import LoginView from "@/views/LoginView.vue";
+import ImageUploadView from "@/views/ImageUploadView.vue";
 import Sidebar from "@/components/SidebarMenu.vue";
+import CropImageView from "@/views/CropImageView.vue";
+import WeatherCharts from "@/views/WeatherCharts.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -33,6 +36,31 @@ const router = createRouter({
       name: "3d",
       components: {
         default: Crops3dView,
+        sidebar: Sidebar,
+      },
+    },
+    {
+      path: "/imageupload",
+      name: "imageupload",
+      components: {
+        default: ImageUploadView,
+        sidebar: Sidebar,
+      },
+      props: true,
+    },
+    {
+      path: "/cropimage",
+      name: "cropimage",
+      components: {
+        default: CropImageView,
+        sidebar: Sidebar,
+      },
+    },
+    {
+      path: "/weathercharts",
+      name: "weathercharts",
+      components: {
+        default: WeatherCharts,
         sidebar: Sidebar,
       },
     },

@@ -1,16 +1,16 @@
 <template>
-  <div class="px-3 py-5 text-3xl text-primary-focus">
-    <h1>Dashboard</h1>
-  </div>
-  <div class="grid grid-cols-3 gap-4 place-items-stretch h-fit p-3">
+  <header-bar title="Dashboard"></header-bar>
+  <div class="grid grid-cols-3 gap-4 place-items-stretch h-fit p-6">
     <div>
       <weather-comp></weather-comp>
     </div>
     <div class="col-span-2 row-span-2">
-      <div class="bg-[#fdfff9] h-full p-2 rounded-xl shadow-sm">Garden</div>
+      <div class="h-full">
+        <garden-map :sensors="sensors" @sensor-click="sensorClick"></garden-map>
+      </div>
     </div>
     <div>
-      <sensor-comp></sensor-comp>
+      <sensor-comp :sensors="sensors"></sensor-comp>
     </div>
   </div>
 
@@ -50,18 +50,24 @@
 </template>
 
 <script setup lang="ts">
-//####################################
-//Test for weather / can be cleaned up
 import { onMounted } from "vue";
-import { weatherStore } from "../stores/weatherStore";
+import { weatherDataStore } from "../stores/weatherDataStore";
 import { sensorStore } from "../stores/sensorStore";
 
-import WeatherComp from "@/components/WeatherComp.vue";
+import WeatherComp from "@/components/Weather/WeatherComp.vue";
 import SensorComp from "@/components/SensorComp.vue";
+import GardenMap from "@/components/GardenMap.vue";
+import HeaderBar from "@/components/HeaderBar.vue";
 
-onMounted(() => {
-  weatherStore().loadDataFromApi();
-  sensorStore().loadDataFromApi();
-});
-//####################################
+import { storeToRefs } from "pinia";
+import type { Ref } from "vue";
+import type { Sensor } from "@/types/sensor";
+
+const sensors: Ref<Sensor[]> = storeToRefs(sensorStore()).getSensors;
+
+//same works for sensorEnter, sensorLeave
+function sensorClick(sensorId: number) {
+  //TODO: handle sensorId, for example for highlighting the table row
+  console.log(sensorId);
+}
 </script>

@@ -6,6 +6,7 @@
   "remoteUser": "docker",
   "extensions": [
     "compulim.compulim-vscode-closetag",
+    "ms-python.python",
     "ms-azuretools.vscode-docker",
     "mhutchie.git-graph",
     "zxh404.vscode-proto3",
