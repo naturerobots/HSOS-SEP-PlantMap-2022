@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="card w-full h-full drop-shadow bg-white">
     <div class="card-body p-0">
       <leaflet-comp
@@ -9,6 +9,19 @@
       ></leaflet-comp>
     </div>
   </div>
+</template> -->
+
+<template>
+  <!-- <q-card class="w-full h-full shadow-1 bg-white"> -->
+  <div class="card-map w-full h-full">
+    <leaflet-comp
+      :maxZoom="maxZoom"
+      :zoom="zoom"
+      :map-image="mapImage"
+      ref="leafletRef"
+    ></leaflet-comp>
+  </div>
+  <!-- </q-card> -->
 </template>
 
 <script setup lang="ts">
@@ -43,14 +56,14 @@ defineExpose({
 function addMarker(marker: L.Marker): void {
   marker.on("click", emitMarkerClick);
   marker.on("mouseover", emitMarkerEnter);
-  marker.on("mouseleave", emitMarkerLeave);
+  marker.on("mouseout", emitMarkerLeave);
   leafletRef.value?.addMarker(marker);
 }
 
 function addPolygon(polygon: L.Polygon): void {
   polygon.on("click", emitPolygonClick);
   polygon.on("mouseover", emitPolygonEnter);
-  polygon.on("mouseleave", emitPolygonLeave);
+  polygon.on("mouseout", emitPolygonLeave);
   leafletRef.value?.addPolygon(polygon);
 }
 

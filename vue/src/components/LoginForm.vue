@@ -22,15 +22,15 @@
             placeholder="Password"
             class="input input-bordered w-full max-w-xs my-2"
           />
-          <div class="grid justify-items-end text-secondary-focus text-sm">
+          <div class="grid justify-items-end text-secondary_hover text-sm">
             <a href="#">Forgot password?</a>
           </div>
         </div>
         <div class="form-control mt-6">
-          <button class="btn btn-primary">Login</button>
+          <button class="btn bg-primary no-border">Login</button>
         </div>
         <div
-          class="grid justify-items-center pt-2 text-secondary-focus text-sm"
+          class="grid justify-items-center pt-2 text-secondary_hover text-sm"
         >
           <a href="#">You don't have an account?</a>
         </div>

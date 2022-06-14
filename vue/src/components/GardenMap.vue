@@ -1,4 +1,4 @@
-<!--everything in this comp is for testing only-->
+<!--image is for testing only-->
 <template>
   <base-map
     :map-image="mapImage"
@@ -30,6 +30,11 @@ const emit = defineEmits<{
   (event: "sensorLeave", sensorId: number): void;
 }>();
 
+defineExpose({
+  setMarkerActive,
+  setMarkerInactive,
+});
+
 const mapImage: MapImage = {
   src: "https://cloud.naturerobots.de/apps/files_sharing/publicpreview/xZj9ytRt8WKr5cw?file=/goeoentueuegs_ibbenbueren_new2.jpg&fileId=28565&x=1920&y=1080&a=true",
   top_left: new LatLng(52.31703002877383, 7.6307445019483575),
@@ -46,11 +51,57 @@ onMounted(() => {
 function addSensorMarker(sensor: Sensor): void {
   let marker = L.marker(new LatLng(sensor.lat, sensor.lng), {
     icon: L.divIcon({
-      html: '<div class="sensor-icon shadow-xl">' + sensor.name + "</div>",
+      html:
+        '<div class="sensor-icon hover:sensor-icon-active shadow-xl">' +
+        sensor.name +
+        "</div>",
     }),
   });
   markerMap.set(sensor.id, marker);
   baseMapRef.value?.addMarker(marker);
+}
+
+function setMarkerActive(sensorId: number): void {
+  const sensor = getSensorById(sensorId);
+  if (sensor) {
+    if (markerMap.has(sensorId)) {
+      const marker = markerMap.get(sensorId);
+      marker?.setIcon(
+        L.divIcon({
+          html:
+            '<div class="sensor-icon sensor-icon-active shadow-xl">' +
+            sensor.name +
+            "</div>",
+        })
+      );
+    }
+  }
+}
+
+function setMarkerInactive(sensorId: number): void {
+  const sensor = getSensorById(sensorId);
+  if (sensor) {
+    if (markerMap.has(sensorId)) {
+      const marker = markerMap.get(sensorId);
+      marker?.setIcon(
+        L.divIcon({
+          html:
+            '<div class="sensor-icon hover:sensor-icon-active shadow-xl">' +
+            sensor.name +
+            "</div>",
+        })
+      );
+    }
+  }
+}
+
+function getSensorById(sensorId: number): Sensor | undefined {
+  for (let i = 0; i < props.sensors.length; i++) {
+    if (props.sensors[i].id == sensorId) {
+      return props.sensors[i];
+    }
+  }
+  return undefined;
 }
 
 function getIdByMarker(marker: L.Marker): number {
@@ -81,23 +132,3 @@ function markerLeave(marker: L.Marker): void {
   }
 }
 </script>
-
-<style>
-/*TODO: move to base.css */
-.sensor-icon {
-  width: 25px;
-  height: 25px;
-  line-height: 25px;
-  border-radius: 50%;
-  font-size: 10px;
-  color: #000;
-  text-align: center;
-  background: #fff;
-  margin-left: -12.5px;
-  margin-top: -12.5px;
-}
-
-.sensor-icon:hover {
-  background: #addb73;
-}
-</style>

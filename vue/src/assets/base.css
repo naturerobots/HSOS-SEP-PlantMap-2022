@@ -6,6 +6,34 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  /* SENSOR MAP ICON */
+  .sensor-icon {
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    border-radius: 50%;
+    font-size: 10px;
+    color: #000;
+    text-align: center;
+    background: #fff;
+    margin-left: -12.5px;
+    margin-top: -12.5px;
+    font-weight: bold;
+  }
+
+  .sensor-icon-active {
+    background: #bbe784;
+    /* TODO: discuss color, add to tailwind colors */
+  }
+
+  /* SENSOR TABLE */
+  .sensor-row-active td {
+    background-color: #bbe784 !important;
+    /* TODO: discuss color, add to tailwind colors */
+  }
+}
+
 :root {
   /* color light mode */
   background-color: #ffffff;
@@ -17,32 +45,41 @@
   }
 }
 
-*,
+/* *,
 *::before,
 *::after {
   box-sizing: border-box;
   margin: 0;
-  /*position: relative;*/
+  position: relative;
   font-weight: normal;
   font-family: Poppins, sans-serif;
-}
+} */
 
 .weather-forecasts {
-  @apply mt-2 text-primary-focus text-sm;
+  @apply mt-2 text-primary_hover text-sm;
 }
 
-.sidebar {
-  @apply h-screen block shadow-lg relative;
+.card {
+  @apply rounded-2xl overflow-x-auto overflow-y-auto p-4 shadow-card;
 }
 
-.sidebar-content {
+.card-map {
+  @apply rounded-2xl overflow-x-auto overflow-y-auto drop-shadow shadow-card;
+}
+
+.card-title {
+  @apply my-2 text-center text-xl;
+}
+
+/* .sidebar-content {
   @apply flex flex-row h-full;
 }
 
 .sidebar-nav {
   @apply w-20 h-screen justify-between flex flex-col;
-}
+} */
 
+/* MAP */
 #map {
   position: absolute;
   height: 100%;
@@ -51,3 +88,81 @@
   bottom: 0;
   left: 0;
 }
+
+/* SENSOR TABLE */
+.sensor-table thead th {
+  @apply uppercase font-bold;
+  color: #6b7280;
+  /* TODO: discuss color, add to tailwind colors */
+}
+
+.sensor-table tbody {
+  font-weight: bold;
+}
+
+.sensor-table thead tr:first-child th,
+.sensor-table tbody tr:nth-child(2n) td {
+  @apply bg-background;
+}
+
+.sensor-table tbody tr {
+  @apply bg-white;
+}
+
+.sensor-table tbody tr td:first-child {
+  @apply rounded-l-lg;
+}
+
+.sensor-table .q-table__bottom {
+  @apply border-none;
+}
+
+/* CROPS TABLE */
+.crops-table thead th:first-child {
+  border-top-left-radius: 1rem;
+}
+
+.crops-table thead th:last-child {
+  border-top-right-radius: 1rem;
+}
+
+.crops-table .q-table__bottom,
+thead tr:first-child th,
+tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.crops-table thead tr th {
+  position: sticky;
+  z-index: 1;
+  font-weight: bold;
+  color: #6b7280;
+}
+
+.crops-table tbody tr td:first-child {
+  @apply rounded-l-lg;
+}
+
+/* this is when the loading indicator appears */
+.crops-table .q-table--loading thead tr:last-child th {
+  /* height of all previous header rows */
+  top: 48px;
+}
+
+.crops3d-icon-active:hover {
+  fill: #79b729;
+}
+
+/* -- layout table-head when hovered/clicked -- */
+.crops-table thead tr th.sorted {
+  color: black;
+}
+
+.crops-table thead tr th.sortable:hover {
+  color: black;
+}
+
+.crops-table tbody tr:hover {
+  background-color: #e5e7eb;
+}
+/* ----------- */

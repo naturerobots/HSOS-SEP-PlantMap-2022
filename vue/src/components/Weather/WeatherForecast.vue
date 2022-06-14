@@ -1,12 +1,16 @@
+<!---
+TODO: Create the date in the store or service. Must then also be changed in WeatherComp.
+-->
 <template>
   <div class="text-center">
-    <h2 class="font-bold text-primary-focus">
+    <div class="text-weight-bold text-primary_hover">
       <!--TODO: Maybe move language and date options to settings?-->
       {{ new Date(forecast.dt * 1000).toLocaleString("de-DE", dateOptions) }}
-    </h2>
+    </div>
     <figure>
-      <img
+      <q-img
         :src="`http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png`"
+        style="width: 90px"
       />
     </figure>
     <p class="weather-forecasts">
