@@ -80,19 +80,19 @@ const gardenMapRef = ref<InstanceType<typeof GardenMap> | null>(null);
 const sensorCompRef = ref<InstanceType<typeof SensorComp> | null>(null);
 
 // Sensor - Map interaction
-function mapSensorEnter(sensorId: number) {
+function mapSensorEnter(sensorId: number): void {
   sensorCompRef.value?.setRowActive(sensorId);
 }
 
-function mapSensorLeave(sensorId: number) {
+function mapSensorLeave(sensorId: number): void {
   sensorCompRef.value?.setRowInactive(sensorId);
 }
 
-function tableSensorEnter(sensorId: number) {
+function tableSensorEnter(sensorId: number): void {
   gardenMapRef.value?.setMarkerActive(sensorId);
 }
 
-function tableSensorLeave(sensorId: number) {
+function tableSensorLeave(sensorId: number): void {
   gardenMapRef.value?.setMarkerInactive(sensorId);
 }
 </script>

@@ -11,7 +11,7 @@ export const cropsStore = defineStore({
     getCrops: (state) => state.crops,
   },
   actions: {
-    async loadDataFromApi() {
+    async loadDataFromApi(): Promise<void> {
       const cropsData = localStorage.getItem("crops");
 
       //The data is loaded from the local memory if it exists there.

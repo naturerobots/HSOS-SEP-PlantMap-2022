@@ -230,7 +230,7 @@ let input = ref("");
 
 const props = defineProps<{
   title: string;
-  visibleColumns: string[] | undefined;
+  visibleColumns: string[];
 }>();
 
 let visCols = ref(props.visibleColumns);
@@ -242,15 +242,15 @@ function pagination() {
   };
 }
 
-function rowEnter(plant: string) {
+function rowEnter(plant: string): void {
   console.log(plant);
 }
 
-function rowLeave(plant: string) {
+function rowLeave(plant: string): void {
   console.log(plant);
 }
 
-function rowclicked() {
+function rowclicked(): void {
   console.log("rowClicked");
 }
 const columns: QTableProps["columns"] = [

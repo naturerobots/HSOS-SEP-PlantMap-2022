@@ -1,6 +1,6 @@
 import type { Crop } from "@/types/crop";
 
-export async function getCrops() {
+export async function getCrops(): Promise<Crop[]> {
   //static demo data
   const crops: Crop[] = [];
 

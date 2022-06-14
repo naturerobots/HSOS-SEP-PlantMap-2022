@@ -77,25 +77,25 @@ function getRowBySensorId(sensorId: number): HTMLTableRowElement | undefined {
   }
 }
 
-function setRowActive(sensorId: number) {
+function setRowActive(sensorId: number): void {
   const row: HTMLTableRowElement | undefined = getRowBySensorId(sensorId);
   if (row) {
     row.classList.add("sensor-row-active");
   }
 }
 
-function setRowInactive(sensorId: number) {
+function setRowInactive(sensorId: number): void {
   const row: HTMLTableRowElement | undefined = getRowBySensorId(sensorId);
   if (row) {
     row.classList.remove("sensor-row-active");
   }
 }
 
-function rowEnter(sensorId: number) {
+function rowEnter(sensorId: number): void {
   emit("rowEnter", sensorId);
 }
 
-function rowLeave(sensorId: number) {
+function rowLeave(sensorId: number): void {
   emit("rowLeave", sensorId);
 }
 //TODO: columns
