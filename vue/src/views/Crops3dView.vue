@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import HeaderBar from "@/components/HeaderBar.vue";
+import HeaderBar from "@/components/header/HeaderBar.vue";
 import CropsTable from "../components/CropsTable.vue";
 import CropsMap from "@/components/CropsMap.vue";
 import { cropsStore } from "@/stores/cropsStore";

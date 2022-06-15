@@ -68,7 +68,7 @@ import WeatherComp from "@/components/Weather/WeatherComp.vue";
 // import SensorComp from "@/components/SensorComp.vue";
 import SensorComp from "@/components/SensorCompQuasar.vue";
 import GardenMap from "@/components/GardenMap.vue";
-import HeaderBar from "@/components/HeaderBar.vue";
+import HeaderBar from "@/components/header/HeaderBar.vue";
 import { ref } from "vue";
 
 import { storeToRefs } from "pinia";

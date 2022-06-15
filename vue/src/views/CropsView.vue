@@ -22,7 +22,7 @@
 import CropsTable from "../components/CropsTable.vue";
 import { onMounted } from "vue";
 import { cropsStore } from "@/stores/cropsStore";
-import HeaderBar from "@/components/HeaderBar.vue";
+import HeaderBar from "@/components/header/HeaderBar.vue";
 import CropsMap from "@/components/CropsMap.vue";
 onMounted(() => {
   cropsStore().loadDataFromApi();
