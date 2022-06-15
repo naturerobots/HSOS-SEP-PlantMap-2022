@@ -7,6 +7,10 @@
       <div class="flex items-center">
         <!--TODO: Add Quasar components (Button, Avatar)-->
         <div class="mr-3">
+          <widget-comp :options="options" label="widgets"></widget-comp>
+        </div>
+
+        <div class="mr-3">
           <a href="#" class="block relative">
             <svg
               class="fill-primary"
@@ -49,6 +53,27 @@
 </template>
 
 <script setup lang="ts">
+import WidgetComp from "@/components/header/widget/WidgetComp.vue";
+import type { WidgetOption } from "@/types/widgetOption";
+
+const options: WidgetOption[] = [
+  {
+    label: "weather",
+    name: "weather",
+  },
+  {
+    label: "soil parameter",
+    name: "soil-parameter",
+  },
+  {
+    label: "notifications",
+    name: "notifications",
+  },
+  {
+    label: "garden",
+    name: "garden",
+  },
+];
 defineProps<{
   title: string;
 }>();
