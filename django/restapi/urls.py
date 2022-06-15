@@ -9,20 +9,20 @@ from . import views
 urlpatterns = [
     path('login', views.login),
     path('register', views.register),
-    path('users/<int:user_id>', views.getUsers),
-    path('companies/<int:company_id>', views.getCompanies),
+    path('users/<int:user_id>', views.getUser),
+    path('companies/<int:company_id>', views.getCompany),
     path('companies/<int:company_id>/gardens', views.getGardens),
-    path('companies/<int:company_id>/gardens/<int:garden_id>', views.getGardenInfo),
+    path('companies/<int:company_id>/gardens/<int:garden_id>', views.getGarden),
     path('companies/<int:company_id>/gardens/<int:garden_id>/image', views.gardenImage),
     path('companies/<int:company_id>/gardens/<int:garden_id>/beds', views.getBeds),
     path('companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/plants', views.getPlants),
     path(
         'companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/plants/<int:plant_id>/3d',
-        views.getBed3dImage,
+        views.getPlant3DImage,
     ),
-    path('companies/<int:company_id>/gardens/<int:garden_id>/sensors', views.getSensors),
-    path('companies/<int:company_id>/gardens/<int:garden_id>/sensors/<int:sensor_id>', views.getSensorInfo),
-    path('', views.list_projects),
+    path('companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/sensors', views.getSensors),
+    path(
+        'companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/sensors/<int:sensor_id>', views.getSensor
+    ),
     path('<str:uuid>/task', views.make_task),
-    path('<str:uuid>', views.list_project_detials),
 ]
