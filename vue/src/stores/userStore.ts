@@ -9,7 +9,15 @@ interface userStore {
 export const userStore = defineStore({
   id: "userStore",
   state: (): userStore => ({
-    options: ["weather", "garden", "soil-parameter"], //TODO: delete later
+    options: [
+      "weather",
+      "garden-map",
+      "soil-parameter",
+      "crops-table",
+      "crops-map",
+      "3d-table",
+      "3d-map",
+    ], //TODO: delete later
   }),
   getters: {
     getOptions(state: userStore): StoreOption[] {
