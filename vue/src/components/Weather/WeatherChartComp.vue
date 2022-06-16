@@ -1,37 +1,43 @@
 <template>
-  <div class="card h-full w-full shadow-sm bg-[#fdfff9]">
-    <div class="card-body p-5">
-      <h2 class="text-xl text-center text-primary-focus">Weather</h2>
-      <div class="card card-side">
-        <div class="card-body">
-          <div class="grid grid-cols-3 gap-4">
-            <button
-              class="btn btn-sm btn-ghost link"
-              @click="changeChartType('rainPop')"
-            >
-              RainPop
-            </button>
-            <button
-              class="btn btn-sm btn-ghost link"
-              @click="changeChartType('temp')"
-            >
-              Temp
-            </button>
-            <button
-              class="btn btn-sm btn-ghost link"
-              @click="changeChartType('wind')"
-            >
-              Wind
-            </button>
-          </div>
-          <LineChart
-            :chart-data="chartData"
-            :chart-options="chartOptions"
-          ></LineChart>
-        </div>
-      </div>
-    </div>
+  <div class="inline-flex my-2 pl-3 text-xl space-x-3">
+    <button
+      class="rounded hover text-left"
+      :class="isActive('rainPop')"
+      @click="changeChartType('rainPop')"
+    >
+      Rain
+      <div
+        id="underline"
+        class="rainbg h-1 rounded-md"
+        :class="isActive('rainPop')"
+      ></div>
+    </button>
+    <button
+      class="rounded hover text-left"
+      :class="isActive('temp')"
+      @click="changeChartType('temp')"
+    >
+      Temperature
+      <div
+        id="underline"
+        class="tempbg h-1 rounded-md"
+        :class="isActive('temp')"
+      ></div>
+    </button>
+    <button
+      class="rounded hover text-left"
+      :class="isActive('wind')"
+      @click="changeChartType('wind')"
+    >
+      Wind
+      <div
+        id="underline"
+        class="windbg h-1 rounded-md"
+        :class="isActive('wind')"
+      ></div>
+    </button>
   </div>
+  <LineChart :chart-data="chartData" :chart-options="chartOptions"></LineChart>
 </template>
 
 <script setup lang="ts">
@@ -55,7 +61,7 @@ import {
 
 const props = withDefaults(
   defineProps<{
-    chartType: ChartType;
+    chartType?: ChartType;
   }>(),
   {
     chartType: "rainPop",
@@ -118,4 +124,35 @@ function changeChartType(chartType: ChartType): void {
   updateOptions[currChartType.value]();
   updateData[currChartType.value]();
 }
+
+function isActive(type: ChartType): string {
+  return currChartType.value === type ? "isActive" : "notActive";
+}
 </script>
+
+<!--TODO: has to be refactored, but works-->
+<style lang="scss">
+.isActive {
+  @apply text-black;
+}
+
+.notActive {
+  @apply text-slate-400;
+}
+
+.notActive#underline {
+  @apply bg-slate-300;
+}
+
+.isActive.rainbg {
+  background-color: #29a6b7;
+}
+
+.isActive.tempbg {
+  background-color: #ebc351;
+}
+
+.isActive.windbg {
+  background-color: #29a6b7;
+}
+</style>
