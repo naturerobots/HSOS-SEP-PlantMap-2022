@@ -39,48 +39,48 @@
 <script setup lang="ts">
 import { Cropper } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
-import { useRouter } from "vue-router";
-import { useQuasar } from "quasar";
-import { ref } from "vue";
+import { useRouter, type Router } from "vue-router";
+import { useQuasar, type QVueGlobals } from "quasar";
+import { ref, type Ref } from "vue";
 
-const router = useRouter();
-const $q = useQuasar();
+const router: Router = useRouter();
+const $q: QVueGlobals = useQuasar();
 
 //https://stackoverflow.com/questions/65002098/how-to-define-type-for-refbinding-on-template-in-vue3-using-typescript
 const cropperChild = ref<InstanceType<typeof Cropper>>();
 
-const model = ref<File>();
-const base64 = ref<string>();
-const base64Cropped = ref<string>();
+const model: Ref<File | undefined> = ref<File>();
+const base64: Ref<string | undefined> = ref<string>();
+const base64Cropped: Ref<string | undefined> = ref<string>();
 
-function crop() {
+function crop(): void {
   base64Cropped.value = cropperChild.value
     ?.getResult()
     .canvas?.toDataURL("image/png") as string;
 }
 
-function place() {
+function place(): void {
   if (base64Cropped.value && base64Cropped.value.length > 0) {
     router.push({ name: "imageupload", params: { src: base64Cropped.value } });
   }
 }
 
-function clearImg() {
-  base64.value = null;
-  base64Cropped.value = null;
+function clearImg(): void {
+  base64.value = undefined;
+  base64Cropped.value = undefined;
 }
 
-function onRejected() {
+function onRejected(): void {
   $q.notify({
     type: "negative",
     message: "Wrong file type!",
   });
 }
 
-function setBase64(file: File) {
+function setBase64(file: File): void {
   if (!file) return;
 
-  var reader = new FileReader();
+  var reader: FileReader = new FileReader();
   reader.readAsDataURL(file);
 
   reader.onload = (event: ProgressEvent<FileReader>) => {
