@@ -52,7 +52,7 @@ the component should be extended to include a message indicating that no weather
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { weatherDataStore } from "@/stores/weatherDataStore";
-import WeatherForecast from "@/components/Weather/WeatherForecast.vue";
+import WeatherForecast from "@/components/weather/WeatherForecast.vue";
 import type { Ref } from "vue";
 import type {
   WeatherDataForecast,

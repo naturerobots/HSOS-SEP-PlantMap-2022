@@ -48,7 +48,7 @@ import type { Hourly } from "@/types/weatherData";
 import { ref, watch, onMounted, type Ref, type ToRefs } from "vue";
 import { storeToRefs } from "pinia";
 import { weatherDataStore } from "@/stores/weatherDataStore";
-import LineChart from "@/components/Weather/LineChart.vue";
+import LineChart from "@/components/weather/LineChart.vue";
 
 import {
   getChartDataRainPop,
@@ -57,7 +57,7 @@ import {
   getChartOptionsRainPop,
   getChartOptionsTemp,
   getChartOptionsWind,
-} from "@/components/Weather/ChartSettings";
+} from "@/components/weather/ChartSettings";
 
 const props = withDefaults(
   defineProps<{
