@@ -38,14 +38,17 @@
     /* TODO: discuss color, add to tailwind colors */
   }
 
-  /* SENSOR TABLE */
+  /* ----------- */
+
+  /* CROPS TABLE */
+
   .crops-row-active td {
     background-color: #e5e7eb !important;
     /* TODO: discuss color, add to tailwind colors */
   }
-}
 
-/* ----------- */
+  /* ----------- */
+}
 
 :root {
   /* color light mode */
