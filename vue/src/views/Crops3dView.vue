@@ -19,8 +19,8 @@
       <crops-map
         ref="cropsMapRef"
         :crops="crops"
-        @crops-enter="mapCropsEnter"
-        @crops-leave="mapCropsLeave"
+        @polygon-enter="mapCropsEnter"
+        @polygon-leave="mapCropsLeave"
       ></crops-map>
     </div>
   </div>
