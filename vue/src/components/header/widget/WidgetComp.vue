@@ -3,7 +3,7 @@
     dir="rtl"
     class="widget"
     v-model="widgetModel"
-    :options="options"
+    :options="widgetOptions"
     :display-value="label"
     hide-dropdown-icon
     multiple
@@ -16,6 +16,8 @@
     option-label="label"
     map-options
     emit-value
+    @add="add"
+    @remove="remove"
   >
     <!-- TODO: check menu-anchor & menu-self -> when the website reloads, you can see the position changes -->
     <template v-slot:option="scope">
@@ -38,14 +40,30 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import type { QSelect } from "quasar";
-import type { WidgetOption } from "@/types/widgetOption";
+import { ref, onMounted } from "vue";
+import type { WidgetOption, StoreOption } from "@/types/widgetOption";
+import { userStore } from "@/stores/userStore";
 
-const widgetModel = ref<InstanceType<typeof QSelect> | null>(null);
+const { addOption, removeOption } = userStore();
 
-defineProps<{
+let widgetModel = ref<StoreOption[]>([]);
+
+const props = defineProps<{
   label: string;
-  options: WidgetOption[];
+  widgetOptions: WidgetOption[];
+  storeOptions: StoreOption[];
 }>();
+
+onMounted(() => {
+  widgetModel.value = props.storeOptions;
+});
+
+//TODO: change type
+function add(item: any): void {
+  addOption(item.value);
+}
+//TODO: change type
+function remove(item: any): void {
+  removeOption(item.value);
+}
 </script>
