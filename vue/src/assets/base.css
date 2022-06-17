@@ -32,6 +32,12 @@
     background-color: #bbe784 !important;
     /* TODO: discuss color, add to tailwind colors */
   }
+
+  /* SENSOR TABLE */
+  .crops-row-active td {
+    background-color: #e5e7eb !important;
+    /* TODO: discuss color, add to tailwind colors */
+  }
 }
 
 :root {
@@ -164,5 +170,9 @@ tbody tr:nth-child(even) {
 
 .crops-table tbody tr:hover {
   background-color: #e5e7eb;
+}
+/* sort-icon-size */
+.crops-table thead tr th i {
+  font-size: 23px;
 }
 /* ----------- */

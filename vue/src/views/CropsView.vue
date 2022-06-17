@@ -10,23 +10,34 @@
   <header-bar title="Crops"></header-bar>
   <div class="row p-6">
     <div class="col-8">
-      <crops-table title="Overview" :visibleColumns="columns"></crops-table>
+      <crops-table
+        ref="cropsTableRef"
+        title="Overview"
+        :crops="crops"
+        :visibleColumns="columns"
+        @row-enter="tableCropsEnter"
+        @row-leave="tableCropsLeave"
+      ></crops-table>
     </div>
     <div class="col-4 pl-2">
-      <crops-map></crops-map>
+      <crops-map
+        ref="cropsMapRef"
+        :crops="crops"
+        @polygon-enter="mapCropsEnter"
+        @polygon-leave="mapCropsLeave"
+      ></crops-map>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import CropsTable from "../components/CropsTable.vue";
-import { onMounted } from "vue";
+import { ref, type Ref } from "vue";
 import { cropsStore } from "@/stores/cropsStore";
 import HeaderBar from "@/components/HeaderBar.vue";
 import CropsMap from "@/components/CropsMap.vue";
-onMounted(() => {
-  cropsStore().loadDataFromApi();
-});
+import type { Crop } from "@/types/crop";
+import { storeToRefs } from "pinia";
 
 let columns: string[] = [
   "id",
@@ -40,4 +51,25 @@ let columns: string[] = [
   "yield",
   "3d",
 ];
+
+const crops: Ref<Crop[]> = storeToRefs(cropsStore()).getCrops;
+const cropsMapRef = ref<InstanceType<typeof CropsMap> | null>(null);
+const cropsTableRef = ref<InstanceType<typeof CropsTable> | null>(null);
+
+// Table - Map interaction
+function mapCropsEnter(cropsId: number): void {
+  cropsTableRef.value?.setRowActive(cropsId);
+}
+
+function mapCropsLeave(cropsId: number): void {
+  cropsTableRef.value?.setRowInactive(cropsId);
+}
+
+function tableCropsEnter(cropsId: number): void {
+  cropsMapRef.value?.setPolygonActive(cropsId);
+}
+
+function tableCropsLeave(cropsId: number): void {
+  cropsMapRef.value?.setPolygonInactive(cropsId);
+}
 </script>

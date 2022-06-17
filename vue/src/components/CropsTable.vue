@@ -2,6 +2,7 @@
   <div class="card h-full w-full mr-24">
     <div class="overflow-x-auto overflow-y-auto rounded-2xl">
       <q-table
+        ref="table"
         @row-click="rowclicked()"
         separator="none"
         class="crops-table no-shadow crops-table-hover"
@@ -18,14 +19,10 @@
           <q-tr
             no-hover
             :props="props"
-            :key="props.row.plant"
-            @mouseenter="rowEnter(props.row.plant)"
-            @mouseleave="rowLeave(props.row.plant)"
+            :key="props.row.id"
+            @mouseenter="rowEnter(props.row.id)"
+            @mouseleave="rowLeave(props.row.id)"
           >
-            <!-- <q-td key="id" :props="props">
-              {{ props.row.id }}
-            </q-td> -->
-
             <q-td key="location" :props="props">
               {{ props.row.location }}
             </q-td>
@@ -223,36 +220,78 @@ import type { Crop } from "../types/crop";
 import { storeToRefs } from "pinia";
 import { cropsStore } from "../stores/cropsStore";
 import { ref } from "vue";
-import type { QTableProps } from "quasar";
+import type { QTable, QTableProps } from "quasar";
 
 const crops: Ref<Crop[]> = storeToRefs(cropsStore()).getCrops;
 let input = ref("");
+const table = ref<null | InstanceType<typeof QTable>>(null);
 
 const props = defineProps<{
   title: string;
   visibleColumns: string[];
+  crops: Crop[];
 }>();
+
+const emit = defineEmits<{
+  (event: "rowEnter", cropsId: number): void;
+  (event: "rowLeave", cropsId: number): void;
+}>();
+
+defineExpose({
+  setRowActive,
+  setRowInactive,
+});
+
+function getRowByCropsId(cropsId: number): HTMLTableRowElement | undefined {
+  const tableValue: any = table.value;
+  const filteredSortedRows = tableValue.filteredSortedRows;
+  if (table.value?.rows?.length) {
+    for (let i = 0; i < table.value.rows.length; i++) {
+      if (cropsId == table.value.rows[i].id) {
+        const rowIndex = filteredSortedRows.indexOf(table.value.rows[i]);
+        return document
+          .getElementsByClassName("q-table")[0]
+          .getElementsByTagName("tr")[rowIndex + 1];
+      }
+    }
+  }
+}
+
+function setRowActive(cropsId: number): void {
+  const row: HTMLTableRowElement | undefined = getRowByCropsId(cropsId);
+  if (row) {
+    row.classList.add("crops-row-active");
+  }
+}
+
+function setRowInactive(cropsId: number): void {
+  const row: HTMLTableRowElement | undefined = getRowByCropsId(cropsId);
+  if (row) {
+    row.classList.remove("crops-row-active");
+  }
+}
+
+function rowEnter(cropsId: number): void {
+  emit("rowEnter", cropsId);
+}
+
+function rowLeave(cropsId: number): void {
+  emit("rowLeave", cropsId);
+}
+
+function rowclicked(): void {
+  console.log("rowClicked");
+}
 
 let visCols = ref(props.visibleColumns);
 
 function pagination() {
   return {
     sortBy: "location",
-    rowsPerPage: 10,
+    rowsPerPage: 0,
   };
 }
 
-function rowEnter(plant: string): void {
-  console.log(plant);
-}
-
-function rowLeave(plant: string): void {
-  console.log(plant);
-}
-
-function rowclicked(): void {
-  console.log("rowClicked");
-}
 const columns: QTableProps["columns"] = [
   // {
   //   name: "id",
