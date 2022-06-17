@@ -10,7 +10,7 @@ import {
   getWeatherDataForecast,
 } from "@/services/weatherDataAPI";
 
-import { getGeoData } from "@/services/geoDataAPI";
+//import { getGeoData } from "@/services/geoDataAPI";
 import type { GeoDataArray } from "@/types/geoData";
 
 export const weatherDataStore = defineStore({
@@ -26,22 +26,22 @@ export const weatherDataStore = defineStore({
     getWeatherData(state: any) {
       return state;
     },
-    getCurrent(state: any) {
-      return Object.keys(state.current).length > 0 ? state.current : undefined;
+    getCurrent(): WeatherDataCurrent {
+      return Object.keys(this.current).length > 0 ? this.current : undefined;
     },
-    getForecast(state: any) {
+    getForecast(state: any): WeatherDataForecast {
       return state.forecast;
     },
-    getHourly(state: any) {
+    getHourly(state: any): Hourly {
       return state.forecast.hourly;
     },
-    getTimeLabels(state: any) {
+    getTimeLabels(state: any): string[] {
       return state.forecast.hourly
         .slice(0, 8)
         .map((value: Hourly, index: any) => {
-          if (index === 0) {
+          /*if (index === 0) {
             return "Now";
-          }
+          }*/
 
           return new Date(value.dt * 1000).toLocaleString("de-DE", {
             hour: "numeric",

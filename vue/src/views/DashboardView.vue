@@ -77,7 +77,7 @@ import {
   type StoreOption,
   type WidgetOption,
 } from "@/types/widgetOption";
-import WeatherComp from "@/components/Weather/WeatherComp.vue";
+import WeatherComp from "@/components/weather/WeatherComp.vue";
 import SensorComp from "@/components/SensorCompQuasar.vue";
 import GardenMap from "@/components/GardenMap.vue";
 import HeaderBar from "@/components/header/HeaderBar.vue";
