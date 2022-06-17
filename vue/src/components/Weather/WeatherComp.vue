@@ -35,7 +35,7 @@ the component should be extended to include a message indicating that no weather
           </div>
         </div>
       </div>
-      <weather-chart-comp></weather-chart-comp>
+      <weather-chart-comp :chart-type="'rainPop'"></weather-chart-comp>
     </div>
 
     <!--TODO: 3 day forecast necessary?-->
