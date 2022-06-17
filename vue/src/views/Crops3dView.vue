@@ -30,8 +30,8 @@ import CropsMap from "@/components/CropsMap.vue";
 
 const storeOptions: Ref<StoreOption[]> = storeToRefs(userStore()).getOptions;
 const widgetOptions3D: WidgetOption[] = [
-  widgetOptions["3dTable"],
-  widgetOptions["3dMap"],
+  widgetOptions.crops3dTable,
+  widgetOptions.crops3dMap,
 ];
 
 onMounted(() => {

@@ -28,11 +28,11 @@ export const widgetOptions = {
     label: "crops map",
     name: "crops-map",
   },
-  "3dTable": {
+  crops3dTable: {
     label: "3D table",
     name: "3d-table",
   },
-  "3dMap": {
+  crops3dMap: {
     label: "3D map",
     name: "3d-map",
   },
