@@ -7,9 +7,13 @@
   <!-- <div class="px-3 py-5 text-h2 text-primary_hover">
     Crops
   </div> -->
-  <header-bar title="Crops"></header-bar>
+  <header-bar
+    title="Crops"
+    :widgetOptions="widgetOptionsCrops"
+    :storeOptions="storeOptions"
+  ></header-bar>
   <div class="row p-6">
-    <div class="col-8">
+    <div v-if="storeOptions.indexOf('crops-table') > -1" class="col-8">
       <crops-table
         ref="cropsTableRef"
         title="Overview"
@@ -19,7 +23,7 @@
         @row-leave="tableCropsLeave"
       ></crops-table>
     </div>
-    <div class="col-4 pl-2">
+    <div v-if="storeOptions.indexOf('crops-map') > -1" class="col-4 pl-2">
       <crops-map
         ref="cropsMapRef"
         :crops="crops"
@@ -31,13 +35,24 @@
 </template>
 
 <script setup lang="ts">
-import CropsTable from "../components/CropsTable.vue";
-import { ref, type Ref } from "vue";
+import { onMounted, type Ref, ref } from "vue";
+import { storeToRefs } from "pinia";
 import { cropsStore } from "@/stores/cropsStore";
-import HeaderBar from "@/components/HeaderBar.vue";
+import { userStore } from "@/stores/userStore";
+import {
+  widgetOptions,
+  type StoreOption,
+  type WidgetOption,
+} from "@/types/widgetOption";
+import CropsTable from "@/components/CropsTable.vue";
+import HeaderBar from "@/components/header/HeaderBar.vue";
 import CropsMap from "@/components/CropsMap.vue";
 import type { Crop } from "@/types/crop";
-import { storeToRefs } from "pinia";
+const storeOptions: Ref<StoreOption[]> = storeToRefs(userStore()).getOptions;
+const widgetOptionsCrops: WidgetOption[] = [
+  widgetOptions.cropsTable,
+  widgetOptions.cropsMap,
+];
 
 let columns: string[] = [
   "id",
