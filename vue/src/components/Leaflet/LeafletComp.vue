@@ -18,10 +18,12 @@ const props = withDefaults(
     maxZoom: number;
     zoom: number;
     mapImage: MapImage;
+    zoomControl: boolean;
   }>(),
   {
     maxZoom: 24,
     zoom: 13,
+    zoomControl: true,
   }
 );
 
@@ -34,7 +36,7 @@ defineExpose({
 
 onMounted(() => {
   leafletMap = L.map("map", {
-    zoomControl: false,
+    zoomControl: props.zoomControl,
     attributionControl: false,
     zoomDelta: 0.25,
     zoomSnap: 0.25,

@@ -18,6 +18,7 @@
       :maxZoom="maxZoom"
       :zoom="zoom"
       :map-image="mapImage"
+      :zoom-control="zoomControl"
       ref="leafletRef"
     ></leaflet-comp>
   </div>
@@ -36,6 +37,7 @@ const leafletRef = ref<InstanceType<typeof LeafletComp> | null>(null);
 defineProps<{
   maxZoom?: number;
   zoom?: number;
+  zoomControl?: boolean;
   mapImage: MapImage;
 }>();
 
