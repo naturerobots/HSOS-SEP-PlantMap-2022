@@ -24,13 +24,17 @@ urlpatterns = [
 # http://localhost:8000/media/pointclouds/ply/e1ef73b1258b475a996d2b72924c27ac/0bf37a0851b7402d88674e153f58e6f8.ply
 
 # #This is only needed when the DEBUG Environment variable is used
-# from django.conf import settings
-# from django.urls import re_path
-# from django.views.static import serve
+from django.conf import settings
+from django.urls import re_path
+from django.views.static import serve
 
-# if settings.DEBUG:
-#     urlpatterns += [
-#         re_path(r'^media/(?P<path>.*)$', serve, {
-#             'document_root': settings.MEDIA_ROOT,
-#         }),
-#     ]
+if settings.DEBUG:
+    urlpatterns += [
+        re_path(
+            r'^media/(?P<path>.*)$',
+            serve,
+            {
+                'document_root': settings.MEDIA_ROOT,
+            },
+        ),
+    ]
