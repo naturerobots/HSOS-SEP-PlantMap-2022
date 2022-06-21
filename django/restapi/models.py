@@ -1,19 +1,5 @@
+from django.contrib.auth.models import User
 from django.db import models
-
-
-class User(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    name = models.CharField(max_length=32, null=True)
-    email = models.CharField(max_length=32, null=True)
-    password = models.CharField(max_length=32, null=True)
-
-    class Meta:
-        app_label = 'restapi'
-        db_table = 'User'
-        managed = True
-
-    def __str__(self):
-        return self.name
 
 
 class Company(models.Model):
