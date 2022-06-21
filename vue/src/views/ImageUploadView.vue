@@ -3,5 +3,5 @@
 </template>
 
 <script setup lang="ts">
-import LeafletRotatedComp from "@/components/Leaflet/LeafletRotatedComp.vue";
+import LeafletRotatedComp from "@/components/leaflet/LeafletRotatedComp.vue";
 </script>
