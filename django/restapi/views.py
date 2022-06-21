@@ -13,10 +13,14 @@ import grpc
 import meta_operations_service_pb2_grpc as metaOperations
 from google.protobuf import empty_pb2
 from google.protobuf.json_format import MessageToDict
+from knox.views import LoginView as KnoxLoginView
 from project_query_pb2 import ProjectQuery
+from rest_framework import permissions
+from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from django.contrib.auth import login
 from django.db.models import ObjectDoesNotExist
 from django.http import *
 from django.template import loader
@@ -46,10 +50,15 @@ def list_project_detials(request, uuid: string) -> Response:
         return Response(MessageToDict(response))
 
 
-# /login
-@api_view(['GET'])
-def login(request):
-    return JsonResponse({})
+class LoginView(KnoxLoginView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        serializer = AuthTokenSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        login(request, user)
+        return super(LoginView, self).post(request, format=None)
 
 
 # /register

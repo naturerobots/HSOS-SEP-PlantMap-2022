@@ -11,6 +11,8 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         gcc \
         python3-pip \
         python3-dev \
+        libssl-dev \
+        libffi-dev \
         gpg \
         && rm -rf /var/lib/apt/lists/*
 
