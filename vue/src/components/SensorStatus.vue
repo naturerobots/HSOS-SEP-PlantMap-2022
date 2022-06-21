@@ -3,7 +3,7 @@ TODO: add hover effect to sensor
 FIXME: fix template string for img src -> "@/" doesnt worked in first attempt
 --->
 <template>
-  <h2 class="text-center text-primary-focus">
+  <h2 class="text-center text-primary_hover">
     {{ sensor.name }}
   </h2>
 

@@ -6,11 +6,21 @@
     </div>
     <div class="col-span-2 row-span-2">
       <div class="h-full">
-        <garden-map :sensors="sensors" @sensor-click="sensorClick"></garden-map>
+        <garden-map
+          ref="gardenMapRef"
+          :sensors="sensors"
+          @sensor-enter="mapSensorEnter"
+          @sensor-leave="mapSensorLeave"
+        ></garden-map>
       </div>
     </div>
     <div>
-      <sensor-comp :sensors="sensors"></sensor-comp>
+      <sensor-comp
+        ref="sensorCompRef"
+        :sensors="sensors"
+        @row-enter="tableSensorEnter"
+        @row-leave="tableSensorLeave"
+      ></sensor-comp>
     </div>
   </div>
 
@@ -55,19 +65,34 @@ import { weatherDataStore } from "../stores/weatherDataStore";
 import { sensorStore } from "../stores/sensorStore";
 
 import WeatherComp from "@/components/Weather/WeatherComp.vue";
-import SensorComp from "@/components/SensorComp.vue";
+// import SensorComp from "@/components/SensorComp.vue";
+import SensorComp from "@/components/SensorCompQuasar.vue";
 import GardenMap from "@/components/GardenMap.vue";
 import HeaderBar from "@/components/HeaderBar.vue";
+import { ref } from "vue";
 
 import { storeToRefs } from "pinia";
 import type { Ref } from "vue";
 import type { Sensor } from "@/types/sensor";
 
 const sensors: Ref<Sensor[]> = storeToRefs(sensorStore()).getSensors;
+const gardenMapRef = ref<InstanceType<typeof GardenMap> | null>(null);
+const sensorCompRef = ref<InstanceType<typeof SensorComp> | null>(null);
 
-//same works for sensorEnter, sensorLeave
-function sensorClick(sensorId: number) {
-  //TODO: handle sensorId, for example for highlighting the table row
-  console.log(sensorId);
+// Sensor - Map interaction
+function mapSensorEnter(sensorId: number): void {
+  sensorCompRef.value?.setRowActive(sensorId);
+}
+
+function mapSensorLeave(sensorId: number): void {
+  sensorCompRef.value?.setRowInactive(sensorId);
+}
+
+function tableSensorEnter(sensorId: number): void {
+  gardenMapRef.value?.setMarkerActive(sensorId);
+}
+
+function tableSensorLeave(sensorId: number): void {
+  gardenMapRef.value?.setMarkerInactive(sensorId);
 }
 </script>
