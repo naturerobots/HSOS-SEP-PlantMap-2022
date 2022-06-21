@@ -15,9 +15,11 @@ from google.protobuf import empty_pb2
 from google.protobuf.json_format import MessageToDict
 from knox.views import LoginView as KnoxLoginView
 from project_query_pb2 import ProjectQuery
-from rest_framework import permissions
+from rest_framework import permissions, status
 from rest_framework.authtoken.serializers import AuthTokenSerializer
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from rest_framework.request import Request
 from rest_framework.response import Response
 
 from django.contrib.auth import login
@@ -25,7 +27,7 @@ from django.db.models import ObjectDoesNotExist
 from django.http import *
 from django.template import loader
 
-from .models import Bed, Company, Garden, User
+from .models import Bed, Company, CreateUserSerializer, Garden, User
 
 logger = logging.getLogger('django')
 
@@ -62,9 +64,20 @@ class LoginView(KnoxLoginView):
 
 
 # /register
-@api_view(['POST'])
-def register(request):
-    return JsonResponse({})
+class RegisterView(KnoxLoginView):
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, format=None):
+        serializer = CreateUserSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            authserializer = AuthTokenSerializer(data=request.data)
+            if authserializer.is_valid():
+                user = authserializer.validated_data['user']
+                login(request, user)
+                return super(RegisterView, self).post(request, format=None)
+            return Response(authserializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # /users/{user-id}
