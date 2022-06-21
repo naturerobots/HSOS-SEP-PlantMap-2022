@@ -39,6 +39,7 @@ stub = metaOperations.MetaOperationsStub(channel)
 
 
 @api_view(['GET'])
+# @permission_classes([AllowAny]) # Turn off authentication FOR TESTING ONLY
 def list_projects(request) -> Response:
     if request.method == 'GET':
         response = stub.GetProjects(empty_pb2.Empty())
@@ -52,6 +53,7 @@ def list_project_detials(request, uuid: string) -> Response:
         return Response(MessageToDict(response))
 
 
+# /login
 class LoginView(KnoxLoginView):
     permission_classes = (permissions.AllowAny,)
 
