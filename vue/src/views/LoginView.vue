@@ -7,5 +7,5 @@
 </template>
 
 <script setup lang="ts">
-import LoginForm from "@/components/LoginFormQuasar.vue";
+import LoginForm from "@/components/login/LoginFormQuasar.vue";
 </script>
