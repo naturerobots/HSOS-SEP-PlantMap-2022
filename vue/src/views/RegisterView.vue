@@ -1,8 +1,20 @@
 <template>
-  <div class="flex h-screen">
-    <div class="m-auto">
-      <register-form></register-form>
+  <div class="grid grid-cols-2 place-items-stretch h-full">
+    <div class="bg-white grid grid-rows-6 gap-4">
+      <div class="row-span-1">
+        <div class="flex h-full pl-14">
+          <img
+            class="w-56"
+            src="@/assets/img/logo_with_text.svg"
+            alt="Nature Robots"
+          />
+        </div>
+      </div>
+      <div class="row-span-5 row-start-2">
+        <register-form></register-form>
+      </div>
     </div>
+    <div class="bg-image bg-cover"></div>
   </div>
 </template>
 
