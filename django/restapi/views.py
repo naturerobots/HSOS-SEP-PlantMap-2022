@@ -123,7 +123,7 @@ def getPlants(request, company_id: int, garden_id: int, bed_id: int):
         {
             'plants': [
                 {
-                    'name': 'Mangold',  # Plant name
+                    'plant': 'Mangold',  # Plant name
                     'variety': 'Mangold',  # Plant variety
                     'location': 1,  # Bed/Row number
                     'soil_humidity': 65,  # Soil humidity for plant area in %
@@ -134,7 +134,7 @@ def getPlants(request, company_id: int, garden_id: int, bed_id: int):
                     'yield': 100,  # 0 = N/A
                 },
                 {
-                    'name': 'Beans',
+                    'plant': 'Beans',
                     'variety': 'Beans',
                     'location': 1,
                     'soil_humidity': 65,
@@ -145,7 +145,7 @@ def getPlants(request, company_id: int, garden_id: int, bed_id: int):
                     'yield': 243,
                 },
                 {
-                    'name': 'Chicory',
+                    'plant': 'Chicory',
                     'variety': 'Chicory',
                     'location': 1,
                     'soil_humidity': 65,
@@ -156,7 +156,7 @@ def getPlants(request, company_id: int, garden_id: int, bed_id: int):
                     'yield': 222,
                 },
                 {
-                    'name': 'Courgette',
+                    'plant': 'Courgette',
                     'variety': 'Courgette',
                     'location': 1,
                     'soil_humidity': 65,
@@ -167,7 +167,7 @@ def getPlants(request, company_id: int, garden_id: int, bed_id: int):
                     'yield': 540,
                 },
                 {
-                    'name': 'Pumpkin',
+                    'plant': 'Pumpkin',
                     'variety': 'Pumpkin',
                     'location': 1,
                     'soil_humidity': 65,
@@ -178,7 +178,7 @@ def getPlants(request, company_id: int, garden_id: int, bed_id: int):
                     'yield': 140,
                 },
                 {
-                    'name': 'Spinach',
+                    'plant': 'Spinach',
                     'variety': 'Spinach',
                     'location': 1,
                     'soil_humidity': 65,
