@@ -1,15 +1,17 @@
 <template>
-  <header-bar
-    title="3D"
-    :widgetOptions="widgetOptions3D"
-    :storeOptions="storeOptions"
-  ></header-bar>
-  <div class="row p-6">
-    <div v-if="storeOptions.indexOf('3d-table') > -1" class="col-4">
-      <crops-table title="Plants" :visibleColumns="columns"></crops-table>
-    </div>
-    <div v-if="storeOptions.indexOf('3d-map') > -1" class="col-8 pl-2">
-      <crops-map></crops-map>
+  <div class="ml-28">
+    <header-bar
+      title="3D"
+      :widgetOptions="widgetOptions3D"
+      :storeOptions="storeOptions"
+    ></header-bar>
+    <div class="row p-6">
+      <div v-if="storeOptions.indexOf('3d-table') > -1" class="col-4">
+        <crops-table title="Plants" :visibleColumns="columns"></crops-table>
+      </div>
+      <div v-if="storeOptions.indexOf('3d-map') > -1" class="col-8 pl-2">
+        <crops-map></crops-map>
+      </div>
     </div>
   </div>
 </template>
