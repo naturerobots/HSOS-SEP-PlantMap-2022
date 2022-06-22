@@ -1,12 +1,4 @@
-<!-- <template>
-  <header-bar title="Crops"></header-bar>
-  <div class="p-6"></div>
-</template> -->
-
 <template>
-  <!-- <div class="px-3 py-5 text-h2 text-primary_hover">
-    Crops
-  </div> -->
   <header-bar
     title="Crops"
     :widgetOptions="widgetOptionsCrops"

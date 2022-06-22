@@ -47,10 +47,6 @@ const widgetOptions3D: WidgetOption[] = [
   widgetOptions.crops3dMap,
 ];
 
-onMounted(() => {
-  cropsStore().loadDataFromApi();
-});
-
 let columns: string[] = ["id", "plant", "location"];
 
 const crops: Ref<Crop[]> = storeToRefs(cropsStore()).getCrops;
