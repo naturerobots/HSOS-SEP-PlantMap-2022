@@ -1,7 +1,7 @@
 <template>
-  <q-layout view="lHh lpr lFf">
-    <div class="relative">
-      <div class="row flex justify-between">
+  <q-layout view="lHh lpr lFf" class="h-full">
+    <div class="relative h-full">
+      <div class="row flex justify-between h-full">
         <!--items-start-->
         <router-view name="sidebar"></router-view>
         <main class="flex flex-col w-full">
