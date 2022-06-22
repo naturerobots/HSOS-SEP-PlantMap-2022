@@ -1,7 +1,7 @@
 <template>
   <div class="flex h-screen">
     <div class="m-auto">
-      <RegisterForm />
+      <register-form></register-form>
     </div>
   </div>
 </template>
