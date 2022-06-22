@@ -1,11 +1,11 @@
 <template>
   <div class="flex h-screen">
     <div class="m-auto">
-      <LoginForm />
+      <register-form></register-form>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import LoginForm from "@/components/login/LoginForm.vue";
+import RegisterForm from "@/components/register/RegisterForm.vue";
 </script>

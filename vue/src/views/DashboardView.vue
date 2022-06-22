@@ -1,36 +1,38 @@
 <template>
-  <header-bar
-    title="Dashboard"
-    :widgetOptions="widgetOptionsDashboard"
-    :storeOptions="storeOptions"
-  ></header-bar>
-  <div class="grid grid-cols-3 gap-4 place-items-stretch h-fit p-6">
-    <div v-if="storeOptions.indexOf('weather') > -1">
-      <weather-comp></weather-comp>
-    </div>
-    <div
-      v-if="storeOptions.indexOf('garden-map') > -1"
-      class="col-span-2 row-span-2"
-    >
-      <div class="h-full">
-        <garden-map
-          ref="gardenMapRef"
+  <div class="ml-28">
+    <header-bar
+      title="Dashboard"
+      :widgetOptions="widgetOptionsDashboard"
+      :storeOptions="storeOptions"
+    ></header-bar>
+    <div class="grid grid-cols-3 gap-4 place-items-stretch h-fit p-6">
+      <div v-if="storeOptions.indexOf('weather') > -1">
+        <weather-comp></weather-comp>
+      </div>
+      <div
+        v-if="storeOptions.indexOf('garden-map') > -1"
+        class="col-span-2 row-span-2"
+      >
+        <div class="h-full">
+          <garden-map
+            ref="gardenMapRef"
+            :sensors="sensors"
+            @sensor-enter="mapSensorEnter"
+            @sensor-leave="mapSensorLeave"
+          ></garden-map>
+        </div>
+      </div>
+      <div v-if="storeOptions.indexOf('soil-parameter') > -1">
+        <sensor-comp
+          ref="sensorCompRef"
           :sensors="sensors"
-          @sensor-enter="mapSensorEnter"
-          @sensor-leave="mapSensorLeave"
-        ></garden-map>
+          @row-enter="tableSensorEnter"
+          @row-leave="tableSensorLeave"
+        >
+        </sensor-comp>
       </div>
     </div>
-    <div v-if="storeOptions.indexOf('soil-parameter') > -1">
-      <sensor-comp
-        ref="sensorCompRef"
-        :sensors="sensors"
-        @row-enter="tableSensorEnter"
-        @row-leave="tableSensorLeave"
-      ></sensor-comp>
-    </div>
   </div>
-
   <!-- DEMO LAYOUTS -->
   <!-- <div class="grid grid-cols-3 gap-4 place-items-stretch h-fit p-3">
     <div>
@@ -77,7 +79,7 @@ import {
   type StoreOption,
   type WidgetOption,
 } from "@/types/widgetOption";
-import WeatherComp from "@/components/Weather/WeatherComp.vue";
+import WeatherComp from "@/components/weather/WeatherComp.vue";
 import SensorComp from "@/components/SensorCompQuasar.vue";
 import GardenMap from "@/components/GardenMap.vue";
 import HeaderBar from "@/components/header/HeaderBar.vue";

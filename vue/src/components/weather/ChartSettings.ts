@@ -54,6 +54,12 @@ export function getChartOptionsRainPop(): ChartOptions<"line"> {
           display: false,
         },
         position: "bottom",
+        ticks: {
+          font: {
+            size: 14,
+            weight: "bold",
+          },
+        },
       },
     },
     plugins: {
@@ -63,7 +69,7 @@ export function getChartOptionsRainPop(): ChartOptions<"line"> {
         offset: -2,
         color: "rgba(112,112,112,1)",
         font: {
-          size: 14,
+          size: 15,
           weight: "bold",
         },
         formatter: (value: string) => {
@@ -128,6 +134,12 @@ export function getChartOptionsTemp(): ChartOptions<"line"> {
           display: false,
         },
         position: "bottom",
+        ticks: {
+          font: {
+            size: 14,
+            weight: "bold",
+          },
+        },
       },
     },
     plugins: {
@@ -137,7 +149,7 @@ export function getChartOptionsTemp(): ChartOptions<"line"> {
         offset: -2,
         color: "rgba(112,112,112,1)",
         font: {
-          size: 14,
+          size: 15,
           weight: "bold",
         },
         formatter: function (value: string) {
@@ -203,6 +215,12 @@ export function getChartOptionsWind(data: Ref<string[]>): ChartOptions<"line"> {
           display: false,
           drawBorder: false,
         },
+        ticks: {
+          font: {
+            size: 14,
+            weight: "bold",
+          },
+        },
       },
     },
     plugins: {
@@ -230,7 +248,7 @@ export function getChartOptionsWind(data: Ref<string[]>): ChartOptions<"line"> {
             offset: 25,
             color: "rgba(112,112,112,1)",
             font: {
-              size: 14,
+              size: 15,
               weight: "bold",
             },
             formatter: function (value: number, ctx: Context) {

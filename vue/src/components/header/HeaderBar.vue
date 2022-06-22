@@ -6,7 +6,8 @@
       </div>
       <div class="flex items-center">
         <!--TODO: Add Quasar components (Button, Avatar)-->
-        <div class="mr-3">
+        <!--FIXME: Maybe add a type that contains widgetOptions and storeOptions, so that both must always be passed together -->
+        <div v-if="widgetOptions && storeOptions" class="mr-3">
           <widget-comp
             :widgetOptions="widgetOptions"
             :storeOptions="storeOptions"
@@ -62,7 +63,7 @@ import type { WidgetOption, StoreOption } from "@/types/widgetOption";
 
 defineProps<{
   title: string;
-  widgetOptions: WidgetOption[];
-  storeOptions: StoreOption[];
+  widgetOptions?: WidgetOption[];
+  storeOptions?: StoreOption[];
 }>();
 </script>

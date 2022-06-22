@@ -1,8 +1,13 @@
 <template>
-  <h1>Crop Image</h1>
-  <image-crop></image-crop>
+  <div class="ml-28">
+    <header-bar title="Crop Image"></header-bar>
+    <!-- <image-crop></image-crop> -->
+    <image-crop-quasar></image-crop-quasar>
+  </div>
 </template>
 
 <script setup lang="ts">
-import ImageCrop from "@/components/ImageCrop.vue";
+import HeaderBar from "@/components/header/HeaderBar.vue";
+//import ImageCrop from "@/components/ImageCrop.vue";
+import ImageCropQuasar from "@/components/ImageCropQuasar.vue";
 </script>

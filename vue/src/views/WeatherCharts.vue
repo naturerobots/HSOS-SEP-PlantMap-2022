@@ -7,5 +7,5 @@
 
 <script setup lang="ts">
 //import { weatherDataStore } from "@/stores/weatherDataStore";
-import WeatherChartComp from "@/components/Weather/WeatherChartComp.vue";
+import WeatherChartComp from "@/components/weather/WeatherChartComp.vue";
 </script>
