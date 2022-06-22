@@ -4,10 +4,8 @@
       <div class="row flex justify-between">
         <!--items-start-->
         <router-view name="sidebar"></router-view>
-        <main class="flex flex-col ml-28 w-full">
-          <div>
-            <router-view></router-view>
-          </div>
+        <main class="flex flex-col w-full">
+          <router-view></router-view>
         </main>
       </div>
     </div>

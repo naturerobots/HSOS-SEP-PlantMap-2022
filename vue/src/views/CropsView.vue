@@ -7,17 +7,19 @@
   <!-- <div class="px-3 py-5 text-h2 text-primary_hover">
     Crops
   </div> -->
-  <header-bar
-    title="Crops"
-    :widgetOptions="widgetOptionsCrops"
-    :storeOptions="storeOptions"
-  ></header-bar>
-  <div class="row p-6">
-    <div v-if="storeOptions.indexOf('crops-table') > -1" class="col-8">
-      <crops-table title="Overview" :visibleColumns="columns"></crops-table>
-    </div>
-    <div v-if="storeOptions.indexOf('crops-map') > -1" class="col-4 pl-2">
-      <crops-map></crops-map>
+  <div class="ml-28">
+    <header-bar
+      title="Crops"
+      :widgetOptions="widgetOptionsCrops"
+      :storeOptions="storeOptions"
+    ></header-bar>
+    <div class="row p-6">
+      <div v-if="storeOptions.indexOf('crops-table') > -1" class="col-8">
+        <crops-table title="Overview" :visibleColumns="columns"></crops-table>
+      </div>
+      <div v-if="storeOptions.indexOf('crops-map') > -1" class="col-4 pl-2">
+        <crops-map></crops-map>
+      </div>
     </div>
   </div>
 </template>
