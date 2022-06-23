@@ -17,6 +17,12 @@ class CreateUserSerializer(serializers.ModelSerializer):
         return user
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
+
+
 class Company(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=32, null=True)
@@ -29,6 +35,12 @@ class Company(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class CompanySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Company
+        fields = '__all__'
 
 
 class Garden(models.Model):
@@ -46,6 +58,12 @@ class Garden(models.Model):
         return self.name
 
 
+class GardenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Garden
+        fields = '__all__'
+
+
 class Bed(models.Model):
     id = models.IntegerField(primary_key=True)
     uuid = models.CharField(max_length=32, null=True)
@@ -57,4 +75,10 @@ class Bed(models.Model):
         managed = True
 
     def __str__(self):
-        return self.name
+        return self.uuid
+
+
+class BedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bed
+        fields = '__all__'

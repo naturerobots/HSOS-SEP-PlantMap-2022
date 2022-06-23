@@ -1,7 +1,9 @@
 <template>
-  <header-bar title="Crop Image"></header-bar>
-  <!-- <image-crop></image-crop> -->
-  <image-crop-quasar></image-crop-quasar>
+  <div class="ml-28">
+    <header-bar title="Crop Image"></header-bar>
+    <!-- <image-crop></image-crop> -->
+    <image-crop-quasar></image-crop-quasar>
+  </div>
 </template>
 
 <script setup lang="ts">
