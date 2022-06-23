@@ -29,7 +29,7 @@ services:
       - 8000:8000
     command: bash -c "while !</dev/tcp/postgres/5432; do sleep 1; done;
       cd django;
-      celery -A rest-api.tasks worker -D;
+      celery -A restapi.tasks worker -D;
       python3 manage.py migrate;
       python3 manage.py runserver 0.0.0.0:8000"
     depends_on:
