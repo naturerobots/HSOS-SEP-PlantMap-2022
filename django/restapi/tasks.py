@@ -115,7 +115,6 @@ def save_ply(pcloud: PointCloud2, puuid: String, uuid: String):
         logger.info("file_path " + str(file_path))
 
         if not default_storage.exists(file_path):
-            # file_content = ContentFile(header.encode('utf-8') + '\r\n'.encode('utf-8') + pcloud.data)
             file_content = ContentFile(header.encode('utf-8') + pcloud.data)
             default_storage.save(file_path, file_content)
 
