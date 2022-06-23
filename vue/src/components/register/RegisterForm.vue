@@ -1,75 +1,98 @@
 <template>
-  <div class="card bg-white">
-    <div class="w-96 p-4">
-      <div class="mb-6">
-        <img
-          src="@/assets/img/logo_small_color.svg"
-          class="w-16 h-16 mb-3 mx-auto"
+  <div class="m-auto max-w-xl px-14">
+    <div class="mb-6">
+      <h3 class="text-3xl font-bold">Sign up</h3>
+      <p class="text-secondary pt-2 font-bold">
+        Sign up for free. Please enter your details.
+      </p>
+    </div>
+    <div class="grid grid-cols-4 gap-4 place-items-stretch">
+      <div class="col-span-2 space-y-2">
+        <label class="font-bold text-black"> Last Name </label>
+        <input
+          class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+          type="text"
+          placeholder="Enter Last Name"
         />
-        <h3 class="text-center text-2xl font-semibold">Sign up</h3>
       </div>
-      <div class="space-y-5">
-        <div class="space-y-2">
-          <label class="text-sm font-medium text-gray-700 tracking-wide"
-            >Email</label
-          >
-          <input
-            class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-            type="email"
-            placeholder="mail@gmail.com"
-          />
-        </div>
-        <div class="space-y-2">
-          <label class="text-sm font-medium text-gray-700 tracking-wide">
-            Password
-          </label>
-          <input
-            class="w-full content-center text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-            type="password"
-            placeholder="Enter your password"
-          />
-        </div>
-        <div class="space-y-2 pb-4">
-          <label class="text-sm font-medium text-gray-700 tracking-wide">
-            Repeat password
-          </label>
-          <input
-            class="w-full content-center text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-            type="password"
-            placeholder="Enter your password"
-          />
-        </div>
-        <div>
-          <button
-            type="submit"
-            class="w-full flex justify-center bg-primary text-white p-3 rounded-full tracking-wide font-semibold shadow-lg"
-          >
-            Sign up
-          </button>
-        </div>
-        <div
-          class="text-center py-2 text-secondary hover:text-secondary_hover text-sm"
+      <div class="col-span-2 space-y-2">
+        <label class="font-bold text-black"> First Name </label>
+        <input
+          class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+          type="text"
+          placeholder="Enter First Name"
+        />
+      </div>
+      <div class="col-span-3 space-y-2">
+        <label class="font-bold text-black"> Street </label>
+        <input
+          class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+          type="text"
+          placeholder="Enter Street Name"
+        />
+      </div>
+      <div class="col-span-1 space-y-2">
+        <label class="font-bold text-black"> Number </label>
+        <input
+          class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+          type="text"
+          placeholder="Number"
+        />
+      </div>
+      <div class="col-span-2 space-y-2">
+        <label class="font-bold text-black"> City </label>
+        <input
+          class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+          type="text"
+          placeholder="Enter City"
+        />
+      </div>
+      <div class="col-span-2 space-y-2">
+        <label class="font-bold text-black"> Zip/Postal Code </label>
+        <input
+          class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+          type="text"
+          placeholder="Enter Zip/Postal Code"
+        />
+      </div>
+      <div class="col-span-4 space-y-2">
+        <label class="font-bold text-black"> Email </label>
+        <input
+          class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+          type="email"
+          placeholder="Enter Email Address"
+        />
+      </div>
+      <div class="col-span-4 space-y-2">
+        <label class="font-bold text-black"> Password </label>
+        <input
+          class="w-full content-center text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+          type="text"
+          placeholder="Enter Password"
+        />
+      </div>
+      <div class="col-span-4 space-y-2">
+        <label class="font-bold text-black"> Repeat Password </label>
+        <input
+          class="w-full content-center text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+          type="text"
+          placeholder="Repeat Password"
+        />
+      </div>
+      <div class="col-span-4 space-y-2 pt-3">
+        <button
+          type="submit"
+          class="w-full flex justify-center bg-primary text-white p-3 rounded-full tracking-wide font-bold shadow-lg"
         >
-          <router-link to="/login" class="hover:text-primary">
-            You already have an account?
+          Sign up
+        </button>
+        <p class="text-center pt-3 text-secondary">
+          Already a member?
+          <router-link to="/login" class="pl-1 text-black font-bold">
+            Login
           </router-link>
-        </div>
-      </div>
-      <div class="pt-5 text-center text-gray-400 text-xs">
-        <span>
-          Copyright © 2022
-          <a
-            href="https://naturerobots.de"
-            rel=""
-            target="_blank"
-            title="Nature Robots"
-            class="text-primary hover:text-primary_hover"
-            >naturerobots</a
-          ></span
-        >
+        </p>
       </div>
     </div>
   </div>
 </template>
-
-<script setup lang="ts"></script>

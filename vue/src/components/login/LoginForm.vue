@@ -1,74 +1,42 @@
 <template>
-  <div class="card bg-white">
-    <div class="w-96 p-4">
-      <div class="mb-6">
-        <img
-          src="@/assets/img/logo_small_color.svg"
-          class="w-16 h-16 mb-3 mx-auto"
+  <div class="w-max m-auto px-14">
+    <div class="mb-6 text-center">
+      <h3 class="text-3xl font-bold">Welcome back</h3>
+      <p class="text-secondary pt-2 font-bold">
+        Welcome back! Please enter your details.
+      </p>
+    </div>
+    <div class="grid grid-cols-4 gap-4 place-items-stretch">
+      <div class="col-span-4 space-y-2">
+        <label class="font-bold text-black"> Email </label>
+        <input
+          class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+          type="email"
+          placeholder="Enter Email Address"
         />
-        <h3 class="text-center text-2xl font-semibold">
-          Sign in to your account
-        </h3>
       </div>
-      <div class="space-y-5">
-        <div class="space-y-2">
-          <label class="text-sm font-medium text-gray-700 tracking-wide"
-            >Email</label
-          >
-          <input
-            class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-            type=""
-            placeholder="mail@gmail.com"
-          />
-        </div>
-        <div class="space-y-2">
-          <label class="text-sm font-medium text-gray-700 tracking-wide">
-            Password
-          </label>
-          <input
-            class="w-full content-center text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-            type=""
-            placeholder="Enter your password"
-          />
-        </div>
-        <div class="flex items-center justify-between">
-          <div class="text-sm">
-            <a href="#" class="text-secondary hover:text-secondary_hover">
-              Forgot your password?
-            </a>
-          </div>
-        </div>
-        <div>
-          <button
-            type="submit"
-            class="w-full flex justify-center bg-primary text-white p-3 rounded-full tracking-wide font-semibold shadow-lg"
-          >
-            Sign in
-          </button>
-        </div>
-        <div
-          class="text-center py-2 text-secondary hover:text-secondary_hover text-sm"
+      <div class="col-span-4 space-y-2">
+        <label class="font-bold text-black"> Password </label>
+        <input
+          class="w-full content-center text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+          type="text"
+          placeholder="Password"
+        />
+      </div>
+      <div class="col-span-4 space-y-2 pt-3">
+        <button
+          type="submit"
+          class="w-full flex justify-center bg-primary text-white p-3 rounded-full tracking-wide font-bold shadow-lg"
         >
-          <router-link to="/register" class="hover:text-primary">
-            You don't have an account?
+          Login
+        </button>
+        <p class="text-center pt-3 text-secondary">
+          Don't have an account?
+          <router-link to="/register" class="pl-1 text-black font-bold">
+            Sign up for free
           </router-link>
-        </div>
-      </div>
-      <div class="pt-5 text-center text-gray-400 text-xs">
-        <span>
-          Copyright © 2022
-          <a
-            href="https://naturerobots.de"
-            rel=""
-            target="_blank"
-            title="Nature Robots"
-            class="text-primary hover:text-primary_hover"
-            >naturerobots</a
-          ></span
-        >
+        </p>
       </div>
     </div>
   </div>
 </template>
-
-<script setup lang="ts"></script>

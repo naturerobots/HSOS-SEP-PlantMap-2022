@@ -54,15 +54,15 @@
   }
 }
 
-/* *,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  position: relative;
-  font-weight: normal;
-  font-family: Poppins, sans-serif;
-} */
+/* BASIC STYLES */
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+/* ----------- */
 
 .weather-forecasts {
   @apply mt-2 text-primary_hover text-sm;
@@ -87,6 +87,14 @@
 .sidebar-nav {
   @apply w-20 h-screen justify-between flex flex-col;
 } */
+
+/* LOGIN/REGISTER */
+
+.bg-image {
+  background-image: url("https://naturerobots.de/images/hero/Titelbild_Lero_blur.jpg"); /* TODO: change image */
+}
+
+/* ----------- */
 
 /* MAP */
 
