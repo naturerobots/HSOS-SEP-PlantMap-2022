@@ -1,33 +1,35 @@
 <template>
-  <header-bar
-    title="3D"
-    :widgetOptions="widgetOptions3D"
-    :storeOptions="storeOptions"
-  ></header-bar>
-  <div class="row p-6">
-    <div v-if="storeOptions.indexOf('3d-table') > -1" class="col-4">
-      <crops-table
-        ref="cropsTableRef"
-        title="Plants"
-        :visibleColumns="columns"
-        :crops="crops"
-        @row-enter="tableCropsEnter"
-        @row-leave="tableCropsLeave"
-      ></crops-table>
-    </div>
-    <div v-if="storeOptions.indexOf('3d-map') > -1" class="col-8 pl-2">
-      <crops-map
-        ref="cropsMapRef"
-        :crops="crops"
-        @polygon-enter="mapCropsEnter"
-        @polygon-leave="mapCropsLeave"
-      ></crops-map>
+  <div class="ml-28">
+    <header-bar
+      title="3D"
+      :widgetOptions="widgetOptions3D"
+      :storeOptions="storeOptions"
+    ></header-bar>
+    <div class="row p-6">
+      <div v-if="storeOptions.indexOf('3d-table') > -1" class="col-4">
+        <crops-table
+          ref="cropsTableRef"
+          title="Plants"
+          :visibleColumns="columns"
+          :crops="crops"
+          @row-enter="tableCropsEnter"
+          @row-leave="tableCropsLeave"
+        ></crops-table>
+      </div>
+      <div v-if="storeOptions.indexOf('3d-map') > -1" class="col-8 pl-2">
+        <crops-map
+          ref="cropsMapRef"
+          :crops="crops"
+          @polygon-enter="mapCropsEnter"
+          @polygon-leave="mapCropsLeave"
+        ></crops-map>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, type Ref, ref } from "vue";
+import { type Ref, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { cropsStore } from "@/stores/cropsStore";
 import { userStore } from "@/stores/userStore";

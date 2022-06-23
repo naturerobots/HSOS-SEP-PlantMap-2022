@@ -285,7 +285,7 @@ function rowclicked(): void {
 
 let visCols = ref(props.visibleColumns);
 
-function pagination() {
+function pagination(): { sortBy: string; rowsPerPage: number } {
   return {
     sortBy: "location",
     rowsPerPage: 0,

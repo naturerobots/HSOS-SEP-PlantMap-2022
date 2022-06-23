@@ -1,33 +1,35 @@
 <template>
-  <header-bar
-    title="Crops"
-    :widgetOptions="widgetOptionsCrops"
-    :storeOptions="storeOptions"
-  ></header-bar>
-  <div class="row p-6">
-    <div v-if="storeOptions.indexOf('crops-table') > -1" class="col-8">
-      <crops-table
-        ref="cropsTableRef"
-        title="Overview"
-        :crops="crops"
-        :visibleColumns="columns"
-        @row-enter="tableCropsEnter"
-        @row-leave="tableCropsLeave"
-      ></crops-table>
-    </div>
-    <div v-if="storeOptions.indexOf('crops-map') > -1" class="col-4 pl-2">
-      <crops-map
-        ref="cropsMapRef"
-        :crops="crops"
-        @polygon-enter="mapCropsEnter"
-        @polygon-leave="mapCropsLeave"
-      ></crops-map>
+  <div class="ml-28">
+    <header-bar
+      title="Crops"
+      :widgetOptions="widgetOptionsCrops"
+      :storeOptions="storeOptions"
+    ></header-bar>
+    <div class="row p-6">
+      <div v-if="storeOptions.indexOf('crops-table') > -1" class="col-8">
+        <crops-table
+          ref="cropsTableRef"
+          title="Overview"
+          :crops="crops"
+          :visibleColumns="columns"
+          @row-enter="tableCropsEnter"
+          @row-leave="tableCropsLeave"
+        ></crops-table>
+      </div>
+      <div v-if="storeOptions.indexOf('crops-map') > -1" class="col-4 pl-2">
+        <crops-map
+          ref="cropsMapRef"
+          :crops="crops"
+          @polygon-enter="mapCropsEnter"
+          @polygon-leave="mapCropsLeave"
+        ></crops-map>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, type Ref, ref } from "vue";
+import { type Ref, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { cropsStore } from "@/stores/cropsStore";
 import { userStore } from "@/stores/userStore";
