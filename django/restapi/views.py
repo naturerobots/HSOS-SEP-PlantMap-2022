@@ -21,7 +21,9 @@ from django.db.models import ObjectDoesNotExist
 from django.http import *
 from django.template import loader
 
-from .models import Bed, Company, Garden, User
+from .models import *
+
+logger = logging.getLogger('django')
 
 logger = logging.getLogger('django')
 
@@ -30,20 +32,6 @@ options = [('grpc.max_receive_message_length', 100 * 1024 * 1024)]  # https://gi
 channel = grpc.insecure_channel(SERVER_URL, options=options)
 
 stub = metaOperations.MetaOperationsStub(channel)
-
-
-@api_view(['GET'])
-def list_projects(request) -> Response:
-    if request.method == 'GET':
-        response = stub.GetProjects(empty_pb2.Empty())
-        return Response(MessageToDict(response))
-
-
-@api_view(['GET'])
-def list_project_detials(request, uuid: string) -> Response:
-    if request.method == 'GET':
-        response = stub.GetProjectDetails(ProjectQuery(projectuuid=uuid))
-        return Response(MessageToDict(response))
 
 
 # /login
@@ -60,31 +48,37 @@ def register(request):
 
 # /users/{user-id}
 @api_view(['GET'])
-def getUsers(request, user_id: string):
+def getUser(request, user_id: int):
     return JsonResponse({})
 
 
 # /companies/{company_id}
 @api_view(['GET'])
-def getCompanies(request, company_id: string):
-    return JsonResponse({})
+def getCompany(request, company_id: int):
+    company = Company.objects.filter(id=company_id)
+    serializer = CompanySerializer(company, many=True)
+    return JsonResponse(serializer.data, safe=False)
 
 
 # /companies/{company_id}/gardens
 @api_view(['GET'])
-def getGardens(request, company_id: string):
-    return JsonResponse({})
+def getGardens(request, company_id: int):
+    garden = Garden.objects.filter(company=company_id)
+    serializer = GardenSerializer(garden, many=True)
+    return JsonResponse(serializer.data, safe=False)
 
 
 # /companies/{company_id}/gardens/{garden_id}
 @api_view(['GET'])
-def getGardenInfo(request, company_id: string, garden_id: string):
-    return JsonResponse({})
+def getGarden(request, company_id: int, garden_id: int):
+    garden = Garden.objects.filter(id=garden_id, company=company_id)
+    serializer = GardenSerializer(garden, many=True)
+    return JsonResponse(serializer.data, safe=False)
 
 
 # /companies/{company_id}/gardens/{garden_id}/image
 @api_view(['GET', 'POST'])
-def gardenImage(request, company_id: string, garden_id: string):
+def gardenImage(request, company_id: int, garden_id: int):
     if request.method == 'GET':
         template = loader.get_template('restapi/image.html')
         context = {}
@@ -96,15 +90,42 @@ def gardenImage(request, company_id: string, garden_id: string):
     return JsonResponse({})
 
 
-# /companies/{company_id}/gardens/{garden_id}/plants
+# /companies/{company_id}/gardens/{garden_id}/beds
 @api_view(['GET'])
-def getPlants(request, company_id: string, garden_id: string):
+def getBeds(request, company_id: int, garden_id: int):
+    return JsonResponse({})
+
+
+# /companies/{company_id}/gardens/{garden_id}/beds/{bed_id}/sensors
+@api_view(['GET'])
+def getSensors(request, company_id: int, garden_id: int, bed_id: int):
+    return JsonResponse({})
+
+
+# /companies/{company_id}/gardens/{garden_id}/beds/{bed_id}/sensors/{sensor_id}
+@api_view(['GET'])
+def getSensor(request, company_id: int, garden_id: int, bed_id: int, sensor_id: int):
+    return JsonResponse({})
+
+
+# /companies/{company_id}/gardens/{garden_id}/beds/{bed_id}/plants
+@api_view(['GET'])
+def getPlants(request, company_id: int, garden_id: int, bed_id: int):
+    # garden = Garden.objects.filter(id=garden_id, company=company_id)
+    # if not garden:
+    #     return JsonResponse({})
+    # beds = Bed.objects.filter(garden=garden[0].id)
+    # serializer = BedSerializer(beds, many=True)
+
+    # response = stub.GetProjectDetails(ProjectQuery(projectuuid=uuid))
+    # return Response(MessageToDict(response))
+
     # Dummy-data!
     return JsonResponse(
         {
             'plants': [
                 {
-                    'name': 'Mangold',  # Plant name
+                    'plant': 'Mangold',  # Plant name
                     'variety': 'Mangold',  # Plant variety
                     'location': 1,  # Bed/Row number
                     'soil_humidity': 65,  # Soil humidity for plant area in %
@@ -115,7 +136,7 @@ def getPlants(request, company_id: string, garden_id: string):
                     'yield': 100,  # 0 = N/A
                 },
                 {
-                    'name': 'Beans',
+                    'plant': 'Beans',
                     'variety': 'Beans',
                     'location': 1,
                     'soil_humidity': 65,
@@ -126,7 +147,7 @@ def getPlants(request, company_id: string, garden_id: string):
                     'yield': 243,
                 },
                 {
-                    'name': 'Chicory',
+                    'plant': 'Chicory',
                     'variety': 'Chicory',
                     'location': 1,
                     'soil_humidity': 65,
@@ -137,7 +158,7 @@ def getPlants(request, company_id: string, garden_id: string):
                     'yield': 222,
                 },
                 {
-                    'name': 'Courgette',
+                    'plant': 'Courgette',
                     'variety': 'Courgette',
                     'location': 1,
                     'soil_humidity': 65,
@@ -148,7 +169,7 @@ def getPlants(request, company_id: string, garden_id: string):
                     'yield': 540,
                 },
                 {
-                    'name': 'Pumpkin',
+                    'plant': 'Pumpkin',
                     'variety': 'Pumpkin',
                     'location': 1,
                     'soil_humidity': 65,
@@ -159,7 +180,7 @@ def getPlants(request, company_id: string, garden_id: string):
                     'yield': 140,
                 },
                 {
-                    'name': 'Spinach',
+                    'plant': 'Spinach',
                     'variety': 'Spinach',
                     'location': 1,
                     'soil_humidity': 65,
@@ -174,42 +195,12 @@ def getPlants(request, company_id: string, garden_id: string):
     )
 
 
-# /companies/{company_id}/gardens/{garden_id}/plant/{plant_id}
+# companies/{company_id}/gardens/{garden_id}/beds/{bed_id}/plants/{plant_id}/3d
 @api_view(['GET'])
-def getBeds(request, company_id: string, garden_id: string, plant_id: string):
+def getPlant3DImage(request, company_id: int, garden_id: int, bed_id: int, plant_id: int):
     return JsonResponse({})
 
-
-# /companies/{company_id}/gardens/{garden_id}/beds
-@api_view(['GET'])
-def getBeds(request, company_id: string, garden_id: string):
-    return JsonResponse({})
-
-
-# /companies/{company_id}/gardens/{garden_id}/beds/{bed_id}
-@api_view(['GET'])
-def getBedInfo(request, company_id: string, garden_id: string, bed_id: string):
-    return JsonResponse({})
-
-
-# /companies/{company_id}/gardens/{garden_id}/beds/{bed_id}/3D
-@api_view(['GET'])
-def getBed3dImage(request, company_id: string, garden_id: string, bed_id: string):
-    return JsonResponse({})
-
-
-# /companies/{company_id}/gardens/{garden_id}/sensors
-@api_view(['GET'])
-def getSensors(request, company_id: string, garden_id: string):
-    return JsonResponse({})
-
-
-# /companies/{company_id}/gardens/{garden_id}/sensors/{sensor_id}
-@api_view(['GET'])
-def getSensorInfo(request, company_id: string, garden_id: string, sensor_id: string):
-    return JsonResponse({})
-
-
+  
 @api_view(['POST'])
 def make_task(request, uuid: string) -> Response:
     if request.method == 'POST':

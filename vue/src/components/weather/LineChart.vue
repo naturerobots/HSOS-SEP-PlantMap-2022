@@ -41,8 +41,8 @@ withDefaults(
   defineProps<{
     chartData: ChartData<"line", DefaultDataPoint<"line">, unknown>;
     chartOptions: ChartOptions<"line">;
-    width: number;
-    height: number;
+    width?: number;
+    height?: number;
   }>(),
   {
     width: 400,
