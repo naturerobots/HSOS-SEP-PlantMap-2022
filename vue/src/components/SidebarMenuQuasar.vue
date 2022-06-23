@@ -120,6 +120,18 @@
           </a>
         </li>
       </router-link>
+      <router-link to="/cropimage" custom v-slot="{ href, navigate, isActive }">
+        <li class="text-center hover">
+          <a
+            class="block py-7"
+            v-bind:class="{ active: isActive }"
+            :href="href"
+            @click="navigate"
+          >
+            Crop Image
+          </a>
+        </li>
+      </router-link>
     </ul>
   </div>
 </template>

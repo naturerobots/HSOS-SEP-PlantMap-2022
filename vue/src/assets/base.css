@@ -2,12 +2,14 @@
 @import "vue-advanced-cropper/dist/style.css";
 
 /* TAILWINDCSS */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer utilities {
   /* SENSOR MAP ICON */
+
   .sensor-icon {
     width: 25px;
     height: 25px;
@@ -27,12 +29,19 @@
     /* TODO: discuss color, add to tailwind colors */
   }
 
+  /* ----------- */
+
   /* SENSOR TABLE */
+
   .sensor-row-active td {
     background-color: #bbe784 !important;
     /* TODO: discuss color, add to tailwind colors */
   }
+
+  /* ----------- */
 }
+
+/* ----------- */
 
 :root {
   /* color light mode */
@@ -45,15 +54,15 @@
   }
 }
 
-/* *,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  position: relative;
-  font-weight: normal;
-  font-family: Poppins, sans-serif;
-} */
+/* BASIC STYLES */
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+/* ----------- */
 
 .weather-forecasts {
   @apply mt-2 text-primary_hover text-sm;
@@ -79,7 +88,16 @@
   @apply w-20 h-screen justify-between flex flex-col;
 } */
 
+/* LOGIN/REGISTER */
+
+.bg-image {
+  background-image: url("https://naturerobots.de/images/hero/Titelbild_Lero_blur.jpg"); /* TODO: change image */
+}
+
+/* ----------- */
+
 /* MAP */
+
 #map {
   position: absolute;
   height: 100%;
@@ -89,7 +107,42 @@
   left: 0;
 }
 
+/* ----------- */
+
+/* WIDGET */
+
+.widget {
+  @apply drop-shadow rounded-md bg-background py-0;
+}
+
+.widget span {
+  @apply font-bold text-[#707070] px-4;
+}
+
+.widget-content.q-position-engine {
+  @apply rounded-lg mt-0.5 !important;
+}
+
+.widget .q-field__native,
+.widget .q-field__control,
+.widget-content .q-item {
+  @apply min-h-min !important;
+}
+
+.widget-content .q-item {
+  @apply bg-white;
+  /* TODO adjust color */
+}
+
+.widget-content-selected {
+  @apply text-black !important;
+  /* TODO adjust color */
+}
+
+/* ----------- */
+
 /* SENSOR TABLE */
+
 .sensor-table thead th {
   @apply uppercase font-bold;
   color: #6b7280;
@@ -117,7 +170,10 @@
   @apply border-none;
 }
 
+/* ----------- */
+
 /* CROPS TABLE */
+
 .crops-table thead th:first-child {
   border-top-left-radius: 1rem;
 }
@@ -165,4 +221,5 @@ tbody tr:nth-child(even) {
 .crops-table tbody tr:hover {
   background-color: #e5e7eb;
 }
+
 /* ----------- */

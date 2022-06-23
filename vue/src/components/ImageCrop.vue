@@ -1,3 +1,4 @@
+<!-- DO NOT DELETE -->
 <template>
   <input
     class="form-control"

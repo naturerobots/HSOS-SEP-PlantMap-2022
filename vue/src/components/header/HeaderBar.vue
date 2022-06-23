@@ -6,6 +6,15 @@
       </div>
       <div class="flex items-center">
         <!--TODO: Add Quasar components (Button, Avatar)-->
+        <!--FIXME: Maybe add a type that contains widgetOptions and storeOptions, so that both must always be passed together -->
+        <div v-if="widgetOptions && storeOptions" class="mr-3">
+          <widget-comp
+            :widgetOptions="widgetOptions"
+            :storeOptions="storeOptions"
+            label="widgets"
+          ></widget-comp>
+        </div>
+
         <div class="mr-3">
           <a href="#" class="block relative">
             <svg
@@ -49,7 +58,12 @@
 </template>
 
 <script setup lang="ts">
+import WidgetComp from "@/components/header/widget/WidgetComp.vue";
+import type { WidgetOption, StoreOption } from "@/types/widgetOption";
+
 defineProps<{
   title: string;
+  widgetOptions?: WidgetOption[];
+  storeOptions?: StoreOption[];
 }>();
 </script>

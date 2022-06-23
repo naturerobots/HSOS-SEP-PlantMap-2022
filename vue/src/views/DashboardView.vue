@@ -1,29 +1,38 @@
 <template>
-  <header-bar title="Dashboard"></header-bar>
-  <div class="grid grid-cols-3 gap-4 place-items-stretch h-fit p-6">
-    <div>
-      <weather-comp></weather-comp>
-    </div>
-    <div class="col-span-2 row-span-2">
-      <div class="h-full">
-        <garden-map
-          ref="gardenMapRef"
+  <div class="ml-28">
+    <header-bar
+      title="Dashboard"
+      :widgetOptions="widgetOptionsDashboard"
+      :storeOptions="storeOptions"
+    ></header-bar>
+    <div class="grid grid-cols-3 gap-4 place-items-stretch h-fit p-6">
+      <div v-if="storeOptions.indexOf('weather') > -1">
+        <weather-comp></weather-comp>
+      </div>
+      <div
+        v-if="storeOptions.indexOf('garden-map') > -1"
+        class="col-span-2 row-span-2"
+      >
+        <div class="h-full">
+          <garden-map
+            ref="gardenMapRef"
+            :sensors="sensors"
+            @sensor-enter="mapSensorEnter"
+            @sensor-leave="mapSensorLeave"
+          ></garden-map>
+        </div>
+      </div>
+      <div v-if="storeOptions.indexOf('soil-parameter') > -1">
+        <sensor-comp
+          ref="sensorCompRef"
           :sensors="sensors"
-          @sensor-enter="mapSensorEnter"
-          @sensor-leave="mapSensorLeave"
-        ></garden-map>
+          @row-enter="tableSensorEnter"
+          @row-leave="tableSensorLeave"
+        >
+        </sensor-comp>
       </div>
     </div>
-    <div>
-      <sensor-comp
-        ref="sensorCompRef"
-        :sensors="sensors"
-        @row-enter="tableSensorEnter"
-        @row-leave="tableSensorLeave"
-      ></sensor-comp>
-    </div>
   </div>
-
   <!-- DEMO LAYOUTS -->
   <!-- <div class="grid grid-cols-3 gap-4 place-items-stretch h-fit p-3">
     <div>
@@ -60,24 +69,31 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
-import { weatherDataStore } from "../stores/weatherDataStore";
-import { sensorStore } from "../stores/sensorStore";
-
-import WeatherComp from "@/components/Weather/WeatherComp.vue";
-// import SensorComp from "@/components/SensorComp.vue";
+import { ref, type Ref } from "vue";
+import { storeToRefs } from "pinia";
+import { sensorStore } from "@/stores/sensorStore";
+import { userStore } from "@/stores/userStore";
+import type { Sensor } from "@/types/sensor";
+import {
+  widgetOptions,
+  type StoreOption,
+  type WidgetOption,
+} from "@/types/widgetOption";
+import WeatherComp from "@/components/weather/WeatherComp.vue";
 import SensorComp from "@/components/SensorCompQuasar.vue";
 import GardenMap from "@/components/GardenMap.vue";
-import HeaderBar from "@/components/HeaderBar.vue";
-import { ref } from "vue";
-
-import { storeToRefs } from "pinia";
-import type { Ref } from "vue";
-import type { Sensor } from "@/types/sensor";
+import HeaderBar from "@/components/header/HeaderBar.vue";
 
 const sensors: Ref<Sensor[]> = storeToRefs(sensorStore()).getSensors;
+const storeOptions: Ref<StoreOption[]> = storeToRefs(userStore()).getOptions;
 const gardenMapRef = ref<InstanceType<typeof GardenMap> | null>(null);
 const sensorCompRef = ref<InstanceType<typeof SensorComp> | null>(null);
+const widgetOptionsDashboard: WidgetOption[] = [
+  widgetOptions.weather,
+  widgetOptions.soilParameter,
+  widgetOptions.gardenMap,
+  widgetOptions.notification,
+];
 
 // Sensor - Map interaction
 function mapSensorEnter(sensorId: number): void {

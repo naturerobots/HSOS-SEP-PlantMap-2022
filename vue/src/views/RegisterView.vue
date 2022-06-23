@@ -10,8 +10,8 @@
           />
         </div>
       </div>
-      <div class="row-span-4 row-start-3">
-        <login-form></login-form>
+      <div class="row-span-5 row-start-2">
+        <register-form></register-form>
       </div>
     </div>
     <div class="bg-image bg-cover"></div>
@@ -19,5 +19,5 @@
 </template>
 
 <script setup lang="ts">
-import LoginForm from "@/components/login/LoginForm.vue";
+import RegisterForm from "@/components/register/RegisterForm.vue";
 </script>
