@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import type { Token, User } from "@/types/user";
 import type { StoreOption } from "@/types/widgetOption";
+import { loginUser } from "@/services/userApi";
 
 // TODO: move to types/store
 interface userStore {
@@ -29,9 +30,11 @@ export const userStore = defineStore({
     getOptions(state: userStore): StoreOption[] {
       return state.user.settings.widgetOptions;
     },
-    isAuthenticated(): boolean {
+    isAuthenticated(state: userStore): boolean {
       /* TODO: the token must be checked here */
-      return true;
+      if (state.user.token.token) return true;
+
+      return false;
     },
   },
   actions: {
@@ -48,6 +51,19 @@ export const userStore = defineStore({
     },
     async updateOptions(): Promise<void> {
       //TODO: send options to API
+    },
+    async loginUser(
+      username: string | undefined,
+      password: string | undefined
+    ): Promise<boolean> {
+      if (username && password) {
+        const token: Token | undefined = await loginUser(username, password);
+        if (token) {
+          this.user.token = token;
+          return true;
+        }
+      }
+      return false;
     },
   },
 });
