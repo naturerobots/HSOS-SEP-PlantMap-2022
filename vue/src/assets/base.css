@@ -91,7 +91,7 @@ body,
 /* LOGIN/REGISTER */
 
 .bg-image {
-  background-image: url("https://naturerobots.de/images/hero/Titelbild_Lero_blur.jpg"); /* TODO: change image */
+  background-image: url("@/assets/img/Robot.png");
 }
 
 /* ----------- */
