@@ -8,6 +8,7 @@ import ImageUploadView from "@/views/ImageUploadView.vue";
 import Sidebar from "@/components/SidebarMenuQuasar.vue";
 import CropImageView from "@/views/CropImageView.vue";
 import WeatherCharts from "@/views/WeatherCharts.vue";
+import { userStore } from "@/stores/userStore";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,6 +24,7 @@ const router = createRouter({
         default: DashboardView,
         sidebar: Sidebar,
       },
+      meta: { requiresAuth: true },
     },
     {
       path: "/crops",
@@ -31,6 +33,7 @@ const router = createRouter({
         default: CropsView,
         sidebar: Sidebar,
       },
+      meta: { requiresAuth: true },
     },
     {
       path: "/3d",
@@ -39,6 +42,7 @@ const router = createRouter({
         default: Crops3dView,
         sidebar: Sidebar,
       },
+      meta: { requiresAuth: true },
     },
     {
       path: "/imageupload",
@@ -48,6 +52,7 @@ const router = createRouter({
         sidebar: Sidebar,
       },
       props: true,
+      meta: { requiresAuth: true },
     },
     {
       path: "/cropimage",
@@ -56,6 +61,7 @@ const router = createRouter({
         default: CropImageView,
         sidebar: Sidebar,
       },
+      meta: { requiresAuth: true },
     },
     {
       path: "/weathercharts",
@@ -64,6 +70,7 @@ const router = createRouter({
         default: WeatherCharts,
         sidebar: Sidebar,
       },
+      meta: { requiresAuth: true },
     },
     {
       path: "/login",
@@ -76,6 +83,18 @@ const router = createRouter({
       component: RegisterView,
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth) {
+    if (userStore().isAuthenticated) {
+      next();
+    } else {
+      next("/login");
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;
