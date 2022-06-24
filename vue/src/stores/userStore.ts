@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { User } from "@/types/user";
+import type { Token, User } from "@/types/user";
 import type { StoreOption } from "@/types/widgetOption";
 
 // TODO: move to types/store
@@ -22,11 +22,16 @@ export const userStore = defineStore({
           "3d-map",
         ], //TODO: delete later
       },
+      token: {} as Token,
     },
   }),
   getters: {
     getOptions(state: userStore): StoreOption[] {
       return state.user.settings.widgetOptions;
+    },
+    isAuthenticated(): boolean {
+      /* TODO: the token must be checked here */
+      return true;
     },
   },
   actions: {
