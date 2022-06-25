@@ -77,6 +77,5 @@ export async function getCrops(): Promise<Crop[]> {
   crops.push(crop2);
   crops.push(crop5);
   crops.push(crop6);
-
   return crops;
 }

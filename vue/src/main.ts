@@ -7,6 +7,7 @@ import "./assets/base.css";
 import { Quasar, Notify } from "quasar";
 // Import icon libraries
 import "@quasar/extras/material-icons/material-icons.css";
+import MaterialIconSet from "quasar/icon-set/material-icons";
 // // Import Quasar css
 import "quasar/src/css/index.sass";
 const app = createApp(App);
@@ -27,3 +28,4 @@ app.use(Quasar, {
 });
 
 app.mount("#app");
+MaterialIconSet.table.arrowUp = "expand_more";
