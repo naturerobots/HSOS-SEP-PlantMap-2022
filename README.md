@@ -30,7 +30,7 @@ SOFTWARE.
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="doc/plant-map-logo.png" alt="Logo" height="80">
+    <img src="docs/imgs/plant-map-logo.png" alt="Logo">
   </a>
 
   <h3 align="center">Project PlantMap</h3>
@@ -159,7 +159,7 @@ data from SEEREP, currently [Protocol
 Buffers](https://developers.google.com/protocol-buffers) are used as the
 messaging format. The data for SEEREP is recorded by an autonomous driving robot which is also developed by [naturerobots](https://naturerobots.de/).
 
-![](doc/plant-map-architecture.png)
+![](docs/imgs/plant-map-architecture.png)
 
 ## Contributing
 
