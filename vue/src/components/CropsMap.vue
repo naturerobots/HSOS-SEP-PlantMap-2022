@@ -13,9 +13,9 @@ const baseMapRef = ref<InstanceType<typeof BaseMap> | null>(null);
 
 const mapImage: MapImage = {
   src: "https://cloud.naturerobots.de/apps/files_sharing/publicpreview/xZj9ytRt8WKr5cw?file=/goeoentueuegs_ibbenbueren_new2.jpg&fileId=28565&x=1920&y=1080&a=true",
-  top_left: new LatLng(52.31703002877383, 7.6307445019483575),
-  top_right: new LatLng(52.316885520295315, 7.630280744986272),
-  bottom_left: new LatLng(52.31721038577891, 7.630586922168733),
+  top_right: new LatLng(52.31724604719058, 7.630553394556046),
+  top_left: new LatLng(52.3170773725588, 7.630054503679276),
+  bottom_left: new LatLng(52.31686606722232, 7.630242593586445),
 };
 
 onMounted(() => {

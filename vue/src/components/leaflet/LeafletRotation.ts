@@ -1,4 +1,5 @@
 import L from "leaflet";
+
 L.ImageOverlay.Rotated = L.ImageOverlay.extend({
   initialize: function (image, topleft, topright, bottomleft, options) {
     if (typeof image === "string") {
@@ -103,6 +104,7 @@ L.ImageOverlay.Rotated = L.ImageOverlay.extend({
       pxBottomLeft,
       pxBottomRight,
     ]);
+
     const size = pxBounds.getSize();
     const pxTopLeftInDiv = pxTopLeft.subtract(pxBounds.min);
 
@@ -155,7 +157,12 @@ L.ImageOverlay.Rotated = L.ImageOverlay.extend({
     this._topLeft = L.latLng(topleft);
     this._topRight = L.latLng(topright);
     this._bottomLeft = L.latLng(bottomleft);
+
     this._reset();
+  },
+
+  updateOpacity: function (opacity: number) {
+    if (opacity >= 0 && opacity <= 1) this._image.style.opacity = opacity;
   },
 
   //TODO: Explicit Types?

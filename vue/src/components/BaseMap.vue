@@ -34,12 +34,17 @@ import type { LeafletEvent } from "leaflet";
 
 const leafletRef = ref<InstanceType<typeof LeafletComp> | null>(null);
 
-defineProps<{
-  maxZoom?: number;
-  zoom?: number;
-  zoomControl?: boolean;
-  mapImage: MapImage;
-}>();
+withDefaults(
+  defineProps<{
+    mapImage: MapImage;
+    maxZoom?: number;
+    zoom?: number;
+    zoomControl?: boolean;
+  }>(),
+  {
+    zoomControl: true,
+  }
+);
 
 const emit = defineEmits<{
   (event: "markerClick", marker: L.Marker): void;
