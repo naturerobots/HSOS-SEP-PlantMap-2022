@@ -1,15 +1,18 @@
 <template>
-  <q-layout view="lHh lpr lFf" class="h-full">
-    <div class="relative h-full">
-      <div class="row flex justify-between h-full">
-        <!--items-start-->
-        <router-view name="sidebar"></router-view>
-        <main class="flex flex-col w-full">
-          <router-view></router-view>
-        </main>
-      </div>
-    </div>
-  </q-layout>
+  <!-- <q-layout view="lHh lpr lFf" class="h-full"> -->
+  <!-- <div class="relative h-full"> -->
+  <!-- <div class="row flex justify-between h-full"> -->
+  <!--items-start-->
+  <div class="flex flex-row h-full flex-nowrap">
+    <router-view name="sidebar"></router-view>
+    <main class="flex flex-col flex-1 w-full h-full">
+      <router-view></router-view>
+    </main>
+  </div>
+
+  <!-- </div> -->
+  <!-- </div> -->
+  <!-- </q-layout> -->
 </template>
 
 <script setup lang="ts">

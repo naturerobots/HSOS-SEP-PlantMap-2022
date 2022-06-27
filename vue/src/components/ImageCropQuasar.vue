@@ -1,19 +1,18 @@
 <template>
-  <div class="inline-flex space-x-3 pl-2 items-center">
-    <div class="q-pa-md">
-      <div class="q-gutter-y-md column" style="max-width: 300px">
-        <q-file
-          clearable
-          filled
-          v-model="model"
-          label="Image upload"
-          accept=".jpg, image/*"
-          @rejected="onRejected"
-          @clear="clearImg"
-          @update:model-value="setBase64($event)"
-        />
-      </div>
+  <div class="inline-flex space-x-3 pl-2 items-center q-pa-md">
+    <div class="q-gutter-y-md column" style="max-width: 300px">
+      <q-file
+        clearable
+        filled
+        v-model="model"
+        label="Image upload"
+        accept=".jpg, image/*"
+        @rejected="onRejected"
+        @clear="clearImg"
+        @update:model-value="setBase64($event)"
+      />
     </div>
+
     <div v-if="base64">
       <q-btn rounded color="primary" label="Crop Image" @click="crop" />
     </div>
@@ -22,7 +21,7 @@
     </div>
   </div>
 
-  <div class="grid grid-cols-2 p-6 gap-4">
+  <div class="grid grid-cols-2 p-6 gap-4 flex-1">
     <div v-if="base64" class="card bg-white">
       <div class="card-body">
         <cropper ref="cropperChild" class="cropper" :src="base64" />

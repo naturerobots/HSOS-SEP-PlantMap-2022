@@ -1,5 +1,5 @@
 <template>
-  <div class="ml-28">
+  <div class="flex-nowrap">
     <header-bar
       title="Dashboard"
       :widgetOptions="widgetOptionsDashboard"
@@ -33,6 +33,7 @@
       </div>
     </div>
   </div>
+
   <!-- DEMO LAYOUTS -->
   <!-- <div class="grid grid-cols-3 gap-4 place-items-stretch h-fit p-3">
     <div>
@@ -69,7 +70,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, type Ref } from "vue";
+import { ref } from "vue";
+import type { Ref } from "vue";
 import { storeToRefs } from "pinia";
 import { sensorStore } from "@/stores/sensorStore";
 import { userStore } from "@/stores/userStore";

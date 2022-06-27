@@ -1,6 +1,6 @@
 <template>
-  <div class="px-6 py-3 border-b">
-    <div class="pl-3 py-3 h-16 w-full flex items-center justify-between">
+  <div class="px-6 py-3 border-b flex-none w-full">
+    <div class="pl-3 py-3 h-16 flex items-center justify-between">
       <div class="text-3xl text-black">
         <div>{{ title }}</div>
       </div>
