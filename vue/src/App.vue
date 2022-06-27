@@ -1,15 +1,5 @@
 <template>
-  <q-layout view="lHh lpr lFf" class="h-full">
-    <div class="relative h-full">
-      <div class="row flex justify-between h-full">
-        <!--items-start-->
-        <router-view name="sidebar"></router-view>
-        <main class="flex flex-col w-full">
-          <router-view></router-view>
-        </main>
-      </div>
-    </div>
-  </q-layout>
+  <router-view></router-view>
 </template>
 
 <script setup lang="ts">
