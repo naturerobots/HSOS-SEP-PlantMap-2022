@@ -10,6 +10,7 @@
       <div class="col-span-4 space-y-2">
         <label class="font-bold text-black"> Email </label>
         <input
+          v-model="email"
           class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
           type="email"
           placeholder="Enter Email Address"
@@ -18,6 +19,7 @@
       <div class="col-span-4 space-y-2">
         <label class="font-bold text-black"> Password </label>
         <input
+          v-model="password"
           class="w-full content-center text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
           type="text"
           placeholder="Password"
@@ -27,6 +29,7 @@
         <button
           type="submit"
           class="w-full flex justify-center bg-primary text-white p-3 rounded-full tracking-wide font-bold shadow-lg"
+          @click="login"
         >
           Login
         </button>
@@ -40,3 +43,26 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref, type Ref } from "vue";
+import { useRouter, type Router } from "vue-router";
+import { userStore } from "@/stores/userStore";
+
+const router: Router = useRouter();
+const email: Ref<string | undefined> = ref<string>();
+const password: Ref<string | undefined> = ref<string>();
+
+async function login(): Promise<void> {
+  const isLoggedIn: boolean = await userStore().loginUser(
+    email.value,
+    password.value
+  );
+  if (isLoggedIn) {
+    router.push({ path: "/" });
+  } else {
+    console.log("User Feedback: Login failed");
+    /* TODO: user feedback */
+  }
+}
+</script>

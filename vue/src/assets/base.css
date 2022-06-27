@@ -39,9 +39,16 @@
   }
 
   /* ----------- */
-}
 
-/* ----------- */
+  /* CROPS TABLE */
+
+  .crops-row-active td {
+    background-color: #e5e7eb !important;
+    /* TODO: discuss color, add to tailwind colors */
+  }
+
+  /* ----------- */
+}
 
 :root {
   /* color light mode */
@@ -221,5 +228,8 @@ tbody tr:nth-child(even) {
 .crops-table tbody tr:hover {
   background-color: #e5e7eb;
 }
-
+/* sort-icon-size */
+.crops-table thead tr th i {
+  font-size: 23px;
+}
 /* ----------- */
