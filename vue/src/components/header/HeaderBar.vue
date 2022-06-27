@@ -1,10 +1,13 @@
 <template>
-  <div class="px-6 py-3 border-b">
-    <div class="pl-3 py-3 h-16 w-full flex items-center justify-between">
+  <div class="px-6 py-3 border-b flex-none w-full">
+    <div
+      class="pl-3 py-3 h-16 flex items-center justify-between"
+      style="flex-wrap: nowrap"
+    >
       <div class="text-3xl text-black">
         <div>{{ title }}</div>
       </div>
-      <div class="flex items-center">
+      <div class="flex items-center" style="flex-wrap: nowrap">
         <!--TODO: Add Quasar components (Button, Avatar)-->
         <!--FIXME: Maybe add a type that contains widgetOptions and storeOptions, so that both must always be passed together -->
         <div v-if="widgetOptions && storeOptions" class="mr-3">

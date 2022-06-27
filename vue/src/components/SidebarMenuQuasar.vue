@@ -1,5 +1,8 @@
 <template>
-  <div class="fixed w-28 h-full z-10 bg-background shadow-2">
+  <div
+    class="w-28 fixed h-full bg-background shadow-2 flex-none"
+    style="min-height: 535px"
+  >
     <div class="text-center">
       <router-link :to="'/dashboard'">
         <img src="@/assets/img/logo_small_white.svg" class="p-6 pb-9" />
