@@ -20,57 +20,39 @@ const router = createRouter({
     {
       path: "/dashboard",
       name: "dashboard",
-      components: {
-        default: DashboardView,
-        sidebar: Sidebar,
-      },
-      meta: { requiresAuth: true },
+      component: DashboardView,
+      meta: { requiresAuth: false },
     },
     {
       path: "/crops",
       name: "crops",
-      components: {
-        default: CropsView,
-        sidebar: Sidebar,
-      },
-      meta: { requiresAuth: true },
+      component: CropsView,
+      meta: { requiresAuth: false },
     },
     {
       path: "/3d",
       name: "3d",
-      components: {
-        default: Crops3dView,
-        sidebar: Sidebar,
-      },
-      meta: { requiresAuth: true },
+      component: Crops3dView,
+      meta: { requiresAuth: false },
     },
     {
       path: "/imageupload",
       name: "imageupload",
-      components: {
-        default: ImageUploadView,
-        sidebar: Sidebar,
-      },
+      component: ImageUploadView,
       props: true,
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: false },
     },
     {
       path: "/cropimage",
       name: "cropimage",
-      components: {
-        default: CropImageView,
-        sidebar: Sidebar,
-      },
-      meta: { requiresAuth: true },
+      component: CropImageView,
+      meta: { requiresAuth: false },
     },
     {
       path: "/weathercharts",
       name: "weathercharts",
-      components: {
-        default: WeatherCharts,
-        sidebar: Sidebar,
-      },
-      meta: { requiresAuth: true },
+      component: WeatherCharts,
+      meta: { requiresAuth: false },
     },
     {
       path: "/login",
