@@ -22,9 +22,9 @@ python3-ck/focal,focal 1.9.4-1.1 all
   Python3 light-weight knowledge manager
 ```
 
-The `docker-compose` package is deprecated and **doesn't support the latest
-compose specification**. So make sure to have the `docker-compose-plugin`
-package installed !
+The `docker-compose` package is deprecated and **may not support
+compose specification 3.8 if you are using a distro with old packages**. Install the `docker-compose-plugin`
+package instead to solve this problem!
 
 If you have the old `docker-compose` installed remove it with
 `sudo apt remove docker-compose` and install the newer version with
