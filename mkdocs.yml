@@ -1,4 +1,4 @@
-site_name: PlantMap
+site_name: PlantMap Documentation
 repo_url: https://github.com/naturerobots/HSOS-SEP-PlantMap-2022
 nav:
   - Home: index.md
