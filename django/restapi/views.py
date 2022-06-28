@@ -79,14 +79,7 @@ class RegisterView(KnoxLoginView):
 @api_view(['GET'])
 def getUser(request):
 
-    # Get requesting user from database for further queries
-
-    user = User.objects.get(username=request.user)
-    if not user:
-        # Requesting user not found in database
-        return JsonResponse({})
-
-    serializer = UserSerializer(user)
+    serializer = UserSerializer(request.user)
     return JsonResponse(serializer.data, safe=False)
 
 
@@ -94,19 +87,12 @@ def getUser(request):
 @api_view(['GET'])
 def getCompanies(request):
 
-    # Get requesting user from database for further queries
-
-    user = User.objects.get(username=request.user)
-    if not user:
-        # Requesting user not found in database
-        return JsonResponse({})
-
     # Check if authenticated user is allowed to request company_id, garden_id
 
-    companies = Company.objects.filter(user=user)
+    companies = Company.objects.filter(user=request.user)
     if not companies:
         # Company with id company_id not found in database or does not belong to the user requesting it
-        return JsonResponse({})
+        return HttpResponseNotFound()
 
     serializer = CompanySerializer(companies, many=True)
     return JsonResponse(serializer.data, safe=False)
@@ -116,19 +102,12 @@ def getCompanies(request):
 @api_view(['GET'])
 def getCompany(request, company_id: int):
 
-    # Get requesting user from database for further queries
-
-    user = User.objects.get(username=request.user)
-    if not user:
-        # Requesting user not found in database
-        return JsonResponse({})
-
     # Check if authenticated user is allowed to request company_id, garden_id
 
-    company = Company.objects.get(id=company_id, user=user)
+    company = Company.objects.get(id=company_id, user=request.user)
     if not company:
         # Company with id company_id not found in database or does not belong to the user requesting it
-        return JsonResponse({})
+        return HttpResponseNotFound()
 
     serializer = CompanySerializer(company)
     return JsonResponse(serializer.data, safe=False)
@@ -138,19 +117,12 @@ def getCompany(request, company_id: int):
 @api_view(['GET'])
 def getGardens(request, company_id: int):
 
-    # Get requesting user from database for further queries
-
-    user = User.objects.get(username=request.user)
-    if not user:
-        # Requesting user not found in database
-        return JsonResponse({})
-
     # Check if authenticated user is allowed to request company_id, garden_id
 
-    company = Company.objects.get(id=company_id, user=user)
+    company = Company.objects.get(id=company_id, user=request.user)
     if not company:
         # Company with id company_id not found in database or does not belong to the user requesting it
-        return JsonResponse({})
+        return HttpResponseNotFound()
 
     gardens = Garden.objects.filter(company=company)
     serializer = GardenSerializer(gardens, many=True)
@@ -161,24 +133,17 @@ def getGardens(request, company_id: int):
 @api_view(['GET'])
 def getGarden(request, company_id: int, garden_id: int):
 
-    # Get requesting user from database for further queries
-
-    user = User.objects.get(username=request.user)
-    if not user:
-        # Requesting user not found in database
-        return JsonResponse({})
-
     # Check if authenticated user is allowed to request company_id, garden_id
 
-    company = Company.objects.get(id=company_id, user=user)
+    company = Company.objects.get(id=company_id, user=request.user)
     if not company:
         # Company with id company_id not found in database or does not belong to the user requesting it
-        return JsonResponse({})
+        return HttpResponseNotFound()
 
     garden = Garden.objects.get(id=garden_id, company=company)
     if not garden:
         # Garden with id garden_id not found in database or does not belong to the company
-        return JsonResponse({})
+        return HttpResponseNotFound()
 
     serializer = GardenSerializer(garden)
     return JsonResponse(serializer.data, safe=False)
@@ -188,24 +153,17 @@ def getGarden(request, company_id: int, garden_id: int):
 @api_view(['GET', 'POST'])
 def gardenImage(request, company_id: int, garden_id: int):
 
-    # Get requesting user from database for further queries
-
-    user = User.objects.get(username=request.user)
-    if not user:
-        # Requesting user not found in database
-        return JsonResponse({})
-
     # Check if authenticated user is allowed to request company_id, garden_id
 
-    company = Company.objects.get(id=company_id, user=user)
+    company = Company.objects.get(id=company_id, user=request.user)
     if not company:
         # Company with id company_id not found in database or does not belong to the user requesting it
-        return JsonResponse({})
+        return HttpResponseNotFound()
 
     garden = Garden.objects.get(id=garden_id, company=company)
     if not garden:
         # Garden with id garden_id not found in database or does not belong to the company
-        return JsonResponse({})
+        return HttpResponseNotFound()
 
     if request.method == 'GET':
         return HttpResponseRedirect(garden.image.url)
@@ -233,24 +191,17 @@ def gardenImage(request, company_id: int, garden_id: int):
 @api_view(['GET'])
 def getBeds(request, company_id: int, garden_id: int):
 
-    # Get requesting user from database for further queries
-
-    user = User.objects.get(username=request.user)
-    if not user:
-        # Requesting user not found in database
-        return JsonResponse({})
-
     # Check if authenticated user is allowed to request company_id, garden_id
 
-    company = Company.objects.get(id=company_id, user=user)
+    company = Company.objects.get(id=company_id, user=request.user)
     if not company:
         # Company with id company_id not found in database or does not belong to the user requesting it
-        return JsonResponse({})
+        return HttpResponseNotFound()
 
     garden = Garden.objects.get(id=garden_id, company=company)
     if not garden:
         # Garden with id garden_id not found in database or does not belong to the company
-        return JsonResponse({})
+        return HttpResponseNotFound()
 
     # Get all beds of the garden
     beds = Bed.objects.filter(garden=garden)
@@ -271,24 +222,17 @@ def getBeds(request, company_id: int, garden_id: int):
 @api_view(['GET'])
 def getCrops(request, company_id: int, garden_id: int, bed_id: int):
 
-    # Get requesting user from database for further queries
-
-    user = User.objects.get(username=request.user)
-    if not user:
-        # Requesting user not found in database
-        return JsonResponse({})
-
     # Check if authenticated user is allowed to request company_id, garden_id, bed_id
 
-    company = Company.objects.get(id=company_id, user=user)
+    company = Company.objects.get(id=company_id, user=request.user)
     if not company:
         # Company with id company_id not found in database or does not belong to the user requesting it
-        return JsonResponse({})
+        return HttpResponseNotFound()
 
     garden = Garden.objects.get(id=garden_id, company=company)
     if not garden:
         # Garden with id garden_id not found in database or does not belong to the company
-        return JsonResponse({})
+        return HttpResponseNotFound()
 
     bed = Bed.objects.get(id=bed_id, garden=garden)
     if not bed:
@@ -328,7 +272,7 @@ def getCrops(request, company_id: int, garden_id: int, bed_id: int):
 
     for crop in cropsPointclouds:
         instanceLabel = crop['labels'].__getitem__(0)
-        classLabel = crop['labels'].__getitem__(1)
+        classLabel = crop['labels'][1]
 
         # Skip gRPC request if class was already requested once
         if classUUIDsRequested.__contains__(bed.uuid):
