@@ -1,9 +1,11 @@
 <!--everything in this comp is for testing only-->
 <template>
   <base-map
+    ref="baseMapRef"
     :map-image="mapImage"
     :zoom="20.5"
-    ref="baseMapRef"
+    :zoom-control="true"
+    :map-interaction="false"
     @polygon-enter="polygonEnter"
     @polygon-leave="polygonLeave"
   ></base-map>

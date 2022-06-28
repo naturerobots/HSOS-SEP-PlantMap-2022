@@ -19,11 +19,13 @@ const props = withDefaults(
     maxZoom?: number;
     zoom?: number;
     zoomControl?: boolean;
+    mapInteraction?: boolean;
   }>(),
   {
     maxZoom: 24,
     zoom: 13,
-    zoomControl: true,
+    //Disabled map interaction per default, can be fixed later but for now it reduces the number of tiles that need to be downloaded.
+    mapInteraction: false,
   }
 );
 
@@ -36,29 +38,33 @@ defineExpose({
 
 onMounted(() => {
   leafletMap = L.map("map", {
-    zoomControl: false,
-    attributionControl: false,
-    zoomDelta: 0.25,
-    zoomSnap: 0.25,
+    ...{
+      zoomControl: false,
+      attributionControl: false,
+      zoomDelta: 0.25,
+      zoomSnap: 0.25,
+    },
+    ...(props.mapInteraction
+      ? {}
+      : {
+          dragging: false,
+          touchZoom: false,
+          doubleClickZoom: false,
+          scrollWheelZoom: false,
+          boxZoom: false,
+          keyboard: false,
+          tap: false,
+        }),
   });
 
   //https://stackoverflow.com/a/55767702
   if (props.zoomControl) {
     L.control
       .zoom({
-        position: "bottomright",
+        position: "topright",
       })
       .addTo(leafletMap);
   }
-
-  //Disable map interaction, can be removed later but for now it reduces the number of tiles that need to be downloaded.
-  leafletMap.dragging.disable();
-  leafletMap.touchZoom.disable();
-  leafletMap.doubleClickZoom.disable();
-  leafletMap.scrollWheelZoom.disable();
-  leafletMap.boxZoom.disable();
-  leafletMap.keyboard.disable();
-  if (leafletMap.tap) leafletMap.tap.disable();
 
   //TODO: refactor params
   L.tileLayer(

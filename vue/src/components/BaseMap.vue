@@ -13,14 +13,16 @@
 
 <template>
   <!-- <q-card class="w-full h-full shadow-1 bg-white"> -->
-  <div class="card-map w-full h-full">
+  <div class="card-map w-full h-full select-none">
     <leaflet-comp
       :maxZoom="maxZoom"
       :zoom="zoom"
       :map-image="mapImage"
       :zoom-control="zoomControl"
+      :map-interaction="mapInteraction"
       ref="leafletRef"
-    ></leaflet-comp>
+    >
+    </leaflet-comp>
   </div>
   <!-- </q-card> -->
 </template>
@@ -34,17 +36,13 @@ import type { LeafletEvent } from "leaflet";
 
 const leafletRef = ref<InstanceType<typeof LeafletComp> | null>(null);
 
-withDefaults(
-  defineProps<{
-    mapImage: MapImage;
-    maxZoom?: number;
-    zoom?: number;
-    zoomControl?: boolean;
-  }>(),
-  {
-    zoomControl: true,
-  }
-);
+defineProps<{
+  mapImage: MapImage;
+  maxZoom?: number;
+  zoom?: number;
+  zoomControl?: boolean;
+  mapInteraction?: boolean;
+}>();
 
 const emit = defineEmits<{
   (event: "markerClick", marker: L.Marker): void;

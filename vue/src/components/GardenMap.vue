@@ -1,9 +1,11 @@
 <!--image is for testing only-->
 <template>
   <base-map
+    ref="baseMapRef"
     :map-image="mapImage"
     :zoom="20.5"
-    ref="baseMapRef"
+    :zoom-control="true"
+    :map-interaction="false"
     @marker-click="markerClick"
     @marker-enter="markerEnter"
     @marker-leave="markerLeave"
