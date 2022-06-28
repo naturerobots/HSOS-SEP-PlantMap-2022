@@ -13,6 +13,9 @@ demo-post:
 run-frontend:
 	@cd vue && npm run dev
 
+start-mkdocs:
+	@mkdocs serve
+
 cleanup-docker:
 	@echo "Warning: This command can only be used on the Host machine and the remote devcontainer connection by VS Code needs to be closed"
 	@echo "shutdown production"

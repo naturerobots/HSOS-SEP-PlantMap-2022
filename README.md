@@ -38,7 +38,7 @@ SOFTWARE.
   <p align="center">
     A tool to support sustainable farming
     <br />
-    <a href="https://github.com/naturerobots/HSOS-SEP-PlantMap-2022/wiki"><strong>Explore the Wiki»</strong></a>
+    <a href="https://naturerobots.github.io/HSOS-SEP-PlantMap-2022/"><strong>Documentation»</strong></a>
     <br />
     ·
     <a href="https://github.com/naturerobots/HSOS-SEP-PlantMap-2022/issues">Report Bug</a>
