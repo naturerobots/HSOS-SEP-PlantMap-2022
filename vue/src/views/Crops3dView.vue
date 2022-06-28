@@ -1,5 +1,5 @@
 <template>
-  <div class="ml-28">
+  <div class="flex-nowrap">
     <header-bar
       title="3D"
       :widgetOptions="widgetOptions3D"

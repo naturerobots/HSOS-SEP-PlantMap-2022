@@ -1,5 +1,5 @@
 <template>
-  <div class="ml-28">
+  <div class="flex-nowrap">
     <header-bar
       title="Crops"
       :widgetOptions="widgetOptionsCrops"
