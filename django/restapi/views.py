@@ -89,8 +89,9 @@ def getCompanies(request):
 
     # Check if authenticated user is allowed to request company_id, garden_id
 
-    companies = Company.objects.filter(user=request.user)
-    if not companies:
+    try:
+        companies = Company.objects.filter(user=request.user)
+    except:
         # Company with id company_id not found in database or does not belong to the user requesting it
         return HttpResponseNotFound()
 
@@ -104,8 +105,9 @@ def getCompany(request, company_id: int):
 
     # Check if authenticated user is allowed to request company_id, garden_id
 
-    company = Company.objects.get(id=company_id, user=request.user)
-    if not company:
+    try:
+        company = Company.objects.get(id=company_id, user=request.user)
+    except:
         # Company with id company_id not found in database or does not belong to the user requesting it
         return HttpResponseNotFound()
 
@@ -119,8 +121,9 @@ def getGardens(request, company_id: int):
 
     # Check if authenticated user is allowed to request company_id, garden_id
 
-    company = Company.objects.get(id=company_id, user=request.user)
-    if not company:
+    try:
+        company = Company.objects.get(id=company_id, user=request.user)
+    except:
         # Company with id company_id not found in database or does not belong to the user requesting it
         return HttpResponseNotFound()
 
@@ -135,13 +138,15 @@ def getGarden(request, company_id: int, garden_id: int):
 
     # Check if authenticated user is allowed to request company_id, garden_id
 
-    company = Company.objects.get(id=company_id, user=request.user)
-    if not company:
+    try:
+        company = Company.objects.get(id=company_id, user=request.user)
+    except:
         # Company with id company_id not found in database or does not belong to the user requesting it
         return HttpResponseNotFound()
 
-    garden = Garden.objects.get(id=garden_id, company=company)
-    if not garden:
+    try:
+        garden = Garden.objects.get(id=garden_id, company=company)
+    except:
         # Garden with id garden_id not found in database or does not belong to the company
         return HttpResponseNotFound()
 
@@ -155,13 +160,15 @@ def gardenImage(request, company_id: int, garden_id: int):
 
     # Check if authenticated user is allowed to request company_id, garden_id
 
-    company = Company.objects.get(id=company_id, user=request.user)
-    if not company:
+    try:
+        company = Company.objects.get(id=company_id, user=request.user)
+    except:
         # Company with id company_id not found in database or does not belong to the user requesting it
         return HttpResponseNotFound()
 
-    garden = Garden.objects.get(id=garden_id, company=company)
-    if not garden:
+    try:
+        garden = Garden.objects.get(id=garden_id, company=company)
+    except:
         # Garden with id garden_id not found in database or does not belong to the company
         return HttpResponseNotFound()
 
@@ -193,13 +200,15 @@ def getBeds(request, company_id: int, garden_id: int):
 
     # Check if authenticated user is allowed to request company_id, garden_id
 
-    company = Company.objects.get(id=company_id, user=request.user)
-    if not company:
+    try:
+        company = Company.objects.get(id=company_id, user=request.user)
+    except:
         # Company with id company_id not found in database or does not belong to the user requesting it
         return HttpResponseNotFound()
 
-    garden = Garden.objects.get(id=garden_id, company=company)
-    if not garden:
+    try:
+        garden = Garden.objects.get(id=garden_id, company=company)
+    except:
         # Garden with id garden_id not found in database or does not belong to the company
         return HttpResponseNotFound()
 
@@ -224,20 +233,23 @@ def getCrops(request, company_id: int, garden_id: int, bed_id: int):
 
     # Check if authenticated user is allowed to request company_id, garden_id, bed_id
 
-    company = Company.objects.get(id=company_id, user=request.user)
-    if not company:
+    try:
+        company = Company.objects.get(id=company_id, user=request.user)
+    except:
         # Company with id company_id not found in database or does not belong to the user requesting it
         return HttpResponseNotFound()
 
-    garden = Garden.objects.get(id=garden_id, company=company)
-    if not garden:
+    try:
+        garden = Garden.objects.get(id=garden_id, company=company)
+    except:
         # Garden with id garden_id not found in database or does not belong to the company
         return HttpResponseNotFound()
 
-    bed = Bed.objects.get(id=bed_id, garden=garden)
-    if not bed:
+    try:
+        bed = Bed.objects.get(id=bed_id, garden=garden)
+    except:
         # Bed with id bed_id not found in database or does not belong to the garden
-        return JsonResponse({})
+        return HttpResponseNotFound()
 
     # Get bed data from SEEREP over gRPC
 
