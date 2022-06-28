@@ -321,18 +321,18 @@ def getCrops(request, company_id: int, garden_id: int, bed_id: int):
 
     # Get instances and classes of cropsPointclouds from SEEREP over gRPC
 
-    instances = []
+    # instances = []
     classes = []
 
     classUUIDsRequested = []
 
     for crop in cropsPointclouds:
-        instanceLabel = crop['labels'].__getitem__(0)
-        classLabel = crop['labels'].__getitem__(1)
+        # instanceLabel = crop['labels'][0]
+        classLabel = crop['labels'][1]
 
         # Skip gRPC request if class was already requested once
         if classUUIDsRequested.__contains__(bed.uuid):
-            classes.append(classes.__getitem__(len(classes) - 1))
+            classes.append(classes[len(classes) - 1])
             continue
 
         try:
@@ -364,7 +364,7 @@ def getCrops(request, company_id: int, garden_id: int, bed_id: int):
 
     for i in range(len(cropsPointclouds) - 1):
 
-        plantName = cropsPointclouds.__getitem__(i)['name']
+        plantName = cropsPointclouds[i]['name']
         variety = "N/A"
         location = bed_id
         soilHumidity = 0
@@ -375,23 +375,23 @@ def getCrops(request, company_id: int, garden_id: int, bed_id: int):
         approxYield = 0
 
         try:
-            variety = classes.__getitem__(i)['attributes']['variety']['stringData']
+            variety = classes[i]['attributes']['variety']['stringData']
         except:
             pass
 
         try:
             # Expects geometry "ground" to be at the last position in "measurements" and that every
             # crop in the current bed is planted on "ground"
-            soilHumidity = measurements.__getitem__(len(measurements) - 1)['data']['humidity']['doubleData']
+            soilHumidity = measurements[len(measurements) - 1]['data']['humidity']['doubleData']
         except:
             pass
 
         try:
-            health = measurements.__getitem__(i)['data']['warn_msg']['stringData']
-            healthLoglevel = int(measurements.__getitem__(i)['data']['warn_level']['int64Data'])
-            status = measurements.__getitem__(i)['data']['status']['stringData']
-            harvest = measurements.__getitem__(i)['data']['growth_state']['doubleData']
-            approxYield = int(measurements.__getitem__(i)['data']['approx_yield']['int64Data'])
+            health = measurements[i]['data']['warn_msg']['stringData']
+            healthLoglevel = int(measurements[i]['data']['warn_level']['int64Data'])
+            status = measurements[i]['data']['status']['stringData']
+            harvest = measurements[i]['data']['growth_state']['doubleData']
+            approxYield = int(measurements[i]['data']['approx_yield']['int64Data'])
         except:
             pass
 
