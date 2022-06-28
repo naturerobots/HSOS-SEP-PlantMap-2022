@@ -12,10 +12,14 @@ theme:
   language: en
   logo: /imgs/logo_small_color.svg
   favicon: /imgs/logo_small_color.svg
+  palette:
+    - scheme: naturerobots
   features:
-    - navigation.tabs
     - navigation.tracking
     - navigation.sections
+    - navigation.tabs
+extra_css:
+  - stylesheets/extra.css
 markdown_extensions:
   - admonition
   - pymdownx.highlight:
