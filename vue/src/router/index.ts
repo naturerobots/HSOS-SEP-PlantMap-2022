@@ -86,7 +86,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth) {
+  if (import.meta.env.VITE_AUTH_REQUIRED === "true" && to.meta.requiresAuth) {
     if (userStore().isAuthenticated) {
       next();
     } else {
