@@ -1,8 +1,8 @@
 import axios from "axios";
 import type { GeoDataArray } from "../types/geoData";
 
-//FIXME: Find a solution that the token is not directly implemented
-const appid = "a8b46be95a90a7e303aa7edd4fc1463e";
+//FIXME: token stored in .env -> could be safed in .env.local later which is ignored by git
+const appid: string = import.meta.env.VITE_TOKEN_OWM;
 const baseURL = "https://api.openweathermap.org/geo/1.0/reverse";
 const limit = 5;
 
