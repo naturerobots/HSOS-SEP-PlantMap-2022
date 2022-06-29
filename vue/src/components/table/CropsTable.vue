@@ -216,9 +216,9 @@
 
 <script setup lang="ts">
 import type { Ref } from "vue";
-import type { Crop } from "../types/crop";
+import type { Crop } from "@/types/crop";
 import { storeToRefs } from "pinia";
-import { cropsStore } from "../stores/cropsStore";
+import { cropsStore } from "@/stores/cropsStore";
 import { ref } from "vue";
 import type { QTable, QTableProps } from "quasar";
 

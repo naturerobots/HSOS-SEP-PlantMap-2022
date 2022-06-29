@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-28 sticky h-full bg-background shadow-2 flex-none"
+    class="w-28 fixed h-full bg-background shadow-2 flex-none"
     style="min-height: 535px"
   >
     <div class="text-center">

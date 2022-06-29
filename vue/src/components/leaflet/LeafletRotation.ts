@@ -1,5 +1,7 @@
 import L from "leaflet";
 
+//https://github.com/IvanSanchez/Leaflet.ImageOverlay.Rotated
+
 L.ImageOverlay.Rotated = L.ImageOverlay.extend({
   initialize: function (image, topleft, topright, bottomleft, options) {
     if (typeof image === "string") {

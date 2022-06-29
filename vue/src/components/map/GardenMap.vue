@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import BaseMap from "@/components/BaseMap.vue";
+import BaseMap from "@/components/map/BaseMap.vue";
 import type { MapImage } from "@/types/mapImage";
 import L, { LatLng } from "leaflet";
 import { ref, onMounted } from "vue";

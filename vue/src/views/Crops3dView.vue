@@ -1,10 +1,9 @@
 <template>
-  <div class="flex-nowrap">
-    <header-bar
-      title="3D"
-      :widgetOptions="widgetOptions3D"
-      :storeOptions="storeOptions"
-    ></header-bar>
+  <base-layout
+    title="3D"
+    :widgetOptions="widgetOptions3D"
+    :storeOptions="storeOptions"
+  >
     <div class="row p-6">
       <div v-if="storeOptions.indexOf('3d-table') > -1" class="col-4">
         <crops-table
@@ -25,7 +24,7 @@
         ></crops-map>
       </div>
     </div>
-  </div>
+  </base-layout>
 </template>
 
 <script setup lang="ts">
@@ -38,9 +37,9 @@ import {
   type StoreOption,
   type WidgetOption,
 } from "@/types/widgetOption";
-import HeaderBar from "@/components/header/HeaderBar.vue";
-import CropsTable from "../components/CropsTable.vue";
-import CropsMap from "@/components/CropsMap.vue";
+import CropsTable from "@/components/table/CropsTable.vue";
+import CropsMap from "@/components/map/CropsMap.vue";
+import BaseLayout from "@/components/layout/BaseLayout.vue";
 import type { Crop } from "@/types/crop";
 
 const storeOptions: Ref<StoreOption[]> = storeToRefs(userStore()).getOptions;

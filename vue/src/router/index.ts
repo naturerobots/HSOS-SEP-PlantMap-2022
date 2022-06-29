@@ -5,9 +5,7 @@ import Crops3dView from "@/views/Crops3dView.vue";
 import LoginView from "@/views/LoginView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import ImageUploadView from "@/views/ImageUploadView.vue";
-import Sidebar from "@/components/SidebarMenuQuasar.vue";
 import CropImageView from "@/views/CropImageView.vue";
-import WeatherCharts from "@/views/WeatherCharts.vue";
 import { userStore } from "@/stores/userStore";
 
 const router = createRouter({
@@ -20,56 +18,31 @@ const router = createRouter({
     {
       path: "/dashboard",
       name: "dashboard",
-      components: {
-        default: DashboardView,
-        sidebar: Sidebar,
-      },
+      component: DashboardView,
       meta: { requiresAuth: true },
     },
     {
       path: "/crops",
       name: "crops",
-      components: {
-        default: CropsView,
-        sidebar: Sidebar,
-      },
+      component: CropsView,
       meta: { requiresAuth: true },
     },
     {
       path: "/3d",
       name: "3d",
-      components: {
-        default: Crops3dView,
-        sidebar: Sidebar,
-      },
+      component: Crops3dView,
       meta: { requiresAuth: true },
     },
     {
       path: "/imageupload",
       name: "imageupload",
-      components: {
-        default: ImageUploadView,
-        sidebar: Sidebar,
-      },
-      props: true,
+      component: ImageUploadView,
       meta: { requiresAuth: true },
     },
     {
       path: "/cropimage",
       name: "cropimage",
-      components: {
-        default: CropImageView,
-        sidebar: Sidebar,
-      },
-      meta: { requiresAuth: true },
-    },
-    {
-      path: "/weathercharts",
-      name: "weathercharts",
-      components: {
-        default: WeatherCharts,
-        sidebar: Sidebar,
-      },
+      component: CropImageView,
       meta: { requiresAuth: true },
     },
     {
