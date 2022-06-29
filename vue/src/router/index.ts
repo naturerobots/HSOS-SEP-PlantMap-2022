@@ -5,7 +5,6 @@ import Crops3dView from "@/views/Crops3dView.vue";
 import LoginView from "@/views/LoginView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import ImageUploadView from "@/views/ImageUploadView.vue";
-import Sidebar from "@/components/SidebarMenuQuasar.vue";
 import CropImageView from "@/views/CropImageView.vue";
 import WeatherCharts from "@/views/WeatherCharts.vue";
 import { userStore } from "@/stores/userStore";
@@ -21,38 +20,38 @@ const router = createRouter({
       path: "/dashboard",
       name: "dashboard",
       component: DashboardView,
-      meta: { requiresAuth: false },
+      meta: { requiresAuth: true },
     },
     {
       path: "/crops",
       name: "crops",
       component: CropsView,
-      meta: { requiresAuth: false },
+      meta: { requiresAuth: true },
     },
     {
       path: "/3d",
       name: "3d",
       component: Crops3dView,
-      meta: { requiresAuth: false },
+      meta: { requiresAuth: true },
     },
     {
       path: "/imageupload",
       name: "imageupload",
       component: ImageUploadView,
       props: true,
-      meta: { requiresAuth: false },
+      meta: { requiresAuth: true },
     },
     {
       path: "/cropimage",
       name: "cropimage",
       component: CropImageView,
-      meta: { requiresAuth: false },
+      meta: { requiresAuth: true },
     },
     {
       path: "/weathercharts",
       name: "weathercharts",
       component: WeatherCharts,
-      meta: { requiresAuth: false },
+      meta: { requiresAuth: true },
     },
     {
       path: "/login",

@@ -1,9 +1,10 @@
 <template>
-  <div class="ml-28">
+  <base-layout title="Place Image">
     <leaflet-rotated-comp></leaflet-rotated-comp>
-  </div>
+  </base-layout>
 </template>
 
 <script setup lang="ts">
+import BaseLayout from "@/components/layout/BaseLayout.vue";
 import LeafletRotatedComp from "@/components/leaflet/LeafletRotatedComp.vue";
 </script>

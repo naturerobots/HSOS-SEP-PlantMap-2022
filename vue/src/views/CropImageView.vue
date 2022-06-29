@@ -7,5 +7,4 @@
 
 <script setup lang="ts">
 import BaseLayout from "@/components/layout/BaseLayout.vue";
-import ImageCropQuasar from "@/components/ImageCropQuasar.vue";
 </script>
