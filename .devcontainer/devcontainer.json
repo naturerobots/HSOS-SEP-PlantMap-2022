@@ -18,7 +18,8 @@
     "vue.volar",
     "vue.vscode-typescript-vue-plugin",
     "davidanson.vscode-markdownlint",
-    "gruntfuggly.todo-tree"
+    "gruntfuggly.todo-tree",
+    "yzhang.markdown-all-in-one"
   ],
   "workspaceFolder": "/workdir",
   "postStartCommand": ".devcontainer/post-create-setup.sh"
