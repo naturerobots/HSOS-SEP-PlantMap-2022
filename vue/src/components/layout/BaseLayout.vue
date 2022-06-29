@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import Sidebar from "@/components/SidebarMenuQuasar.vue";
+import Sidebar from "@/components/sidebar/SidebarMenu.vue";
 import HeaderBar from "@/components/header/HeaderBar.vue";
 import type { StoreOption, WidgetOption } from "@/types/widgetOption";
 defineProps<{

@@ -6,7 +6,6 @@ import LoginView from "@/views/LoginView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import ImageUploadView from "@/views/ImageUploadView.vue";
 import CropImageView from "@/views/CropImageView.vue";
-import WeatherCharts from "@/views/WeatherCharts.vue";
 import { userStore } from "@/stores/userStore";
 
 const router = createRouter({
@@ -38,19 +37,12 @@ const router = createRouter({
       path: "/imageupload",
       name: "imageupload",
       component: ImageUploadView,
-      props: true,
       meta: { requiresAuth: true },
     },
     {
       path: "/cropimage",
       name: "cropimage",
       component: CropImageView,
-      meta: { requiresAuth: true },
-    },
-    {
-      path: "/weathercharts",
-      name: "weathercharts",
-      component: WeatherCharts,
       meta: { requiresAuth: true },
     },
     {

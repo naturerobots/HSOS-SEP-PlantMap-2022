@@ -1,19 +1,5 @@
-<!-- <template>
-  <div class="card w-full h-full drop-shadow bg-white">
-    <div class="card-body p-0">
-      <leaflet-comp
-        :maxZoom="maxZoom"
-        :zoom="zoom"
-        :map-image="mapImage"
-        ref="leafletRef"
-      ></leaflet-comp>
-    </div>
-  </div>
-</template> -->
-
 <template>
-  <!-- <q-card class="w-full h-full shadow-1 bg-white"> -->
-  <div class="card-map w-full h-full select-none">
+  <div class="card-map w-full h-full select-none base-map">
     <leaflet-comp
       :maxZoom="maxZoom"
       :zoom="zoom"
@@ -24,7 +10,6 @@
     >
     </leaflet-comp>
   </div>
-  <!-- </q-card> -->
 </template>
 
 <script setup lang="ts">
@@ -102,3 +87,9 @@ function emitPolygonLeave(event: LeafletEvent): void {
   emit("polygonLeave", polygon);
 }
 </script>
+
+<style>
+.base-map {
+  min-height: 600px; /* TODO: change css */
+}
+</style>

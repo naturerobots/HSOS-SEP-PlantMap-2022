@@ -37,9 +37,8 @@ import {
   type StoreOption,
   type WidgetOption,
 } from "@/types/widgetOption";
-import HeaderBar from "@/components/header/HeaderBar.vue";
-import CropsTable from "../components/CropsTable.vue";
-import CropsMap from "@/components/CropsMap.vue";
+import CropsTable from "@/components/table/CropsTable.vue";
+import CropsMap from "@/components/map/CropsMap.vue";
 import BaseLayout from "@/components/layout/BaseLayout.vue";
 import type { Crop } from "@/types/crop";
 

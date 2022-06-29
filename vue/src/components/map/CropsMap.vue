@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import BaseMap from "@/components/BaseMap.vue";
+import BaseMap from "@/components/map/BaseMap.vue";
 import type { Crop } from "@/types/crop";
 import type { MapImage } from "@/types/mapImage";
 import L, { LatLng, polygon, Polygon } from "leaflet";

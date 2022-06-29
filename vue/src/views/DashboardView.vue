@@ -48,8 +48,8 @@ import {
   type WidgetOption,
 } from "@/types/widgetOption";
 import WeatherComp from "@/components/weather/WeatherComp.vue";
-import SensorComp from "@/components/SensorCompQuasar.vue";
-import GardenMap from "@/components/GardenMap.vue";
+import SensorComp from "@/components/sensor/SensorComp.vue";
+import GardenMap from "@/components/map/GardenMap.vue";
 import BaseLayout from "@/components/layout/BaseLayout.vue";
 
 const sensors: Ref<Sensor[]> = storeToRefs(sensorStore()).getSensors;
