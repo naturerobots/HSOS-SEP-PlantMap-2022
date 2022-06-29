@@ -39,7 +39,8 @@ repos:
               .*\.obj|
               .*\.pgm|
               .*\.step|
-              .*\.stl
+              .*\.stl|
+              .*\.md
           )$
       - id: fix-byte-order-marker
       - id: mixed-line-ending
