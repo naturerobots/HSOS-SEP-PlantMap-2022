@@ -2,12 +2,25 @@ site_name: PlantMap Documentation
 repo_url: https://github.com/naturerobots/HSOS-SEP-PlantMap-2022
 nav:
   - Home: index.md
-  - Definitions: definitions.md
-  - Common Errors: errors.md
+  - Getting started:
+      - Installtion: installation.md
+      - Common errors: errors.md
+  - Reference:
+      - Definitions: definitions.md
+      - Authentication: authentication.md
 theme:
   name: material
   language: en
+  logo: imgs/logo_small_color.svg
+  favicon: imgs/logo_small_color.svg
+  palette:
+    - scheme: naturerobots
   features:
+    - navigation.tracking
+    - navigation.sections
+    - navigation.tabs
+extra_css:
+  - stylesheets/extra.css
 markdown_extensions:
   - admonition
   - pymdownx.highlight:

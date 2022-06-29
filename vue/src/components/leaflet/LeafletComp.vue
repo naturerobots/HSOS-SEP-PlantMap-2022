@@ -15,15 +15,17 @@ let leafletMap: L.Map;
 
 const props = withDefaults(
   defineProps<{
-    maxZoom: number;
-    zoom: number;
     mapImage: MapImage;
-    zoomControl: boolean;
+    maxZoom?: number;
+    zoom?: number;
+    zoomControl?: boolean;
+    mapInteraction?: boolean;
   }>(),
   {
     maxZoom: 24,
     zoom: 13,
-    zoomControl: true,
+    //Disabled map interaction per default, can be fixed later but for now it reduces the number of tiles that need to be downloaded.
+    mapInteraction: false,
   }
 );
 
@@ -36,16 +38,43 @@ defineExpose({
 
 onMounted(() => {
   leafletMap = L.map("map", {
-    zoomControl: props.zoomControl,
-    attributionControl: false,
-    zoomDelta: 0.25,
-    zoomSnap: 0.25,
+    ...{
+      zoomControl: false,
+      attributionControl: false,
+      zoomDelta: 0.25,
+      zoomSnap: 0.25,
+    },
+    ...(props.mapInteraction
+      ? {}
+      : {
+          dragging: false,
+          touchZoom: false,
+          doubleClickZoom: false,
+          scrollWheelZoom: false,
+          boxZoom: false,
+          keyboard: false,
+          tap: false,
+        }),
   });
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxNativeZoom: 18,
-    maxZoom: props.maxZoom,
-  }).addTo(leafletMap);
+  //https://stackoverflow.com/a/55767702
+  if (props.zoomControl) {
+    L.control
+      .zoom({
+        position: "topright",
+      })
+      .addTo(leafletMap);
+  }
+
+  //TODO: refactor params
+  L.tileLayer(
+    "https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibHNpZWJlbHMiLCJhIjoiY2wxdno3d2E0Mnh4ZDNqcXJzbHlqeWZoMCJ9.KXbrKH7ESK2qu28olSw6sQ",
+    {
+      maxNativeZoom: 19,
+      minZoom: 19,
+      maxZoom: props.maxZoom,
+    }
+  ).addTo(leafletMap);
 
   if (props.mapImage) {
     let overlay = L.imageOverlay.rotated(

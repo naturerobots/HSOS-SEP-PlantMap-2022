@@ -1,9 +1,11 @@
 <!--image is for testing only-->
 <template>
   <base-map
+    ref="baseMapRef"
     :map-image="mapImage"
     :zoom="20.5"
-    ref="baseMapRef"
+    :zoom-control="true"
+    :map-interaction="false"
     @marker-click="markerClick"
     @marker-enter="markerEnter"
     @marker-leave="markerLeave"
@@ -37,9 +39,9 @@ defineExpose({
 
 const mapImage: MapImage = {
   src: "https://cloud.naturerobots.de/apps/files_sharing/publicpreview/xZj9ytRt8WKr5cw?file=/goeoentueuegs_ibbenbueren_new2.jpg&fileId=28565&x=1920&y=1080&a=true",
-  top_right: new LatLng(52.31724405852429, 7.6305786972487475),
-  top_left: new LatLng(52.317090996655104, 7.630103431682726),
-  bottom_left: new LatLng(52.3168784640098, 7.630269296175566),
+  top_right: new LatLng(52.31724604719058, 7.630553394556046),
+  top_left: new LatLng(52.3170773725588, 7.630054503679276),
+  bottom_left: new LatLng(52.31686606722232, 7.630242593586445),
 };
 
 onMounted(() => {
