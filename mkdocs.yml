@@ -5,6 +5,7 @@ nav:
   - Getting started:
       - Installtion: installation.md
       - Common errors: errors.md
+      - License: license.md
   - Reference:
       - Definitions: definitions.md
       - Authentication: authentication.md
