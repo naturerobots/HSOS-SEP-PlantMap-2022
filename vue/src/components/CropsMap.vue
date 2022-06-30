@@ -103,6 +103,7 @@ function addCropsPolygon(crop: Crop): void {
 }
 
 function setPolygonActive(cropsId: number): void {
+  removeActivePolygon();
   const crop = getCropById(cropsId);
   if (crop) {
     if (polygonMap.has(cropsId)) {
@@ -119,6 +120,16 @@ function setPolygonActive(cropsId: number): void {
 function removeClickedPolygon(): void {
   polygonMap.forEach((polygon) => {
     if (polygon?.options.fillOpacity === 1) {
+      polygon?.setStyle({
+        fillOpacity: 0.0,
+      });
+    }
+  });
+}
+
+function removeActivePolygon(): void {
+  polygonMap.forEach((polygon) => {
+    if (polygon?.options.fillOpacity === 0.7) {
       polygon?.setStyle({
         fillOpacity: 0.0,
       });

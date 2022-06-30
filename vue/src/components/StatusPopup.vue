@@ -1,6 +1,5 @@
 <template>
   <q-popup-proxy
-    ref="cropsTableRef"
     class="w-80"
     anchor="bottom middle"
     self="top middle"
@@ -8,7 +7,11 @@
   >
     <!-- fit -->
     <div class="absolute right-0">
-      <button class="text-secondary p-1" v-close-popup @click="removeClicked()">
+      <button
+        class="text-secondary p-1"
+        v-close-popup
+        @click="$emit('removeClicked')"
+      >
         <span
           class="material-icons hover:text-black p-1"
           style="font-size: 20px"
@@ -99,11 +102,9 @@ import type CropsTable from "@/components/CropsTable.vue";
 
 const cropsTableRef = ref<InstanceType<typeof CropsTable> | null>(null);
 
-function removeClicked(): void {
-  console.log("removeClicked");
-  // console.log(cropsTableRef.value?.removeClickedRow());
-  // cropsTableRef.value?.removeClickedRow();
-}
+defineEmits<{
+  (event: "removeClicked"): void;
+}>();
 </script>
 
 <style></style>

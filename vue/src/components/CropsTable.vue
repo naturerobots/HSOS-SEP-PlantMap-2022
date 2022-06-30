@@ -24,7 +24,10 @@
             @mouseleave="rowLeave(props.row.id)"
             @click="rowclicked(props.row.id)"
           >
-            <status-popup></status-popup>
+            <status-popup
+              :props="props"
+              @remove-clicked="rowclicked(props.row.id)"
+            ></status-popup>
             <q-td key="location" :props="props">
               {{ props.row.location }}
             </q-td>
@@ -245,7 +248,6 @@ defineExpose({
   setRowActive,
   setRowInactive,
   setRowClicked,
-  removeClickedRow,
 });
 
 function getRowByCropsId(cropsId: number): HTMLTableRowElement | undefined {
@@ -332,7 +334,7 @@ function rowLeave(cropsId: number): void {
 }
 
 function rowclicked(cropsId: number): void {
-  console.log("rowClicked");
+  console.log("rowClicked " + cropsId);
   // removeClickedRow();
   emit("rowClick", cropsId);
   const row: HTMLTableRowElement | undefined = getRowByCropsId(cropsId);
