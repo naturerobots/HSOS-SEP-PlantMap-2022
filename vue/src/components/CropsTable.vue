@@ -3,7 +3,7 @@
     <div class="overflow-x-auto overflow-y-auto rounded-2xl">
       <q-table
         ref="table"
-        @row-click="rowclicked()"
+        @row-click="rowclicked(0)"
         separator="none"
         class="crops-table no-shadow crops-table-hover"
         :title="title"
@@ -22,7 +22,9 @@
             :key="props.row.id"
             @mouseenter="rowEnter(props.row.id)"
             @mouseleave="rowLeave(props.row.id)"
+            @click="rowclicked(props.row.id)"
           >
+            <status-popup></status-popup>
             <q-td key="location" :props="props">
               {{ props.row.location }}
             </q-td>
@@ -221,6 +223,7 @@ import { storeToRefs } from "pinia";
 import { cropsStore } from "../stores/cropsStore";
 import { ref } from "vue";
 import type { QTable, QTableProps } from "quasar";
+import StatusPopup from "@/components/StatusPopup.vue";
 
 const crops: Ref<Crop[]> = storeToRefs(cropsStore()).getCrops;
 let input = ref("");
@@ -235,11 +238,14 @@ const props = defineProps<{
 const emit = defineEmits<{
   (event: "rowEnter", cropsId: number): void;
   (event: "rowLeave", cropsId: number): void;
+  (event: "rowClick", cropsId: number): void;
 }>();
 
 defineExpose({
   setRowActive,
   setRowInactive,
+  setRowClicked,
+  removeClickedRow,
 });
 
 function getRowByCropsId(cropsId: number): HTMLTableRowElement | undefined {
@@ -257,10 +263,56 @@ function getRowByCropsId(cropsId: number): HTMLTableRowElement | undefined {
   }
 }
 
+function removeClickedRow(): void {
+  console.log("removeClickedRow");
+  const tableValue: any = table.value;
+  const filteredSortedRows = tableValue.filteredSortedRows;
+  if (table.value?.rows?.length) {
+    for (let i = 0; i < table.value.rows.length; i++) {
+      const rowIndex = filteredSortedRows.indexOf(table.value.rows[i]);
+      const row: HTMLTableRowElement = document
+        .getElementsByClassName("q-table")[0]
+        .getElementsByTagName("tr")[rowIndex + 1];
+      if (row.classList != null) {
+        if (row.classList.contains("crops-row-clicked")) {
+          row.classList.remove("crops-row-clicked");
+        }
+      }
+    }
+  }
+}
+
 function setRowActive(cropsId: number): void {
   const row: HTMLTableRowElement | undefined = getRowByCropsId(cropsId);
   if (row) {
     row.classList.add("crops-row-active");
+  }
+}
+
+function setRowClicked(cropsId: number): void {
+  console.log("setRowClicked");
+  const row: HTMLTableRowElement | undefined = getRowByCropsId(cropsId);
+  // if (row) {
+  //   removeClickedRow();
+  //   row.classList.add("crops-row-clicked");
+  //   let element: HTMLElement = document.getElementsByClassName('crops-row-clicked')[0] as HTMLElement;
+  //   element.click();
+  // }
+  if (row) {
+    if (row.classList.contains("crops-row-clicked")) {
+      removeClickedRow();
+      console.log("remove");
+      row.classList.remove("crops-row-clicked");
+      emit("rowClick", cropsId);
+    } else {
+      removeClickedRow();
+      console.log("add");
+      // row.classList.add("crops-row-clicked");
+      let element: HTMLElement = document.getElementsByClassName(
+        "crops-row-active"
+      )[0] as HTMLElement;
+      element.click();
+    }
   }
 }
 
@@ -279,8 +331,22 @@ function rowLeave(cropsId: number): void {
   emit("rowLeave", cropsId);
 }
 
-function rowclicked(): void {
+function rowclicked(cropsId: number): void {
   console.log("rowClicked");
+  // removeClickedRow();
+  emit("rowClick", cropsId);
+  const row: HTMLTableRowElement | undefined = getRowByCropsId(cropsId);
+  if (row) {
+    if (row.classList.contains("crops-row-clicked")) {
+      removeClickedRow();
+      console.log("remove");
+      row.classList.remove("crops-row-clicked");
+    } else {
+      removeClickedRow();
+      console.log("add");
+      row.classList.add("crops-row-clicked");
+    }
+  }
 }
 
 let visCols = ref(props.visibleColumns);

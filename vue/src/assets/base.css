@@ -47,6 +47,11 @@
     /* TODO: discuss color, add to tailwind colors */
   }
 
+  .crops-row-clicked td {
+    background-color: #bbe784 !important;
+    /* TODO: discuss color, add to tailwind colors */
+  }
+
   /* ----------- */
 }
 

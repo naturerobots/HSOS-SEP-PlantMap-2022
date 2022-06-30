@@ -24,7 +24,7 @@ const router = createRouter({
         default: DashboardView,
         sidebar: Sidebar,
       },
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: false },
     },
     {
       path: "/crops",
@@ -33,7 +33,7 @@ const router = createRouter({
         default: CropsView,
         sidebar: Sidebar,
       },
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: false },
     },
     {
       path: "/3d",
@@ -42,7 +42,7 @@ const router = createRouter({
         default: Crops3dView,
         sidebar: Sidebar,
       },
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: false },
     },
     {
       path: "/imageupload",
@@ -52,7 +52,7 @@ const router = createRouter({
         sidebar: Sidebar,
       },
       props: true,
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: false },
     },
     {
       path: "/cropimage",
@@ -61,7 +61,7 @@ const router = createRouter({
         default: CropImageView,
         sidebar: Sidebar,
       },
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: false },
     },
     {
       path: "/weathercharts",
@@ -70,7 +70,7 @@ const router = createRouter({
         default: WeatherCharts,
         sidebar: Sidebar,
       },
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: false },
     },
     {
       path: "/login",
