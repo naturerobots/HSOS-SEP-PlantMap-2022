@@ -34,9 +34,3 @@ markdown_extensions:
       permalink: "#"
   - pymdownx.striphtml:
       strip_comments: true #default
-  # TODO: Add mermaid for graphs?
-  #- pymdownx.superfences:
-  #    custom_fences:
-  #      - name: mermaid
-  #        class: mermaid
-  #        format: !!python/name:pymdownx.superfences.fence_code_format

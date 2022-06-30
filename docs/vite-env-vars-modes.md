@@ -38,7 +38,7 @@ make run-frontend-prod
 ```
 
 !!! danger
-    **❗ Do not store sensitive information in `.env` files. ❗**
+    **❗ Do not store sensitive information in `.env` files. ❗**  
     Sensitive variables can be stored in `.env.*.local` files by adding it to your .gitignore to avoid them being
     checked into git.
 
@@ -88,8 +88,6 @@ interface ImportMetaEnv {
   readonly VITE_TOKEN_OWM: string;
 }
 ```
-
-<!--FIXME: MD046 can be ignored, but maybe add markdownlint config for that?-->
 
 ??? Bug
     The type of `VITE_AUTH_REQUIRED` should be a boolean, but if the type is set to boolean,
