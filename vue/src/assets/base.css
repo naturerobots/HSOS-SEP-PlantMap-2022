@@ -76,7 +76,7 @@ body,
 }
 
 .card {
-  @apply rounded-2xl overflow-x-auto overflow-y-auto p-4 shadow-card;
+  @apply rounded-2xl overflow-x-auto overflow-y-auto p-4 shadow-card h-full;
 }
 
 .card-map {

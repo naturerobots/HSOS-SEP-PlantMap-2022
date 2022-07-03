@@ -5,25 +5,13 @@
     :storeOptions="storeOptions"
   >
     <div
-      class="grow grid grid-cols-3 gap-4 place-items-stretch p-6 w-full h-fit"
+      class="p-6 dashboard-grid"
+      :class="{ 'grid-flow-row': !gardenMapComputed }"
     >
-      <div v-if="storeOptions.indexOf('weather') > -1">
+      <div v-if="weatherComputed">
         <weather-comp></weather-comp>
       </div>
-      <div
-        v-if="storeOptions.indexOf('garden-map') > -1"
-        class="col-span-2 row-span-2"
-      >
-        <div class="h-full">
-          <garden-map
-            ref="gardenMapRef"
-            :sensors="sensors"
-            @sensor-enter="mapSensorEnter"
-            @sensor-leave="mapSensorLeave"
-          ></garden-map>
-        </div>
-      </div>
-      <div v-if="storeOptions.indexOf('soil-parameter') > -1">
+      <div v-if="soilParameterComputed">
         <sensor-comp
           ref="sensorCompRef"
           :sensors="sensors"
@@ -32,12 +20,21 @@
         >
         </sensor-comp>
       </div>
+      <div v-if="gardenMapComputed" class="row-span-2 col-span-2">
+        <garden-map
+          ref="gardenMapRef"
+          :sensors="sensors"
+          @sensor-enter="mapSensorEnter"
+          @sensor-leave="mapSensorLeave"
+        >
+        </garden-map>
+      </div>
     </div>
   </base-layout>
 </template>
 
 <script setup lang="ts">
-import { ref, type Ref } from "vue";
+import { ref, computed, type Ref } from "vue";
 import { storeToRefs } from "pinia";
 import { sensorStore } from "@/stores/sensorStore";
 import { userStore } from "@/stores/userStore";
@@ -63,6 +60,16 @@ const widgetOptionsDashboard: WidgetOption[] = [
   widgetOptions.notification,
 ];
 
+const weatherComputed = computed(
+  () => storeOptions.value.indexOf("weather") > -1
+);
+const soilParameterComputed = computed(
+  () => storeOptions.value.indexOf("soil-parameter") > -1
+);
+const gardenMapComputed = computed(
+  () => storeOptions.value.indexOf("garden-map") > -1
+);
+
 // Sensor - Map interaction
 function mapSensorEnter(sensorId: number): void {
   sensorCompRef.value?.setRowActive(sensorId);
@@ -80,3 +87,31 @@ function tableSensorLeave(sensorId: number): void {
   gardenMapRef.value?.setMarkerInactive(sensorId);
 }
 </script>
+
+<style>
+.dashboard-grid {
+  display: grid;
+  gap: 1.5rem;
+
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(calc(100% / 2 - 1.5rem), 1fr)
+  );
+  grid-template-rows: repeat(auto-fill, minmax(calc(100% / 2 - 1.5rem), 1fr));
+
+  grid-auto-flow: row;
+
+  height: 100%;
+}
+
+@media screen and (min-width: 1350px) {
+  .dashboard-grid {
+    grid-auto-flow: column;
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(calc(100% / 3 - 1.5rem), 1fr)
+    );
+    grid-template-rows: repeat(auto-fill, minmax(calc(100% / 2 - 1.5rem), 1fr));
+  }
+}
+</style>

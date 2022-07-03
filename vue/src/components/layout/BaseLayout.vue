@@ -4,7 +4,7 @@
       <sidebar></sidebar>
     </div>
     <div class="grow order-1">
-      <div class="flex flex-col h-full" style="flex-wrap: nowrap">
+      <div class="flex flex-col h-auto base-layout" style="flex-wrap: nowrap">
         <header-bar
           :title="title"
           :widgetOptions="widgetOptions"
@@ -28,3 +28,11 @@ defineProps<{
   title: string;
 }>();
 </script>
+
+<style>
+@media screen and (min-width: 1350px) {
+  .base-layout {
+    @apply h-full !important;
+  }
+}
+</style>
