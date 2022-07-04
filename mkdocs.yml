@@ -9,6 +9,7 @@ nav:
   - Reference:
       - Definitions: definitions.md
       - Authentication: authentication.md
+      - Vite Env Variables and Modes: vite-env-vars-modes.md
 theme:
   name: material
   language: en
@@ -24,8 +25,13 @@ extra_css:
   - stylesheets/extra.css
 markdown_extensions:
   - admonition
+  - pymdownx.details
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.superfences
   - meta
   - attr_list
+  - toc:
+      permalink: "#"
+  - pymdownx.striphtml:
+      strip_comments: true #default
