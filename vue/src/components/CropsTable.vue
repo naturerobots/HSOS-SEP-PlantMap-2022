@@ -10,7 +10,7 @@
         :rows="crops"
         :columns="columns"
         no-data-label="I didn't find anything for you"
-        row-key="name"
+        row-key="id"
         :filter="input"
         :visible-columns="visCols"
         :pagination="pagination()"
