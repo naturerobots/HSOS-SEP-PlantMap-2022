@@ -20,7 +20,8 @@
     "quasar": "^2.7.1",
     "vue-advanced-cropper": "^2.8.1",
     "vue-chartjs": "^4.1.1",
-    "vue-router": "^4.0.15"
+    "vue-router": "^4.0.15",
+    "three": "^0.131.3"
   },
   "devDependencies": {
     "@quasar/vite-plugin": "^1.0.10",
