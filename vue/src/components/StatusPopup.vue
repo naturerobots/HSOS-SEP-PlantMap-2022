@@ -1,110 +1,93 @@
 <template>
-  <q-popup-proxy
-    class="w-80"
-    anchor="bottom middle"
-    self="top middle"
+  <q-tooltip
+    class="w-60 bg-white card"
     style="border-radius: 1rem"
+    :delay="500"
   >
     <!-- fit -->
-    <div class="absolute right-0">
-      <button
-        class="text-secondary p-1"
-        v-close-popup
-        @click="$emit('removeClicked')"
+    <div class="p-2">
+      <div class="font-bold text-[#707070] text-sm mb-2">Health:</div>
+      <!-- <p> -->
+      <q-badge
+        text-color="black"
+        :class="{
+          'bg-blue': health.loglevel === 0,
+          'bg-green': health.loglevel === 1,
+          'bg-warning': health.loglevel === 2,
+          'bg-red': health.loglevel === 3,
+        }"
       >
-        <span
-          class="material-icons hover:text-black p-1"
-          style="font-size: 20px"
-          >close</span
+        <div class="font-bold">{{ health.type }}</div>
+      </q-badge>
+      <div>
+        <div
+          class="font-bold text-sm mt-2"
+          :class="{
+            'text-blue': health.loglevel === 0,
+            'text-green': health.loglevel === 1,
+            'text-warning': health.loglevel === 2,
+            'text-red': health.loglevel === 3,
+          }"
         >
-      </button>
-      <!-- <q-btn class="text-secondary" flat icon="close" v-close-popup/> -->
-    </div>
-    <div class="p-4 grid grid-cols-3 grid-flow-row auto-rows-max">
-      <div class="grid-span-1">
-        <div class="font-bold text-[#707070]">Status:</div>
-        <div class="font-bold text-lg">Sprout</div>
-      </div>
-      <div class="grid-span-2">
-        <div class="font-bold text-[#707070]">Health:</div>
-        <div>
-          <p>
-            <!-- <q-badge class="bg-warning" text-color="black"> -->
-            <!-- <div class="font-bold">Disease Detection</div> -->
-            <!-- </q-badge> -->
-            <q-expansion-item
-              class="shadow-1 overflow-hidden mt-3"
-              label="Disease Detection"
-              dense
-              style="width: 193px; border-radius: 0.25rem"
-              header-class="bg-warning font-bold text-sm p-0"
-              group="health"
-            >
-              <div class="px-4 p-2">
-                <div class="text-warning font-bold text-sm">2: Attention</div>
-                <div class="font-bold text-sm">
-                  A desease has been detected in your lettuce.
-                </div>
-              </div>
-            </q-expansion-item>
-          </p>
-          <p>
-            <!-- <q-badge class="bg-red" text-color="black">
-                            <div class="font-bold">Nutrient Deficiency</div>
-                        </q-badge> -->
-            <q-expansion-item
-              class="shadow-1 overflow-hidden mt-3"
-              label="Nutrient Deficiency"
-              dense
-              style="width: 193px; border-radius: 0.25rem"
-              header-class="bg-red font-bold text-sm p-0"
-              group="health"
-            >
-              <div class="px-4 p-2">
-                <div class="text-red font-bold text-sm">3: Warning</div>
-
-                <div class="font-bold text-sm">
-                  Action required, a nutrient deficiency has been detected in
-                  your lettuce.
-                </div>
-              </div>
-            </q-expansion-item>
-          </p>
-          <p>
-            <!-- <q-badge class="bg-green" text-color="black">
-                            <div class="font-bold">Watering</div>
-                        </q-badge> -->
-            <q-expansion-item
-              class="shadow-1 overflow-hidden mt-3"
-              label="Watering"
-              dense
-              style="width: 193px; border-radius: 0.25rem"
-              header-class="bg-green font-bold text-sm p-0"
-              group="health"
-            >
-              <div class="px-4 p-2">
-                <div class="text-green font-bold text-sm"></div>
-                <div class="font-bold text-sm">
-                  Your lettuce is perfectly watered.
-                </div>
-              </div>
-            </q-expansion-item>
-          </p>
+          {{ health.loglevel }}: {{ infoLoglevel[health.loglevel] }}
+        </div>
+        <div class="font-bold text-black text-sm">
+          <div v-if="health.shortcut === 'W'">
+            {{ infoWatering[health.loglevel] }} {{ plant }}.
+          </div>
+          <div v-else-if="health.shortcut === 'N'">
+            {{ infoNutrient[health.loglevel] }} {{ plant }}.
+          </div>
+          <div v-else-if="health.shortcut === 'D'">
+            {{ infoDisease[health.loglevel] }} {{ plant }}.
+          </div>
         </div>
       </div>
+      <!-- </p> -->
     </div>
-  </q-popup-proxy>
+  </q-tooltip>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
 import type CropsTable from "@/components/CropsTable.vue";
+import type { Health } from "@/types/health";
 
 const cropsTableRef = ref<InstanceType<typeof CropsTable> | null>(null);
+
+const props = defineProps<{
+  health: Health;
+  plant: string;
+}>();
 
 defineEmits<{
   (event: "removeClicked"): void;
 }>();
+
+const infoLoglevel: string[] = ["N/A", "OK", "Warning", "Attention"];
+const infoNotAvailable =
+  "The health state is not available at the moment for your";
+
+const infoNutrient: string[] = [
+  infoNotAvailable,
+  "No nutrient deficiency has been detected in your",
+  "A nutrient deficiency has been detected in your",
+  "Action required, a nutrient deficiency has been detected in your",
+];
+
+const infoDisease: string[] = [
+  infoNotAvailable,
+  "No disease has been detected in your",
+  "A disease has been detected in your",
+  "Action required, a disease has been detected in your",
+];
+
+const infoWatering: string[] = [
+  infoNotAvailable,
+  "No lack of water has been detected in your",
+  "A lack of water has been detected in your",
+  "Action required, a lack of water has been detected in your",
+];
 </script>
 
 <style></style>

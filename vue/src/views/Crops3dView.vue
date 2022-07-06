@@ -43,7 +43,7 @@ import {
 import HeaderBar from "@/components/header/HeaderBar.vue";
 import CropsTable from "../components/CropsTable.vue";
 import CropsMap from "@/components/CropsMap.vue";
-import type { Crop } from "@/types/crop";
+import type { Bed } from "@/types/crop";
 
 const storeOptions: Ref<StoreOption[]> = storeToRefs(userStore()).getOptions;
 const widgetOptions3D: WidgetOption[] = [
@@ -53,7 +53,7 @@ const widgetOptions3D: WidgetOption[] = [
 
 let columns: string[] = ["id", "plant", "location"];
 
-const crops: Ref<Crop[]> = storeToRefs(cropsStore()).getCrops;
+const crops: Ref<Bed[]> = storeToRefs(cropsStore()).getCrops;
 const cropsMapRef = ref<InstanceType<typeof CropsMap> | null>(null);
 const cropsTableRef = ref<InstanceType<typeof CropsTable> | null>(null);
 

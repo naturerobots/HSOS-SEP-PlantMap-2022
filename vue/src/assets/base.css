@@ -201,6 +201,7 @@ tbody tr:nth-child(even) {
 }
 
 .crops-table thead tr th {
+  @apply uppercase font-bold;
   position: sticky;
   z-index: 1;
   font-weight: bold;
