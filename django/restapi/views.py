@@ -3,6 +3,7 @@ import string
 import sys
 
 from . import tasks
+from .forms import *
 
 # there is definitly a better way to add an import path
 sys.path.append(r'../build/gRPC/')
@@ -10,10 +11,15 @@ sys.path.append(r'../build/gRPC/')
 import logging
 
 import grpc
+import label_service_pb2_grpc as labelService
+import measurement_service_pb2_grpc as measurementService
 import meta_operations_service_pb2_grpc as metaOperations
+from class_query_pb2 import ClassQuery
+from geometry_query_pb2 import GeometryQuery
 from google.protobuf import empty_pb2
 from google.protobuf.json_format import MessageToDict
 from knox.views import LoginView as KnoxLoginView
+from measurement_pb2 import Measurement
 from project_query_pb2 import ProjectQuery
 from rest_framework import permissions, status
 from rest_framework.authtoken.serializers import AuthTokenSerializer
@@ -23,6 +29,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from django.contrib.auth import login
+from django.contrib.auth.models import User
 from django.db.models import ObjectDoesNotExist
 from django.http import *
 from django.template import loader
@@ -36,7 +43,8 @@ options = [('grpc.max_receive_message_length', 100 * 1024 * 1024)]  # https://gi
 channel = grpc.insecure_channel(SERVER_URL, options=options)
 
 stub = metaOperations.MetaOperationsStub(channel)
-
+stubLabel = labelService.LabelServiceStub(channel)
+stubMeasurement = measurementService.MeasurementServiceStub(channel)
 
 # /login
 class LoginView(KnoxLoginView):
@@ -67,46 +75,121 @@ class RegisterView(KnoxLoginView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# /users/{user-id}
+# /user
 @api_view(['GET'])
-def getUser(request, user_id: int):
-    return JsonResponse({})
+def getUser(request):
+
+    serializer = UserSerializer(request.user)
+    return JsonResponse(serializer.data, safe=False)
+
+
+# /companies
+@api_view(['GET'])
+def getCompanies(request):
+
+    # Check if authenticated user is allowed to request company_id, garden_id
+
+    try:
+        companies = Company.objects.filter(user=request.user)
+    except:
+        # Company with id company_id not found in database or does not belong to the user requesting it
+        return HttpResponseNotFound()
+
+    serializer = CompanySerializer(companies, many=True)
+    return JsonResponse(serializer.data, safe=False)
 
 
 # /companies/{company_id}
 @api_view(['GET'])
 def getCompany(request, company_id: int):
-    company = Company.objects.filter(id=company_id)
-    serializer = CompanySerializer(company, many=True)
+
+    # Check if authenticated user is allowed to request company_id, garden_id
+
+    try:
+        company = Company.objects.get(id=company_id, user=request.user)
+    except:
+        # Company with id company_id not found in database or does not belong to the user requesting it
+        return HttpResponseNotFound()
+
+    serializer = CompanySerializer(company)
     return JsonResponse(serializer.data, safe=False)
 
 
 # /companies/{company_id}/gardens
 @api_view(['GET'])
 def getGardens(request, company_id: int):
-    garden = Garden.objects.filter(company=company_id)
-    serializer = GardenSerializer(garden, many=True)
+
+    # Check if authenticated user is allowed to request company_id, garden_id
+
+    try:
+        company = Company.objects.get(id=company_id, user=request.user)
+    except:
+        # Company with id company_id not found in database or does not belong to the user requesting it
+        return HttpResponseNotFound()
+
+    gardens = Garden.objects.filter(company=company)
+    serializer = GardenSerializer(gardens, many=True)
     return JsonResponse(serializer.data, safe=False)
 
 
 # /companies/{company_id}/gardens/{garden_id}
 @api_view(['GET'])
 def getGarden(request, company_id: int, garden_id: int):
-    garden = Garden.objects.filter(id=garden_id, company=company_id)
-    serializer = GardenSerializer(garden, many=True)
+
+    # Check if authenticated user is allowed to request company_id, garden_id
+
+    try:
+        company = Company.objects.get(id=company_id, user=request.user)
+    except:
+        # Company with id company_id not found in database or does not belong to the user requesting it
+        return HttpResponseNotFound()
+
+    try:
+        garden = Garden.objects.get(id=garden_id, company=company)
+    except:
+        # Garden with id garden_id not found in database or does not belong to the company
+        return HttpResponseNotFound()
+
+    serializer = GardenSerializer(garden)
     return JsonResponse(serializer.data, safe=False)
 
 
 # /companies/{company_id}/gardens/{garden_id}/image
 @api_view(['GET', 'POST'])
 def gardenImage(request, company_id: int, garden_id: int):
-    if request.method == 'GET':
-        template = loader.get_template('restapi/image.html')
-        context = {}
-        return HttpResponse(template.render(context, request))
 
-    elif request == 'POST':
-        return JsonResponse({})
+    # Check if authenticated user is allowed to request company_id, garden_id
+
+    try:
+        company = Company.objects.get(id=company_id, user=request.user)
+    except:
+        # Company with id company_id not found in database or does not belong to the user requesting it
+        return HttpResponseNotFound()
+
+    try:
+        garden = Garden.objects.get(id=garden_id, company=company)
+    except:
+        # Garden with id garden_id not found in database or does not belong to the company
+        return HttpResponseNotFound()
+
+    if request.method == 'GET':
+        return HttpResponseRedirect(garden.image.url)
+
+    # Example request with curl:
+    # curl --form image='@/home/user/image.png' http://localhost:8000/companies/1/gardens/1/image
+    #  -H "Authorization: Token 7182c8ddc808ac13d6befd1791816aabb66a6048048861720603c431b9589d7c"
+    elif request.method == 'POST':
+        gardenForm = GardenForm(request.POST, request.FILES)
+
+        if gardenForm.is_valid():
+
+            # Delete previous garden image if it exists
+            if garden.image:
+                garden.image.delete(save=True)
+
+            garden.image = gardenForm.cleaned_data['image']
+            garden.save()
+            return JsonResponse({"success": "true"})
 
     return JsonResponse({})
 
@@ -114,7 +197,175 @@ def gardenImage(request, company_id: int, garden_id: int):
 # /companies/{company_id}/gardens/{garden_id}/beds
 @api_view(['GET'])
 def getBeds(request, company_id: int, garden_id: int):
-    return JsonResponse({})
+
+    # Check if authenticated user is allowed to request company_id, garden_id
+
+    try:
+        company = Company.objects.get(id=company_id, user=request.user)
+    except:
+        # Company with id company_id not found in database or does not belong to the user requesting it
+        return HttpResponseNotFound()
+
+    try:
+        garden = Garden.objects.get(id=garden_id, company=company)
+    except:
+        # Garden with id garden_id not found in database or does not belong to the company
+        return HttpResponseNotFound()
+
+    # Get all beds of the garden
+    beds = Bed.objects.filter(garden=garden)
+
+    # Get bed data from SEEREP over gRPC
+    bedsData = []
+    for bed in beds:
+        try:
+            bedData = stub.GetProjectDetails(ProjectQuery(projectuuid=bed.uuid))
+            bedsData.append(MessageToDict(bedData))
+        except:
+            return JsonResponse({})
+
+    return JsonResponse(bedsData, safe=False)
+
+
+# /companies/{company_id}/gardens/{garden_id}/beds/{bed_id}/crops
+@api_view(['GET'])
+def getCrops(request, company_id: int, garden_id: int, bed_id: int):
+
+    # Check if authenticated user is allowed to request company_id, garden_id, bed_id
+
+    try:
+        company = Company.objects.get(id=company_id, user=request.user)
+    except:
+        # Company with id company_id not found in database or does not belong to the user requesting it
+        return HttpResponseNotFound()
+
+    try:
+        garden = Garden.objects.get(id=garden_id, company=company)
+    except:
+        # Garden with id garden_id not found in database or does not belong to the company
+        return HttpResponseNotFound()
+
+    try:
+        bed = Bed.objects.get(id=bed_id, garden=garden)
+    except:
+        # Bed with id bed_id not found in database or does not belong to the garden
+        return HttpResponseNotFound()
+
+    # Get bed data from SEEREP over gRPC
+
+    try:
+        bedData = stub.GetProjectDetails(ProjectQuery(projectuuid=bed.uuid))
+    except:
+        return JsonResponse({})
+
+    bedDataDict = MessageToDict(bedData)
+
+    # Seperate pointcloud and measurement geometries:
+    # - Every crop has one pointcloud geometry and one measurement geometry
+    # - cropsPointclouds(1) and cropsMeasurements(1) refer to the same crop
+
+    cropsPointclouds = []
+    cropsMeasurements = []
+
+    for crop in bedDataDict['geometries']:
+
+        if crop['type'] == "pointcloud":
+            cropsPointclouds.append(crop)
+
+        elif crop['type'] == "measurement":
+            cropsMeasurements.append(crop)
+
+    # Get instances and classes of cropsPointclouds from SEEREP over gRPC
+
+    # instances = []
+    classes = []
+
+    classUUIDsRequested = []
+
+    for crop in cropsPointclouds:
+        # instanceLabel = crop['labels'][0]
+        classLabel = crop['labels'][1]
+
+        # Skip gRPC request if class was already requested once
+        if classUUIDsRequested.__contains__(bed.uuid):
+            classes.append(classes[len(classes) - 1])
+            continue
+
+        try:
+            classData = stubLabel.GetClass(ClassQuery(projectuuid=bed.uuid, classuuid=classLabel))
+            classUUIDsRequested.append(bed.uuid)
+        except:
+            return JsonResponse({})
+
+        classes.append(MessageToDict(classData))
+
+    # Get measurements of cropsMeasurements from SEEREP over gRPC
+
+    measurements = []
+
+    for crop in cropsMeasurements:
+
+        try:
+            measurementData = stubMeasurement.GetMeasurementByUUID(
+                GeometryQuery(projectuuid=bed.uuid, geometryuuid=crop['uuid'])
+            )
+        except:
+            return JsonResponse({})
+
+        measurements.append(MessageToDict(measurementData))
+
+    # Collect and put together all needed data over a single crop
+
+    crops = []
+
+    for i in range(len(cropsPointclouds) - 1):
+
+        plantName = cropsPointclouds[i]['name']
+        variety = "N/A"
+        location = bed_id
+        soilHumidity = 0
+        health = "N/A"
+        healthLoglevel = 0
+        status = "N/A"
+        harvest = 0
+        approxYield = 0
+
+        try:
+            variety = classes[i]['attributes']['variety']['stringData']
+        except:
+            pass
+
+        try:
+            # Expects geometry "ground" to be at the last position in "measurements" and that every
+            # crop in the current bed is planted on "ground"
+            soilHumidity = measurements[len(measurements) - 1]['data']['humidity']['doubleData']
+        except:
+            pass
+
+        try:
+            health = measurements[i]['data']['warn_msg']['stringData']
+            healthLoglevel = int(measurements[i]['data']['warn_level']['int64Data'])
+            status = measurements[i]['data']['status']['stringData']
+            harvest = measurements[i]['data']['growth_state']['doubleData']
+            approxYield = int(measurements[i]['data']['approx_yield']['int64Data'])
+        except:
+            pass
+
+        crops.append(
+            {
+                'plant': plantName,
+                'variety': variety,
+                'location': location,
+                'soil_humidity': soilHumidity,
+                'health': health,
+                'health_loglevel': healthLoglevel,
+                'status': status,
+                'harvest': harvest,
+                'yield': approxYield,
+            }
+        )
+
+    return JsonResponse(crops, safe=False)
 
 
 # /companies/{company_id}/gardens/{garden_id}/beds/{bed_id}/sensors
@@ -129,96 +380,9 @@ def getSensor(request, company_id: int, garden_id: int, bed_id: int, sensor_id: 
     return JsonResponse({})
 
 
-# /companies/{company_id}/gardens/{garden_id}/beds/{bed_id}/plants
+# companies/{company_id}/gardens/{garden_id}/beds/{bed_id}/3d
 @api_view(['GET'])
-def getPlants(request, company_id: int, garden_id: int, bed_id: int):
-    # garden = Garden.objects.filter(id=garden_id, company=company_id)
-    # if not garden:
-    #     return JsonResponse({})
-    # beds = Bed.objects.filter(garden=garden[0].id)
-    # serializer = BedSerializer(beds, many=True)
-
-    # response = stub.GetProjectDetails(ProjectQuery(projectuuid=uuid))
-    # return Response(MessageToDict(response))
-
-    # Dummy-data!
-    return JsonResponse(
-        {
-            'plants': [
-                {
-                    'plant': 'Mangold',  # Plant name
-                    'variety': 'Mangold',  # Plant variety
-                    'location': 1,  # Bed/Row number
-                    'soil_humidity': 65,  # Soil humidity for plant area in %
-                    'health': 'N/A',  # Health statuses: 'N/A', 'Disease Detection', 'Nutrient Deficiency', 'Watering', 'Good'
-                    'health_loglevel': 1,  # Importance of health status: 1 (Info), 2 (Attention), 3 (Warning)
-                    'status': 'Sprout',  # Plant growth statuses: 'Sprout', 'Seedling', 'Vegetating', 'Budding', 'Flowering', 'Ripening'
-                    'harvest': 150,  # Time until harvesting in days (0 = harvest today)
-                    'yield': 100,  # 0 = N/A
-                },
-                {
-                    'plant': 'Beans',
-                    'variety': 'Beans',
-                    'location': 1,
-                    'soil_humidity': 65,
-                    'health': 'Good',
-                    'health_loglevel': 1,  # Importance of health status: 1 (Info), 2 (Attention), 3 (Warning)
-                    'status': 'Seedling',
-                    'harvest': 120,
-                    'yield': 243,
-                },
-                {
-                    'plant': 'Chicory',
-                    'variety': 'Chicory',
-                    'location': 1,
-                    'soil_humidity': 65,
-                    'health': 'Watering',
-                    'health_loglevel': 2,
-                    'status': 'Vegetating',
-                    'harvest': 90,
-                    'yield': 222,
-                },
-                {
-                    'plant': 'Courgette',
-                    'variety': 'Courgette',
-                    'location': 1,
-                    'soil_humidity': 65,
-                    'health': 'Nutrient Deficiency',
-                    'health_loglevel': 2,
-                    'status': 'Budding',
-                    'harvest': 60,
-                    'yield': 540,
-                },
-                {
-                    'plant': 'Pumpkin',
-                    'variety': 'Pumpkin',
-                    'location': 1,
-                    'soil_humidity': 65,
-                    'health': 'Disease Detection',
-                    'health_loglevel': 3,
-                    'status': 'Flowering',
-                    'harvest': 30,
-                    'yield': 140,
-                },
-                {
-                    'plant': 'Spinach',
-                    'variety': 'Spinach',
-                    'location': 1,
-                    'soil_humidity': 65,
-                    'health': 'Good',
-                    'health_loglevel': 1,
-                    'status': 'Ripening',
-                    'harvest': 10,
-                    'yield': 200,
-                },
-            ]
-        }
-    )
-
-
-# companies/{company_id}/gardens/{garden_id}/beds/{bed_id}/plants/{plant_id}/3d
-@api_view(['GET'])
-def getPlant3DImage(request, company_id: int, garden_id: int, bed_id: int, plant_id: int):
+def getBed3DImage(request, company_id: int, garden_id: int, bed_id: int):
     return JsonResponse({})
 
 

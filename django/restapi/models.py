@@ -1,3 +1,6 @@
+import os
+from uuid import uuid4
+
 from rest_framework import serializers
 
 from django.contrib.auth.models import User
@@ -43,10 +46,20 @@ class CompanySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+# Creates random filenames for garden images
+def path_and_rename(path):
+    def wrapper(instance, filename):
+        ext = filename.split('.')[-1]
+        filename = '{}.{}'.format(uuid4().hex, ext)
+        return os.path.join(path, filename)
+
+    return wrapper
+
+
 class Garden(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=32, null=True)
-    image = models.ImageField(upload_to='images/', null=True)
+    image = models.ImageField(upload_to=path_and_rename('garden-images'), null=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
 
     class Meta:
