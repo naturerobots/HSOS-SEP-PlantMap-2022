@@ -17,38 +17,40 @@ const size = {
   height: 300, // window.innerHeight
 };
 
-var renderer: any;
-var camera: any;
-var scene: any;
-var mesh: any;
+var renderer: THREE.WebGLRenderer;
+var camera: THREE.PerspectiveCamera;
+var scene: THREE.Scene;
+var mesh: THREE.Mesh;
 
 onMounted(() => {
-  var canvas: any = document.querySelector("#three-scene-canvas");
+  var canvasScene: Element | null = document.querySelector(
+    "#three-scene-canvas"
+  );
 
-  renderer = new THREE.WebGLRenderer(canvas);
+  renderer = new THREE.WebGLRenderer();
 
   camera = new THREE.PerspectiveCamera(70, size.width / size.height, 0.01, 10);
   camera.position.z = 1;
 
-  var controls: any = new OrbitControls(camera, renderer.domElement);
+  var controls: OrbitControls = new OrbitControls(camera, renderer.domElement);
   controls.enableZoom = false;
 
   scene = new THREE.Scene();
 
-  var geometry: any = new THREE.BoxGeometry(0.2, 0.2, 0.2);
-  var material: any = new THREE.MeshNormalMaterial();
+  var geometry: THREE.BoxGeometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+  var material: THREE.MeshNormalMaterial = new THREE.MeshNormalMaterial();
 
   mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);
 
   renderer.setSize(size.width, size.height);
-  renderer.setAnimationLoop(animation);
-  canvas.appendChild(renderer.domElement);
+  renderer.setAnimationLoop(animationCallback);
+  canvasScene?.appendChild(renderer.domElement);
 });
 
-function animation(time: any): void {
+let animationCallback = (time: number): void => {
   mesh.rotation.x = time / 2000;
   mesh.rotation.y = time / 1000;
   renderer.render(scene, camera);
-}
+};
 </script>

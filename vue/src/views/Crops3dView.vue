@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import CropScene from "@/components/3d/CropScene.vue";
+import CropScene from "@/components/three-scenes/CropScene.vue";
 import { type Ref, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { cropsStore } from "@/stores/cropsStore";
