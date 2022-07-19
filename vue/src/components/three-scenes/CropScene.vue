@@ -7,12 +7,10 @@
 <script setup lang="ts">
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { PLYLoader } from "three/examples/jsm/loaders/PLYLoader.js";
-//import { PLYLoader } from "@/components/three-scenes/CustomPlyLoader.js";
-//import * as PLYLoader from "@/components/three-scenes/CustomPlyLoader.js";
+//import { PLYLoader } from "three/examples/jsm/loaders/PLYLoader.js";
+//import { CustomPLYLoader } from "@/components/three-scenes/CustomPlyLoader.js";
+import { CustomPLYLoader } from "./CustomPlyLoader.ts";
 import { onMounted } from "vue";
-
-//let PLYLoader = require("@/components/three-scenes/CustomPlyLoader.js");
 
 // 'http://localhost:8000/media/pointclouds/ply/e1ef73b1258b475a996d2b72924c27ac/0bf37a0851b7402d88674e153f58e6f8.ply'
 // https://pointly.medium.com/how-to-convert-ply-files-to-las-laz-d4100ef3625a
@@ -60,7 +58,9 @@ onMounted(() => {
   spotLight.position.set(20, 20, 20);
   scene.add(spotLight);
 
-  var loader = new PLYLoader();
+  //var loader = new PLYLoader();
+
+  var loader = new CustomPLYLoader();
 
   loader.setPropertyNameMapping({
     r: "red",
@@ -117,7 +117,7 @@ onMounted(() => {
 
   plys.forEach((ply) => {
     //let path = 'http://localhost:8000/media/pointclouds/ply/e1ef73b1258b475a996d2b72924c27ac/0bf37a0851b7402d88674e153f58e6f8.ply';
-    loader.load(ply, function (geometry) {
+    loader.load(ply, function (geometry: any) {
       //geometry.computeVertexNormals();
 
       console.log("geometry", geometry);
@@ -172,7 +172,8 @@ onMounted(() => {
   renderer.setAnimationLoop(animationCallback);
   canvasScene?.appendChild(renderer.domElement);
 
-  renderer.setClearColor(0xff0000, 1);
+  // set backgroud color red
+  //renderer.setClearColor(0xff0000, 1);
 });
 
 let animationCallback = (time: number): void => {
