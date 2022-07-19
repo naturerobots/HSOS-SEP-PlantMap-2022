@@ -63,7 +63,7 @@ class RegisterView(KnoxLoginView):
     permission_classes = (permissions.AllowAny,)
 
     def post(self, request, format=None):
-        serializer = CreateUserSerializer(data=request.data)
+        serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             authserializer = AuthTokenSerializer(data=request.data)
