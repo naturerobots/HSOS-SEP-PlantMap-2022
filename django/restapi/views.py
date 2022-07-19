@@ -387,6 +387,7 @@ def getBed3DImage(request, company_id: int, garden_id: int, bed_id: int):
 
 
 @api_view(['POST'])
+@permission_classes([AllowAny])  # Turn off authentication FOR TESTING ONLY
 def make_task(request, uuid: string) -> Response:
     if request.method == 'POST':
         logger.info("views.py make_task POST")

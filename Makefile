@@ -8,7 +8,7 @@ migrate:
 	@cd django && python3 manage.py migrate
 
 demo-post:
-	@curl -X POST http://localhost:8000/e1ef73b1258b475a996d2b72924c27ac/task
+	@curl -X POST http://localhost:8000/beds/e1ef73b1258b475a996d2b72924c27ac/task
 
 run-frontend:
 	@cd vue && npm run dev
