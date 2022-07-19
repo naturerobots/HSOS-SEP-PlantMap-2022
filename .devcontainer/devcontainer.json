@@ -19,7 +19,8 @@
     "vue.vscode-typescript-vue-plugin",
     "davidanson.vscode-markdownlint",
     "gruntfuggly.todo-tree",
-    "yzhang.markdown-all-in-one"
+    "yzhang.markdown-all-in-one",
+    "streetsidesoftware.code-spell-checker"
   ],
   "workspaceFolder": "/workdir",
   "postStartCommand": ".devcontainer/post-create-setup.sh"
