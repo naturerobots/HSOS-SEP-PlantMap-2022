@@ -16,19 +16,21 @@
       >
         <div class="grid grid-cols-4 gap-4 place-items-stretch">
           <div class="col-span-4 space-y-2">
-            <label class="font-bold text-black"> Last Name </label>
-            <input
-              class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-              type="text"
-              placeholder="Enter Last Name"
-            />
-          </div>
-          <div class="col-span-4 space-y-2">
             <label class="font-bold text-black"> First Name </label>
             <input
+              v-model="firstname"
               class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
               type="text"
               placeholder="Enter First Name"
+            />
+          </div>
+          <div class="col-span-4 space-y-2">
+            <label class="font-bold text-black"> Last Name </label>
+            <input
+              v-model="lastname"
+              class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+              type="text"
+              placeholder="Enter Last Name"
             />
           </div>
           <div class="col-span-4 space-y-2 pt-3">
@@ -64,6 +66,7 @@
           <div class="col-span-4 space-y-2">
             <label class="font-bold text-black"> Email </label>
             <input
+              v-model="email"
               class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
               type="email"
               placeholder="Enter Email Address"
@@ -72,6 +75,7 @@
           <div class="col-span-4 space-y-2">
             <label class="font-bold text-black"> Password </label>
             <input
+              v-model="password"
               class="w-full content-center text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
               type="text"
               placeholder="Enter Password"
@@ -80,6 +84,7 @@
           <div class="col-span-4 space-y-2">
             <label class="font-bold text-black"> Repeat Password </label>
             <input
+              v-model="passwordRepeat"
               class="w-full content-center text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
               type="text"
               placeholder="Repeat Password"
@@ -150,7 +155,7 @@
           </div>
           <div class="col-span-4 space-y-2 pt-3">
             <button
-              @click="startOnboarding()"
+              @click="register()"
               type="submit"
               class="w-full flex justify-center bg-primary text-white p-3 rounded-full tracking-wide font-bold shadow-lg mb-2"
             >
@@ -166,12 +171,32 @@
 <script setup lang="ts">
 import { ref, type Ref } from "vue";
 import { useRouter, type Router } from "vue-router";
+import { userStore } from "@/stores/userStore";
 
 const step: Ref<number> = ref(1);
 const router: Router = useRouter();
 
-function startOnboarding(): void {
-  router.push({ name: "onboarding" });
+const firstname: Ref<string | undefined> = ref<string>();
+const lastname: Ref<string | undefined> = ref<string>();
+const email: Ref<string | undefined> = ref<string>();
+const password: Ref<string | undefined> = ref<string>();
+const passwordRepeat: Ref<string | undefined> = ref<string>();
+
+//TODO: validate all fields
+
+async function register(): Promise<void> {
+  const isLoggedIn: boolean = await userStore().registerUser(
+    email.value,
+    password.value,
+    firstname.value,
+    lastname.value
+  );
+  if (isLoggedIn) {
+    router.push({ name: "onboarding" });
+  } else {
+    console.log("User Feedback: Login failed");
+    /* TODO: user feedback */
+  }
 }
 </script>
 

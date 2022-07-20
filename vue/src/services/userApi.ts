@@ -17,3 +17,25 @@ export async function loginUser(
       return undefined;
     });
 }
+
+export async function registerUser(
+  username: string,
+  password: string,
+  firstname: string,
+  lastname: string
+): Promise<Token | undefined> {
+  return await axios
+    .post<Token>(baseURL + "/register", {
+      username: username,
+      password: password,
+      first_name: firstname,
+      last_name: lastname,
+    })
+    .then(function (response): Token {
+      return response.data;
+    })
+    .catch(function (): undefined {
+      //console.log(error.response);
+      return undefined;
+    });
+}

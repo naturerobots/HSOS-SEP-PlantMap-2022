@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import type { Token, User } from "@/types/user";
 import type { StoreOption } from "@/types/widgetOption";
-import { loginUser } from "@/services/userApi";
+import { loginUser, registerUser } from "@/services/userApi";
 
 // TODO: move to types/store
 interface userStore {
@@ -58,6 +58,26 @@ export const userStore = defineStore({
     ): Promise<boolean> {
       if (username && password) {
         const token: Token | undefined = await loginUser(username, password);
+        if (token) {
+          this.user.token = token;
+          return true;
+        }
+      }
+      return false;
+    },
+    async registerUser(
+      username: string | undefined,
+      password: string | undefined,
+      firstname: string | undefined,
+      lastname: string | undefined
+    ): Promise<boolean> {
+      if (username && password && firstname && lastname) {
+        const token: Token | undefined = await registerUser(
+          username,
+          password,
+          firstname,
+          lastname
+        );
         if (token) {
           this.user.token = token;
           return true;
