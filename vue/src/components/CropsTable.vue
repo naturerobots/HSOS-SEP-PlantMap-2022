@@ -46,7 +46,28 @@
               </q-td>
 
               <q-td key="health" :props="props">
-                <q-badge
+                <div class="flex flex-row w-24">
+                  <div
+                    class="round-badge mx-1 text-black text-bold transition hover:scale-125"
+                    v-for="h in props.row.health"
+                    :key="h"
+                    :class="{
+                      'bg-n/a': h.loglevel === 0,
+                      'bg-ok': h.loglevel === 1,
+                      'bg-warning-custom': h.loglevel === 2,
+                      'bg-danger': h.loglevel === 3,
+                    }"
+                  >
+                    {{ getShortcut(h.type) }}
+                    <status-popup
+                      :health="h"
+                      :plant="props.row.plant"
+                      :props="props"
+                      @remove-clicked="rowclicked(props.row.id)"
+                    ></status-popup>
+                  </div>
+                </div>
+                <!-- <q-badge
                   rounded
                   class="mx-1 text-black text-bold transition hover:scale-125"
                   v-for="h in props.row.health"
@@ -57,15 +78,16 @@
                     'bg-warning': h.loglevel === 2,
                     'bg-red': h.loglevel === 3,
                   }"
-                  :label="h.shortcut"
+
                 >
+                {{ getShortcut(h.type) }}
                   <status-popup
                     :health="h"
                     :plant="props.row.plant"
                     :props="props"
                     @remove-clicked="rowclicked(props.row.id)"
                   ></status-popup>
-                </q-badge>
+                </q-badge> -->
               </q-td>
 
               <q-td key="status" :props="props">
@@ -250,6 +272,10 @@ defineExpose({
   setRowInactive,
   setRowClicked,
 });
+
+function getShortcut(healthType: string): string {
+  return Array.from(healthType)[0];
+}
 
 function getRowByCropsId(cropsId: number): HTMLTableRowElement | undefined {
   const tableValue: any = table.value;

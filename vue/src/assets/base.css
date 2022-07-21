@@ -238,4 +238,16 @@ tbody tr:nth-child(even) {
 .crops-table thead tr th i {
   font-size: 23px;
 }
+
+.round-badge {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  /* display: inline; */
+}
+
+.round-badge:hover {
+  cursor: help;
+  /* cursor: default; */
+}
 /* ----------- */

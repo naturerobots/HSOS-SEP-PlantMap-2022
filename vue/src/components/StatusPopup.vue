@@ -11,10 +11,10 @@
       <q-badge
         text-color="black"
         :class="{
-          'bg-blue': health.loglevel === 0,
-          'bg-green': health.loglevel === 1,
-          'bg-warning': health.loglevel === 2,
-          'bg-red': health.loglevel === 3,
+          'bg-n/a': health.loglevel === 0,
+          'bg-ok': health.loglevel === 1,
+          'bg-warning-custom': health.loglevel === 2,
+          'bg-danger': health.loglevel === 3,
         }"
       >
         <div class="font-bold">{{ health.type }}</div>
@@ -23,22 +23,22 @@
         <div
           class="font-bold text-sm mt-2"
           :class="{
-            'text-blue': health.loglevel === 0,
-            'text-green': health.loglevel === 1,
-            'text-warning': health.loglevel === 2,
-            'text-red': health.loglevel === 3,
+            'text-n/a-text': health.loglevel === 0,
+            'text-ok-text': health.loglevel === 1,
+            'text-warning-custom-text': health.loglevel === 2,
+            'text-danger': health.loglevel === 3,
           }"
         >
           {{ health.loglevel }}: {{ infoLoglevel[health.loglevel] }}
         </div>
         <div class="font-bold text-black text-sm">
-          <div v-if="health.shortcut === 'W'">
+          <div v-if="health.type === 'Watering'">
             {{ infoWatering[health.loglevel] }} {{ plant }}.
           </div>
-          <div v-else-if="health.shortcut === 'N'">
+          <div v-else-if="health.type === 'Nutrient Deficiency'">
             {{ infoNutrient[health.loglevel] }} {{ plant }}.
           </div>
-          <div v-else-if="health.shortcut === 'D'">
+          <div v-else-if="health.type === 'Disease Detection'">
             {{ infoDisease[health.loglevel] }} {{ plant }}.
           </div>
         </div>
