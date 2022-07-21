@@ -1,0 +1,18 @@
+[
+  {
+    "model": "restapi.garden",
+    "pk": 1,
+    "fields": {
+      "name": "PlantMap-Default-Garden-1",
+      "company": 1
+    }
+  },
+  {
+    "model": "restapi.garden",
+    "pk": 1,
+    "fields": {
+      "name": "PlantMap-Default-Garden-2",
+      "company": 1
+    }
+  }
+]

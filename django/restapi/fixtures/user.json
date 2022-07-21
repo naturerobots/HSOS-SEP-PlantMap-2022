@@ -1,0 +1,23 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "username": "k.müller",
+      "first_name": "Kevin",
+      "last_name": "Müller",
+      "password": "1234"
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "username": "dHaus",
+      "first_name": "David",
+      "last_name": "Haus",
+      "password": "1234",
+      "is_superuser": true
+    }
+  }
+]

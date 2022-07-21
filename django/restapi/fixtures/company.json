@@ -1,0 +1,10 @@
+[
+  {
+    "model": "restapi.company",
+    "pk": 1,
+    "fields": {
+      "name": "PlantMap1",
+      "user": 1
+    }
+  }
+]
