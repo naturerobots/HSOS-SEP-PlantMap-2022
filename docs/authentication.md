@@ -27,15 +27,41 @@ Example response:
 
 ### `/register`
 
-Requests and responses are the same as for `/login`,
-but a new user is created with the provided username & password
+Responses are the same as for `/login`,
+but requests need to supply a `first_name` and a `last_name` as well.
+A new user is created with the provided information
 and an error is returned if the username is already taken.
+
+```json
+{
+ "username": "testuser1234",
+ "password": "7Gq^7Mjwgi%#DcHj22$C",
+ "first_name": "first",
+ "last_name": "last"
+}
+```
 
 ### `/logout` & `/logoutall`
 
 These endpoints take an empty POST request.
 With `/logout` the logged in user is logged out from the current session,
 with `/logoutall` from all sessions.
+
+### `/user`
+
+An empty GET request returns information about the currently logged in user.
+
+Example response:
+
+```json
+{
+ "username": "testuser1234",
+ "first_name": "first",
+ "last_name": "last",
+ "date_joined": "2022-07-12T12:49:31.010300Z",
+ "last_login": "2022-07-19T11:35:55.158069Z"
+}
+```
 
 ## Token
 
