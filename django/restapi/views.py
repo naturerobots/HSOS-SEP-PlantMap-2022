@@ -221,106 +221,117 @@ def getBeds(request, company_id: int, garden_id: int):
     # Get all beds of the garden
     beds = Bed.objects.filter(garden=garden)
 
-    # Get bed data from SEEREP over gRPC
-    bedsData = []
-    for bed in beds:
-        try:
-            requests += 1
-            bedData = stub.GetProjectDetails(ProjectQuery(projectuuid=bed.uuid))
-        except:
-            continue
+    def streamGen(beds):
 
-        plant_type = {}
-        variety = {}
-        soil_humidty = []
-        harvest = []
-        pyield = []
-        health = {}
+        yield "{ \"beds\": ["
 
-        for plant in bedData.geometries:
-            if plant.type != "measurement":
+        first = True
+        # Get bed data from SEEREP over gRPC
+        for bed in beds:
+
+            if first:
+                first = False
+            else:
+                yield ","
+
+            try:
+                bedData = stub.GetProjectDetails(ProjectQuery(projectuuid=bed.uuid))
+            except:
                 continue
 
-            # Maybe extract this into a function
-            try:
-                requests += 1
-                measurement = stubMeasurement.GetMeasurementByUUID(
-                    GeometryQuery(projectuuid=bed.uuid, geometryuuid=plant.uuid)
-                )
-                if "humidity" in measurement.data:
-                    soil_humidty.append(measurement.data["humidity"].double_data)
+            plant_type = {}
+            variety = {}
+            soil_humidty = []
+            harvest = []
+            pyield = []
+            health = {}
 
-                if "approx_yield" in measurement.data:
-                    pyield.append(measurement.data["approx_yield"].double_data)
+            for plant in bedData.geometries:
+                if plant.type != "measurement":
+                    continue
 
-                for i in range(3):
-                    if all(key in measurement.data for key in (f"health_{i}_type", f"health_{i}_level")):
-                        htype = measurement.data[f"health_{i}_type"].string_data
-                        hlevel = measurement.data[f"health_{i}_level"].int64_data
-                        if htype in health:
-                            health[htype].append(hlevel)
-                        else:
-                            health[htype] = [hlevel]
+                # Maybe extract this into a function
+                try:
+                    measurement = stubMeasurement.GetMeasurementByUUID(
+                        GeometryQuery(projectuuid=bed.uuid, geometryuuid=plant.uuid)
+                    )
+                    if "humidity" in measurement.data:
+                        soil_humidty.append(measurement.data["humidity"].double_data)
 
-                requests += 1
-                instance = stubLabel.GetInstance(InstanceQuery(projectuuid=bed.uuid, instanceuuid=plant.labels[0]))
+                    if "approx_yield" in measurement.data:
+                        pyield.append(measurement.data["approx_yield"].double_data)
 
-                if instance.name in plant_type:
-                    plant_type[instance.name] += 1
-                else:
-                    plant_type[instance.name] = 1
+                    for i in range(3):
+                        if all(key in measurement.data for key in (f"health_{i}_type", f"health_{i}_level")):
+                            htype = measurement.data[f"health_{i}_type"].string_data
+                            hlevel = measurement.data[f"health_{i}_level"].int64_data
+                            if htype in health:
+                                health[htype].append(hlevel)
+                            else:
+                                health[htype] = [hlevel]
 
-                if "planting_date" in instance.attributes and "growth_state" in measurement.data:
-                    planting_date: int = instance.attributes["planting_date"].int64_data
-                    growth_state: float = measurement.data["growth_state"].double_data
+                    instance = stubLabel.GetInstance(InstanceQuery(projectuuid=bed.uuid, instanceuuid=plant.labels[0]))
 
-                    harvest.append((time() - planting_date) * (1.0 - growth_state))
-
-            except:
-                pass
-
-            try:
-                requests += 1
-                pclass = stubLabel.GetClass(ClassQuery(projectuuid=bed.uuid, classuuid=plant.labels[1]))
-
-                if "variety" in pclass.attributes:
-                    v = pclass.attributes["variety"].string_data
-                    if v in variety:
-                        variety[v] += 1
+                    if instance.name in plant_type:
+                        plant_type[instance.name] += 1
                     else:
-                        variety[v] = 1
+                        plant_type[instance.name] = 1
 
-            except:
-                pass
+                    if "planting_date" in instance.attributes and "growth_state" in measurement.data:
+                        planting_date: int = instance.attributes["planting_date"].int64_data
+                        growth_state: float = measurement.data["growth_state"].double_data
 
-        # Compute averages
-        plant_type = max(plant_type, key=plant_type.get)
-        variety = max(variety, key=variety.get)
-        soil_humidty = float(sum(soil_humidty)) / float(len(soil_humidty))
-        harvest = int((float(sum(harvest)) / float(len(harvest))) / 604800)
-        pyield = float(sum(pyield)) / float(len(pyield))
-        phealth = []
-        for hkey, hval in health.items():
-            phealth.append({"type": hkey, "loglevel": int((float(sum(hval)) / float(len(hval))))})
-        plants_url = reverse(
-            'plants-resource', kwargs={'company_id': company_id, 'garden_id': garden_id, 'bed_id': bed.id}
-        )
+                        harvest.append((time() - planting_date) * (1.0 - growth_state))
 
-        bedsData.append(
-            {
-                "id": bed.id,
-                "location": "TODO",
-                "plant": plant_type,
-                "variety": variety,
-                "plants": plants_url,
-                "soil_humidty": soil_humidty,
-                "harvest": f"{harvest} week",
-                "yield": pyield,
-                "health": phealth,
-            }
-        )
-    logger.info(f"gRPC Requests: {requests}")
-    return JsonResponse({"beds": bedsData})
+                except:
+                    pass
+
+                try:
+                    pclass = stubLabel.GetClass(ClassQuery(projectuuid=bed.uuid, classuuid=plant.labels[1]))
+
+                    if "variety" in pclass.attributes:
+                        v = pclass.attributes["variety"].string_data
+                        if v in variety:
+                            variety[v] += 1
+                        else:
+                            variety[v] = 1
+
+                except:
+                    pass
+
+            # Compute averages
+            plant_type = max(plant_type, key=plant_type.get)
+            variety = max(variety, key=variety.get)
+            soil_humidty = float(sum(soil_humidty)) / float(len(soil_humidty))
+            harvest = int((float(sum(harvest)) / float(len(harvest))) / 604800)
+            pyield = float(sum(pyield)) / float(len(pyield))
+            phealth = []
+            for hkey, hval in health.items():
+                phealth.append({"type": hkey, "loglevel": int((float(sum(hval)) / float(len(hval))))})
+            plants_url = reverse(
+                'plants-resource', kwargs={'company_id': company_id, 'garden_id': garden_id, 'bed_id': bed.id}
+            )
+
+            data = json.dumps(
+                {
+                    "id": bed.id,
+                    "location": "TODO",
+                    "plant": plant_type,
+                    "variety": variety,
+                    "plants": plants_url,
+                    "soil_humidty": soil_humidty,
+                    "harvest": f"{harvest} week",
+                    "yield": pyield,
+                    "health": phealth,
+                }
+            )
+
+            yield data
+        yield "]}"
+
+    # logger.info(f"gRPC Requests: {requests}")
+    # return JsonResponse({"beds": bedsData})
+    return StreamingHttpResponse(streamGen(beds), content_type='application/json')
 
 
 # /companies/{company_id}/gardens/{garden_id}/beds/{bed_id}/crops
