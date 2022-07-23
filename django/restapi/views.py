@@ -1,6 +1,7 @@
 import json
 import string
 import sys
+from time import time
 
 from . import tasks
 from .forms import *
@@ -18,6 +19,7 @@ from class_query_pb2 import ClassQuery
 from geometry_query_pb2 import GeometryQuery
 from google.protobuf import empty_pb2
 from google.protobuf.json_format import MessageToDict
+from instance_query_pb2 import InstanceQuery
 from knox.views import LoginView as KnoxLoginView
 from measurement_pb2 import Measurement
 from project_query_pb2 import ProjectQuery
@@ -33,6 +35,7 @@ from django.contrib.auth.models import User
 from django.db.models import ObjectDoesNotExist
 from django.http import *
 from django.template import loader
+from django.urls import reverse
 
 from .models import *
 
@@ -194,9 +197,12 @@ def gardenImage(request, company_id: int, garden_id: int):
     return JsonResponse({})
 
 
+# With the current dummy data this costs 100 gRPC-requests per bed. Seems like quite the DOS potential
 # /companies/{company_id}/gardens/{garden_id}/beds
 @api_view(['GET'])
 def getBeds(request, company_id: int, garden_id: int):
+
+    requests = 0
 
     # Check if authenticated user is allowed to request company_id, garden_id
 
@@ -219,17 +225,108 @@ def getBeds(request, company_id: int, garden_id: int):
     bedsData = []
     for bed in beds:
         try:
+            requests += 1
             bedData = stub.GetProjectDetails(ProjectQuery(projectuuid=bed.uuid))
-            bedsData.append(MessageToDict(bedData))
         except:
-            return JsonResponse({})
+            continue
 
-    return JsonResponse(bedsData, safe=False)
+        plant_type = {}
+        variety = {}
+        soil_humidty = []
+        harvest = []
+        pyield = []
+        health = {}
+
+        for plant in bedData.geometries:
+            if plant.type != "measurement":
+                continue
+
+            # Maybe extract this into a function
+            try:
+                requests += 1
+                measurement = stubMeasurement.GetMeasurementByUUID(
+                    GeometryQuery(projectuuid=bed.uuid, geometryuuid=plant.uuid)
+                )
+                if "humidity" in measurement.data:
+                    soil_humidty.append(measurement.data["humidity"].double_data)
+
+                if "approx_yield" in measurement.data:
+                    pyield.append(measurement.data["approx_yield"].double_data)
+
+                for i in range(3):
+                    if all(key in measurement.data for key in (f"health_{i}_type", f"health_{i}_level")):
+                        htype = measurement.data[f"health_{i}_type"].string_data
+                        hlevel = measurement.data[f"health_{i}_level"].int64_data
+                        if htype in health:
+                            health[htype].append(hlevel)
+                        else:
+                            health[htype] = [hlevel]
+
+                requests += 1
+                instance = stubLabel.GetInstance(InstanceQuery(projectuuid=bed.uuid, instanceuuid=plant.labels[0]))
+
+                if instance.name in plant_type:
+                    plant_type[instance.name] += 1
+                else:
+                    plant_type[instance.name] = 1
+
+                if "planting_date" in instance.attributes and "growth_state" in measurement.data:
+                    planting_date: int = instance.attributes["planting_date"].int64_data
+                    growth_state: float = measurement.data["growth_state"].double_data
+
+                    harvest.append((time() - planting_date) * (1.0 - growth_state))
+
+            except:
+                pass
+
+            try:
+                requests += 1
+                pclass = stubLabel.GetClass(ClassQuery(projectuuid=bed.uuid, classuuid=plant.labels[1]))
+
+                if "variety" in pclass.attributes:
+                    v = pclass.attributes["variety"].string_data
+                    if v in variety:
+                        variety[v] += 1
+                    else:
+                        variety[v] = 1
+
+            except:
+                pass
+
+        # Compute averages
+        plant_type = max(plant_type, key=plant_type.get)
+        variety = max(variety, key=variety.get)
+        soil_humidty = float(sum(soil_humidty)) / float(len(soil_humidty))
+        harvest = int((float(sum(harvest)) / float(len(harvest))) / 604800)
+        pyield = float(sum(pyield)) / float(len(pyield))
+        phealth = []
+        for hkey, hval in health.items():
+            phealth.append({"type": hkey, "loglevel": int((float(sum(hval)) / float(len(hval))))})
+        plants_url = reverse(
+            'plants-resource', kwargs={'company_id': company_id, 'garden_id': garden_id, 'bed_id': bed.id}
+        )
+
+        bedsData.append(
+            {
+                "id": bed.id,
+                "location": "TODO",
+                "plant": plant_type,
+                "variety": variety,
+                "plants": plants_url,
+                "soil_humidty": soil_humidty,
+                "harvest": f"{harvest} week",
+                "yield": pyield,
+                "health": phealth,
+            }
+        )
+    logger.info(f"gRPC Requests: {requests}")
+    return JsonResponse({"beds": bedsData})
 
 
 # /companies/{company_id}/gardens/{garden_id}/beds/{bed_id}/crops
 @api_view(['GET'])
-def getCrops(request, company_id: int, garden_id: int, bed_id: int):
+def getPlants(request, company_id: int, garden_id: int, bed_id: int):
+    requests = 0
 
     # Check if authenticated user is allowed to request company_id, garden_id, bed_id
 
@@ -256,116 +353,79 @@ def getCrops(request, company_id: int, garden_id: int, bed_id: int):
     try:
         bedData = stub.GetProjectDetails(ProjectQuery(projectuuid=bed.uuid))
     except:
-        return JsonResponse({})
+        return HttpResponseNotFound()
 
-    bedDataDict = MessageToDict(bedData)
+    plantData = []
 
-    # Seperate pointcloud and measurement geometries:
-    # - Every crop has one pointcloud geometry and one measurement geometry
-    # - cropsPointclouds(1) and cropsMeasurements(1) refer to the same crop
-
-    cropsPointclouds = []
-    cropsMeasurements = []
-
-    for crop in bedDataDict['geometries']:
-
-        if crop['type'] == "pointcloud":
-            cropsPointclouds.append(crop)
-
-        elif crop['type'] == "measurement":
-            cropsMeasurements.append(crop)
-
-    # Get instances and classes of cropsPointclouds from SEEREP over gRPC
-
-    # instances = []
-    classes = []
-
-    classUUIDsRequested = []
-
-    for crop in cropsPointclouds:
-        # instanceLabel = crop['labels'][0]
-        classLabel = crop['labels'][1]
-
-        # Skip gRPC request if class was already requested once
-        if classUUIDsRequested.__contains__(bed.uuid):
-            classes.append(classes[len(classes) - 1])
+    for plant in bedData.geometries:
+        if plant.type != "measurement":
             continue
 
-        try:
-            classData = stubLabel.GetClass(ClassQuery(projectuuid=bed.uuid, classuuid=classLabel))
-            classUUIDsRequested.append(bed.uuid)
-        except:
-            return JsonResponse({})
-
-        classes.append(MessageToDict(classData))
-
-    # Get measurements of cropsMeasurements from SEEREP over gRPC
-
-    measurements = []
-
-    for crop in cropsMeasurements:
-
-        try:
-            measurementData = stubMeasurement.GetMeasurementByUUID(
-                GeometryQuery(projectuuid=bed.uuid, geometryuuid=crop['uuid'])
-            )
-        except:
-            return JsonResponse({})
-
-        measurements.append(MessageToDict(measurementData))
-
-    # Collect and put together all needed data over a single crop
-
-    crops = []
-
-    for i in range(len(cropsPointclouds) - 1):
-
-        plantName = cropsPointclouds[i]['name']
-        variety = "N/A"
-        location = bed_id
-        soilHumidity = 0
-        health = "N/A"
-        healthLoglevel = 0
-        status = "N/A"
+        plant_type = "Error"
+        variety = "Error"
+        soil_humidty = 0.0
         harvest = 0
-        approxYield = 0
+        pyield = 0.0
+        health = []
 
+        # Maybe extract this into a function
         try:
-            variety = classes[i]['attributes']['variety']['stringData']
+            requests += 1
+            measurement = stubMeasurement.GetMeasurementByUUID(
+                GeometryQuery(projectuuid=bed.uuid, geometryuuid=plant.uuid)
+            )
+            if "humidity" in measurement.data:
+                soil_humidty = measurement.data["humidity"].double_data
+
+            if "approx_yield" in measurement.data:
+                pyield = measurement.data["approx_yield"].double_data
+
+            for i in range(3):
+                if all(key in measurement.data for key in (f"health_{i}_type", f"health_{i}_level")):
+                    htype = measurement.data[f"health_{i}_type"].string_data
+                    hlevel = measurement.data[f"health_{i}_level"].int64_data
+                    health.append({"type": htype, "loglevel": hlevel})
+
+            requests += 1
+            instance = stubLabel.GetInstance(InstanceQuery(projectuuid=bed.uuid, instanceuuid=plant.labels[0]))
+
+            plant_type = instance.name
+
+            if "planting_date" in instance.attributes and "growth_state" in measurement.data:
+                planting_date: int = instance.attributes["planting_date"].int64_data
+                growth_state: float = measurement.data["growth_state"].double_data
+
+                harvest = int(((time() - planting_date) * (1.0 - growth_state)) / 604800.0)
+
         except:
             pass
 
         try:
-            # Expects geometry "ground" to be at the last position in "measurements" and that every
-            # crop in the current bed is planted on "ground"
-            soilHumidity = measurements[len(measurements) - 1]['data']['humidity']['doubleData']
+            requests += 1
+            pclass = stubLabel.GetClass(ClassQuery(projectuuid=bed.uuid, classuuid=plant.labels[1]))
+
+            if "variety" in pclass.attributes:
+                variety = pclass.attributes["variety"].string_data
+
         except:
             pass
 
-        try:
-            health = measurements[i]['data']['warn_msg']['stringData']
-            healthLoglevel = int(measurements[i]['data']['warn_level']['int64Data'])
-            status = measurements[i]['data']['status']['stringData']
-            harvest = measurements[i]['data']['growth_state']['doubleData']
-            approxYield = int(measurements[i]['data']['approx_yield']['int64Data'])
-        except:
-            pass
-
-        crops.append(
+        plantData.append(
             {
-                'plant': plantName,
-                'variety': variety,
-                'location': location,
-                'soil_humidity': soilHumidity,
-                'health': health,
-                'health_loglevel': healthLoglevel,
-                'status': status,
-                'harvest': harvest,
-                'yield': approxYield,
+                "id": plant.uuid,
+                "bedid": bed.id,
+                "location": "TODO",
+                "plant": plant_type,
+                "variety": variety,
+                "soil_humidty": soil_humidty,
+                "harvest": f"{harvest} week",
+                "yield": pyield,
+                "health": health,
             }
         )
 
-    return JsonResponse(crops, safe=False)
+    logger.info(f"gRPC Requests: {requests}")
+    return JsonResponse({"plants": plantData})
 
 
 # /companies/{company_id}/gardens/{garden_id}/beds/{bed_id}/sensors
