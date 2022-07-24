@@ -4,12 +4,14 @@
     <div class="rounded-xl overflow-x-auto overflow-y-auto">
       <q-table
         ref="table"
-        separator="none"
         flat
         class="sensor-table"
         :rows="sensors"
         :columns="columns"
         row-key="name"
+        virtual-scroll
+        :rows-per-page-options="[0]"
+        hide-bottom
       >
         <template v-slot:body="props">
           <q-tr

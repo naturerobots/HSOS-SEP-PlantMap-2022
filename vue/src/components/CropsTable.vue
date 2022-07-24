@@ -14,7 +14,6 @@
           :filter="input"
           :visible-columns="visCols"
           virtual-scroll
-          :virtual-scroll-sticky-size-start="48"
           :rows-per-page-options="[0]"
           :pagination="pagination()"
           hide-bottom
@@ -70,27 +69,6 @@
                     ></status-popup>
                   </div>
                 </div>
-                <!-- <q-badge
-                  rounded
-                  class="mx-1 text-black text-bold transition hover:scale-125"
-                  v-for="h in props.row.health"
-                  :key="h"
-                  :class="{
-                    'bg-blue': h.loglevel === 0,
-                    'bg-green': h.loglevel === 1,
-                    'bg-warning': h.loglevel === 2,
-                    'bg-red': h.loglevel === 3,
-                  }"
-
-                >
-                {{ getShortcut(h.type) }}
-                  <status-popup
-                    :health="h"
-                    :plant="props.row.plant"
-                    :props="props"
-                    @remove-clicked="rowclicked(props.row.id)"
-                  ></status-popup>
-                </q-badge> -->
               </q-td>
 
               <q-td key="status" :props="props">
@@ -196,7 +174,6 @@
           class="crops-table no-shadow crops-table-hover"
           :pagination="pagination()"
           virtual-scroll
-          :virtual-scroll-sticky-size-start="48"
           :rows-per-page-options="[0]"
           hide-bottom
         >

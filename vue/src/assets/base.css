@@ -34,7 +34,7 @@
   /* SENSOR TABLE */
 
   .sensor-row-active td {
-    background-color: #bbe784 !important;
+    background-color: #e5e7eb !important;
     /* TODO: discuss color, add to tailwind colors */
   }
 
@@ -184,11 +184,6 @@ body,
   min-height: 30px !important;
 }
 
-.q-field__native {
-  /* text-align: center !important; */
-  /* padding-left: 13px !important; */
-}
-
 ::-webkit-input-placeholder {
   padding-left: 13px;
 }
@@ -215,9 +210,11 @@ body,
   font-weight: bold;
 }
 
-.sensor-table thead tr:first-child th,
-.sensor-table tbody tr:nth-child(2n) td {
-  @apply bg-background;
+.sensor-table thead tr:first-child th {
+  top: 0;
+  /* bg color is important for th; just specify one */
+  @apply bg-table-header;
+  /* background-color: #FAFAFA; */
 }
 
 .sensor-table tbody tr {
@@ -241,24 +238,10 @@ body,
   /* TODO: specify height */
 }
 
-/* .crops-table thead th:first-child {
-  border-top-left-radius: 1rem;
-}
-
-.crops-table thead th:last-child {
-  border-top-right-radius: 1rem;
-} */
-
-/* .crops-table .q-table__bottom,
-thead tr:first-child th,
-tbody tr:nth-child(even) {
-  background-color: #f9fafb;
-} */
-
 .crops-table thead tr:first-child th {
   top: 0;
   /* bg color is important for th; just specify one */
-  background-color: #f9fafb;
+  @apply bg-table-header;
 }
 
 .crops-table thead tr th {
@@ -268,10 +251,6 @@ tbody tr:nth-child(even) {
   font-weight: bold;
   color: #6b7280;
 }
-
-/* .crops-table tbody tr td:first-child {
-  @apply rounded-l-lg;
-} */
 
 /* this is when the loading indicator appears */
 .crops-table .q-table--loading thead tr:last-child th {
@@ -311,7 +290,6 @@ tbody tr:nth-child(even) {
   height: 20px;
   width: 20px;
   border-radius: 50%;
-  /* display: inline; */
 }
 
 .round-badge:hover {

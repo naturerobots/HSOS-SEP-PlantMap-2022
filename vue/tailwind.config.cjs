@@ -19,6 +19,7 @@ module.exports = {
         "ok-text": "#ADDB73 !important",
         "n/a": "rgba(103,195,208,0.66) !important",
         "n/a-text": "#67C3D0 !important",
+        "table-header": "#FAFAFA",
       },
       boxShadow: {
         card: "0px 0px 3px 1px rgb(0 0 0 / 0.1)",
