@@ -318,7 +318,7 @@ def getBeds(request, company_id: int, garden_id: int):
                     "location": "TODO",
                     "plant": plant_type,
                     "variety": variety,
-                    "plants": plants_url,
+                    "plants": request.build_absolute_uri(plants_url),
                     "soil_humidty": soil_humidty,
                     "harvest": f"{harvest} week",
                     "yield": pyield,
@@ -373,7 +373,7 @@ def getPlants(request, company_id: int, garden_id: int, bed_id: int):
             continue
 
         plant_type = "Error"
-        variety = "Error"
+        variety = "N/A"
         soil_humidty = 0.0
         harvest = 0
         pyield = 0.0
