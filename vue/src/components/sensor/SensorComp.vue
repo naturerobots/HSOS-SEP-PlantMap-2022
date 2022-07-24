@@ -112,19 +112,19 @@ const columns: QTableProps["columns"] = [
     name: "moisture_value",
     label: "Moisture",
     field: "moisture_value",
-    align: "center",
+    align: "left",
   },
   {
     name: "temp_value",
     label: "Temperature",
     field: "temp_value",
-    align: "center",
+    align: "left",
   },
   {
     name: "ph_value",
     label: "PH",
     field: "ph_value",
-    align: "center",
+    align: "left",
   },
 ];
 </script>
