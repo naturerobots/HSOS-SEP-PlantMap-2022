@@ -166,8 +166,8 @@ body,
 }
 
 .q-table__middle {
-  border-top-left-radius: 1rem;
-  border-top-right-radius: 1rem;
+  border-top-left-radius: 1rem !important;
+  border-top-right-radius: 1rem !important;
 }
 
 /* ----------- */
@@ -222,7 +222,7 @@ body,
 }
 
 .sensor-table tbody tr td:first-child {
-  @apply rounded-l-lg;
+  /* @apply rounded-l-lg; */
 }
 
 .sensor-table .q-table__bottom {
@@ -234,7 +234,7 @@ body,
 /* CROPS TABLE */
 
 .crops-table {
-  height: 400px;
+  /* height: 400px; */
   /* TODO: specify height */
 }
 

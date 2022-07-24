@@ -1,11 +1,10 @@
 <template>
-  <div class="flex-nowrap">
-    <header-bar title="Crop Image"></header-bar>
-    <image-crop-quasar></image-crop-quasar>
-  </div>
+  <base-layout title="Crop Image">
+    <image-crop></image-crop>
+  </base-layout>
 </template>
 
 <script setup lang="ts">
-import HeaderBar from "@/components/header/HeaderBar.vue";
-import ImageCropQuasar from "@/components/ImageCropQuasar.vue";
+import BaseLayout from "@/components/layout/BaseLayout.vue";
+import ImageCrop from "@/components/image-crop/ImageCrop.vue";
 </script>

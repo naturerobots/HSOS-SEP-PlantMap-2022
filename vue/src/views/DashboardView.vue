@@ -1,11 +1,12 @@
 <template>
-  <div class="flex-nowrap">
-    <header-bar
-      title="Dashboard"
-      :widgetOptions="widgetOptionsDashboard"
-      :storeOptions="storeOptions"
-    ></header-bar>
-    <div class="grid grid-cols-3 gap-4 place-items-stretch h-fit p-6">
+  <base-layout
+    title="Dashboard"
+    :widgetOptions="widgetOptionsDashboard"
+    :storeOptions="storeOptions"
+  >
+    <div
+      class="grow grid grid-cols-3 gap-4 place-items-stretch p-6 w-full h-fit"
+    >
       <div v-if="storeOptions.indexOf('weather') > -1">
         <weather-comp></weather-comp>
       </div>
@@ -32,46 +33,11 @@
         </sensor-comp>
       </div>
     </div>
-  </div>
-
-  <!-- DEMO LAYOUTS -->
-  <!-- <div class="grid grid-cols-3 gap-4 place-items-stretch h-fit p-3">
-    <div>
-      <div class="bg-gray-200 h-96 p-2">Weather</div>
-    </div>
-    <div class="col-span-3 row-span-2 order-last">
-      <div class="bg-gray-200 h-96 p-2">Garden</div>
-    </div>
-    <div>
-      <div class="bg-gray-200 h-full p-2">Sensor</div>
-    </div>
-    <div>
-      <div class="bg-gray-200 h-96 p-2">Custom</div>
-    </div>
-  </div> -->
-
-  <!-- <div class="grid grid-cols-3 gap-4 place-items-stretch h-fit p-3">
-    <div>
-      <div class="bg-gray-200 h-96 p-2">Weather</div>
-    </div>
-    <div>
-      <div class="bg-gray-200 h-full p-2">Sensor</div>
-    </div>
-    <div class="col-span-1 row-span-2">
-      <div class="bg-gray-200 h-full p-2">Garden</div>
-    </div>
-    <div>
-      <div class="bg-gray-200 h-96 p-2">Custom</div>
-    </div>
-    <div>
-      <div class="bg-gray-200 h-96 p-2">Custom</div>
-    </div>
-  </div> -->
+  </base-layout>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import type { Ref } from "vue";
+import { ref, type Ref } from "vue";
 import { storeToRefs } from "pinia";
 import { sensorStore } from "@/stores/sensorStore";
 import { userStore } from "@/stores/userStore";
@@ -82,9 +48,9 @@ import {
   type WidgetOption,
 } from "@/types/widgetOption";
 import WeatherComp from "@/components/weather/WeatherComp.vue";
-import SensorComp from "@/components/SensorCompQuasar.vue";
-import GardenMap from "@/components/GardenMap.vue";
-import HeaderBar from "@/components/header/HeaderBar.vue";
+import SensorComp from "@/components/sensor/SensorComp.vue";
+import GardenMap from "@/components/map/GardenMap.vue";
+import BaseLayout from "@/components/layout/BaseLayout.vue";
 
 const sensors: Ref<Sensor[]> = storeToRefs(sensorStore()).getSensors;
 const storeOptions: Ref<StoreOption[]> = storeToRefs(userStore()).getOptions;

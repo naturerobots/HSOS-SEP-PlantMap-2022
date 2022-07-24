@@ -1,10 +1,9 @@
 <template>
-  <div class="flex-nowrap">
-    <header-bar
-      title="3D"
-      :widgetOptions="widgetOptions3D"
-      :storeOptions="storeOptions"
-    ></header-bar>
+  <base-layout
+    title="3D"
+    :widgetOptions="widgetOptions3D"
+    :storeOptions="storeOptions"
+  >
     <div class="row p-6">
       <div v-if="storeOptions.indexOf('3d-table') > -1" class="col-4">
         <crops-table
@@ -27,10 +26,14 @@
         ></crops-map>
       </div>
     </div>
-  </div>
+    <div class="row p-6">
+      <crop-scene></crop-scene>
+    </div>
+  </base-layout>
 </template>
 
 <script setup lang="ts">
+import CropScene from "@/components/three-scenes/CropScene.vue";
 import { type Ref, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { cropsStore } from "@/stores/cropsStore";
@@ -40,10 +43,10 @@ import {
   type StoreOption,
   type WidgetOption,
 } from "@/types/widgetOption";
-import HeaderBar from "@/components/header/HeaderBar.vue";
-import CropsTable from "../components/CropsTable.vue";
-import CropsMap from "@/components/CropsMap.vue";
-import type { Bed } from "@/types/crop";
+import CropsTable from "@/components/table/CropsTable.vue";
+import CropsMap from "@/components/map/CropsMap.vue";
+import BaseLayout from "@/components/layout/BaseLayout.vue";
+import type { Crop } from "@/types/crop";
 
 const storeOptions: Ref<StoreOption[]> = storeToRefs(userStore()).getOptions;
 const widgetOptions3D: WidgetOption[] = [
@@ -53,7 +56,7 @@ const widgetOptions3D: WidgetOption[] = [
 
 let columns: string[] = ["id", "plant", "location"];
 
-const crops: Ref<Bed[]> = storeToRefs(cropsStore()).getCrops;
+const crops: Ref<Crop[]> = storeToRefs(cropsStore()).getCrops;
 const cropsMapRef = ref<InstanceType<typeof CropsMap> | null>(null);
 const cropsTableRef = ref<InstanceType<typeof CropsTable> | null>(null);
 

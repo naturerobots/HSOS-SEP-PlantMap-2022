@@ -4,7 +4,6 @@
       <div v-if="!cropstable">
         <q-table
           ref="table"
-          @row-click="rowclicked(0)"
           class="crops-table no-shadow crops-table-hover"
           :title="title"
           :rows="crops"
@@ -226,9 +225,9 @@
 
 <script setup lang="ts">
 import type { Ref } from "vue";
-import type { Crop } from "../types/crop";
+import type { Crop } from "@/types/crop";
 import { storeToRefs } from "pinia";
-import { cropsStore } from "../stores/cropsStore";
+import { cropsStore } from "@/stores/cropsStore";
 import { ref } from "vue";
 import type { QTable, QTableProps } from "quasar";
 import StatusPopup from "@/components/StatusPopup.vue";

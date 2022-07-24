@@ -13,6 +13,16 @@ demo-post:
 run-frontend:
 	@cd vue && npm run dev
 
+run-frontend-prod:
+	@echo "#############################"
+	@echo "# build vite for production #"
+	@echo "#############################"
+	@cd vue && npm run build
+	@echo "##########################"
+	@echo "# run vite in production #"
+	@echo "##########################"
+	@cd vue && npm run preview
+
 start-mkdocs:
 	@mkdocs serve
 

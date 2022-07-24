@@ -1,9 +1,10 @@
 <template>
-  <header-bar title="Place Image"></header-bar>
-  <leaflet-rotated-comp></leaflet-rotated-comp>
+  <base-layout title="Place Image">
+    <leaflet-rotated-comp></leaflet-rotated-comp>
+  </base-layout>
 </template>
 
 <script setup lang="ts">
-import HeaderBar from "@/components/header/HeaderBar.vue";
+import BaseLayout from "@/components/layout/BaseLayout.vue";
 import LeafletRotatedComp from "@/components/leaflet/LeafletRotatedComp.vue";
 </script>

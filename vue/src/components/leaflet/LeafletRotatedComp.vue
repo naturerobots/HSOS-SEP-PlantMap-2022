@@ -1,27 +1,35 @@
 <template>
-  <div class="inline-flex space-x-3 pl-2 items-center q-pa-md">
-    <q-btn rounded color="primary" label="Save Image" @click="saveImage" />
-    <q-btn
-      v-if="markers.length == 3 && parseFloat(opacity.toFixed(1)) >= 0.1"
-      rounded
-      color="black font-bold"
-      fab-mini
-      label="-"
-      @click="updateOpacity(-0.1)"
-    />
-    <q-btn
-      v-if="markers.length == 3 && parseFloat(opacity.toFixed(1)) <= 0.9"
-      rounded
-      color="black font-bold"
-      fab-mini
-      label="+"
-      @click="updateOpacity(0.1)"
-    />
-  </div>
-
-  <div class="card-map h-full m-4 flex-1">
-    <div class="map-container w-full h-full">
-      <div id="map"></div>
+  <div class="flex flex-col h-full" style="flex-wrap: nowrap">
+    <div class="px-4 pt-4">
+      <q-btn
+        class="mr-2 bg-primary text-white"
+        rounded
+        label="Save Image"
+        @click="saveImage"
+      ></q-btn>
+      <q-btn
+        class="mr-1 bg-secondary text-white"
+        v-if="markers.length == 3 && parseFloat(opacity.toFixed(1)) >= 0.1"
+        rounded
+        fab-mini
+        label="-"
+        @click="updateOpacity(-0.1)"
+      ></q-btn>
+      <q-btn
+        class="mr-1 bg-secondary text-white"
+        v-if="markers.length == 3 && parseFloat(opacity.toFixed(1)) <= 0.9"
+        rounded
+        fab-mini
+        label="+"
+        @click="updateOpacity(0.1)"
+      ></q-btn>
+    </div>
+    <div class="grow p-4">
+      <div class="card-map h-full">
+        <div class="map-container w-full">
+          <div id="map"></div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -64,10 +72,10 @@ onMounted(() => {
   }
 
   //TODO: Get coords from stored location
-  leafletMap = L.map("map", { zoomControl: false }).setView(
-    new L.LatLng(52.317033021766406, 7.630251717595675),
-    13
-  );
+  leafletMap = L.map("map", {
+    zoomControl: false,
+    attributionControl: false,
+  }).setView(new L.LatLng(52.317033021766406, 7.630251717595675), 13);
 
   //TODO: refactor params
   L.tileLayer(

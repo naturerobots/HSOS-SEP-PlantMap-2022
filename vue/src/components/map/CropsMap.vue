@@ -13,8 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import BaseMap from "@/components/BaseMap.vue";
-import type { Bed } from "@/types/crop";
+import BaseMap from "@/components/map/BaseMap.vue";
+import type { Crop } from "@/types/crop";
 import type { MapImage } from "@/types/mapImage";
 import L, { LatLng, polygon, Polygon } from "leaflet";
 import { ref, onMounted } from "vue";
@@ -23,7 +23,7 @@ const baseMapRef = ref<InstanceType<typeof BaseMap> | null>(null);
 const polygonMap: Map<number, L.Polygon<any>> = new Map();
 
 const props = defineProps<{
-  crops: Bed[];
+  crops: Crop[];
 }>();
 
 const emit = defineEmits<{
@@ -62,7 +62,7 @@ let lon4 = 7.630334734025543;
 let offsetLat = 0.00001;
 let offsetLon = 0.00003;
 
-function addCropsPolygon(crop: Bed): void {
+function addCropsPolygon(crop: Crop): void {
   let latlng: L.LatLng[] = [];
   latlng.push(new LatLng(lat1, lon1));
   latlng.push(new LatLng(lat2, lon2));
@@ -159,7 +159,7 @@ function setPolygonClicked(cropsId: number): void {
   }
 }
 
-function getCropById(cropsId: number): Bed | undefined {
+function getCropById(cropsId: number): Crop | undefined {
   for (let i = 0; i < props.crops.length; i++) {
     if (props.crops[i].id == cropsId) {
       return props.crops[i];

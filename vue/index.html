@@ -4,11 +4,15 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PlantMap</title>
-    <!-- Todo: Change Title -->
+    <!-- <title>PlantMap</title> -->
+    <!-- TODO: Change Title -->
   </head>
   <body>
     <div id="app"></div>
+    <script type="module">
+      //FIXME not so nice, maybe take a look at https://vue-meta.nuxtjs.org/
+      document.title = import.meta.env.VITE_APP_TITLE;
+    </script>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
