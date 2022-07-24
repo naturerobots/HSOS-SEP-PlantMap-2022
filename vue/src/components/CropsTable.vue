@@ -1,11 +1,10 @@
 <template>
   <div class="card h-full w-full mr-24">
-    <div class="overflow-x-auto overflow-y-auto rounded-2xl">
+    <div class="overflow-x-auto overflow-y-auto">
       <div v-if="!cropstable">
         <q-table
           ref="table"
           @row-click="rowclicked(0)"
-          separator="none"
           class="crops-table no-shadow crops-table-hover"
           :title="title"
           :rows="crops"
@@ -14,7 +13,11 @@
           row-key="id"
           :filter="input"
           :visible-columns="visCols"
+          virtual-scroll
+          :virtual-scroll-sticky-size-start="48"
+          :rows-per-page-options="[0]"
           :pagination="pagination()"
+          hide-bottom
         >
           <template #body="props">
             <q-tr
@@ -46,7 +49,7 @@
               </q-td>
 
               <q-td key="health" :props="props">
-                <div class="flex flex-row w-24">
+                <div class="flex flex-row w-24 text-center">
                   <div
                     class="round-badge mx-1 text-black text-bold transition hover:scale-125"
                     v-for="h in props.row.health"
@@ -160,6 +163,7 @@
               multiple
               outlined
               dense
+              rounded
               options-dense
               :display-value="$q.lang.table.columns"
               emit-value
@@ -172,12 +176,13 @@
             <q-input
               outlined
               dense
+              rounded
               v-model="input"
-              placeholder="Search"
+              placeholder="search"
               style="width: 150px"
             >
-              <template v-slot:append>
-                <q-icon name="search" />
+              <template v-slot:prepend>
+                <q-icon name="search" class="search-icon" />
               </template>
             </q-input>
           </template>
@@ -189,8 +194,11 @@
           :columns="columns2"
           row-key="name"
           class="crops-table no-shadow crops-table-hover"
-          separator="none"
           :pagination="pagination()"
+          virtual-scroll
+          :virtual-scroll-sticky-size-start="48"
+          :rows-per-page-options="[0]"
+          hide-bottom
         >
           <template v-slot:top-left>
             <div class="row">
@@ -210,6 +218,7 @@
               multiple
               outlined
               dense
+              rounded
               options-dense
               :display-value="$q.lang.table.columns"
               emit-value
@@ -222,12 +231,13 @@
             <q-input
               outlined
               dense
+              rounded
               v-model="input"
-              placeholder="Search"
+              placeholder="search"
               style="width: 150px"
             >
-              <template v-slot:append>
-                <q-icon name="search" />
+              <template v-slot:prepend>
+                <q-icon name="search" class="search-icon" />
               </template>
             </q-input>
           </template>
@@ -389,15 +399,6 @@ function pagination(): { sortBy: string; rowsPerPage: number } {
 }
 
 const columns: QTableProps["columns"] = [
-  // {
-  //   name: "id",
-  //   // required: true,
-  //   label: "ID",
-  //   align: "left",
-  //   field: (row: any) => row.id,
-  //   format: (val: any) => `${val}`,
-  //   sortable: true,
-  // },
   {
     name: "location",
     align: "left",
@@ -430,10 +431,10 @@ const columns: QTableProps["columns"] = [
   },
   {
     name: "health",
-    align: "center",
+    align: "left",
     label: "Health",
     field: "health",
-    sortable: true,
+    sortable: false,
   },
   {
     name: "status",
@@ -460,20 +461,7 @@ const columns: QTableProps["columns"] = [
   { name: "3d", align: "left", label: "3D", field: "3d", sortable: false },
 ];
 
-// let visibleColumns = ref([
-//   columns[0].name,
-//   columns[1].name,
-//   columns[2].name,
-//   columns[3].name,
-//   columns[4].name,
-//   columns[5].name,
-//   columns[6].name,
-//   columns[7].name,
-//   columns[8].name,
-//   columns[9].name,
-// ]);
-
-const columns2 = [
+const columns2: QTableProps["columns"] = [
   {
     name: "name",
     required: true,

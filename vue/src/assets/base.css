@@ -153,6 +153,56 @@ body,
 
 /* ----------- */
 
+/* TABLE */
+
+.q-table--horizontal-separator tbody tr:not(:last-child) td {
+  border-bottom-width: 0.7px !important;
+  border-color: #e5e7eb;
+}
+
+.q-table--horizontal-separator thead tr th {
+  border-bottom-width: 0.7px !important;
+  border-color: #e5e7eb;
+}
+
+.q-table__middle {
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+/* ----------- */
+
+/* q-field */
+
+.q-field--dense .q-field__control,
+.q-field--dense .q-field__marginal {
+  height: 30px !important;
+}
+
+.q-field--auto-height.q-field--dense .q-field__control,
+.q-field--auto-height.q-field--dense .q-field__native {
+  min-height: 30px !important;
+}
+
+.q-field__native {
+  /* text-align: center !important; */
+  /* padding-left: 13px !important; */
+}
+
+::-webkit-input-placeholder {
+  padding-left: 13px;
+}
+
+:-moz-placeholder {
+  padding-left: 13px;
+}
+
+.q-field__native.row {
+  padding-left: 13px !important;
+}
+
+/* ----------- */
+
 /* SENSOR TABLE */
 
 .sensor-table thead th {
@@ -186,17 +236,28 @@ body,
 
 /* CROPS TABLE */
 
-.crops-table thead th:first-child {
+.crops-table {
+  height: 400px;
+  /* TODO: specify height */
+}
+
+/* .crops-table thead th:first-child {
   border-top-left-radius: 1rem;
 }
 
 .crops-table thead th:last-child {
   border-top-right-radius: 1rem;
-}
+} */
 
-.crops-table .q-table__bottom,
+/* .crops-table .q-table__bottom,
 thead tr:first-child th,
 tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+} */
+
+.crops-table thead tr:first-child th {
+  top: 0;
+  /* bg color is important for th; just specify one */
   background-color: #f9fafb;
 }
 
@@ -208,9 +269,9 @@ tbody tr:nth-child(even) {
   color: #6b7280;
 }
 
-.crops-table tbody tr td:first-child {
+/* .crops-table tbody tr td:first-child {
   @apply rounded-l-lg;
-}
+} */
 
 /* this is when the loading indicator appears */
 .crops-table .q-table--loading thead tr:last-child th {
@@ -234,9 +295,16 @@ tbody tr:nth-child(even) {
 .crops-table tbody tr:hover {
   background-color: #e5e7eb;
 }
+
+.search-icon {
+  font-size: 18px !important;
+}
 /* sort-icon-size */
 .crops-table thead tr th i {
-  font-size: 23px;
+  font-size: 18px;
+  margin-bottom: 2px;
+  margin-left: 0;
+  color: black;
 }
 
 .round-badge {

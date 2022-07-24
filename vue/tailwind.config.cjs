@@ -9,7 +9,7 @@ module.exports = {
         primary: "#79b729",
         primary_hover: "#26561D",
         primary_disable: "#B6C1A7",
-        secondary: "#9C9B9B",
+        secondary: "#9C9B9B !important",
         secondary_hover: "#7A8882",
         secondary_disable: "#B0BAB6",
         danger: "#FFA6A6 !important",

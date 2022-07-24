@@ -1,6 +1,6 @@
 import type { Health } from "./health";
 
-export interface Bed {
+export interface Crop {
   id: number;
   plant: string;
   variety: string;
