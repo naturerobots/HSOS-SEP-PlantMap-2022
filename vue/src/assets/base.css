@@ -89,7 +89,7 @@ body,
 }
 
 .card-title {
-  @apply my-2 text-center text-xl;
+  @apply mt-1 mb-3 text-center text-base font-bold;
 }
 
 /* .sidebar-content {
