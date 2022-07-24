@@ -8,6 +8,7 @@ nav:
       - License: license.md
   - Reference:
       - Definitions: definitions.md
+      - Endpoints: endpoints.md
       - Authentication: authentication.md
       - Vite Env Variables and Modes: vite-env-vars-modes.md
 theme:
