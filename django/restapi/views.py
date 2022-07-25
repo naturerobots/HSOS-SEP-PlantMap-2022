@@ -3,6 +3,8 @@ import string
 import sys
 from time import time
 
+from conversions.transform_coordinates import llOfPlant
+
 from . import tasks
 from .forms import *
 
@@ -15,10 +17,13 @@ import grpc
 import label_service_pb2_grpc as labelService
 import measurement_service_pb2_grpc as measurementService
 import meta_operations_service_pb2_grpc as metaOperations
+import numpy as np
+import tf_service_pb2_grpc as tfService
 from class_query_pb2 import ClassQuery
 from geometry_query_pb2 import GeometryQuery
 from google.protobuf import empty_pb2
 from google.protobuf.json_format import MessageToDict
+from header_pb2 import Header
 from instance_query_pb2 import InstanceQuery
 from knox.views import LoginView as KnoxLoginView
 from measurement_pb2 import Measurement
@@ -29,6 +34,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
+from transform_stamped_query_pb2 import TransformStampedQuery
 
 from django.contrib.auth import login
 from django.contrib.auth.models import User
@@ -48,6 +54,7 @@ channel = grpc.insecure_channel(SERVER_URL, options=options)
 stub = metaOperations.MetaOperationsStub(channel)
 stubLabel = labelService.LabelServiceStub(channel)
 stubMeasurement = measurementService.MeasurementServiceStub(channel)
+stubTf = tfService.TfServiceStub(channel)
 
 # /login
 class LoginView(KnoxLoginView):
@@ -223,21 +230,17 @@ def getBeds(request, company_id: int, garden_id: int):
 
     def streamGen(beds):
 
-        yield "{ \"beds\": ["
-
-        first = True
         # Get bed data from SEEREP over gRPC
         for bed in beds:
-
-            if first:
-                first = False
-            else:
-                yield ","
 
             try:
                 bedData = stub.GetProjectDetails(ProjectQuery(projectuuid=bed.uuid))
             except:
                 continue
+
+            plys_missing = False
+
+            tf_cache = {}
 
             plant_type = {}
             variety = {}
@@ -245,8 +248,41 @@ def getBeds(request, company_id: int, garden_id: int):
             harvest = []
             pyield = []
             health = {}
+            plant_coords = []
 
             for plant in bedData.geometries:
+                if plant.type == "pointcloud":
+                    try:
+                        if not (plant.frame_id in tf_cache):
+                            tfresponse = stubTf.GetTransformStamped(
+                                TransformStampedQuery(
+                                    header=Header(seq=99, frame_id="map", uuid_project=bed.uuid),
+                                    child_frame_id=plant.frame_id,
+                                )
+                            )
+                            tf_cache[plant.frame_id] = tfresponse.transform
+
+                        translation = tf_cache[plant.frame_id].translation
+                        rotation = tf_cache[plant.frame_id].rotation
+
+                        pcoords = llOfPlant(
+                            bed.uuid,
+                            plant.uuid,
+                            bedData.geolocation.latitude,
+                            bedData.geolocation.longitude,
+                            np.array([translation.x, translation.y, translation.z]),
+                            np.array([rotation.x, rotation.y, rotation.z, rotation.w]),
+                        )
+
+                        if pcoords is not None:
+                            (lat, lon, h) = pcoords
+                            plant_coords.append({"id": bed.id, "lat": lat, "lon": lon})
+                        else:
+                            plys_missing = True
+
+                    except Exception as err:
+                        pass
+
                 if plant.type != "measurement":
                     continue
 
@@ -315,7 +351,6 @@ def getBeds(request, company_id: int, garden_id: int):
             data = json.dumps(
                 {
                     "id": bed.id,
-                    "location": "TODO",
                     "plant": plant_type,
                     "variety": variety,
                     "plants": request.build_absolute_uri(plants_url),
@@ -323,11 +358,14 @@ def getBeds(request, company_id: int, garden_id: int):
                     "harvest": f"{harvest} week",
                     "yield": pyield,
                     "health": phealth,
+                    "plant_coords": plant_coords,
                 }
             )
 
+            if plys_missing:
+                tasks.dl_pcloud.delay(MessageToDict(bedData)['geometries'], bed.uuid)
+
             yield data
-        yield "]}"
 
     # logger.info(f"gRPC Requests: {requests}")
     # return JsonResponse({"beds": bedsData})
