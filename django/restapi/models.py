@@ -1,4 +1,5 @@
 import os
+from turtle import position
 from uuid import uuid4
 
 from rest_framework import serializers
@@ -57,11 +58,16 @@ def path_and_rename(path):
     return os.path.join(path, filename)
 
 
+class Image(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    path = models.CharField(max_length=100)
+
+
 class Garden(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=32, null=True)
-    image = models.ImageField(upload_to=path_and_rename('garden-images'), null=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
+    image_path = models.CharField(max_length=100, null=True)
 
     class Meta:
         app_label = 'restapi'
@@ -70,6 +76,14 @@ class Garden(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Coordinate(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=32)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    image = models.ForeignKey(Garden, on_delete=models.CASCADE)
 
 
 class GardenSerializer(serializers.ModelSerializer):

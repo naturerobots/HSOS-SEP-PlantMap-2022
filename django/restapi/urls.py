@@ -17,8 +17,8 @@ urlpatterns = [
     path('companies', views.getCompanies),
     path('companies/<int:company_id>', views.getCompany),
     path('companies/<int:company_id>/gardens', views.getGardens),
+    path('gardens/<int:garden_id>/image', views.uploadGardenImage),
     path('companies/<int:company_id>/gardens/<int:garden_id>', views.getGarden),
-    path('companies/<int:company_id>/gardens/<int:garden_id>/image', views.gardenImage),
     path('companies/<int:company_id>/gardens/<int:garden_id>/beds', views.getBeds),
     path('companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/crops', views.getCrops),
     path(

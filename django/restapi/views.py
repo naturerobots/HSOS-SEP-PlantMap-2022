@@ -1,6 +1,11 @@
 import json
+import re
 import string
 import sys
+from email.mime import base
+from tokenize import cookie_re
+from turtle import pos
+from unicodedata import name
 
 from . import tasks
 from .forms import *
@@ -8,7 +13,10 @@ from .forms import *
 # there is definitly a better way to add an import path
 sys.path.append(r'../build/gRPC/')
 
+import base64
 import logging
+import os
+import re
 
 import grpc
 import label_service_pb2_grpc as labelService
@@ -27,6 +35,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
+from restapi.models import Coordinate, Garden
 
 from django.contrib.auth import login
 from django.contrib.auth.models import User
@@ -152,6 +161,52 @@ def getGarden(request, company_id: int, garden_id: int):
 
     serializer = GardenSerializer(garden)
     return JsonResponse(serializer.data, safe=False)
+
+
+# TODO add authentication
+@api_view(['POST'])
+def uploadGardenImage(request, garden_id):
+    if not request.data['image']:
+        return HttpResponseBadRequest('Missing Image in request')
+
+    if not request.data['positions']:
+        return HttpResponseBadRequest('Missing Positions in request')
+
+    # split image string to get file extension and raw bytes
+    imageInfo, imageData = request.data['image'].split(',')
+    infos = re.split(':|/|;', imageInfo)
+
+    # TODO add env variable for storage location
+    path = "/workdir/django/storage/images"
+    if not os.path.exists(path):
+        os.mkdir(path)
+
+    # create unique file name
+    filename = f"{path}/{uuid4()}.{infos[2]}"
+
+    # decode bytes
+    try:
+        with open(filename, 'wb') as image:
+            image.write(base64.b64decode(imageData))
+    except FileNotFoundError:
+        return HttpResponseBadRequest("Wrong format of image string in request")
+
+    # create image model
+    try:
+        garden = Garden.objects.get(pk=garden_id)
+    except Garden.DoesNotExist:
+        return HttpResponseBadRequest(f"Garden number {garden_id} does not exists")
+    garden.image_path = filename
+    garden.save()
+
+    # save coordinates
+    for position in request.data['positions']:
+        try:
+            Coordinate(image=garden, **position).save()
+        except TypeError:
+            return HttpResponseBadRequest("Wrong format of the positions in requests")
+
+    return HttpResponse(status=201)
 
 
 # /companies/{company_id}/gardens/{garden_id}/image
