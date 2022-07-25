@@ -34,7 +34,6 @@ class UserSerializer(serializers.ModelSerializer):
 class Company(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=32, null=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     class Meta:
         app_label = 'restapi'
@@ -95,4 +94,40 @@ class Bed(models.Model):
 class BedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bed
+        fields = '__all__'
+
+
+class CompanyPermission(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    permission = models.CharField(max_length=1, null=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
+    class Meta:
+        app_label = 'restapi'
+        db_table = 'CompanyPermission'
+        managed = True
+
+
+class CompanyPermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CompanyPermission
+        fields = '__all__'
+
+
+class GardenPermission(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    permission = models.CharField(max_length=1, null=True)
+    garden = models.ForeignKey(Garden, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+
+    class Meta:
+        app_label = 'restapi'
+        db_table = 'GardenPermission'
+        managed = True
+
+
+class GardenPermissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GardenPermission
         fields = '__all__'

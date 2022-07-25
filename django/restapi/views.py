@@ -75,6 +75,124 @@ class RegisterView(KnoxLoginView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# Authorization methods
+
+
+def canReadCompany(companyID, userID):
+    try:
+        company = Company.objects.get(id=companyID)
+        user = User.objects.get(id=userID)
+        companyPermission = CompanyPermission.objects.filter(company=company, user=user).first()
+        serializer = CompanyPermissionSerializer(companyPermission)
+        if not serializer.data['permission']:
+            return False
+        elif serializer.data['permission'] == 'r' or serializer.data['permission'] == 'a':
+            return True
+    except:
+        return False
+
+
+def canEditCompany(companyID, userID):
+    try:
+        company = Company.objects.get(id=companyID)
+        user = User.objects.get(id=userID)
+        companyPermission = CompanyPermission.objects.filter(company=company, user=user).first()
+        serializer = CompanyPermissionSerializer(companyPermission)
+        if not serializer.data['permission']:
+            return False
+        elif serializer.data['permission'] == 'a':
+            return True
+    except:
+        return False
+
+
+# Permissions: 'r' = read; 'a' = admin (read, write)
+def addCompanyPermission(companyID, userID, permission):
+    try:
+        if not permission in ['r', 'a']:
+            return False
+        company = Company.objects.filter(id=companyID)
+        user = User.objects.filter(id=userID)
+        try:
+            # Try to delete already existing entry
+            CompanyPermission.objects.filter(company=company, user=user).delete()
+        except:
+            pass
+        CompanyPermission.objects.create(permission=permission, company=company.first(), user=user.first())
+        return True
+    except:
+        return False
+
+
+def removeCompanyPermission(companyID, userID):
+    try:
+        company = Company.objects.get(id=companyID)
+        user = User.objects.get(id=userID)
+        CompanyPermission.objects.filter(company=company, user=user).delete()
+        return True
+    except:
+        return False
+
+
+def canReadGarden(gardenID, userID):
+    try:
+        garden = Garden.objects.get(id=gardenID)
+        user = User.objects.get(id=userID)
+        gardenPermission = GardenPermission.objects.filter(garden=garden, user=user).first()
+        serializer = GardenPermissionSerializer(gardenPermission)
+        if not serializer.data['permission']:
+            return False
+        elif serializer.data['permission'] == 'r' or serializer.data['permission'] == 'a':
+            return True
+    except:
+        return False
+
+
+def canEditGarden(gardenID, userID):
+    try:
+        garden = Garden.objects.get(id=gardenID)
+        user = User.objects.get(id=userID)
+        gardenPermission = GardenPermission.objects.filter(garden=garden, user=user).first()
+        serializer = GardenPermissionSerializer(gardenPermission)
+        if not serializer.data['permission']:
+            return False
+        elif serializer.data['permission'] == 'a':
+            return True
+    except:
+        return False
+
+
+# Permissions: 'r' = read; 'a' = admin (read, write)
+def addGardenPermission(gardenID, userID, permission):
+    try:
+        if not permission in ['r', 'a']:
+            return False
+        garden = Garden.objects.filter(id=gardenID)
+        user = User.objects.filter(id=userID)
+        try:
+            # Try to delete already existing entry
+            GardenPermission.objects.filter(garden=garden, user=user).delete()
+        except:
+            pass
+        GardenPermission.objects.create(permission=permission, garden=garden.first(), user=user.first())
+        return True
+    except:
+        return False
+
+
+def removeGardenPermission(gardenID, userID):
+    try:
+        garden = Garden.objects.get(id=gardenID)
+        user = User.objects.get(id=userID)
+        GardenPermission.objects.filter(garden=garden, user=user).delete()
+        return True
+    except:
+        return False
+
+
+# End of authorization methods
+
+
 # /user
 @api_view(['GET'])
 def getUser(request):
@@ -104,9 +222,11 @@ def getCompanies(request):
 def getCompany(request, company_id: int):
 
     # Check if authenticated user is allowed to request company_id, garden_id
+    if canReadCompany(company_id, request.user.id) == False:
+        return HttpResponseForbidden()
 
     try:
-        company = Company.objects.get(id=company_id, user=request.user)
+        company = Company.objects.get(id=company_id)
     except:
         # Company with id company_id not found in database or does not belong to the user requesting it
         return HttpResponseNotFound()
@@ -120,9 +240,11 @@ def getCompany(request, company_id: int):
 def getGardens(request, company_id: int):
 
     # Check if authenticated user is allowed to request company_id, garden_id
+    if canReadCompany(company_id, request.user.id) == False:
+        return HttpResponseForbidden()
 
     try:
-        company = Company.objects.get(id=company_id, user=request.user)
+        company = Company.objects.get(id=company_id)
     except:
         # Company with id company_id not found in database or does not belong to the user requesting it
         return HttpResponseNotFound()
@@ -137,9 +259,11 @@ def getGardens(request, company_id: int):
 def getGarden(request, company_id: int, garden_id: int):
 
     # Check if authenticated user is allowed to request company_id, garden_id
+    if canReadGarden(garden_id, request.user.id) == False:
+        return HttpResponseForbidden()
 
     try:
-        company = Company.objects.get(id=company_id, user=request.user)
+        company = Company.objects.get(id=company_id)
     except:
         # Company with id company_id not found in database or does not belong to the user requesting it
         return HttpResponseNotFound()
@@ -159,9 +283,11 @@ def getGarden(request, company_id: int, garden_id: int):
 def gardenImage(request, company_id: int, garden_id: int):
 
     # Check if authenticated user is allowed to request company_id, garden_id
+    if canReadGarden(garden_id, request.user.id) == False:
+        return HttpResponseForbidden()
 
     try:
-        company = Company.objects.get(id=company_id, user=request.user)
+        company = Company.objects.get(id=company_id)
     except:
         # Company with id company_id not found in database or does not belong to the user requesting it
         return HttpResponseNotFound()
@@ -179,6 +305,10 @@ def gardenImage(request, company_id: int, garden_id: int):
     # curl --form image='@/home/user/image.png' http://localhost:8000/companies/1/gardens/1/image
     #  -H "Authorization: Token 7182c8ddc808ac13d6befd1791816aabb66a6048048861720603c431b9589d7c"
     elif request.method == 'POST':
+
+        if canEditGarden(garden_id, request.user.id) == False:
+            return HttpResponseForbidden()
+
         gardenForm = GardenForm(request.POST, request.FILES)
 
         if gardenForm.is_valid():
@@ -199,9 +329,11 @@ def gardenImage(request, company_id: int, garden_id: int):
 def getBeds(request, company_id: int, garden_id: int):
 
     # Check if authenticated user is allowed to request company_id, garden_id
+    if canReadGarden(garden_id, request.user.id) == False:
+        return HttpResponseForbidden()
 
     try:
-        company = Company.objects.get(id=company_id, user=request.user)
+        company = Company.objects.get(id=company_id)
     except:
         # Company with id company_id not found in database or does not belong to the user requesting it
         return HttpResponseNotFound()
@@ -232,9 +364,11 @@ def getBeds(request, company_id: int, garden_id: int):
 def getCrops(request, company_id: int, garden_id: int, bed_id: int):
 
     # Check if authenticated user is allowed to request company_id, garden_id, bed_id
+    if canReadGarden(garden_id, request.user.id) == False:
+        return HttpResponseForbidden()
 
     try:
-        company = Company.objects.get(id=company_id, user=request.user)
+        company = Company.objects.get(id=company_id)
     except:
         # Company with id company_id not found in database or does not belong to the user requesting it
         return HttpResponseNotFound()
