@@ -46,27 +46,22 @@ Example response (Beds are streamed one by one):
  ],
  "plant_coords": [
   {
-   "id": 1,
    "lat": 52.317118374885005,
    "lon": 7.630641577424838
   },
   {
-   "id": 1,
    "lat": 52.317126563936476,
    "lon": 7.63064192673892
   },
   {
-   "id": 1,
    "lat": 52.31712302636109,
    "lon": 7.630644944039591
   },
   {
-   "id": 1,
    "lat": 52.31711997964676,
    "lon": 7.63064731009461
   },
   {
-   "id": 1,
    "lat": 52.31712704329051,
    "lon": 7.63063668011326
   }
@@ -89,11 +84,10 @@ Example response:
   {
    "id": "25816c5842f14fe98b1ebc85a4908934",
    "bedid": 1,
-   "location": "TODO",
    "plant": "mangold",
    "variety": "Lucullus",
    "soil_humidty": 0.0,
-   "harvest": "10 week",
+   "harvest": "11 week",
    "yield": 486.50339525240184,
    "health": [
     {
@@ -108,12 +102,15 @@ Example response:
      "type": "diseases",
      "loglevel": 2
     }
-   ]
+   ],
+   "plant_coords": {
+    "lat": 52.317118374885005,
+    "lon": 7.630641577424838
+   }
   },
   {
    "id": "5107b0de17984b038b4319ad431c9775",
    "bedid": 1,
-   "location": "TODO",
    "plant": "weed",
    "variety": "Lucullus",
    "soil_humidty": 0.0,
@@ -132,7 +129,11 @@ Example response:
      "type": "diseases",
      "loglevel": 1
     }
-   ]
+   ],
+   "plant_coords": {
+    "lat": 52.317126563936476,
+    "lon": 7.63064192673892
+   }
   }
  ]
 }

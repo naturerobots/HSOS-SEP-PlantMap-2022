@@ -276,7 +276,7 @@ def getBeds(request, company_id: int, garden_id: int):
 
                         if pcoords is not None:
                             (lat, lon, h) = pcoords
-                            plant_coords.append({"id": bed.id, "lat": lat, "lon": lon})
+                            plant_coords.append({"lat": lat, "lon": lon})
                         else:
                             plys_missing = True
 
@@ -404,9 +404,44 @@ def getPlants(request, company_id: int, garden_id: int, bed_id: int):
     except:
         return HttpResponseNotFound()
 
-    plantData = []
+    plys_missing = False
+
+    tf_cache = {}
+    plant_coords = {}
+    plantData = {}
 
     for plant in bedData.geometries:
+        if plant.type == "pointcloud":
+            try:
+                if not (plant.frame_id in tf_cache):
+                    tfresponse = stubTf.GetTransformStamped(
+                        TransformStampedQuery(
+                            header=Header(seq=99, frame_id="map", uuid_project=bed.uuid),
+                            child_frame_id=plant.frame_id,
+                        )
+                    )
+                    tf_cache[plant.frame_id] = tfresponse.transform
+
+                translation = tf_cache[plant.frame_id].translation
+                rotation = tf_cache[plant.frame_id].rotation
+
+                pcoords = llOfPlant(
+                    bed.uuid,
+                    plant.uuid,
+                    bedData.geolocation.latitude,
+                    bedData.geolocation.longitude,
+                    np.array([translation.x, translation.y, translation.z]),
+                    np.array([rotation.x, rotation.y, rotation.z, rotation.w]),
+                )
+
+                if pcoords is not None:
+                    (lat, lon, h) = pcoords
+                    plant_coords[plant.name] = {"lat": lat, "lon": lon}
+                else:
+                    plys_missing = True
+
+            except Exception as err:
+                pass
         if plant.type != "measurement":
             continue
 
@@ -459,22 +494,30 @@ def getPlants(request, company_id: int, garden_id: int, bed_id: int):
         except:
             pass
 
-        plantData.append(
-            {
-                "id": plant.uuid,
-                "bedid": bed.id,
-                "location": "TODO",
-                "plant": plant_type,
-                "variety": variety,
-                "soil_humidty": soil_humidty,
-                "harvest": f"{harvest} week",
-                "yield": pyield,
-                "health": health,
-            }
-        )
+        plantData[plant.name] = {
+            "id": plant.uuid,
+            "bedid": bed.id,
+            "plant": plant_type,
+            "variety": variety,
+            "soil_humidty": soil_humidty,
+            "harvest": f"{harvest} week",
+            "yield": pyield,
+            "health": health,
+        }
+
+    newPlantData = []
+
+    # This is stupid, don't tell me if it breaks
+    for (name, plant) in plantData.items():
+        if name in plant_coords:
+            plant["plant_coords"] = plant_coords[name]
+        newPlantData.append(plant)
+
+    if plys_missing:
+        tasks.dl_pcloud.delay(MessageToDict(bedData)['geometries'], bed.uuid)
 
     logger.info(f"gRPC Requests: {requests}")
-    return JsonResponse({"plants": plantData})
+    return JsonResponse({"plants": newPlantData})
 
 
 # /companies/{company_id}/gardens/{garden_id}/beds/{bed_id}/sensors
