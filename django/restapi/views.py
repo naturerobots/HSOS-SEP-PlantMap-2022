@@ -7,7 +7,6 @@ import sys
 from uuid import uuid4
 
 import grpc
-from yaml import serialize
 
 # generated grpc python files
 sys.path.append(r'../build/gRPC/')
@@ -152,11 +151,8 @@ def getGarden(request, company_id: int, garden_id: int):
 
 
 def uploadImage(request, garden_id):
-    if not request.data['image']:
-        return HttpResponseBadRequest('Missing Image in request')
-
-    if not request.data['positions']:
-        return HttpResponseBadRequest('Missing Positions in request')
+    if not 'coordinates' in request.data or not 'image' in request.data:
+        return HttpResponseBadRequest()
 
     # split image string to get file extension and raw bytes
     imageInfo, imageData = request.data['image'].split(',')
@@ -179,7 +175,6 @@ def uploadImage(request, garden_id):
     except FileNotFoundError:
         return HttpResponseBadRequest("Wrong format of image string in request")
 
-    # create image model
     try:
         garden = Garden.objects.get(pk=garden_id)
     except Garden.DoesNotExist:
@@ -187,14 +182,18 @@ def uploadImage(request, garden_id):
     garden.image_path = filename
     garden.save()
 
-    # TODO add updates of coordinates
-
-    # save coordinates
-    for position in request.data['positions']:
+    for position in request.data['coordinates']:
+        # if coordinates already exist just update, else create new ones
         try:
-            Coordinate(garden=garden, **position).save()
-        except TypeError:
-            return HttpResponseBadRequest("Wrong format of the positions in requests")
+            coordinate = Coordinate.objects.get(name=position['name'])
+            coordinate.latitude = position['latitude']
+            coordinate.longitude = position['longitude']
+            coordinate.save()
+        except Coordinate.DoesNotExist:
+            try:
+                Coordinate(garden=garden, **position).save()
+            except TypeError:
+                return HttpResponseBadRequest("Wrong format of the positions in requests")
 
     return HttpResponse(status=201)
 

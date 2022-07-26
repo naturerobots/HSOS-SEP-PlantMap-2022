@@ -80,24 +80,16 @@ class Garden(models.Model):
 
 
 class Coordinate(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=32, primary_key=True)
     latitude = models.FloatField()
     longitude = models.FloatField()
     garden = models.ForeignKey(Garden, related_name='garden_coordinates', on_delete=models.CASCADE)
 
 
-class CoordinateListSerializer(serializers.ListSerializer):
-    def create(self, validated_data):
-        coordinate = [Coordinate(**item) for item in validated_data]
-        return Coordinate.objects.bulk_create(coordinate)
-
-
 class CoordinateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Coordinate
-        exclude = ['id', 'garden']
-        list_serializer_class = CoordinateListSerializer
+        exclude = ['garden']
 
 
 class GardenSerializer(serializers.ModelSerializer):
