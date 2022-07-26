@@ -21,5 +21,14 @@ urlpatterns = [
     path('companies/<int:company_id>/gardens/<int:garden_id>/beds', views.getBeds),
     path('companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/crops', views.getCrops),
     path('companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/3d', views.getBed3DImage),
+    path(
+        'companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/plants',
+        views.getPlants,
+        name='plants-resource',
+    ),
+    path(
+        'companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/3d',
+        views.getBed3DImage,
+    ),
     path('beds/<str:uuid>/task', views.make_task),
 ]
