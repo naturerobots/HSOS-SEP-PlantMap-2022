@@ -7,6 +7,7 @@ import sys
 from uuid import uuid4
 
 import grpc
+from yaml import serialize
 
 # generated grpc python files
 sys.path.append(r'../build/gRPC/')
@@ -26,6 +27,7 @@ from rest_framework.response import Response
 
 from django.contrib.auth import login
 from django.http import *
+from django.views.generic import View
 
 from . import tasks
 from .models import *
@@ -149,9 +151,7 @@ def getGarden(request, company_id: int, garden_id: int):
     return JsonResponse(serializer.data, safe=False)
 
 
-# TODO add authentication
-@api_view(['POST'])
-def uploadGardenImage(request, garden_id):
+def uploadImage(request, garden_id):
     if not request.data['image']:
         return HttpResponseBadRequest('Missing Image in request')
 
@@ -187,14 +187,44 @@ def uploadGardenImage(request, garden_id):
     garden.image_path = filename
     garden.save()
 
+    # TODO add updates of coordinates
+
     # save coordinates
     for position in request.data['positions']:
         try:
-            Coordinate(image=garden, **position).save()
+            Coordinate(garden=garden, **position).save()
         except TypeError:
             return HttpResponseBadRequest("Wrong format of the positions in requests")
 
     return HttpResponse(status=201)
+
+
+def getImage(request, garden_id):
+    try:
+        garden = Garden.objects.get(pk=garden_id)
+    except Garden.DoesNotExist:
+        return HttpResponseNotFound()
+
+    if garden.image_path is None:
+        return HttpResponseNotFound('No image uploaded for this garden')
+
+    with open(garden.image_path, 'rb') as image:
+        image_string = 'data:image/png;base64,' + base64.b64encode(image.read()).decode('ASCII')
+
+    coordinates = garden.garden_coordinates.all()
+
+    coordinates = CoordinateSerializer(coordinates, many=True).data
+
+    return JsonResponse({"data": image_string, "coordinates": coordinates})
+
+
+# TODO consider using class based views, for improved separation
+@api_view(['GET', 'POST'])
+def imageView(request, garden_id):
+    if request.method == 'POST':
+        return uploadImage(request, garden_id)
+    elif request.method == 'GET':
+        return getImage(request, garden_id)
 
 
 # /companies/{company_id}/gardens/{garden_id}/beds

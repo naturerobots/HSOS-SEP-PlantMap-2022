@@ -1,4 +1,5 @@
 import os
+from dataclasses import fields
 from turtle import position
 from uuid import uuid4
 
@@ -83,7 +84,20 @@ class Coordinate(models.Model):
     name = models.CharField(max_length=32)
     latitude = models.FloatField()
     longitude = models.FloatField()
-    image = models.ForeignKey(Garden, on_delete=models.CASCADE)
+    garden = models.ForeignKey(Garden, related_name='garden_coordinates', on_delete=models.CASCADE)
+
+
+class CoordinateListSerializer(serializers.ListSerializer):
+    def create(self, validated_data):
+        coordinate = [Coordinate(**item) for item in validated_data]
+        return Coordinate.objects.bulk_create(coordinate)
+
+
+class CoordinateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Coordinate
+        exclude = ['id', 'garden']
+        list_serializer_class = CoordinateListSerializer
 
 
 class GardenSerializer(serializers.ModelSerializer):

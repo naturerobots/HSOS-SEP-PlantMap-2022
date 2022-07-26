@@ -14,7 +14,7 @@ urlpatterns = [
     path('register', views.RegisterView.as_view()),
     path('user-info', views.getUser),
     path('companies', views.getCompanies),
-    path('gardens/<int:garden_id>/image', views.uploadGardenImage),
+    path('gardens/<int:garden_id>/image', views.imageView),
     path('companies/<int:company_id>', views.getCompany),
     path('companies/<int:company_id>/gardens', views.getGardens),
     path('companies/<int:company_id>/gardens/<int:garden_id>', views.getGarden),
