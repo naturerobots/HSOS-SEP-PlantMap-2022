@@ -168,7 +168,9 @@ def uploadGardenImage(request, garden_id):
         os.mkdir(path)
 
     # create unique file name
-    filename = f"{path}/{uuid4()}.{infos[2]}"
+    if infos[2] != 'png':
+        return HttpResponseBadRequest('We currently only support PNGs')
+    filename = f"{path}/{uuid4()}.png"
 
     # decode bytes
     try:
