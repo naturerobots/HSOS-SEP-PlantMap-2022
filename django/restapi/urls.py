@@ -1,7 +1,6 @@
 from knox import views as knox_views
 
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.urls import include, path
+from django.urls import path
 
 from . import views
 
@@ -13,21 +12,14 @@ urlpatterns = [
     path('logout', knox_views.LogoutView.as_view(), name='knox_logout'),
     path('logoutall', knox_views.LogoutAllView.as_view(), name='knox_logoutall'),
     path('register', views.RegisterView.as_view()),
-    path('user', views.getUser),
+    path('user-info', views.getUser),
     path('companies', views.getCompanies),
+    path('gardens/<int:garden_id>/image', views.uploadGardenImage),
     path('companies/<int:company_id>', views.getCompany),
     path('companies/<int:company_id>/gardens', views.getGardens),
-    path('gardens/<int:garden_id>/image', views.uploadGardenImage),
     path('companies/<int:company_id>/gardens/<int:garden_id>', views.getGarden),
     path('companies/<int:company_id>/gardens/<int:garden_id>/beds', views.getBeds),
     path('companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/crops', views.getCrops),
-    path(
-        'companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/3d',
-        views.getBed3DImage,
-    ),
-    path('companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/sensors', views.getSensors),
-    path(
-        'companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/sensors/<int:sensor_id>', views.getSensor
-    ),
+    path('companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/3d', views.getBed3DImage),
     path('beds/<str:uuid>/task', views.make_task),
 ]

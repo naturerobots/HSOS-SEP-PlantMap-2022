@@ -1,54 +1,40 @@
-import json
-import re
-import string
-import sys
-from email.mime import base
-from tokenize import cookie_re
-from turtle import pos
-from unicodedata import name
-
-from . import tasks
-from .forms import *
-
-# there is definitly a better way to add an import path
-sys.path.append(r'../build/gRPC/')
-
 import base64
 import logging
 import os
 import re
+import string
+import sys
+from uuid import uuid4
 
 import grpc
+
+# generated grpc python files
+sys.path.append(r'../build/gRPC/')
+
 import label_service_pb2_grpc as labelService
 import measurement_service_pb2_grpc as measurementService
 import meta_operations_service_pb2_grpc as metaOperations
 from class_query_pb2 import ClassQuery
 from geometry_query_pb2 import GeometryQuery
-from google.protobuf import empty_pb2
 from google.protobuf.json_format import MessageToDict
 from knox.views import LoginView as KnoxLoginView
-from measurement_pb2 import Measurement
 from project_query_pb2 import ProjectQuery
 from rest_framework import permissions, status
 from rest_framework.authtoken.serializers import AuthTokenSerializer
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
-from rest_framework.request import Request
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from restapi.models import Coordinate, Garden
 
 from django.contrib.auth import login
-from django.contrib.auth.models import User
-from django.db.models import ObjectDoesNotExist
 from django.http import *
-from django.template import loader
 
+from . import tasks
 from .models import *
 
 logger = logging.getLogger('django')
 
 SERVER_URL = "seerep.naturerobots.de:5000"
-options = [('grpc.max_receive_message_length', 100 * 1024 * 1024)]  # https://github.com/tensorflow/serving/issues/1382
+# https://github.com/tensorflow/serving/issues/1382
+options = [('grpc.max_receive_message_length', 100 * 1024 * 1024)]
 channel = grpc.insecure_channel(SERVER_URL, options=options)
 
 stub = metaOperations.MetaOperationsStub(channel)
@@ -84,7 +70,7 @@ class RegisterView(KnoxLoginView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# /user
+# /user-info
 @api_view(['GET'])
 def getUser(request):
 
@@ -96,7 +82,7 @@ def getUser(request):
 @api_view(['GET'])
 def getCompanies(request):
 
-    # Check if authenticated user is allowed to request company_id, garden_id
+    # TODO Check if authenticated user is allowed to request company_id, garden_id
 
     try:
         companies = Company.objects.filter(user=request.user)
@@ -112,7 +98,7 @@ def getCompanies(request):
 @api_view(['GET'])
 def getCompany(request, company_id: int):
 
-    # Check if authenticated user is allowed to request company_id, garden_id
+    # TODO Check if authenticated user is allowed to request company_id, garden_id
 
     try:
         company = Company.objects.get(id=company_id, user=request.user)
@@ -128,7 +114,7 @@ def getCompany(request, company_id: int):
 @api_view(['GET'])
 def getGardens(request, company_id: int):
 
-    # Check if authenticated user is allowed to request company_id, garden_id
+    # TODO Check if authenticated user is allowed to request company_id, garden_id
 
     try:
         company = Company.objects.get(id=company_id, user=request.user)
@@ -145,7 +131,7 @@ def getGardens(request, company_id: int):
 @api_view(['GET'])
 def getGarden(request, company_id: int, garden_id: int):
 
-    # Check if authenticated user is allowed to request company_id, garden_id
+    # TODO Check if authenticated user is allowed to request company_id, garden_id
 
     try:
         company = Company.objects.get(id=company_id, user=request.user)
@@ -209,51 +195,11 @@ def uploadGardenImage(request, garden_id):
     return HttpResponse(status=201)
 
 
-# /companies/{company_id}/gardens/{garden_id}/image
-@api_view(['GET', 'POST'])
-def gardenImage(request, company_id: int, garden_id: int):
-
-    # Check if authenticated user is allowed to request company_id, garden_id
-
-    try:
-        company = Company.objects.get(id=company_id, user=request.user)
-    except:
-        # Company with id company_id not found in database or does not belong to the user requesting it
-        return HttpResponseNotFound()
-
-    try:
-        garden = Garden.objects.get(id=garden_id, company=company)
-    except:
-        # Garden with id garden_id not found in database or does not belong to the company
-        return HttpResponseNotFound()
-
-    if request.method == 'GET':
-        return HttpResponseRedirect(garden.image.url)
-
-    # Example request with curl:
-    # curl --form image='@/home/user/image.png' http://localhost:8000/companies/1/gardens/1/image
-    #  -H "Authorization: Token 7182c8ddc808ac13d6befd1791816aabb66a6048048861720603c431b9589d7c"
-    elif request.method == 'POST':
-        gardenForm = GardenForm(request.POST, request.FILES)
-
-        if gardenForm.is_valid():
-
-            # Delete previous garden image if it exists
-            if garden.image:
-                garden.image.delete(save=True)
-
-            garden.image = gardenForm.cleaned_data['image']
-            garden.save()
-            return JsonResponse({"success": "true"})
-
-    return JsonResponse({})
-
-
 # /companies/{company_id}/gardens/{garden_id}/beds
 @api_view(['GET'])
 def getBeds(request, company_id: int, garden_id: int):
 
-    # Check if authenticated user is allowed to request company_id, garden_id
+    # TODO Check if authenticated user is allowed to request company_id, garden_id
 
     try:
         company = Company.objects.get(id=company_id, user=request.user)
@@ -286,7 +232,7 @@ def getBeds(request, company_id: int, garden_id: int):
 @api_view(['GET'])
 def getCrops(request, company_id: int, garden_id: int, bed_id: int):
 
-    # Check if authenticated user is allowed to request company_id, garden_id, bed_id
+    # TODO Check if authenticated user is allowed to request company_id, garden_id, bed_id
 
     try:
         company = Company.objects.get(id=company_id, user=request.user)
@@ -421,18 +367,6 @@ def getCrops(request, company_id: int, garden_id: int, bed_id: int):
         )
 
     return JsonResponse(crops, safe=False)
-
-
-# /companies/{company_id}/gardens/{garden_id}/beds/{bed_id}/sensors
-@api_view(['GET'])
-def getSensors(request, company_id: int, garden_id: int, bed_id: int):
-    return JsonResponse({})
-
-
-# /companies/{company_id}/gardens/{garden_id}/beds/{bed_id}/sensors/{sensor_id}
-@api_view(['GET'])
-def getSensor(request, company_id: int, garden_id: int, bed_id: int, sensor_id: int):
-    return JsonResponse({})
 
 
 # companies/{company_id}/gardens/{garden_id}/beds/{bed_id}/3d
