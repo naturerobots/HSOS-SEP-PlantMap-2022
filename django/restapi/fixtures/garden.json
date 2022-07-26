@@ -9,7 +9,7 @@
   },
   {
     "model": "restapi.garden",
-    "pk": 1,
+    "pk": 2,
     "fields": {
       "name": "PlantMap-Default-Garden-2",
       "company": 1

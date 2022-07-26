@@ -6,7 +6,7 @@
       "username": "k.müller",
       "first_name": "Kevin",
       "last_name": "Müller",
-      "password": "1234"
+      "password": "pbkdf2_sha256$320000$LuKlEyk1ZdbXx8ctkvF9c7$21bgLk3zi8fHBCZdTkAKQT8e0nIGe7A+gmS4zFaqzd4="
     }
   },
   {
@@ -16,7 +16,7 @@
       "username": "dHaus",
       "first_name": "David",
       "last_name": "Haus",
-      "password": "1234",
+      "password": "pbkdf2_sha256$320000$LuKlEyk1ZdbXx8ctkvF9c7$21bgLk3zi8fHBCZdTkAKQT8e0nIGe7A+gmS4zFaqzd4=",
       "is_superuser": true
     }
   }
