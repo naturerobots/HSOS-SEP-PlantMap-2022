@@ -10,6 +10,7 @@ the component should be extended to include a message indicating that no weather
       <div class="grid grid-cols-3">
         <div class="flex items-center justify-center">
           <img
+            class="weather-icon"
             :src="
               '/src/assets/icons/weather/' + current.weather[0].icon + '.svg'
             "
@@ -75,3 +76,9 @@ const dateOptions: Intl.DateTimeFormatOptions = {
   year: "numeric",
 };
 </script>
+
+<style>
+.weather-icon {
+  width: 100px;
+}
+</style>
