@@ -1,4 +1,4 @@
-# Endpoints
+# Beds & Plants Endpoints
 
 ## General
 
@@ -138,9 +138,3 @@ Example response:
  ]
 }
 ```
-
-## Authentication
-
-### `/login`, `/register`, `/logout`, `/logoutall` & `/user`
-
-See [Authentication](/authentication).
