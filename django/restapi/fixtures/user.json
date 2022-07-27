@@ -3,9 +3,9 @@
     "model": "auth.user",
     "pk": 1,
     "fields": {
-      "username": "k.müller",
-      "first_name": "Kevin",
-      "last_name": "Müller",
+      "username": "demo",
+      "first_name": "demo",
+      "last_name": "user",
       "password": "pbkdf2_sha256$320000$LuKlEyk1ZdbXx8ctkvF9c7$21bgLk3zi8fHBCZdTkAKQT8e0nIGe7A+gmS4zFaqzd4="
     }
   },
@@ -13,9 +13,9 @@
     "model": "auth.user",
     "pk": 2,
     "fields": {
-      "username": "dHaus",
-      "first_name": "David",
-      "last_name": "Haus",
+      "username": "admin",
+      "first_name": "admin",
+      "last_name": "admin",
       "password": "pbkdf2_sha256$320000$LuKlEyk1ZdbXx8ctkvF9c7$21bgLk3zi8fHBCZdTkAKQT8e0nIGe7A+gmS4zFaqzd4=",
       "is_superuser": true
     }

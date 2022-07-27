@@ -26,11 +26,6 @@ urlpatterns = [
     ),
     path('companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/3d', views.getBed3DImage),
     path(
-        'companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/plants',
-        views.getPlants,
-        name='plants-resource',
-    ),
-    path(
         'companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/3d',
         views.getBed3DImage,
     ),

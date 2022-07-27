@@ -3,7 +3,7 @@
     "model": "restapi.company",
     "pk": 1,
     "fields": {
-      "name": "PlantMap1",
+      "name": "Demo-Company",
       "user": 1
     }
   }
