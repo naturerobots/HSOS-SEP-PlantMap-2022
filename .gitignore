@@ -14,4 +14,4 @@ media
 #whitelist the .vscode folder in .devcontainer
 !.devcontainer/.vscode
 
-django/plys/
+storage
