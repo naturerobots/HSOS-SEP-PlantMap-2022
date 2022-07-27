@@ -1,0 +1,10 @@
+[
+  {
+    "model": "restapi.garden",
+    "pk": 1,
+    "fields": {
+      "name": "Demo-Garden-1",
+      "company": 1
+    }
+  }
+]
