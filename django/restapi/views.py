@@ -1,57 +1,42 @@
+import base64
 import json
+import logging
+import os
 import re
 import string
 import sys
-from email.mime import base
 from time import time
-from tokenize import cookie_re
-from turtle import pos
-from unicodedata import name
 
-from conversions.transform_coordinates import llOfPlant
-
-from . import tasks
-from .forms import *
+import grpc
 
 # there is definitly a better way to add an import path
 sys.path.append(r'../build/gRPC/')
 
-import base64
-import logging
-import os
-import re
-
-import grpc
 import label_service_pb2_grpc as labelService
 import measurement_service_pb2_grpc as measurementService
 import meta_operations_service_pb2_grpc as metaOperations
 import numpy as np
 import tf_service_pb2_grpc as tfService
 from class_query_pb2 import ClassQuery
+from conversions.transform_coordinates import llOfPlant
 from geometry_query_pb2 import GeometryQuery
-from google.protobuf import empty_pb2
 from google.protobuf.json_format import MessageToDict
 from header_pb2 import Header
 from instance_query_pb2 import InstanceQuery
 from knox.views import LoginView as KnoxLoginView
-from measurement_pb2 import Measurement
 from project_query_pb2 import ProjectQuery
 from rest_framework import permissions, status
 from rest_framework.authtoken.serializers import AuthTokenSerializer
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
-from rest_framework.request import Request
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from restapi.models import Coordinate, Garden
 from transform_stamped_query_pb2 import TransformStampedQuery
 
 from django.contrib.auth import login
-from django.contrib.auth.models import User
-from django.db.models import ObjectDoesNotExist
 from django.http import *
-from django.template import loader
 from django.urls import reverse
 
+from . import tasks
 from .models import *
 
 logger = logging.getLogger('django')
@@ -143,7 +128,8 @@ def getGardens(request, company_id: int):
     try:
         company = Company.objects.get(id=company_id, user=request.user)
     except:
-        # Company with id company_id not found in database or does not belong to the user requesting it
+        # Company with id company_id not found in database or does not belong to
+        # the user requesting it
         return HttpResponseNotFound()
 
     gardens = Garden.objects.filter(company=company)
@@ -173,14 +159,9 @@ def getGarden(request, company_id: int, garden_id: int):
     return JsonResponse(serializer.data, safe=False)
 
 
-# TODO add authentication
-@api_view(['POST'])
-def uploadGardenImage(request, garden_id):
-    if not request.data['image']:
-        return HttpResponseBadRequest('Missing Image in request')
-
-    if not request.data['positions']:
-        return HttpResponseBadRequest('Missing Positions in request')
+def uploadImage(request, garden_id):
+    if not 'coordinates' in request.data or not 'image' in request.data:
+        return HttpResponseBadRequest()
 
     # split image string to get file extension and raw bytes
     imageInfo, imageData = request.data['image'].split(',')
@@ -192,7 +173,9 @@ def uploadGardenImage(request, garden_id):
         os.mkdir(path)
 
     # create unique file name
-    filename = f"{path}/{uuid4()}.{infos[2]}"
+    if infos[2] != 'png':
+        return HttpResponseBadRequest('We currently only support PNGs')
+    filename = f"{path}/{uuid4()}.png"
 
     # decode bytes
     try:
@@ -201,7 +184,6 @@ def uploadGardenImage(request, garden_id):
     except FileNotFoundError:
         return HttpResponseBadRequest("Wrong format of image string in request")
 
-    # create image model
     try:
         garden = Garden.objects.get(pk=garden_id)
     except Garden.DoesNotExist:
@@ -209,54 +191,48 @@ def uploadGardenImage(request, garden_id):
     garden.image_path = filename
     garden.save()
 
-    # save coordinates
-    for position in request.data['positions']:
+    for position in request.data['coordinates']:
+        # if coordinates already exist just update, else create new ones
         try:
-            Coordinate(image=garden, **position).save()
-        except TypeError:
-            return HttpResponseBadRequest("Wrong format of the positions in requests")
+            coordinate = Coordinate.objects.get(name=position['name'])
+            coordinate.latitude = position['latitude']
+            coordinate.longitude = position['longitude']
+            coordinate.save()
+        except Coordinate.DoesNotExist:
+            try:
+                Coordinate(garden=garden, **position).save()
+            except TypeError:
+                return HttpResponseBadRequest("Wrong format of the positions in requests")
 
     return HttpResponse(status=201)
 
 
-# /companies/{company_id}/gardens/{garden_id}/image
+def getImage(request, garden_id):
+    try:
+        garden = Garden.objects.get(pk=garden_id)
+    except Garden.DoesNotExist:
+        return HttpResponseNotFound()
+
+    if garden.image_path is None:
+        return HttpResponseNotFound('No image uploaded for this garden')
+
+    with open(garden.image_path, 'rb') as image:
+        image_string = 'data:image/png;base64,' + base64.b64encode(image.read()).decode('ASCII')
+
+    coordinates = garden.garden_coordinates.all()
+
+    coordinates = CoordinateSerializer(coordinates, many=True).data
+
+    return JsonResponse({"image": image_string, "coordinates": coordinates})
+
+
+# TODO consider using class based views, for improved separation
 @api_view(['GET', 'POST'])
-def gardenImage(request, company_id: int, garden_id: int):
-
-    # Check if authenticated user is allowed to request company_id, garden_id
-
-    try:
-        company = Company.objects.get(id=company_id, user=request.user)
-    except:
-        # Company with id company_id not found in database or does not belong to the user requesting it
-        return HttpResponseNotFound()
-
-    try:
-        garden = Garden.objects.get(id=garden_id, company=company)
-    except:
-        # Garden with id garden_id not found in database or does not belong to the company
-        return HttpResponseNotFound()
-
-    if request.method == 'GET':
-        return HttpResponseRedirect(garden.image.url)
-
-    # Example request with curl:
-    # curl --form image='@/home/user/image.png' http://localhost:8000/companies/1/gardens/1/image
-    #  -H "Authorization: Token 7182c8ddc808ac13d6befd1791816aabb66a6048048861720603c431b9589d7c"
-    elif request.method == 'POST':
-        gardenForm = GardenForm(request.POST, request.FILES)
-
-        if gardenForm.is_valid():
-
-            # Delete previous garden image if it exists
-            if garden.image:
-                garden.image.delete(save=True)
-
-            garden.image = gardenForm.cleaned_data['image']
-            garden.save()
-            return JsonResponse({"success": "true"})
-
-    return JsonResponse({})
+def imageView(request, garden_id):
+    if request.method == 'POST':
+        return uploadImage(request, garden_id)
+    elif request.method == 'GET':
+        return getImage(request, garden_id)
 
 
 # With the current dummy data this costs 100 gRPC-requests per bed. Seems like quite the DOS potential
