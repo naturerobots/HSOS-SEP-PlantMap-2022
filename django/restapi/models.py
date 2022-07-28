@@ -117,9 +117,9 @@ class CompanyPermissionSerializer(serializers.ModelSerializer):
 
 class GardenPermission(models.Model):
     id = models.BigAutoField(primary_key=True)
-    permission = models.CharField(max_length=1, null=True)
-    garden = models.ForeignKey(Garden, on_delete=models.CASCADE, null=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    permission = models.CharField(max_length=1)
+    garden = models.ForeignKey(Garden, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         app_label = 'restapi'
