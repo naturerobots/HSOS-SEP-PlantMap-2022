@@ -99,9 +99,9 @@ class BedSerializer(serializers.ModelSerializer):
 
 class CompanyPermission(models.Model):
     id = models.BigAutoField(primary_key=True)
-    permission = models.CharField(max_length=1, null=True)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    permission = models.CharField(max_length=1)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         app_label = 'restapi'
