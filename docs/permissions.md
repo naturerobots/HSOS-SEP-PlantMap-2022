@@ -7,8 +7,19 @@ Each row in the table holds the reference to either a company or garden, the use
 The permission is represented by a single char. Possible permissions are described in the next section.
 In addition, each row in the table has a unique number as a primary-key.
 
-Example row in table CompanyPermission: [id: 1; company_id: 1; user_id: 1; permission: 'a']
-Example row in table GardenPermission: [id: 1; garden_id: 1; user_id: 1; permission: 'a']
+Example rows in table CompanyPermission:
+
+|id (PK)|company_id (FK)|user_id (FK)|permission|
+|:-----:|:-------------:|:----------:|:--------:|
+|   1   |       1       |      1     |     a    |
+|   2   |       1       |      2     |     u    |
+
+Example rows in table GardenPermission:
+
+|id (PK)|garden_id (FK)|user_id (FK)|permission|
+|:-----:|:------------:|:----------:|:--------:|
+|   1   |       1      |      1     |     a    |
+|   2   |       1      |      2     |     u    |
 
 ## Roles
 
@@ -26,10 +37,10 @@ The request body needs to contain a `user_id` and a `permission` field as json.
 
 Only admins of the corresponding company can access this endpoint.
 
-The following request gives the user with id '42' admin permissions on the company with id '2':
+The following request with URL: ../companies/2/createPermission
+gives the user with id '42' admin permissions on the company with id '2':
 
 ```json
-URL: ../companies/2/createPermission
 {
   "user_id": "42",
   "permission": "a"
@@ -54,10 +65,10 @@ The request body needs to contain a `user_id` field as json.
 Only admins of the corresponding company can access this endpoint.
 Own permissions or those of the last admin cannot be removed.
 
-The following request removes the permissions for the user with id '42' on the company with id '2':
+The following request with URL: ../companies/2/createPermission
+removes the permissions for the user with id '42' on the company with id '2':
 
 ```json
-URL: ../companies/2/createPermission
 {
   "user_id": "42"
 }
