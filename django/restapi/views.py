@@ -77,6 +77,93 @@ class RegisterView(KnoxLoginView):
 
 # Authorization methods
 
+# Checks if given user-id is valid
+def isUserIdValid(user_id):
+    if not user_id or not isinstance(user_id, int) or user_id < 1:
+        return False
+    return True
+
+
+# Checks if given permission is valid
+def isPermissionValid(permission):
+    if not permission or not permission in ['u', 'a']:
+        return False
+    return True
+
+
+# Checks if given permission is user permission
+def isUser(permission):
+    if not permission or not permission in 'u':
+        return False
+    return True
+
+
+# Checks if given permission is admin permission
+def isAdmin(permission):
+    if not permission or not permission in 'a':
+        return False
+    return True
+
+
+# Checks if a HTTP request contains necessary keys and valid values
+# to create a new permission in corresponding endpoints
+def isCreatePermissionRequestValid(request):
+
+    if not request.body:
+        return False
+
+    data = json.loads(request.body)
+    if not data or not 'user_id' in data or not 'permission' in data:
+        return False
+
+    if not isPermissionValid(data['permission']) or not isUserIdValid(data['user_id']):
+        return False
+
+    # Deny overwriting users own permissions
+    if request.user.id == data['user_id']:
+        return False
+
+    return True
+
+
+# Checks if a HTTP request contains necessary keys and valid values
+# to remove a new permission in corresponding endpoints
+def isRemovePermissionRequestValid(request):
+
+    if not request.body:
+        return False
+
+    data = json.loads(request.body)
+    if not data or not 'user_id' in data:
+        return False
+
+    if not isUserIdValid(data['user_id']):
+        return False
+
+    # Deny removing users own permissions
+    if request.user.id == data['user_id']:
+        return False
+
+    return True
+
+
+# Checks if a HTTP request contains necessary keys and valid values
+# to create a new company or garden in corresponding endpoints
+def isCreateCompanyOrGardenRequestValid(request):
+
+    if not request.body:
+        return False
+
+    data = json.loads(request.body)
+    if not data or not 'name' in data:
+        return False
+
+    if not data['name']:
+        return False
+
+    return True
+
+
 # Returns True, if user_id is allowed to access company_id
 def isCompanyUser(company_id, user_id):
     try:
@@ -84,13 +171,17 @@ def isCompanyUser(company_id, user_id):
         user = User.objects.get(id=user_id)
         companyPermission = CompanyPermission.objects.filter(company=company, user=user).first()
         serializer = CompanyPermissionSerializer(companyPermission)
-        if not serializer.data['permission']:
-            return False
-        elif serializer.data['permission'] == 'u' or serializer.data['permission'] == 'a':
-            return True
-        return False
     except:
         return False
+
+    if not 'permission' in serializer.data:
+        return False
+
+    permission = serializer.data['permission']
+    if not isUser(permission) and not isAdmin(permission):
+        return False
+
+    return True
 
 
 # Returns True, if user_id is admin of company_id
@@ -100,13 +191,16 @@ def isCompanyAdmin(company_id, user_id):
         user = User.objects.get(id=user_id)
         companyPermission = CompanyPermission.objects.filter(company=company, user=user).first()
         serializer = CompanyPermissionSerializer(companyPermission)
-        if not serializer.data['permission']:
-            return False
-        if serializer.data['permission'] == 'a':
-            return True
-        return False
     except:
         return False
+
+    if not 'permission' in serializer.data:
+        return False
+
+    if not isAdmin(serializer.data['permission']):
+        return False
+
+    return True
 
 
 # Function to create a new company permission
@@ -116,9 +210,13 @@ def createCompanyPermission(company_id, user_id, permission):
         company = Company.objects.get(id=company_id)
         user = User.objects.get(id=user_id)
 
-        # Filter for permission, delete if exists and create new permission
-        CompanyPermission.objects.filter(company=company, user=user).delete()
-        CompanyPermission.objects.create(permission=permission, company=company, user=user)
+        # Filter for permission, update if exists or create new permission
+        companyPermission = CompanyPermission.objects.filter(company=company, user=user).first()
+        if companyPermission:
+            companyPermission.permission = permission
+            companyPermission.save()
+        else:
+            CompanyPermission.objects.create(permission=permission, company=company, user=user)
 
         return True
     except:
@@ -130,30 +228,18 @@ def createCompanyPermission(company_id, user_id, permission):
 def createCompanyPermissionView(request, company_id: int):
 
     # Check if requesting user has admin permissions on company
-    if isCompanyAdmin(company_id, request.user.id) == False:
+    if not isCompanyAdmin(company_id, request.user.id):
         return HttpResponseForbidden()
 
-    try:
-        # Read user_id and permission from request body
-        data = json.loads(request.body)
-        user_id = data['user_id']
-        permission = data['permission']
+    if not isCreatePermissionRequestValid(request):
+        return HttpResponseBadRequest()
 
-        # Validate input
-        if not permission in ['u', 'a'] or not user_id > 0:
-            return HttpResponseBadRequest()
+    inputData = json.loads(request.body)
 
-        # Deny overwriting users own permissions
-        if request.user.id == user_id:
-            return HttpResponseForbidden()
+    if not createCompanyPermission(company_id, inputData['user_id'], inputData['permission']):
+        return HttpResponseBadRequest()
 
-        if createCompanyPermission(company_id, user_id, permission) == True:
-            return HttpResponse(status=201)
-
-    except:
-        pass
-
-    return HttpResponseBadRequest()
+    return HttpResponse(status=201)
 
 
 # Function to remove a users permissions for a company
@@ -176,28 +262,16 @@ def removeCompanyPermission(company_id, user_id):
 def removeCompanyPermissionView(request, company_id: int):
 
     # Check if requesting user has admin permissions on company
-    if isCompanyAdmin(company_id, request.user.id) == False:
+    if not isCompanyAdmin(company_id, request.user.id):
         return HttpResponseForbidden()
 
-    try:
-        # Read user_id from request body
-        user_id = json.loads(request.body)['user_id']
+    if not isRemovePermissionRequestValid(request):
+        return HttpResponseBadRequest()
 
-        # Validate input
-        if not user_id > 0:
-            return HttpResponseBadRequest()
+    if not removeCompanyPermission(company_id, json.loads(request.body)['user_id']):
+        return HttpResponseBadRequest()
 
-        # Deny removing users own permissions
-        if request.user.id == user_id:
-            return HttpResponseForbidden()
-
-        if removeCompanyPermission(company_id, user_id) == True:
-            return HttpResponse(status=200)
-
-    except:
-        pass
-
-    return HttpResponseBadRequest()
+    return HttpResponse(status=200)
 
 
 # Returns True, if user_id is allowed to access garden_id
@@ -207,13 +281,17 @@ def isGardenUser(garden_id, user_id):
         user = User.objects.get(id=user_id)
         gardenPermission = GardenPermission.objects.filter(garden=garden, user=user).first()
         serializer = GardenPermissionSerializer(gardenPermission)
-        if not serializer.data['permission']:
-            return False
-        if serializer.data['permission'] == 'u' or serializer.data['permission'] == 'a':
-            return True
-        return False
     except:
         return False
+
+    if not 'permission' in serializer.data:
+        return False
+
+    permission = serializer.data['permission']
+    if not isUser(permission) and not isAdmin(permission):
+        return False
+
+    return True
 
 
 # Returns True, if user_id is admin of garden_id
@@ -223,13 +301,16 @@ def isGardenAdmin(garden_id, user_id):
         user = User.objects.get(id=user_id)
         gardenPermission = GardenPermission.objects.filter(garden=garden, user=user).first()
         serializer = GardenPermissionSerializer(gardenPermission)
-        if not serializer.data['permission']:
-            return False
-        if serializer.data['permission'] == 'a':
-            return True
-        return False
     except:
         return False
+
+    if not 'permission' in serializer.data:
+        return False
+
+    if not isAdmin(serializer.data['permission']):
+        return False
+
+    return True
 
 
 # Function to create a new garden permission
@@ -239,9 +320,13 @@ def createGardenPermission(garden_id, user_id, permission):
         garden = Garden.objects.get(id=garden_id)
         user = User.objects.get(id=user_id)
 
-        # Filter for permission, delete if it already exists and create a new permission
-        GardenPermission.objects.filter(garden=garden, user=user).delete()
-        GardenPermission.objects.create(permission=permission, garden=garden, user=user)
+        # Filter for permission, update if it already exists or create a new permission
+        gardenPermission = GardenPermission.objects.filter(garden=garden, user=user).first()
+        if gardenPermission:
+            gardenPermission.permission = permission
+            gardenPermission.save()
+        else:
+            GardenPermission.objects.create(permission=permission, garden=garden, user=user)
 
         return True
     except:
@@ -253,30 +338,18 @@ def createGardenPermission(garden_id, user_id, permission):
 def createGardenPermissionView(request, company_id: int, garden_id: int):
 
     # Check if requesting user has admin permissions on garden or company
-    if isGardenAdmin(garden_id, request.user.id) == False and isCompanyAdmin(company_id, request.user.id) == False:
+    if not isGardenAdmin(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
         return HttpResponseForbidden()
 
-    try:
-        # Read user_id and permission from request body
-        data = json.loads(request.body)
-        user_id = data['user_id']
-        permission = data['permission']
+    if not isCreatePermissionRequestValid(request):
+        return HttpResponseBadRequest()
 
-        # Validate input
-        if not permission in ['u', 'a'] or not user_id > 0:
-            return HttpResponseBadRequest()
+    inputData = json.loads(request.body)
 
-        # Deny overwriting users own permissions
-        if request.user.id == user_id:
-            return HttpResponseForbidden()
+    if not createGardenPermission(garden_id, inputData['user_id'], inputData['permission']):
+        return HttpResponseBadRequest()
 
-        if createGardenPermission(garden_id, user_id, permission) == True:
-            return HttpResponse(status=201)
-
-    except:
-        pass
-
-    return HttpResponseBadRequest()
+    return HttpResponse(status=201)
 
 
 # Function to remove a garden permission
@@ -299,28 +372,16 @@ def removeGardenPermission(garden_id, user_id):
 def removeGardenPermissionView(request, company_id: int, garden_id: int):
 
     # Check if requesting user has admin permissions on garden or company
-    if isGardenAdmin(garden_id, request.user.id) == False and isCompanyAdmin(company_id, request.user.id) == False:
+    if not isGardenAdmin(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
         return HttpResponseForbidden()
 
-    try:
-        # Read user_id from request body
-        user_id = json.loads(request.body)['user_id']
+    if not isRemovePermissionRequestValid(request):
+        return HttpResponseForbidden()
 
-        # Validate input
-        if not user_id > 0:
-            return HttpResponseBadRequest()
+    if not removeGardenPermission(garden_id, json.loads(request.body)['user_id']):
+        return HttpResponseBadRequest()
 
-        # Deny removing users own permissions
-        if request.user.id == user_id:
-            return HttpResponseForbidden()
-
-        if removeGardenPermission(garden_id, user_id) == True:
-            return HttpResponse(status=200)
-
-    except:
-        pass
-
-    return HttpResponseBadRequest()
+    return HttpResponse(status=200)
 
 
 # End of authorization methods
@@ -334,46 +395,53 @@ def getUser(request):
     return JsonResponse(serializer.data, safe=False)
 
 
+# Endpoint that returns all companies a user has permissions on
+def getCompanies(request):
+
+    try:
+        companyPermissions = CompanyPermission.objects.filter(user=request.user)
+    except:
+        return HttpResponseBadRequest()
+
+    companies = []
+    for p in companyPermissions.iterator():
+        companies.append(p.company)
+
+    serializer = CompanySerializer(companies, many=True)
+    return JsonResponse(serializer.data, safe=False)
+
+
+# Endpoint to create a new company
+def createCompany(request):
+
+    if not isCreateCompanyOrGardenRequestValid(request):
+        return HttpResponseBadRequest()
+
+    try:
+        company = Company.objects.create(name=json.loads(request.body)['name'])
+    except:
+        return HttpResponseBadRequest()
+
+    # Give the user admin permissions on new company
+    # Delete company if permission could not be set successfully
+    if not createCompanyPermission(company.id, request.user.id, 'a'):
+        Company.objects.delete(company)
+        return HttpResponseBadRequest()
+
+    return JsonResponse({'id': company.id})
+
+
 # /companies
 @api_view(['GET', 'POST'])
 def companies(request):
 
-    # GET: Returns all companies the requesting user is user or admin of
+    # GET: Endpoint that returns all companies a user has permissions on
     if request.method == 'GET':
-
-        try:
-            companyPermissions = CompanyPermission.objects.filter(user=request.user)
-            companies = []
-            for p in companyPermissions.iterator():
-                companies.append(p.company)
-            serializer = CompanySerializer(companies, many=True)
-            return JsonResponse(serializer.data, safe=False)
-        except:
-            # Requesting user has no companies
-            return JsonResponse({})
+        return getCompanies(request)
 
     # POST: Endpoint to create a new company
-    else:
-
-        try:
-            # Read name of company from request body
-            company_name = json.loads(request.body)['name']
-
-            # Validate input
-            if not company_name:
-                return HttpResponseBadRequest()
-
-            company = Company.objects.create(name=company_name)
-
-            # Give the user admin permissions on new company
-            # Delete company if permission could not be set successfully
-            if createCompanyPermission(company.id, request.user.id, 'a') == False:
-                Company.objects.delete(company)
-                return HttpResponseBadRequest()
-
-            return JsonResponse({'id': company.id})
-        except:
-            return HttpResponseBadRequest()
+    elif request.method == 'POST':
+        return createCompany(request)
 
 
 # /companies/{company_id}
@@ -381,7 +449,7 @@ def companies(request):
 def getCompany(request, company_id: int):
 
     # Check if requesting user is allowed to access company
-    if isCompanyUser(company_id, request.user.id) == False and isCompanyAdmin(company_id, request.user.id) == False:
+    if not isCompanyUser(company_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
         return HttpResponseForbidden()
 
     try:
@@ -392,62 +460,66 @@ def getCompany(request, company_id: int):
         return HttpResponseBadRequest()
 
 
+# Endpoint that returns all gardens of the requested company the user has permissions on
+def getGardens(request, company_id):
+
+    # Check if requesting user is allowed to access company
+    userIsCompanyAdmin = isCompanyAdmin(company_id, request.user.id)
+    if not isCompanyUser(company_id, request.user.id) and not userIsCompanyAdmin:
+        return HttpResponseForbidden()
+
+    try:
+        company = Company.objects.get(id=company_id)
+        gardens = Garden.objects.filter(company=company)
+    except:
+        return HttpResponseBadRequest()
+
+    # Company admin can access all gardens
+    if userIsCompanyAdmin:
+        serializer = GardenSerializer(gardens, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    # Check company user permissions on each garden
+    authorizedGardens = []
+    for g in gardens.iterator():
+        if GardenPermission.objects.filter(user=request.user, garden=g).count() > 0:
+            authorizedGardens.append(g)
+
+    serializer = GardenSerializer(authorizedGardens, many=True)
+    return JsonResponse(serializer.data, safe=False)
+
+
+# Endpoint to create a new garden
+def createGarden(request, company_id):
+
+    # Check if requesting user has admin permissions on company
+    if not isCompanyAdmin(company_id, request.user.id):
+        return HttpResponseForbidden()
+
+    if not isCreateCompanyOrGardenRequestValid(request):
+        return HttpResponseBadRequest()
+
+    # Create new garden
+    try:
+        company = Company.objects.get(id=company_id)
+        garden = Garden.objects.create(name=json.loads(request.body)['name'], company=company, image=None)
+    except:
+        return HttpResponseBadRequest()
+
+    return JsonResponse({'id': garden.id})
+
+
 # /companies/{company_id}/gardens
 @api_view(['GET', 'POST'])
 def gardens(request, company_id: int):
 
-    # GET: Returns all gardens the user can access of the requested company
+    # GET: Endpoint that returns all gardens of the requested company the user has permissions on
     if request.method == 'GET':
-
-        # Check if requesting user is allowed to access company
-        if isCompanyUser(company_id, request.user.id) == False and isCompanyAdmin(company_id, request.user.id) == False:
-            return HttpResponseForbidden()
-
-        try:
-            company = Company.objects.get(id=company_id)
-            gardens = Garden.objects.filter(company=company)
-
-            # Check users permissions on each garden
-            authorizedGardens = []
-            for g in gardens.iterator():
-                if GardenPermission.objects.filter(user=request.user, garden=g).count() > 0:
-                    authorizedGardens.append(g)
-
-            serializer = GardenSerializer(authorizedGardens, many=True)
-            return JsonResponse(serializer.data, safe=False)
-
-        except:
-            return HttpResponseBadRequest()
+        return getGardens(request, company_id)
 
     # POST: Endpoint to create a new garden
-    else:
-
-        # Check if requesting user has admin permissions on company
-        if isCompanyAdmin(company_id, request.user.id) == False:
-            return HttpResponseForbidden()
-
-        # Read name of garden from request body
-        garden_name = None
-        try:
-            garden_name = json.loads(request.body)['name']
-
-            # Validate input
-            if not garden_name:
-                return HttpResponseBadRequest()
-
-            # Create new garden
-            company = Company.objects.get(id=company_id)
-            garden = Garden.objects.create(name=garden_name, company=company, image=None)
-
-            # Give the user admin permissions on new garden
-            # Delete garden if permission could not be set successfully
-            if createGardenPermission(company.id, request.user.id, 'a') == False:
-                Garden.objects.delete(garden)
-                return HttpResponseBadRequest()
-
-            return JsonResponse({'id': garden.id})
-        except:
-            return HttpResponseBadRequest()
+    elif request.method == 'POST':
+        return createGarden(request, company_id)
 
 
 # /companies/{company_id}/gardens/{garden_id}
@@ -455,7 +527,7 @@ def gardens(request, company_id: int):
 def getGarden(request, company_id: int, garden_id: int):
 
     # Check if requesting user is allowed to access the garden
-    if isGardenUser(garden_id, request.user.id) == False and isCompanyAdmin(company_id, request.user.id) == False:
+    if not isGardenUser(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
         return HttpResponseForbidden()
 
     try:
