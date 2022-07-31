@@ -1,3 +1,11 @@
+run-app-dev:
+	@cd django && \
+		python3 manage.py makemigrations && \
+		python3 manage.py migrate && \
+		python3 manage.py loaddata user company garden
+	@cd vue && npm run dev
+
+
 run-server:
 	@cd django && python3 manage.py runserver
 
