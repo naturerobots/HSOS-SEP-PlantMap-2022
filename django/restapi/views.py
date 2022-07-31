@@ -544,9 +544,14 @@ def getGarden(request, company_id: int, garden_id: int):
     return JsonResponse(serializer.data, safe=False)
 
 
-def uploadImage(request, garden_id):
+def uploadImage(request, company_id, garden_id):
+
     if not 'coordinates' in request.data or not 'image' in request.data:
         return HttpResponseBadRequest()
+
+    # Check if requesting user has admin permissions on garden
+    if not isGardenAdmin(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
+        return HttpResponseForbidden()
 
     # split image string to get file extension and raw bytes
     imageInfo, imageData = request.data['image'].split(',')
@@ -592,7 +597,12 @@ def uploadImage(request, garden_id):
     return HttpResponse(status=201)
 
 
-def getImage(request, garden_id):
+def getImage(request, company_id, garden_id):
+
+    # Check if requesting user is allowed to access the garden
+    if not isGardenUser(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
+        return HttpResponseForbidden()
+
     try:
         garden = Garden.objects.get(pk=garden_id)
     except Garden.DoesNotExist:
@@ -613,17 +623,21 @@ def getImage(request, garden_id):
 
 # TODO consider using class based views, for improved separation
 @api_view(['GET', 'POST'])
-def imageView(request, garden_id):
+def imageView(request, company_id: int, garden_id: int):
     if request.method == 'POST':
-        return uploadImage(request, garden_id)
+        return uploadImage(request, company_id, garden_id)
     elif request.method == 'GET':
-        return getImage(request, garden_id)
+        return getImage(request, company_id, garden_id)
 
 
 # With the current dummy data this costs 100 gRPC-requests per bed. Seems like quite the DOS potential
 # /companies/{company_id}/gardens/{garden_id}/beds
 @api_view(['GET'])
 def getBeds(request, company_id: int, garden_id: int):
+
+    # Check if requesting user is allowed to access the garden
+    if not isGardenUser(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
+        return HttpResponseForbidden()
 
     requests = 0
 
@@ -793,11 +807,12 @@ def getBeds(request, company_id: int, garden_id: int):
 # /companies/{company_id}/gardens/{garden_id}/beds/{bed_id}/crops
 @api_view(['GET'])
 def getPlants(request, company_id: int, garden_id: int, bed_id: int):
-    requests = 0
 
-    # Check if authenticated user is allowed to request company_id, garden_id, bed_id
-    if isGardenUser(garden_id, request.user.id) == False:
+    # Check if requesting user is allowed to access the garden
+    if not isGardenUser(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
         return HttpResponseForbidden()
+
+    requests = 0
 
     try:
         company = Company.objects.get(id=company_id)

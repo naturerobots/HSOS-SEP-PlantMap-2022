@@ -14,7 +14,6 @@ urlpatterns = [
     path('register', views.RegisterView.as_view()),
     path('companies', views.companies),
     path('user-info', views.getUser),
-    path('gardens/<int:garden_id>/image', views.imageView),
     path('companies/<int:company_id>', views.getCompany),
     path('companies/<int:company_id>/createPermission', views.createCompanyPermissionView),
     path('companies/<int:company_id>/removePermission', views.removeCompanyPermissionView),
@@ -22,7 +21,7 @@ urlpatterns = [
     path('companies/<int:company_id>/gardens/<int:garden_id>', views.getGarden),
     path('companies/<int:company_id>/gardens/<int:garden_id>/createPermission', views.createGardenPermissionView),
     path('companies/<int:company_id>/gardens/<int:garden_id>/removePermission', views.removeGardenPermissionView),
-    path('companies/<int:company_id>/gardens/<int:garden_id>/image', views.gardenImage),
+    path('companies/<int:company_id>/gardens/<int:garden_id>/image', views.imageView),
     path('companies/<int:company_id>/gardens/<int:garden_id>/beds', views.getBeds),
     path(
         'companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/plants',
