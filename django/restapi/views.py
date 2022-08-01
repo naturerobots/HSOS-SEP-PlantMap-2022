@@ -506,7 +506,7 @@ def createGarden(request, company_id):
     # Create new garden
     try:
         company = Company.objects.get(id=company_id)
-        garden = Garden.objects.create(name=json.loads(request.body)['name'], company=company, image=None)
+        garden = Garden.objects.create(name=json.loads(request.body)['name'], company=company, image_path=None)
     except:
         return HttpResponseBadRequest()
 
