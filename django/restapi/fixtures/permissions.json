@@ -32,7 +32,7 @@
     "fields": {
       "permission": "a",
       "garden": 1,
-      "user": 2
+      "user": 1
     }
   }
 ]
