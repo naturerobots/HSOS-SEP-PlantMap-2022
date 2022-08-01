@@ -23,6 +23,12 @@ export async function getWeatherDataCurrent(
     params: { lat, lon, lang, units, appid },
   });
 
+  //TODO: can be removed if night icons exist
+  response.data.weather[0].icon = response.data.weather[0].icon.replace(
+    "n",
+    "d"
+  );
+
   return response.data;
 }
 
