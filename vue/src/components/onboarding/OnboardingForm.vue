@@ -21,7 +21,7 @@
           <div class="col-span-4 space-y-2">
             <label class="font-bold text-black"> Name* </label>
             <input
-              v-model="name"
+              v-model="companyName"
               class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
               type="text"
               placeholder="Enter Company name"
@@ -63,7 +63,7 @@
             <button
               type="submit"
               class="w-full flex justify-center bg-primary text-white p-3 rounded-full tracking-wide font-bold shadow-lg"
-              @click="onboardingStep = 2"
+              @click="company()"
             >
               Create
             </button>
@@ -89,7 +89,7 @@
           <div class="col-span-4 space-y-2">
             <label class="font-bold text-black"> Name* </label>
             <input
-              v-model="name"
+              v-model="gardenName"
               class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
               type="text"
               placeholder="Enter Company name"
@@ -131,7 +131,7 @@
             <button
               type="submit"
               class="w-full flex justify-center bg-primary text-white p-3 rounded-full tracking-wide font-bold shadow-lg"
-              @click="finishOnboarding()"
+              @click="garden()"
             >
               Create
             </button>
@@ -151,11 +151,42 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, type Ref } from "vue";
 import { useRouter, type Router } from "vue-router";
+import { createCompany } from "@/services/companyApi";
+import { createGarden } from "@/services/gardenApi";
 
 const onboardingStep = ref(1);
 const router: Router = useRouter();
+
+const companyName: Ref<string | undefined> = ref<string>();
+const gardenName: Ref<string | undefined> = ref<string>();
+let companyId: number | undefined;
+let gardenId: number | undefined;
+
+async function company(): Promise<void> {
+  if (companyName.value) {
+    companyId = await createCompany(companyName.value);
+
+    if (companyId) {
+      onboardingStep.value++;
+    } else {
+      /* TODO: add user feedback */
+    }
+  }
+}
+
+async function garden(): Promise<void> {
+  if (gardenName.value && companyId) {
+    gardenId = await createGarden(companyId, gardenName.value);
+
+    if (gardenId) {
+      finishOnboarding();
+    } else {
+      /* TODO: add user feedback */
+    }
+  }
+}
 
 function finishOnboarding(): void {
   router.push({ name: "dashboard" });
