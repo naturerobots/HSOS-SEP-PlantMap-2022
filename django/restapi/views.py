@@ -79,6 +79,318 @@ class RegisterView(KnoxLoginView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# Authorization methods
+
+# Checks if given user-id is valid
+def isUserIdValid(user_id):
+    if not user_id or not isinstance(user_id, int) or user_id < 1:
+        return False
+    return True
+
+
+# Checks if given permission is valid
+def isPermissionValid(permission):
+    if not permission or not permission in ['u', 'a']:
+        return False
+    return True
+
+
+# Checks if given permission is user permission
+def isUser(permission):
+    if not permission or not permission in 'u':
+        return False
+    return True
+
+
+# Checks if given permission is admin permission
+def isAdmin(permission):
+    if not permission or not permission in 'a':
+        return False
+    return True
+
+
+# Checks if a HTTP request contains necessary keys and valid values
+# to create a new permission in corresponding endpoints
+def isCreatePermissionRequestValid(request):
+
+    if not request.body:
+        return False
+
+    data = json.loads(request.body)
+    if not data or not 'user_id' in data or not 'permission' in data:
+        return False
+
+    if not isPermissionValid(data['permission']) or not isUserIdValid(data['user_id']):
+        return False
+
+    # Deny overwriting users own permissions
+    if request.user.id == data['user_id']:
+        return False
+
+    return True
+
+
+# Checks if a HTTP request contains necessary keys and valid values
+# to remove a new permission in corresponding endpoints
+def isRemovePermissionRequestValid(request):
+
+    if not request.body:
+        return False
+
+    data = json.loads(request.body)
+    if not data or not 'user_id' in data:
+        return False
+
+    if not isUserIdValid(data['user_id']):
+        return False
+
+    # Deny removing users own permissions
+    if request.user.id == data['user_id']:
+        return False
+
+    return True
+
+
+# Checks if a HTTP request contains necessary keys and valid values
+# to create a new company or garden in corresponding endpoints
+def isCreateCompanyOrGardenRequestValid(request):
+
+    if not request.body:
+        return False
+
+    data = json.loads(request.body)
+    if not data or not 'name' in data:
+        return False
+
+    if not data['name']:
+        return False
+
+    return True
+
+
+# Returns True, if user_id is allowed to access company_id
+def isCompanyUser(company_id, user_id):
+    try:
+        company = Company.objects.get(id=company_id)
+        user = User.objects.get(id=user_id)
+        companyPermission = CompanyPermission.objects.filter(company=company, user=user).first()
+        serializer = CompanyPermissionSerializer(companyPermission)
+    except:
+        return False
+
+    if not 'permission' in serializer.data:
+        return False
+
+    permission = serializer.data['permission']
+    if not isUser(permission) and not isAdmin(permission):
+        return False
+
+    return True
+
+
+# Returns True, if user_id is admin of company_id
+def isCompanyAdmin(company_id, user_id):
+    try:
+        company = Company.objects.get(id=company_id)
+        user = User.objects.get(id=user_id)
+        companyPermission = CompanyPermission.objects.filter(company=company, user=user).first()
+        serializer = CompanyPermissionSerializer(companyPermission)
+    except:
+        return False
+
+    if not 'permission' in serializer.data:
+        return False
+
+    if not isAdmin(serializer.data['permission']):
+        return False
+
+    return True
+
+
+# Function to create a new company permission
+# Returns True, if permission was created successfully
+def createCompanyPermission(company_id, user_id, permission):
+    try:
+        company = Company.objects.get(id=company_id)
+        user = User.objects.get(id=user_id)
+
+        # Filter for permission, update if exists or create new permission
+        companyPermission = CompanyPermission.objects.filter(company=company, user=user).first()
+        if companyPermission:
+            companyPermission.permission = permission
+            companyPermission.save()
+        else:
+            CompanyPermission.objects.create(permission=permission, company=company, user=user)
+
+        return True
+    except:
+        return False
+
+
+# Endpoint to give a user permissions for a company
+@api_view(['POST'])
+def createCompanyPermissionView(request, company_id: int):
+
+    # Check if requesting user has admin permissions on company
+    if not isCompanyAdmin(company_id, request.user.id):
+        return HttpResponseForbidden()
+
+    if not isCreatePermissionRequestValid(request):
+        return HttpResponseBadRequest()
+
+    inputData = json.loads(request.body)
+
+    if not createCompanyPermission(company_id, inputData['user_id'], inputData['permission']):
+        return HttpResponseBadRequest()
+
+    return HttpResponse(status=201)
+
+
+# Function to remove a users permissions for a company
+# Returns True, if permission was deleted successfully or does not exist
+def removeCompanyPermission(company_id, user_id):
+    try:
+        company = Company.objects.get(id=company_id)
+        user = User.objects.get(id=user_id)
+
+        # Filter for permission and delete it
+        CompanyPermission.objects.filter(company=company, user=user).delete()
+
+        return True
+    except:
+        return False
+
+
+# Endpoint to remove a users permissions for a company
+@api_view(['POST'])
+def removeCompanyPermissionView(request, company_id: int):
+
+    # Check if requesting user has admin permissions on company
+    if not isCompanyAdmin(company_id, request.user.id):
+        return HttpResponseForbidden()
+
+    if not isRemovePermissionRequestValid(request):
+        return HttpResponseBadRequest()
+
+    if not removeCompanyPermission(company_id, json.loads(request.body)['user_id']):
+        return HttpResponseBadRequest()
+
+    return HttpResponse(status=200)
+
+
+# Returns True, if user_id is allowed to access garden_id
+def isGardenUser(garden_id, user_id):
+    try:
+        garden = Garden.objects.get(id=garden_id)
+        user = User.objects.get(id=user_id)
+        gardenPermission = GardenPermission.objects.filter(garden=garden, user=user).first()
+        serializer = GardenPermissionSerializer(gardenPermission)
+    except:
+        return False
+
+    if not 'permission' in serializer.data:
+        return False
+
+    permission = serializer.data['permission']
+    if not isUser(permission) and not isAdmin(permission):
+        return False
+
+    return True
+
+
+# Returns True, if user_id is admin of garden_id
+def isGardenAdmin(garden_id, user_id):
+    try:
+        garden = Garden.objects.get(id=garden_id)
+        user = User.objects.get(id=user_id)
+        gardenPermission = GardenPermission.objects.filter(garden=garden, user=user).first()
+        serializer = GardenPermissionSerializer(gardenPermission)
+    except:
+        return False
+
+    if not 'permission' in serializer.data:
+        return False
+
+    if not isAdmin(serializer.data['permission']):
+        return False
+
+    return True
+
+
+# Function to create a new garden permission
+# Returns True, if permission was created successfully
+def createGardenPermission(garden_id, user_id, permission):
+    try:
+        garden = Garden.objects.get(id=garden_id)
+        user = User.objects.get(id=user_id)
+
+        # Filter for permission, update if it already exists or create a new permission
+        gardenPermission = GardenPermission.objects.filter(garden=garden, user=user).first()
+        if gardenPermission:
+            gardenPermission.permission = permission
+            gardenPermission.save()
+        else:
+            GardenPermission.objects.create(permission=permission, garden=garden, user=user)
+
+        return True
+    except:
+        return False
+
+
+# Endpoint to give a user permissions for a garden
+@api_view(['POST'])
+def createGardenPermissionView(request, company_id: int, garden_id: int):
+
+    # Check if requesting user has admin permissions on garden or company
+    if not isGardenAdmin(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
+        return HttpResponseForbidden()
+
+    if not isCreatePermissionRequestValid(request):
+        return HttpResponseBadRequest()
+
+    inputData = json.loads(request.body)
+
+    if not createGardenPermission(garden_id, inputData['user_id'], inputData['permission']):
+        return HttpResponseBadRequest()
+
+    return HttpResponse(status=201)
+
+
+# Function to remove a garden permission
+# Returns True, if permission was deleted successfully or does not exist
+def removeGardenPermission(garden_id, user_id):
+    try:
+        garden = Garden.objects.get(id=garden_id)
+        user = User.objects.get(id=user_id)
+
+        # Filter for permission and delete it
+        GardenPermission.objects.filter(garden=garden, user=user).delete()
+
+        return True
+    except:
+        return False
+
+
+# Endpoint to remove a users permissions for a garden
+@api_view(['POST'])
+def removeGardenPermissionView(request, company_id: int, garden_id: int):
+
+    # Check if requesting user has admin permissions on garden or company
+    if not isGardenAdmin(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
+        return HttpResponseForbidden()
+
+    if not isRemovePermissionRequestValid(request):
+        return HttpResponseForbidden()
+
+    if not removeGardenPermission(garden_id, json.loads(request.body)['user_id']):
+        return HttpResponseBadRequest()
+
+    return HttpResponse(status=200)
+
+
+# End of authorization methods
+
+
 # /user
 @api_view(['GET'])
 def getUser(request):
@@ -87,81 +399,159 @@ def getUser(request):
     return JsonResponse(serializer.data, safe=False)
 
 
-# /companies
-@api_view(['GET'])
+# Endpoint that returns all companies a user has permissions on
 def getCompanies(request):
 
-    # Check if authenticated user is allowed to request company_id, garden_id
-
     try:
-        companies = Company.objects.filter(user=request.user)
+        companyPermissions = CompanyPermission.objects.filter(user=request.user)
     except:
-        # Company with id company_id not found in database or does not belong to the user requesting it
-        return HttpResponseNotFound()
+        return HttpResponseBadRequest()
+
+    companies = []
+    for p in companyPermissions.iterator():
+        companies.append(p.company)
 
     serializer = CompanySerializer(companies, many=True)
     return JsonResponse(serializer.data, safe=False)
+
+
+# Endpoint to create a new company
+def createCompany(request):
+
+    if not isCreateCompanyOrGardenRequestValid(request):
+        return HttpResponseBadRequest()
+
+    try:
+        company = Company.objects.create(name=json.loads(request.body)['name'])
+    except:
+        return HttpResponseBadRequest()
+
+    # Give the user admin permissions on new company
+    # Delete company if permission could not be set successfully
+    if not createCompanyPermission(company.id, request.user.id, 'a'):
+        Company.objects.delete(company)
+        return HttpResponseBadRequest()
+
+    return JsonResponse({'id': company.id})
+
+
+# /companies
+@api_view(['GET', 'POST'])
+def companies(request):
+
+    # GET: Endpoint that returns all companies a user has permissions on
+    if request.method == 'GET':
+        return getCompanies(request)
+
+    # POST: Endpoint to create a new company
+    elif request.method == 'POST':
+        return createCompany(request)
 
 
 # /companies/{company_id}
 @api_view(['GET'])
 def getCompany(request, company_id: int):
 
-    # Check if authenticated user is allowed to request company_id, garden_id
+    # Check if requesting user is allowed to access company
+    if not isCompanyUser(company_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
+        return HttpResponseForbidden()
 
     try:
-        company = Company.objects.get(id=company_id, user=request.user)
+        company = Company.objects.get(id=company_id)
+        serializer = CompanySerializer(company)
+        return JsonResponse(serializer.data, safe=False)
     except:
-        # Company with id company_id not found in database or does not belong to the user requesting it
-        return HttpResponseNotFound()
+        return HttpResponseBadRequest()
 
-    serializer = CompanySerializer(company)
+
+# Endpoint that returns all gardens of the requested company the user has permissions on
+def getGardens(request, company_id):
+
+    # Check if requesting user is allowed to access company
+    userIsCompanyAdmin = isCompanyAdmin(company_id, request.user.id)
+    if not isCompanyUser(company_id, request.user.id) and not userIsCompanyAdmin:
+        return HttpResponseForbidden()
+
+    try:
+        company = Company.objects.get(id=company_id)
+        gardens = Garden.objects.filter(company=company)
+    except:
+        return HttpResponseBadRequest()
+
+    # Company admin can access all gardens
+    if userIsCompanyAdmin:
+        serializer = GardenSerializer(gardens, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    # Check company user permissions on each garden
+    authorizedGardens = []
+    for g in gardens.iterator():
+        if GardenPermission.objects.filter(user=request.user, garden=g).count() > 0:
+            authorizedGardens.append(g)
+
+    serializer = GardenSerializer(authorizedGardens, many=True)
     return JsonResponse(serializer.data, safe=False)
+
+
+# Endpoint to create a new garden
+def createGarden(request, company_id):
+
+    # Check if requesting user has admin permissions on company
+    if not isCompanyAdmin(company_id, request.user.id):
+        return HttpResponseForbidden()
+
+    if not isCreateCompanyOrGardenRequestValid(request):
+        return HttpResponseBadRequest()
+
+    # Create new garden
+    try:
+        company = Company.objects.get(id=company_id)
+        garden = Garden.objects.create(name=json.loads(request.body)['name'], company=company, image_path=None)
+    except:
+        return HttpResponseBadRequest()
+
+    return JsonResponse({'id': garden.id})
 
 
 # /companies/{company_id}/gardens
-@api_view(['GET'])
-def getGardens(request, company_id: int):
+@api_view(['GET', 'POST'])
+def gardens(request, company_id: int):
 
-    # Check if authenticated user is allowed to request company_id, garden_id
+    # GET: Endpoint that returns all gardens of the requested company the user has permissions on
+    if request.method == 'GET':
+        return getGardens(request, company_id)
 
-    try:
-        company = Company.objects.get(id=company_id, user=request.user)
-    except:
-        # Company with id company_id not found in database or does not belong to
-        # the user requesting it
-        return HttpResponseNotFound()
-
-    gardens = Garden.objects.filter(company=company)
-    serializer = GardenSerializer(gardens, many=True)
-    return JsonResponse(serializer.data, safe=False)
+    # POST: Endpoint to create a new garden
+    elif request.method == 'POST':
+        return createGarden(request, company_id)
 
 
 # /companies/{company_id}/gardens/{garden_id}
 @api_view(['GET'])
 def getGarden(request, company_id: int, garden_id: int):
 
-    # Check if authenticated user is allowed to request company_id, garden_id
+    # Check if requesting user is allowed to access the garden
+    if not isGardenUser(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
+        return HttpResponseForbidden()
 
     try:
-        company = Company.objects.get(id=company_id, user=request.user)
-    except:
-        # Company with id company_id not found in database or does not belong to the user requesting it
-        return HttpResponseNotFound()
-
-    try:
+        company = Company.objects.get(id=company_id)
         garden = Garden.objects.get(id=garden_id, company=company)
     except:
-        # Garden with id garden_id not found in database or does not belong to the company
-        return HttpResponseNotFound()
+        return HttpResponseBadRequest()
 
     serializer = GardenSerializer(garden)
     return JsonResponse(serializer.data, safe=False)
 
 
-def uploadImage(request, garden_id):
+def uploadImage(request, company_id, garden_id):
+
     if not 'coordinates' in request.data or not 'image' in request.data:
         return HttpResponseBadRequest()
+
+    # Check if requesting user has admin permissions on garden
+    if not isGardenAdmin(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
+        return HttpResponseForbidden()
 
     # split image string to get file extension and raw bytes
     imageInfo, imageData = request.data['image'].split(',')
@@ -207,7 +597,12 @@ def uploadImage(request, garden_id):
     return HttpResponse(status=201)
 
 
-def getImage(request, garden_id):
+def getImage(request, company_id, garden_id):
+
+    # Check if requesting user is allowed to access the garden
+    if not isGardenUser(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
+        return HttpResponseForbidden()
+
     try:
         garden = Garden.objects.get(pk=garden_id)
     except Garden.DoesNotExist:
@@ -228,11 +623,11 @@ def getImage(request, garden_id):
 
 # TODO consider using class based views, for improved separation
 @api_view(['GET', 'POST'])
-def imageView(request, garden_id):
+def imageView(request, company_id: int, garden_id: int):
     if request.method == 'POST':
-        return uploadImage(request, garden_id)
+        return uploadImage(request, company_id, garden_id)
     elif request.method == 'GET':
-        return getImage(request, garden_id)
+        return getImage(request, company_id, garden_id)
 
 
 # With the current dummy data this costs 100 gRPC-requests per bed. Seems like quite the DOS potential
@@ -240,12 +635,18 @@ def imageView(request, garden_id):
 @api_view(['GET'])
 def getBeds(request, company_id: int, garden_id: int):
 
+    # Check if requesting user is allowed to access the garden
+    if not isGardenUser(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
+        return HttpResponseForbidden()
+
     requests = 0
 
     # Check if authenticated user is allowed to request company_id, garden_id
+    if isGardenUser(garden_id, request.user.id) == False:
+        return HttpResponseForbidden()
 
     try:
-        company = Company.objects.get(id=company_id, user=request.user)
+        company = Company.objects.get(id=company_id)
     except:
         # Company with id company_id not found in database or does not belong to the user requesting it
         return HttpResponseNotFound()
@@ -275,7 +676,7 @@ def getBeds(request, company_id: int, garden_id: int):
 
             plant_type = {}
             variety = {}
-            soil_humidty = []
+            soil_humidity = []
             harvest = []
             pyield = []
             health = {}
@@ -323,7 +724,7 @@ def getBeds(request, company_id: int, garden_id: int):
                         GeometryQuery(projectuuid=bed.uuid, geometryuuid=plant.uuid)
                     )
                     if "humidity" in measurement.data:
-                        soil_humidty.append(measurement.data["humidity"].double_data)
+                        soil_humidity.append(measurement.data["humidity"].double_data)
 
                     if "approx_yield" in measurement.data:
                         pyield.append(measurement.data["approx_yield"].double_data)
@@ -369,7 +770,7 @@ def getBeds(request, company_id: int, garden_id: int):
             # Compute averages
             plant_type = max(plant_type, key=plant_type.get)
             variety = max(variety, key=variety.get)
-            soil_humidty = float(sum(soil_humidty)) / float(len(soil_humidty))
+            soil_humidity = float(sum(soil_humidity)) / float(len(soil_humidity))
             harvest = int((float(sum(harvest)) / float(len(harvest))) / 604800)
             pyield = float(sum(pyield)) / float(len(pyield))
             phealth = []
@@ -385,7 +786,7 @@ def getBeds(request, company_id: int, garden_id: int):
                     "plant": plant_type,
                     "variety": variety,
                     "plants": request.build_absolute_uri(plants_url),
-                    "soil_humidty": soil_humidty,
+                    "soil_humidity": soil_humidity,
                     "harvest": f"{harvest} week",
                     "yield": pyield,
                     "health": phealth,
@@ -406,12 +807,15 @@ def getBeds(request, company_id: int, garden_id: int):
 # /companies/{company_id}/gardens/{garden_id}/beds/{bed_id}/crops
 @api_view(['GET'])
 def getPlants(request, company_id: int, garden_id: int, bed_id: int):
+
+    # Check if requesting user is allowed to access the garden
+    if not isGardenUser(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
+        return HttpResponseForbidden()
+
     requests = 0
 
-    # Check if authenticated user is allowed to request company_id, garden_id, bed_id
-
     try:
-        company = Company.objects.get(id=company_id, user=request.user)
+        company = Company.objects.get(id=company_id)
     except:
         # Company with id company_id not found in database or does not belong to the user requesting it
         return HttpResponseNotFound()
@@ -478,7 +882,7 @@ def getPlants(request, company_id: int, garden_id: int, bed_id: int):
 
         plant_type = "Error"
         variety = "N/A"
-        soil_humidty = 0.0
+        soil_humidity = 0.0
         harvest = 0
         pyield = 0.0
         health = []
@@ -490,7 +894,7 @@ def getPlants(request, company_id: int, garden_id: int, bed_id: int):
                 GeometryQuery(projectuuid=bed.uuid, geometryuuid=plant.uuid)
             )
             if "humidity" in measurement.data:
-                soil_humidty = measurement.data["humidity"].double_data
+                soil_humidity = measurement.data["humidity"].double_data
 
             if "approx_yield" in measurement.data:
                 pyield = measurement.data["approx_yield"].double_data
@@ -527,10 +931,10 @@ def getPlants(request, company_id: int, garden_id: int, bed_id: int):
 
         plantData[plant.name] = {
             "id": plant.uuid,
-            "bedid": bed.id,
+            "bed_id": bed.id,
             "plant": plant_type,
             "variety": variety,
-            "soil_humidty": soil_humidty,
+            "soil_humidity": soil_humidity,
             "harvest": f"{harvest} week",
             "yield": pyield,
             "health": health,
