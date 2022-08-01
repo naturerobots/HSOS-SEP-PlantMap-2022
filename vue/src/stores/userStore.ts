@@ -36,6 +36,9 @@ export const userStore = defineStore({
 
       return false;
     },
+    getToken(state: userStore): Token {
+      return state.user.token;
+    },
   },
   actions: {
     addOption(storeOption: StoreOption): void {
