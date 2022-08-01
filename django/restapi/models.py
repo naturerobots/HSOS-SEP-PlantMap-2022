@@ -62,6 +62,10 @@ class Image(models.Model):
     id = models.BigAutoField(primary_key=True)
     path = models.CharField(max_length=100)
 
+    class Meta:
+        app_label = 'restapi'
+        db_table = 'Image'
+
 
 class Garden(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -83,6 +87,10 @@ class Coordinate(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     garden = models.ForeignKey(Garden, related_name='garden_coordinates', on_delete=models.CASCADE)
+
+    class Meta:
+        app_label = 'restapi'
+        db_table = 'Coordinates'
 
 
 class CoordinateSerializer(serializers.ModelSerializer):
