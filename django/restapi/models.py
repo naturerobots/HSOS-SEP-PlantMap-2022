@@ -1,26 +1,36 @@
+import os
+from dataclasses import fields
+from turtle import position
+from uuid import uuid4
+
 from rest_framework import serializers
 
 from django.contrib.auth.models import User
 from django.db import models
 
 
-class CreateUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['username', 'password']
-        extra_kwargs = {'password': {'write_only': True}}
-
-    def create(self, validated_data):
-        user = User(username=validated_data['username'])
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
-
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['username', 'password', 'first_name', 'last_name', 'date_joined', 'last_login']
+        # fields = '__all__'
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'first_name': {'required': True},
+            'last_name': {'required': True},
+            'last_login': {'read_only': True},
+            'date_joined': {'read_only': True},
+        }
+
+    def create(self, validated_data):
+        user = User(
+            username=validated_data['username'],
+            first_name=validated_data['first_name'],
+            last_name=validated_data['last_name'],
+        )
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
 
 
 class Company(models.Model):
@@ -43,11 +53,22 @@ class CompanySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+# Creates random filenames for garden images
+def path_and_rename(path):
+    filename = '{}.{}'.format(uuid4().hex, 'png')
+    return os.path.join(path, filename)
+
+
+class Image(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    path = models.CharField(max_length=100)
+
+
 class Garden(models.Model):
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=32, null=True)
-    image = models.ImageField(upload_to='images/', null=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
+    image_path = models.CharField(max_length=100, null=True)
 
     class Meta:
         app_label = 'restapi'
@@ -56,6 +77,19 @@ class Garden(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Coordinate(models.Model):
+    name = models.CharField(max_length=32, primary_key=True)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    garden = models.ForeignKey(Garden, related_name='garden_coordinates', on_delete=models.CASCADE)
+
+
+class CoordinateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Coordinate
+        exclude = ['garden']
 
 
 class GardenSerializer(serializers.ModelSerializer):

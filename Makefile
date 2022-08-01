@@ -1,3 +1,11 @@
+run-app-dev:
+	@cd django && \
+		python3 manage.py makemigrations && \
+		python3 manage.py migrate && \
+		python3 manage.py loaddata user company garden
+	@cd vue && npm run dev
+
+
 run-server:
 	@cd django && python3 manage.py runserver
 
@@ -12,6 +20,16 @@ demo-post:
 
 run-frontend:
 	@cd vue && npm run dev
+
+run-frontend-prod:
+	@echo "#############################"
+	@echo "# build vite for production #"
+	@echo "#############################"
+	@cd vue && npm run build
+	@echo "##########################"
+	@echo "# run vite in production #"
+	@echo "##########################"
+	@cd vue && npm run preview
 
 start-mkdocs:
 	@mkdocs serve

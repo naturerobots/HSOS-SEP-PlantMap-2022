@@ -3,12 +3,19 @@ repo_url: https://github.com/naturerobots/HSOS-SEP-PlantMap-2022
 nav:
   - Home: index.md
   - Getting started:
-      - Installtion: installation.md
-      - Common errors: errors.md
-      - License: license.md
+      - Installation: "getting-started/installation.md"
+      - Tutorials: "getting-started/tutorials.md"
+      - Common errors: "getting-started/errors.md"
+      - Improvements: "getting-started/improvements.md"
+      - License: "getting-started/license.md"
   - Reference:
-      - Definitions: definitions.md
-      - Authentication: authentication.md
+      - REST-API:
+          - Authentication: "reference/authentication.md"
+          - Beds & Plants: "reference/bed-plant-endpoints.md"
+          - Company & Gardens: "reference/company-garden-endpoints.md"
+      - Env Variables: "reference/env-vars.md"
+      - Architecture: "reference/architecture.md"
+      - Definitions: "reference/definitions.md"
 theme:
   name: material
   language: en
@@ -24,8 +31,13 @@ extra_css:
   - stylesheets/extra.css
 markdown_extensions:
   - admonition
+  - pymdownx.details
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.superfences
   - meta
   - attr_list
+  - toc:
+      permalink: "#"
+  - pymdownx.striphtml:
+      strip_comments: true #default
