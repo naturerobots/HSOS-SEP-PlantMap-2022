@@ -676,7 +676,7 @@ def getBeds(request, company_id: int, garden_id: int):
 
             plant_type = {}
             variety = {}
-            soil_humidty = []
+            soil_humidity = []
             harvest = []
             pyield = []
             health = {}
@@ -724,7 +724,7 @@ def getBeds(request, company_id: int, garden_id: int):
                         GeometryQuery(projectuuid=bed.uuid, geometryuuid=plant.uuid)
                     )
                     if "humidity" in measurement.data:
-                        soil_humidty.append(measurement.data["humidity"].double_data)
+                        soil_humidity.append(measurement.data["humidity"].double_data)
 
                     if "approx_yield" in measurement.data:
                         pyield.append(measurement.data["approx_yield"].double_data)
@@ -770,7 +770,7 @@ def getBeds(request, company_id: int, garden_id: int):
             # Compute averages
             plant_type = max(plant_type, key=plant_type.get)
             variety = max(variety, key=variety.get)
-            soil_humidty = float(sum(soil_humidty)) / float(len(soil_humidty))
+            soil_humidity = float(sum(soil_humidity)) / float(len(soil_humidity))
             harvest = int((float(sum(harvest)) / float(len(harvest))) / 604800)
             pyield = float(sum(pyield)) / float(len(pyield))
             phealth = []
@@ -786,7 +786,7 @@ def getBeds(request, company_id: int, garden_id: int):
                     "plant": plant_type,
                     "variety": variety,
                     "plants": request.build_absolute_uri(plants_url),
-                    "soil_humidty": soil_humidty,
+                    "soil_humidity": soil_humidity,
                     "harvest": f"{harvest} week",
                     "yield": pyield,
                     "health": phealth,
@@ -882,7 +882,7 @@ def getPlants(request, company_id: int, garden_id: int, bed_id: int):
 
         plant_type = "Error"
         variety = "N/A"
-        soil_humidty = 0.0
+        soil_humidity = 0.0
         harvest = 0
         pyield = 0.0
         health = []
@@ -894,7 +894,7 @@ def getPlants(request, company_id: int, garden_id: int, bed_id: int):
                 GeometryQuery(projectuuid=bed.uuid, geometryuuid=plant.uuid)
             )
             if "humidity" in measurement.data:
-                soil_humidty = measurement.data["humidity"].double_data
+                soil_humidity = measurement.data["humidity"].double_data
 
             if "approx_yield" in measurement.data:
                 pyield = measurement.data["approx_yield"].double_data
@@ -931,10 +931,10 @@ def getPlants(request, company_id: int, garden_id: int, bed_id: int):
 
         plantData[plant.name] = {
             "id": plant.uuid,
-            "bedid": bed.id,
+            "bed_id": bed.id,
             "plant": plant_type,
             "variety": variety,
-            "soil_humidty": soil_humidty,
+            "soil_humidity": soil_humidity,
             "harvest": f"{harvest} week",
             "yield": pyield,
             "health": health,
