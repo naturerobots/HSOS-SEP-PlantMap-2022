@@ -173,7 +173,7 @@ onMounted(() => {
   canvasScene?.appendChild(renderer.domElement);
 
   // set backgroud color red
-  //renderer.setClearColor(0xff0000, 1);
+  //renderer.setClearColor(0xffffff, 1);
 });
 
 let animationCallback = (time: number): void => {
