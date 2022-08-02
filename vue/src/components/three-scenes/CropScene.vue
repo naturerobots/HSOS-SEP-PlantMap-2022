@@ -1,8 +1,55 @@
 <template>
   <div class="scene">
     <div id="three-scene-canvas"></div>
+    <div id="info-card">
+      <div id="info-detail">
+        <div class="hole"></div>
+        <div class="description">test</div>
+      </div>
+    </div>
   </div>
 </template>
+
+<style>
+.description {
+  margin-top: 20px;
+  margin-left: 240px;
+}
+.hole {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 200px;
+  height: 160px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 255, 0.2);
+}
+.scene {
+  position: relative;
+}
+#info-detail {
+  overflow: hidden;
+  position: relative;
+  margin-left: 20%;
+  width: 400px;
+  height: 200px;
+  /*background-color: red;*/
+}
+
+#info-card {
+  position: absolute; /* let us position them inside the container */
+  left: 0; /* make their default position the top left of the container */
+  top: 0;
+  cursor: pointer; /* change the cursor to a hand when over us */
+  font-size: large;
+  user-select: none; /* don't let the text get selected */
+  text-shadow:         /* create a black outline */ -1px -1px 0 #000,
+    0 -1px 0 #000, 1px -1px 0 #000, 1px 0 0 #000, 1px 1px 0 #000, 0 1px 0 #000,
+    -1px 1px 0 #000, -1px 0 0 #000;
+}
+#info-card:hover {
+  color: red;
+}
+</style>
 
 <script setup lang="ts">
 import * as THREE from "three";
@@ -17,6 +64,9 @@ import axios from "axios";
 // https://pointly.medium.com/how-to-convert-ply-files-to-las-laz-d4100ef3625a
 // https://gis.stackexchange.com/questions/314732/converting-ply-files-to-las-for-arcgis-input
 // https://pdal.io/apps/translate.html
+
+// The InfoCard is realized like shown in this tutorial
+// https://r105.threejsfundamentals.org/threejs/lessons/threejs-align-html-elements-to-3d.html
 
 console.log("THREE", THREE);
 console.log("OrbitControls", OrbitControls);
@@ -34,6 +84,11 @@ var scene: THREE.Scene;
 var controls: OrbitControls;
 
 var loader = new CustomPLYLoader();
+
+var infoCardCube;
+const tempV = new THREE.Vector3();
+
+var selectedPlant;
 
 onMounted(() => {
   var canvasScene: Element | null = document.querySelector(
@@ -78,17 +133,18 @@ onMounted(() => {
       loadPlants(plants);
 
       // Set Camera position
-      let plant = plants[1];
+      let plant = plants[2];
+      selectedPlant = plant;
       setCameraToPlant(plant);
     })
     .catch(function (error) {
       console.log("catch", error);
     });
 
-  var geometry: THREE.BoxGeometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
-  var material: THREE.MeshNormalMaterial = new THREE.MeshNormalMaterial();
+  //var geometry: THREE.BoxGeometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+  //var material: THREE.MeshNormalMaterial = new THREE.MeshNormalMaterial();
 
-  var mesh = new THREE.Mesh(geometry, material);
+  //var mesh = new THREE.Mesh(geometry, material);
   //scene.add(mesh);
 
   renderer.setSize(size.width, size.height);
@@ -100,6 +156,7 @@ onMounted(() => {
 });
 
 let animationCallback = (time: number): void => {
+  updateInfoCard();
   controls.update();
   renderer.render(scene, camera);
 };
@@ -115,6 +172,42 @@ let setCameraToPlant = (plant): void => {
   camera.position.set(x, -1, 0);
   camera.lookAt(new THREE.Vector3(x, y, z));
   controls.update();
+
+  var geometry: THREE.BoxGeometry = new THREE.BoxGeometry(0, 0, 0);
+  var material: THREE.MeshNormalMaterial = new THREE.MeshNormalMaterial();
+
+  infoCardCube = new THREE.Mesh(geometry, material);
+  scene.add(infoCardCube);
+
+  infoCardCube.position.set(x, y, z);
+
+  //updateInfoCard();
+};
+
+let updateInfoCard = (): void => {
+  if (typeof infoCardCube != "undefined") {
+    console.log("renderer.domElement.position().left ", renderer.domElement);
+
+    // get the position of the center of the cube
+    infoCardCube.updateWorldMatrix(true, false);
+    infoCardCube.getWorldPosition(tempV);
+
+    // get the normalized screen coordinate of that position
+    // x and y will be in the -1 to +1 range with x = -1 being
+    // on the left and y = -1 being on the bottom
+    tempV.project(camera);
+
+    // convert the normalized position to CSS coordinates
+    //const x2 = (tempV.x *  .5 + .5) * renderer.domElement.clientWidth;
+    //const y2 = (tempV.y * -.5 + .5) * renderer.domElement.clientHeight;
+    const x2 = (tempV.x * 0.5 + 0.5) * renderer.domElement.clientWidth;
+    const y2 = (tempV.y * -0.5 + 0.5) * renderer.domElement.clientHeight;
+
+    // move the elem to that position
+    //elem.style.transform = `translate(-50%, -50%) translate(${x2}px,${y2}px)`;
+    var infoCard: Element | null = document.querySelector("#info-card");
+    infoCard.style.transform = `translate(-50%, -50%) translate(${x2}px,${y2}px)`;
+  }
 };
 
 let loadPlants = (plants): void => {
