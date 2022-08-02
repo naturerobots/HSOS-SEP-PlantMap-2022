@@ -10,12 +10,13 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@cognite/potree-core": "^1.5.1",
     "@quasar/extras": "^1.14.0",
     "axios": "^0.26.1",
     "chart.js": "^3.8.0",
     "chartjs-plugin-datalabels": "^2.0.0",
     "pinia": "^2.0.14",
+    "potree-loader": "^1.10.4",
+    "proj4": "^2.8.0",
     "quasar": "^2.7.1",
     "three": "^0.131.3",
     "vue": "^3.2.37",

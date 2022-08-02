@@ -30,7 +30,6 @@ const size = {
 var renderer: THREE.WebGLRenderer;
 var camera: THREE.PerspectiveCamera;
 var scene: THREE.Scene;
-//var mesh: THREE.Mesh;
 
 onMounted(() => {
   var canvasScene: Element | null = document.querySelector(
@@ -43,7 +42,6 @@ onMounted(() => {
   camera.position.z = 1;
 
   var controls: OrbitControls = new OrbitControls(camera, renderer.domElement);
-  //controls.enableZoom = false;
 
   scene = new THREE.Scene();
 
@@ -51,7 +49,7 @@ onMounted(() => {
   //camera.position.x = 10;
   //camera.position.y = 10;
   //camera.position.z = 10;
-  camera.lookAt(new THREE.Vector3(0, 2, 0));
+  //camera.lookAt(new THREE.Vector3(0, 2, 0));
 
   // add spotlight for the shadows
   var spotLight = new THREE.SpotLight(0xffffff);
@@ -172,13 +170,11 @@ onMounted(() => {
   renderer.setAnimationLoop(animationCallback);
   canvasScene?.appendChild(renderer.domElement);
 
-  // set backgroud color red
+  // set backgroud color white
   //renderer.setClearColor(0xffffff, 1);
 });
 
 let animationCallback = (time: number): void => {
-  //mesh.rotation.x = time / 2000;
-  //mesh.rotation.y = time / 1000;
   renderer.render(scene, camera);
 };
 </script>

@@ -7,21 +7,9 @@
 <script setup lang="ts">
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-//import { PLYLoader } from "three/examples/jsm/loaders/PLYLoader.js";
-//import { CustomPLYLoader } from "@/components/three-scenes/CustomPlyLoader.js";
-import { CustomPLYLoader } from "./CustomPlyLoader.ts";
 import { onMounted } from "vue";
 
-//import { Potree } from '@cognite/potree-core';
-
-import Potree from "@cognite/potree-core";
-
-//window.Potree = require('@cognite/potree-core');
-
-// 'http://localhost:8000/media/pointclouds/ply/e1ef73b1258b475a996d2b72924c27ac/0bf37a0851b7402d88674e153f58e6f8.ply'
-// https://pointly.medium.com/how-to-convert-ply-files-to-las-laz-d4100ef3625a
-// https://gis.stackexchange.com/questions/314732/converting-ply-files-to-las-for-arcgis-input
-// https://pdal.io/apps/translate.html
+import { PointCloudOctree, Potree } from "potree-loader";
 
 console.log("THREE", THREE);
 console.log("OrbitControls", OrbitControls);
@@ -38,6 +26,12 @@ var camera: THREE.PerspectiveCamera;
 var scene: THREE.Scene;
 //var mesh: THREE.Mesh;
 
+const potree = new Potree();
+// Show at most 2 million points.
+potree.pointBudget = 2_000_000;
+// List of point clouds which we loaded and need to update.
+const pointClouds: PointCloudOctree[] = [];
+
 onMounted(() => {
   var canvasScene: Element | null = document.querySelector(
     "#three-scene-canvas"
@@ -53,12 +47,6 @@ onMounted(() => {
 
   scene = new THREE.Scene();
 
-  // position and point the camera to the center of the scene
-  //camera.position.x = 10;
-  //camera.position.y = 10;
-  //camera.position.z = 10;
-  camera.lookAt(new THREE.Vector3(0, 2, 0));
-
   // add spotlight for the shadows
   var spotLight = new THREE.SpotLight(0xffffff);
   spotLight.position.set(20, 20, 20);
@@ -66,21 +54,28 @@ onMounted(() => {
 
   var server = "http://localhost:8000";
   var mediaPath = "/media/pointclouds/";
-  var path = server + mediaPath + "ept/ept.json";
-  //var path = server + mediaPath + "lion_takanawa/cloud.js";
+  var path = server + mediaPath + "las_converted/metadata.json";
+  //var path = server + mediaPath + "ground_converted/metadata.json";
 
-  var points = new Potree.Group();
-  points.setPointBudget(10000000);
-  scene.add(points);
+  potree
+    .loadPointCloud(
+      // The name of the point cloud which is to be loaded.
+      "metadata.json",
+      // Given the relative URL of a file, should return a full URL (e.g. signed).
+      //relativeUrl => `${baseUrl}${relativeUrl}`,
+      (relativeUrl) => path
+    )
+    .then((pco) => {
+      console.log("pco", pco);
+      pointClouds.push(pco);
+      scene.add(pco); // Add the loaded point cloud to your ThreeJS scene.
 
-  console.log("points", points);
+      // The point cloud comes with a material which can be customized directly.
+      // Here we just set the size of the points.
+      pco.material.size = 1.0;
+    });
 
-  Potree.loadPointCloud(path, "testPointCloud", function (data) {
-    //console.log(Potree);
-    console.log("data", data);
-    var pointcloud = data.pointcloud;
-    points.add(pointcloud);
-  });
+  //potree.updatePointClouds(pointClouds, camera, renderer);
 
   var geometry: THREE.BoxGeometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
   var material: THREE.MeshNormalMaterial = new THREE.MeshNormalMaterial();
@@ -89,16 +84,23 @@ onMounted(() => {
   scene.add(mesh);
 
   renderer.setSize(size.width, size.height);
-  renderer.setAnimationLoop(animationCallback);
+  //renderer.setAnimationLoop(animationCallback);
+  renderer.setAnimationLoop(update);
   canvasScene?.appendChild(renderer.domElement);
 
+  update();
   // set backgroud color red
-  //renderer.setClearColor(0xffffff, 1);
+  renderer.setClearColor(0xffffff, 1);
 });
 
-let animationCallback = (time: number): void => {
-  //mesh.rotation.x = time / 2000;
-  //mesh.rotation.y = time / 1000;
+function update() {
+  // This is where most of the potree magic happens. It updates the visiblily of the octree nodes
+  // based on the camera frustum and it triggers any loads/unloads which are necessary to keep the
+  // number of visible points in check.
+  potree.updatePointClouds(pointClouds, camera, renderer);
+
+  // Render your scene as normal
+  renderer.clear();
   renderer.render(scene, camera);
-};
+}
 </script>

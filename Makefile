@@ -40,9 +40,7 @@ cleanup-docker:
 potree-entwine-ept:
 	@docker run -it -v `pwd`/django/storage/media/pointclouds/:/pointclouds/ connormanning/entwine build -c /pointclouds/config.json
 
-potree-entwine-ept-bak:
-	@docker run -it -v `pwd`/models/:/django/storage/media/pointclouds/ connormanning/entwine build \
-    -i /pointclouds/las/0bf37a0851b7402d88674e153f58e6f8 - Cloud.las \
-    -o /pointclouds \
-	-r EPSG:4978 \
-	--dataType binary
+potree-rebuild:
+	@sudo rm -r -f django/storage/media/pointclouds/ept/*
+	@docker run -it -v `pwd`/django/storage/media/pointclouds/:/pointclouds/ connormanning/entwine build -c /pointclouds/config.json
+	@sudo chown -R student:student django/storage/media/pointclouds/ept/*

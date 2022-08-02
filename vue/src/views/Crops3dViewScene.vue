@@ -5,14 +5,15 @@
     :storeOptions="storeOptions"
   >
     <div class="row p-6">
-      <crop-scene-potree></crop-scene-potree>
+      <crop-scene></crop-scene>
+      <!-- <crop-scene-potree></crop-scene-potree> -->
     </div>
   </base-layout>
 </template>
 
 <script setup lang="ts">
-//import CropScene from "@/components/three-scenes/CropScene.vue";
-import CropScenePotree from "@/components/three-scenes/CropScenePotree.vue";
+import CropScene from "@/components/three-scenes/CropScene.vue";
+//import CropScenePotree from "@/components/three-scenes/CropScenePotree.vue";
 import { type Ref, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { cropsStore } from "@/stores/cropsStore";
