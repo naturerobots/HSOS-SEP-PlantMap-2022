@@ -43,7 +43,7 @@ cleanup-docker:
 	@echo "kill all exited containers"
 	@-docker rm -f $(docker ps -qa --no-trunc --filter "status=exited")
 	@echo "delete container systemwide"
-	@docker system prune -a
+	@docker system prune -a --volumes
 
 potree-entwine-ept:
 	@docker run -it -v `pwd`/django/storage/media/pointclouds/:/pointclouds/ connormanning/entwine build -c /pointclouds/config.json

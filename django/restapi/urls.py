@@ -1,5 +1,5 @@
 from knox import views as knox_views
-from restapi.views import auth, bed_plants, company_gardens
+from restapi.views import auth, bed_plants, company_gardens, three_scene
 
 from django.urls import path
 
@@ -33,4 +33,5 @@ urlpatterns = [
         bed_plants.getBed3DImage,
     ),
     path('beds/<str:uuid>/task', bed_plants.make_task),
+    path('companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/3d-scene/', three_scene.get3dPlants),
 ]
