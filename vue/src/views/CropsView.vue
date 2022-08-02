@@ -8,11 +8,12 @@
       <div v-if="storeOptions.indexOf('crops-table') > -1" class="col-8">
         <crops-table
           ref="cropsTableRef"
-          title="Overview"
+          title="Beds"
           :crops="crops"
           :visibleColumns="columns"
           @row-enter="tableCropsEnter"
           @row-leave="tableCropsLeave"
+          @row-click="tableCropsClick"
         ></crops-table>
       </div>
       <div v-if="storeOptions.indexOf('crops-map') > -1" class="col-4 pl-2">
@@ -21,6 +22,7 @@
           :crops="crops"
           @polygon-enter="mapCropsEnter"
           @polygon-leave="mapCropsLeave"
+          @polygon-click="mapCropsClick"
         ></crops-map>
       </div>
     </div>
@@ -73,11 +75,19 @@ function mapCropsLeave(cropsId: number): void {
   cropsTableRef.value?.setRowInactive(cropsId);
 }
 
+function mapCropsClick(cropsId: number): void {
+  cropsTableRef.value?.setRowClicked(cropsId);
+}
+
 function tableCropsEnter(cropsId: number): void {
   cropsMapRef.value?.setPolygonActive(cropsId);
 }
 
 function tableCropsLeave(cropsId: number): void {
   cropsMapRef.value?.setPolygonInactive(cropsId);
+}
+
+function tableCropsClick(cropsId: number): void {
+  cropsMapRef.value?.setPolygonClicked(cropsId);
 }
 </script>

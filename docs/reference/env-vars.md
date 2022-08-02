@@ -1,4 +1,4 @@
-# Vite Env Variables and Modes
+# Env Variables and Modes
 
 The `Vite` documentation for `Env Variables and Modes` is available _[here](https://vitejs.dev/guide/env-and-mode.html#env-variables-and-modes)_.
 

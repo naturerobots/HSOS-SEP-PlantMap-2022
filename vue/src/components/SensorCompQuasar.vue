@@ -1,7 +1,7 @@
 <template>
   <div class="card bg-white">
     <div class="card-title">Soil Parameter</div>
-    <div class="overflow-x-auto overflow-y-auto">
+    <div class="rounded-xl overflow-x-auto overflow-y-auto">
       <q-table
         ref="table"
         flat
@@ -112,19 +112,19 @@ const columns: QTableProps["columns"] = [
     name: "moisture_value",
     label: "Moisture",
     field: "moisture_value",
-    align: "left",
+    align: "center",
   },
   {
     name: "temp_value",
     label: "Temperature",
     field: "temp_value",
-    align: "left",
+    align: "center",
   },
   {
     name: "ph_value",
     label: "PH",
     field: "ph_value",
-    align: "left",
+    align: "center",
   },
 ];
 </script>

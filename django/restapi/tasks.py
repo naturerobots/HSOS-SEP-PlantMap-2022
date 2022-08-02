@@ -38,6 +38,8 @@ def dl_pcloud(geometries, puuid):
     success = []
     failed = []
     for index, geometry in enumerate(geometries):
+        if geometry['type'] != "pointcloud":
+            continue
 
         geometryQuery = GeometryQuery(projectuuid=puuid, geometryuuid=geometry['uuid'])
 

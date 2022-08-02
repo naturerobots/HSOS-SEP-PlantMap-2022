@@ -1,0 +1,18 @@
+[
+  {
+    "model": "restapi.bed",
+    "pk": 1,
+    "fields": {
+      "uuid": "e1ef73b1258b475a996d2b72924c27ac",
+      "garden": 1
+    }
+  },
+  {
+    "model": "restapi.bed",
+    "pk": 2,
+    "fields": {
+      "uuid": "18f89a2118d24d19b1c66345ec499f43",
+      "garden": 1
+    }
+  }
+]
