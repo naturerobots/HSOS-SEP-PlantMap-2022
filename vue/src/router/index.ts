@@ -3,6 +3,7 @@ import DashboardView from "@/views/DashboardView.vue";
 import CropsView from "@/views/CropsView.vue";
 import Crops3dView from "@/views/Crops3dView.vue";
 import LoginView from "@/views/LoginView.vue";
+import OnboardingView from "@/views/OnboardingView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import ImageUploadView from "@/views/ImageUploadView.vue";
 import CropImageView from "@/views/CropImageView.vue";
@@ -54,6 +55,11 @@ const router = createRouter({
       path: "/register",
       name: "register",
       component: RegisterView,
+    },
+    {
+      path: "/onboarding",
+      name: "onboarding",
+      component: OnboardingView,
     },
   ],
 });
