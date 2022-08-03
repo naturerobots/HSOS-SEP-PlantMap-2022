@@ -1,4 +1,6 @@
 import axios from "axios";
+import { userStore } from "@/stores/userStore";
+import { storeToRefs } from "pinia";
 import type { Token } from "@/types/user";
 
 const baseURL = "http://127.0.0.1:8000";
@@ -33,6 +35,27 @@ export async function registerUser(
     })
     .then(function (response): Token {
       return response.data;
+    })
+    .catch(function (): undefined {
+      //console.log(error.response);
+      return undefined;
+    });
+}
+
+export async function logout(): Promise<void> {
+  return await axios
+    .post(
+      baseURL + "/logout",
+      {},
+      {
+        headers: {
+          Authorization:
+            "Token " + storeToRefs(userStore()).getToken.value.token,
+        },
+      }
+    )
+    .then(function (): void {
+      userStore().resetStore();
     })
     .catch(function (): undefined {
       //console.log(error.response);

@@ -88,5 +88,8 @@ export const userStore = defineStore({
       }
       return false;
     },
+    async resetStore(): Promise<void> {
+      this.$reset();
+    },
   },
 });
