@@ -1,5 +1,5 @@
 <template>
-  <q-btn flat fab padding="0" ripple="false">
+  <q-btn flat fab padding="0" :ripple="false">
     <img
       alt="profil"
       src="https://images.pexels.com/photos/7457498/pexels-photo-7457498.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
@@ -11,7 +11,7 @@
         <q-item clickable>
           <q-item-section>Profile</q-item-section>
         </q-item>
-        <q-item clickable>
+        <q-item clickable to="settings">
           <q-item-section>Settings</q-item-section>
         </q-item>
         <q-item clickable>

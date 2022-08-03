@@ -7,6 +7,7 @@ import OnboardingView from "@/views/OnboardingView.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import ImageUploadView from "@/views/ImageUploadView.vue";
 import CropImageView from "@/views/CropImageView.vue";
+import SettingsView from "@/views/SettingsView.vue";
 import { userStore } from "@/stores/userStore";
 
 const router = createRouter({
@@ -50,6 +51,12 @@ const router = createRouter({
       path: "/login",
       name: "login",
       component: LoginView,
+    },
+    {
+      path: "/settings",
+      name: "settings",
+      component: SettingsView,
+      meta: { requiresAuth: true },
     },
     {
       path: "/register",

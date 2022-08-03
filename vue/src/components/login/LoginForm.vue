@@ -21,7 +21,7 @@
         <input
           v-model="password"
           class="w-full content-center text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-          type="text"
+          type="password"
           placeholder="Password"
         />
       </div>
