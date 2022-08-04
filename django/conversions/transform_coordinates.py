@@ -7,9 +7,7 @@ from scipy.spatial.transform import Rotation
 
 def plantLocationOffset(projectUUID, geometryUUID):
     try:
-        with open(
-            "/workdir/django/storage/media/pointclouds/ply/" + projectUUID + "/" + geometryUUID + ".ply", "rb"
-        ) as file:
+        with open("storage/media/pointclouds/ply/" + projectUUID + "/" + geometryUUID + ".ply", "rb") as file:
             plydata = PlyData.read(file)
             # get an estimate of a plant's center, by taking the averge x and y
             x_avg = np.average(plydata.elements[0].data['x'])

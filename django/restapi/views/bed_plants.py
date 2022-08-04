@@ -7,7 +7,7 @@ from time import time
 import grpc
 
 # there is definitly a better way to add an import path
-sys.path.append(r'/workdir/build/gRPC/')
+sys.path.append(r'../build/gRPC/')
 
 import label_service_pb2_grpc as labelService
 import measurement_service_pb2_grpc as measurementService
