@@ -46,8 +46,11 @@
 
 <script setup lang="ts">
 import { ref, type Ref } from "vue";
+import { storeToRefs } from "pinia";
 import { useRouter, type Router } from "vue-router";
 import { userStore } from "@/stores/userStore";
+import { companyStore } from "@/stores/companyStore";
+import { gardenStore } from "@/stores/gardenStore";
 
 const router: Router = useRouter();
 const email: Ref<string | undefined> = ref<string>();
@@ -59,6 +62,16 @@ async function login(): Promise<void> {
     password.value
   );
   if (isLoggedIn) {
+    await companyStore().loadDataFromApi();
+    const companyId = storeToRefs(companyStore()).getCompanies?.value[0]?.id;
+    if (companyId) {
+      companyStore().setSelectedCompany(companyId);
+      await gardenStore().loadDataFromApi(companyId);
+      const gardenId = storeToRefs(gardenStore()).getGardens?.value[0]?.id;
+      if (gardenId) {
+        gardenStore().setSelectedGarden(gardenId);
+      }
+    }
     router.push({ path: "/" });
   } else {
     console.log("User Feedback: Login failed");

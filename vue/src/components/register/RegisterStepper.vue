@@ -77,7 +77,7 @@
             <input
               v-model="password"
               class="w-full content-center text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-              type="text"
+              type="password"
               placeholder="Enter Password"
             />
           </div>
@@ -86,7 +86,7 @@
             <input
               v-model="passwordRepeat"
               class="w-full content-center text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-              type="text"
+              type="password"
               placeholder="Repeat Password"
             />
           </div>
@@ -192,7 +192,7 @@ async function register(): Promise<void> {
     lastname.value
   );
   if (isLoggedIn) {
-    router.push({ name: "onboarding" });
+    router.push({ name: "onboarding-company" });
   } else {
     console.log("User Feedback: Login failed");
     /* TODO: user feedback */
