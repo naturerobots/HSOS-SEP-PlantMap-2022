@@ -95,7 +95,15 @@ export const userStore = defineStore({
         );
         if (token) {
           this.token = token;
-          return true;
+
+          const user: User | undefined = await getUser();
+
+          if (user) {
+            this.user = user;
+            return true;
+          }
+
+          return false;
         }
       }
       return false;
