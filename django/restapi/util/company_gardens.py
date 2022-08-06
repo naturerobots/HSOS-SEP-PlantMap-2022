@@ -1,6 +1,7 @@
 import json
 
 from restapi.models import *
+from restapi.serializer import CompanySerializer, GardenSerializer
 from restapi.util.auth import (
     createCompanyPermission,
     isCompanyAdmin,
