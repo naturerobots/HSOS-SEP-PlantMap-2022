@@ -1,8 +1,3 @@
-import os
-from dataclasses import fields
-from turtle import position
-from uuid import uuid4
-
 from rest_framework import serializers
 
 from django.contrib.auth.models import User
@@ -50,21 +45,6 @@ class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
         fields = '__all__'
-
-
-# Creates random filenames for garden images
-def path_and_rename(path):
-    filename = '{}.{}'.format(uuid4().hex, 'png')
-    return os.path.join(path, filename)
-
-
-class Image(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    path = models.CharField(max_length=100)
-
-    class Meta:
-        app_label = 'restapi'
-        db_table = 'Image'
 
 
 class Garden(models.Model):
