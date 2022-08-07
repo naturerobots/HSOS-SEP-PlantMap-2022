@@ -1,6 +1,58 @@
 import json
+from http.client import HTTPResponse
 
 from restapi.models import *
+
+from django.http import *
+
+
+# Endpoint to get user information
+def getUser(request):
+
+    serializer = UserSerializer(request.user)
+    return JsonResponse(serializer.data, safe=False)
+
+
+# Endpoint to edit user information
+def editUser(request):
+
+    if not request.body:
+        return HttpResponseBadRequest()
+
+    data = json.loads(request.body)
+    if not data:
+        return HttpResponseBadRequest()
+
+    usr = request.user
+    userEdited = False
+
+    if 'username' in data:
+        usr.username = data['username']
+        userEdited = True
+
+    if 'password' in data:
+        usr.set_password(data['password'])
+        userEdited = True
+
+    if 'email' in data:
+        usr.email = data['email']
+        userEdited = True
+
+    if 'first_name' in data:
+        usr.first_name = data['first_name']
+        userEdited = True
+
+    if 'last_name' in data:
+        usr.last_name = data['last_name']
+        userEdited = True
+
+    usr.save()
+
+    if userEdited:
+        return HttpResponse(status=200)
+    else:
+        return HttpResponseBadRequest()
+
 
 # Authorization methods
 

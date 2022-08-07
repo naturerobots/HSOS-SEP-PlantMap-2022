@@ -1,5 +1,6 @@
 import base64
 import re
+from http.client import HTTPResponse
 
 from rest_framework.decorators import api_view
 from restapi.helpers.auth import (
@@ -29,19 +30,14 @@ def companies(request):
 
 
 # /companies/{company_id}
-@api_view(['GET'])
-def getCompany(request, company_id: int):
+@api_view(['GET', 'DELETE'])
+def companyView(request, company_id: int):
 
-    # Check if requesting user is allowed to access company
-    if not isCompanyUser(company_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
-        return HttpResponseForbidden()
+    if request.method == 'GET':
+        getCompany(request, company_id)
 
-    try:
-        company = Company.objects.get(id=company_id)
-        serializer = CompanySerializer(company)
-        return JsonResponse(serializer.data, safe=False)
-    except:
-        return HttpResponseBadRequest()
+    elif request.method == 'DELETE':
+        deleteCompany(request, company_id)
 
 
 # /companies/{company_id}/gardens
@@ -58,21 +54,14 @@ def gardens(request, company_id: int):
 
 
 # /companies/{company_id}/gardens/{garden_id}
-@api_view(['GET'])
-def getGarden(request, company_id: int, garden_id: int):
+@api_view(['GET', 'DELETE'])
+def gardenView(request, company_id: int, garden_id: int):
 
-    # Check if requesting user is allowed to access the garden
-    if not isGardenUser(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
-        return HttpResponseForbidden()
+    if request.method == 'GET':
+        getGarden(request, company_id, garden_id)
 
-    try:
-        company = Company.objects.get(id=company_id)
-        garden = Garden.objects.get(id=garden_id, company=company)
-    except:
-        return HttpResponseBadRequest()
-
-    serializer = GardenSerializer(garden)
-    return JsonResponse(serializer.data, safe=False)
+    elif request.method == 'DELETE':
+        deleteGarden(request, company_id, garden_id)
 
 
 # TODO consider using class based views, for improved separation
@@ -159,3 +148,14 @@ def getImage(request, company_id, garden_id):
     coordinates = CoordinateSerializer(coordinates, many=True).data
 
     return JsonResponse({"image": image_string, "coordinates": coordinates})
+
+
+# /companies/{company_id}/gardens/{garden_id}/widget
+@api_view(['GET', 'POST'])
+def widgetView(request, company_id: int, garden_id: int):
+
+    if request.method == 'GET':
+        return getWidget(request, company_id, garden_id)
+
+    elif request.method == 'POST':
+        return createOrEditWidget(request, company_id, garden_id)

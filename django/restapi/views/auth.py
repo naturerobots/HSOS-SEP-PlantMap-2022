@@ -1,3 +1,5 @@
+from http.client import HTTPResponse
+
 from knox.views import LoginView as KnoxLoginView
 from rest_framework import permissions, status
 from rest_framework.authtoken.serializers import AuthTokenSerializer
@@ -112,8 +114,11 @@ def removeGardenPermissionView(request, company_id: int, garden_id: int):
 
 
 # /user
-@api_view(['GET'])
-def getUser(request):
+@api_view(['GET', 'PUT'])
+def userView(request):
 
-    serializer = UserSerializer(request.user)
-    return JsonResponse(serializer.data, safe=False)
+    if request.method == 'GET':
+        return getUser(request)
+
+    elif request.method == 'PUT':
+        return editUser(request)

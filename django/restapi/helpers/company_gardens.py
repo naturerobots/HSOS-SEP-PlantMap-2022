@@ -1,10 +1,13 @@
 import json
+from urllib.request import HTTPBasicAuthHandler
 
 from restapi.helpers.auth import (
     createCompanyPermission,
     isCompanyAdmin,
     isCompanyUser,
     isCreateCompanyOrGardenRequestValid,
+    isGardenAdmin,
+    isGardenUser,
 )
 from restapi.helpers.company_gardens import *
 from restapi.models import *
@@ -46,6 +49,36 @@ def createCompany(request):
         return HttpResponseBadRequest()
 
     return JsonResponse({'id': company.id})
+
+
+# Endpoint to get a company
+def getCompany(request, company_id):
+
+    # Check if requesting user is allowed to access company
+    if not isCompanyUser(company_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
+        return HttpResponseForbidden()
+
+    try:
+        company = Company.objects.get(id=company_id)
+        serializer = CompanySerializer(company)
+        return JsonResponse(serializer.data, safe=False)
+    except:
+        return HttpResponseBadRequest()
+
+
+# Endpoint to delete a company
+def deleteCompany(request, company_id):
+
+    # Check if requesting user is company admin
+    if not isCompanyAdmin(company_id, request.user.id):
+        return HttpResponseForbidden()
+
+    try:
+        Company.objects.filter(id=company_id).delete()
+    except:
+        return HttpResponseBadRequest()
+
+    return HttpResponse(status=200)
 
 
 # Endpoint that returns all gardens of the requested company the user has permissions on
@@ -95,3 +128,85 @@ def createGarden(request, company_id):
         return HttpResponseBadRequest()
 
     return JsonResponse({'id': garden.id})
+
+
+# Endpoint to get a garden
+def getGarden(request, company_id, garden_id):
+
+    # Check if requesting user is allowed to access the garden
+    if not isGardenUser(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
+        return HttpResponseForbidden()
+
+    try:
+        company = Company.objects.get(id=company_id)
+        garden = Garden.objects.get(id=garden_id, company=company)
+    except:
+        return HttpResponseBadRequest()
+
+    serializer = GardenSerializer(garden)
+    return JsonResponse(serializer.data, safe=False)
+
+
+# Endpoint to delete a garden
+def deleteGarden(request, company_id, garden_id):
+
+    # Check if requesting user is admin of company or garden
+    if not isGardenAdmin(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
+        return HttpResponseForbidden()
+
+    try:
+        Garden.objects.filter(id=garden_id).delete()
+    except:
+        return HttpResponseBadRequest()
+
+    return HttpResponse(status=200)
+
+
+def getWidget(request, company_id, garden_id):
+
+    # Check if requesting user has permissions on garden
+    if (
+        not isCompanyAdmin(company_id, request.user.id)
+        and not isGardenAdmin(garden_id, request.user.id)
+        and not isGardenUser(garden_id, request.user.id)
+    ):
+        return HttpResponseForbidden()
+
+    try:
+        garden = Garden.objects.get(id=garden_id)
+        widget = Widget.objects.filter(user=request.user, garden=garden).first()
+    except:
+        return HttpResponseBadRequest()
+
+    if not widget:
+        return JsonResponse({})
+    else:
+        return HttpResponse(json.dumps(widget.data), content_type="application/json")
+
+
+def createOrEditWidget(request, company_id, garden_id):
+
+    # Check if requesting user has permissions on garden
+    if (
+        not isCompanyAdmin(company_id, request.user.id)
+        and not isGardenAdmin(garden_id, request.user.id)
+        and not isGardenUser(garden_id, request.user.id)
+    ):
+        return HttpResponseForbidden()
+
+    if not request.body:
+        return HttpResponseBadRequest()
+
+    # Save widget settings
+    try:
+        garden = Garden.objects.get(id=garden_id)
+        widget = Widget.objects.filter(user=request.user, garden=garden).first()
+        if widget:
+            widget.data = json.loads(request.body)
+            widget.save()
+        else:
+            Widget.objects.create(user=request.user, garden=garden, data=json.loads(request.body))
+    except:
+        return HttpResponseBadRequest()
+
+    return HttpResponse(status=200)
