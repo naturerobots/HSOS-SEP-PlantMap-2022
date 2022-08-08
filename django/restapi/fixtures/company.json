@@ -3,7 +3,28 @@
     "model": "restapi.company",
     "pk": 1,
     "fields": {
-      "name": "Demo-Company"
+      "name": "company-1"
+    }
+  },
+  {
+    "model": "restapi.company",
+    "pk": 2,
+    "fields": {
+      "name": "company-2"
+    }
+  },
+  {
+    "model": "restapi.company",
+    "pk": 3,
+    "fields": {
+      "name": "company-3"
+    }
+  },
+  {
+    "model": "restapi.company",
+    "pk": 4,
+    "fields": {
+      "name": "company-4"
     }
   }
 ]
