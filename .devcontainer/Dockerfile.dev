@@ -16,6 +16,7 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends -y \
         python3-tk \
         libssl-dev \
         libffi-dev \
+        libpq-dev \
         gpg \
         && rm -rf /var/lib/apt/lists/*
 
