@@ -2,10 +2,22 @@
 
 ## Endpoints
 
-### `/login`
+### Overview
+
+| Name                                              | HTTP | URL                  |
+| ------------------------------------------------- | ---- | -------------------- |
+| [Login existing account](#login-existing-account) | POST | /login               |
+| [Register new account](#register-new-account)     | POST | /register            |
+| [Logout current user](#logout-current-user)       | POST | /logout & /logoutall |
+| [Query current user](#query-current-user)         | GET  | /user                |
+
+### Login existing account
 
 Send a POST request to this endpoint to login.
 The request needs to contain a `username` and a `password` field either as form or json.
+
+**Request**:  `POST /login`  
+**Response**: `200 Ok`, `400 Bad Request`
 
 Example request:
 
@@ -25,12 +37,17 @@ Example response:
 }
 ```
 
-### `/register`
+### Register new account
 
 Responses are the same as for `/login`,
 but requests need to supply a `first_name` and a `last_name` as well.
 A new user is created with the provided information
 and an error is returned if the username is already taken.
+
+**Request**:  `POST /register`  
+**Response**: `201 Created`, `400 Bad Request`
+
+Example request:
 
 ```json
 {
@@ -41,15 +58,22 @@ and an error is returned if the username is already taken.
 }
 ```
 
-### `/logout` & `/logoutall`
+### Logout current user
 
 These endpoints take an empty POST request.
 With `/logout` the logged in user is logged out from the current session,
 with `/logoutall` from all sessions.
 
-### `/user`
+**Request 1**:  `POST /logout`  
+**Request 2**:  `POST /logoutall`  
+**Response**: `200 Ok`, `400 Bad Request`
+
+### Query current user
 
 An empty GET request returns information about the currently logged in user.
+
+**Request**:  `POST /user`  
+**Response**: `200 Ok`
 
 Example response:
 

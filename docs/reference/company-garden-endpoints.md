@@ -2,10 +2,10 @@
 
 ## Overview
 
-| Name                                                              | HTTP | URL                            |
-| ----------------------------------------------------------------- | ---- | ------------------------------ |
-| [Upload image and coordinates](#upload-image-and-coordinates)     | POST | /gardens/{garden_id:int}/image |
-| [Download image and coordinates](#download-image-and-coordinates) | GET  | /gardens/{garden_id:int}/image |
+| Name                                                              | HTTP | URL                                                       |
+| ----------------------------------------------------------------- | ---- | --------------------------------------------------------- |
+| [Upload image and coordinates](#upload-image-and-coordinates)     | POST | /companies/{company_id:int}/gardens/{garden_id:int}/image |
+| [Download image and coordinates](#download-image-and-coordinates) | GET  | /companies/{company_id:int}/gardens/{garden_id:int}/image |
 
 ## Upload image and coordinates
 
@@ -17,7 +17,7 @@ For this, at least 3 coordinates with the names `topLeft`, `topRight` and `botto
 
     We currently only support the use of `.png` images.
 
-**Request**:  `POST /gardens/{garden_id:int}/image`  
+**Request**:  `POST /companies/{company_id:int}/gardens/{garden_id:int}/image`  
 **Response**: `201 Created`, `404 Not Found`, `400 Bad Request`
 
 Example Request:
@@ -47,7 +47,7 @@ Example Request:
 
 ## Download image and coordinates
 
-**Request**: `GET /gardens/{garden_id:int}/image`  
+**Request**: `GET /companies/{company_id:int}/gardens/{garden_id:int}/image`  
 **Response** `200 Ok`, `404 Not Found`, `400 Bad Request` 
 
 Example Request:
