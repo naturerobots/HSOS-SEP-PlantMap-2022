@@ -1,8 +1,7 @@
 name: ci
 
-# Controls when the action will run.
 on:
-  # Triggers the workflow on push or pull request events but only for the main or dev branch
+  # Triggers the workflow on push or pull request on the main or dev branch
   push:
     branches:
       - main
@@ -11,83 +10,102 @@ on:
     branches:
       - main
       - dev
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 env:
-  IMAGE_NAME: hsos-sep-plant-map-2022
+  IMAGE_NAME: plant-map-digital-logbook
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # builds the docker image if the corresponding files changed
-  build-docker:
-    # run on ubuntu
-    runs-on: ubuntu-20.04
+  create-ids:
+    runs-on: ubuntu-latest
     outputs:
-      docker_tag: ${{ steps.image-push.outputs.docker_tag || github.base_ref || github.ref_name }}
+      image_id: ${{ steps.imageTags.outputs.image_id }}
+      version: ${{ steps.imageTags.outputs.version }}
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
-      # check if Dockerfile or installDependencies have changed
-      - name: Get changed files
-        id: changed-files-specific
-        uses: tj-actions/changed-files@v19
-        with:
-          files: .devcontainer/Dockerfile
-
-      - name: Build image
-        if: steps.changed-files-specific.outputs.any_changed == 'true'
-        run: docker build .devcontainer --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
-
-      - name: Log in to registry
-        if: steps.changed-files-specific.outputs.any_changed == 'true'
-        # This is where you will update the PAT to GITHUB_TOKEN
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-      - name: Push image
-        id: image-push
-        if: steps.changed-files-specific.outputs.any_changed == 'true'
+      - id: imageTags
+        name: Generate tags
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
 
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          # Set Docker tag from branch
-          VERSION=${{ github.head_ref || github.ref_name }}
-          # Replace slashes
-          VERSION=$(echo $VERSION | tr '/' '-')
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
-          echo "::set-output name=docker_tag::$VERSION"
 
-  # builds the code
-  build:
-    needs: build-docker
-    # run in docker container on ubuntu
-    runs-on: ubuntu-20.04
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+          # Use Docker `latest` tag convention
+          [[ "${{ github.ref }}" != "refs/tags/"* ]] && VERSION=latest
+
+          # Save to output for later steps
+          echo "::set-output name=image_id::$IMAGE_ID"
+          echo "::set-output name=version::$VERSION"
+
+  # Builds the Docker image if the corresponding files changed
+  build-docker:
+    needs: create-ids
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      # check if Dockerfile has changed
+      - name: Get changed files
+        id: changed-files-specific-docker
+        uses: tj-actions/changed-files@v8.1
+        with:
+          files: |
+            .devcontainer/Dockerfile.dev
+
+      - name: Set up Docker Buildx
+        if: github.ref_type == 'tag' || steps.changed-files-specific-docker.outputs.any_changed == 'true'
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to Container Registry
+        if: github.ref_type == 'tag' || steps.changed-files-specific-docker.outputs.any_changed == 'true'
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push base image
+        if: github.ref_type == 'tag' || steps.changed-files-specific-docker.outputs.any_changed == 'true'
+        uses: docker/build-push-action@v2
+        with:
+          file: .devcontainer/Dockerfile.dev
+          push: ${{ GitHub.event_name != 'pull_request'}}
+          tags: ${{ needs.create-ids.outputs.image_id }}:${{ needs.create-ids.outputs.version }}
+          cache-from: type=registry,ref=${{ needs.create-ids.outputs.image_id }}:${{ needs.create-ids.outputs.version }}
+          cache-to: type=inline
+
+  # Builds the code
+  build-code:
+    needs: [build-docker, create-ids]
+    runs-on: ubuntu-latest
     container:
-      image: ghcr.io/${{ github.repository_owner }}/hsos-sep-plant-map-2022:${{ needs.build-docker.outputs.docker_tag }}
+      image: ${{ needs.create-ids.outputs.image_id }}:${{ needs.create-ids.outputs.version }}
       options: --user docker --workdir /PlantMap
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      #build workspace
+      # Build workspace
       - name: Build the proto files
         run: |
           mkdir -p build/gRPC
           python3 -m grpc_tools.protoc -I=protobuf-msgs --python_out=build/gRPC --grpc_python_out=build/gRPC protobuf-msgs/*
         shell: bash
 
+      # Build vue frontend
       - name: Build vue
         run: |
           cd vue
@@ -95,7 +113,7 @@ jobs:
           npm run build
         shell: bash
 
-      #pre-commit checks
+      # Run pre-commit checks
       - name: run pre-commit tests
         run: |
           pre-commit run -a
