@@ -1,7 +1,7 @@
 run-django:
 	@cd django && python3 manage.py makemigrations \
 		&& python3 manage.py migrate \
-		&& python3 manage.py loaddata user company garden permissions \
+		&& python3 manage.py loaddata user company garden bed permissions coordinate \
 		&& python3 manage.py runserver
 
 run-celery:

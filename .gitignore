@@ -14,5 +14,5 @@ media
 #whitelist the .vscode folder in .devcontainer
 !.devcontainer/.vscode
 
-storage/images/**
+django/storage/images
 !goeoentueuegs_ibbenbueren.png

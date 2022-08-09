@@ -31,14 +31,16 @@ class Garden(models.Model):
 
 
 class Coordinate(models.Model):
-    name = models.CharField(max_length=32, primary_key=True)
+    id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=32)
     latitude = models.FloatField()
     longitude = models.FloatField()
     garden = models.ForeignKey(Garden, related_name='garden_coordinates', on_delete=models.CASCADE)
 
     class Meta:
         app_label = 'restapi'
-        db_table = 'Coordinates'
+        db_table = 'Coordinate'
+        managed = True
 
 
 class Bed(models.Model):
