@@ -1,45 +1,52 @@
-name: build docker images from scratch
+name: build-docker-from-scratch-unconditionally
 
-# Controls when the action will run.
 on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      imageTag:
+        description: "The tag to be used for the images"
+        required: true
+        default: "latest"
 
 env:
-  IMAGE_NAME: hsos-sep-plant-map-2022
+  IMAGE_NAME: plant-map-digital-logbook
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # builds the docker image if the corresponding files changed
+  # Builds the docker image if the corresponding files changed
   build-docker:
-    # run on ubuntu
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
-
-      - name: Build image
-        run: docker build .devcontainer --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
-
-      - name: Log in to registry
-        # This is where you will update the PAT to GITHUB_TOKEN
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-      - name: Push image
+      - name: Generate tags
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
 
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          # Set Docker tag from branch
-          VERSION=${{ github.ref_name }}
-          # Replace slashes
-          VERSION=$(echo $VERSION | tr '/' '-')
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
+          # Save to env for later steps
+          echo "image_id=$IMAGE_ID" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to GitHub container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push base image
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          file: .devcontainer/Dockerfile.dev
+          tags: ${{ env.image_id}}:${{ github.event.inputs.imageTag }}
+          cache-from: type=registry,ref=${{ env.image_id }}:${{ github.event.inputs.imageTag }}
+          cache-to: type=inline
