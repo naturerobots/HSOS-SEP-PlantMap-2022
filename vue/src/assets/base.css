@@ -1,0 +1,299 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+@import "vue-advanced-cropper/dist/style.css";
+
+/* TAILWINDCSS */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  /* SENSOR MAP ICON */
+
+  .sensor-icon {
+    width: 25px;
+    height: 25px;
+    line-height: 25px;
+    border-radius: 50%;
+    font-size: 10px;
+    color: #000;
+    text-align: center;
+    background: #fff;
+    margin-left: -12.5px;
+    margin-top: -12.5px;
+    font-weight: bold;
+  }
+
+  .sensor-icon-active {
+    background: #bbe784;
+    /* TODO: discuss color, add to tailwind colors */
+  }
+
+  /* ----------- */
+
+  /* SENSOR TABLE */
+
+  .sensor-row-active td {
+    background-color: #e5e7eb !important;
+    /* TODO: discuss color, add to tailwind colors */
+  }
+
+  /* ----------- */
+
+  /* CROPS TABLE */
+
+  .crops-row-active td {
+    background-color: #e5e7eb !important;
+    /* TODO: discuss color, add to tailwind colors */
+  }
+
+  .crops-row-clicked td {
+    background-color: #bbe784 !important;
+    /* TODO: discuss color, add to tailwind colors */
+  }
+
+  /* ----------- */
+}
+
+:root {
+  /* color light mode */
+  background-color: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* color dark mode */
+  }
+}
+
+/* BASIC STYLES */
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+/* ----------- */
+
+.weather-forecasts {
+  @apply mt-2 text-primary_hover text-sm;
+}
+
+.card {
+  @apply rounded-2xl overflow-x-auto overflow-y-auto p-4 shadow-card;
+}
+
+.card-map {
+  @apply rounded-2xl overflow-x-auto overflow-y-auto drop-shadow shadow-card;
+}
+
+.card-title {
+  @apply mt-1 mb-3 text-center text-base font-bold;
+}
+
+/* .sidebar-content {
+  @apply flex flex-row h-full;
+}
+
+.sidebar-nav {
+  @apply w-20 h-screen justify-between flex flex-col;
+} */
+
+/* LOGIN/REGISTER */
+
+.bg-image {
+  background-image: url("@/assets/img/Robot.png");
+}
+
+/* ----------- */
+
+/* MAP */
+
+#map {
+  position: absolute;
+  height: 100%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+/* ----------- */
+
+/* WIDGET */
+
+.widget {
+  @apply drop-shadow rounded-md bg-background py-0;
+}
+
+.widget span {
+  @apply font-bold text-[#707070] px-4;
+}
+
+.widget-content.q-position-engine {
+  @apply rounded-lg mt-0.5 !important;
+}
+
+.widget .q-field__native,
+.widget .q-field__control,
+.widget-content .q-item {
+  @apply min-h-min !important;
+}
+
+.widget-content .q-item {
+  @apply bg-white;
+  /* TODO adjust color */
+}
+
+.widget-content-selected {
+  @apply text-black !important;
+  /* TODO adjust color */
+}
+
+/* ----------- */
+
+/* TABLE */
+
+.q-table--horizontal-separator tbody tr:not(:last-child) td {
+  border-bottom-width: 0.7px !important;
+  border-color: #e5e7eb;
+}
+
+.q-table--horizontal-separator thead tr th {
+  border-bottom-width: 0.7px !important;
+  border-color: #e5e7eb;
+}
+
+.q-table__middle {
+  border-top-left-radius: 1rem !important;
+  border-top-right-radius: 1rem !important;
+}
+
+/* ----------- */
+
+/* q-field */
+
+.q-field--dense .q-field__control,
+.q-field--dense .q-field__marginal {
+  height: 30px !important;
+}
+
+.q-field--auto-height.q-field--dense .q-field__control,
+.q-field--auto-height.q-field--dense .q-field__native {
+  min-height: 30px !important;
+}
+
+::-webkit-input-placeholder {
+  padding-left: 13px;
+}
+
+:-moz-placeholder {
+  padding-left: 13px;
+}
+
+.q-field__native.row {
+  padding-left: 13px !important;
+}
+
+/* ----------- */
+
+/* SENSOR TABLE */
+
+.sensor-table thead th {
+  @apply uppercase font-bold;
+  color: #6b7280;
+  /* TODO: discuss color, add to tailwind colors */
+}
+
+.sensor-table tbody {
+  font-weight: bold;
+}
+
+.sensor-table thead tr:first-child th {
+  top: 0;
+  /* bg color is important for th; just specify one */
+  @apply bg-table-header;
+  /* background-color: #FAFAFA; */
+}
+
+.sensor-table tbody tr {
+  @apply bg-white;
+}
+
+.sensor-table tbody tr td:first-child {
+  /* @apply rounded-l-lg; */
+}
+
+.sensor-table .q-table__bottom {
+  @apply border-none;
+}
+
+/* ----------- */
+
+/* CROPS TABLE */
+
+.crops-table {
+  /* height: 400px; */
+  /* TODO: specify height */
+}
+
+.crops-table thead tr:first-child th {
+  top: 0;
+  /* bg color is important for th; just specify one */
+  @apply bg-table-header;
+}
+
+.crops-table thead tr th {
+  @apply uppercase font-bold;
+  position: sticky;
+  z-index: 1;
+  font-weight: bold;
+  color: #6b7280;
+}
+
+/* this is when the loading indicator appears */
+.crops-table .q-table--loading thead tr:last-child th {
+  /* height of all previous header rows */
+  top: 48px;
+}
+
+.crops3d-icon-active:hover {
+  fill: #79b729;
+}
+
+/* -- layout table-head when hovered/clicked -- */
+.crops-table thead tr th.sorted {
+  color: black;
+}
+
+.crops-table thead tr th.sortable:hover {
+  color: black;
+}
+
+.crops-table tbody tr:hover {
+  background-color: #e5e7eb;
+}
+
+.search-icon {
+  font-size: 18px !important;
+}
+/* sort-icon-size */
+.crops-table thead tr th i {
+  font-size: 18px;
+  margin-bottom: 2px;
+  margin-left: 0;
+  color: black;
+}
+
+.round-badge {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+}
+
+.round-badge:hover {
+  cursor: help;
+  /* cursor: default; */
+}
+/* ----------- */

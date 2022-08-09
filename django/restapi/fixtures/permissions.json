@@ -1,0 +1,38 @@
+[
+  {
+    "model": "restapi.companypermission",
+    "pk": 1,
+    "fields": {
+      "permission": "u",
+      "company": 1,
+      "user": 1
+    }
+  },
+  {
+    "model": "restapi.companypermission",
+    "pk": 2,
+    "fields": {
+      "permission": "a",
+      "company": 1,
+      "user": 2
+    }
+  },
+  {
+    "model": "restapi.gardenpermission",
+    "pk": 1,
+    "fields": {
+      "permission": "u",
+      "garden": 1,
+      "user": 2
+    }
+  },
+  {
+    "model": "restapi.gardenpermission",
+    "pk": 1,
+    "fields": {
+      "permission": "a",
+      "garden": 1,
+      "user": 1
+    }
+  }
+]

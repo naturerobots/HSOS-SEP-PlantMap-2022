@@ -1,0 +1,52 @@
+name: build-docker-from-scratch-unconditionally
+
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      imageTag:
+        description: "The tag to be used for the images"
+        required: true
+        default: "latest"
+
+env:
+  IMAGE_NAME: plant-map-digital-logbook
+
+jobs:
+  # Builds the docker image if the corresponding files changed
+  build-docker:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+
+    steps:
+      - name: Generate tags
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          # Save to env for later steps
+          echo "image_id=$IMAGE_ID" >> $GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Log in to GitHub container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push base image
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          file: .devcontainer/Dockerfile.dev
+          tags: ${{ env.image_id}}:${{ github.event.inputs.imageTag }}
+          cache-from: type=registry,ref=${{ env.image_id }}:${{ github.event.inputs.imageTag }}
+          cache-to: type=inline

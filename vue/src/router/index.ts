@@ -1,0 +1,79 @@
+import { createRouter, createWebHistory } from "vue-router";
+import DashboardView from "@/views/DashboardView.vue";
+import CropsView from "@/views/CropsView.vue";
+import Crops3dView from "@/views/Crops3dView.vue";
+import LoginView from "@/views/LoginView.vue";
+import OnboardingView from "@/views/OnboardingView.vue";
+import RegisterView from "@/views/RegisterView.vue";
+import ImageUploadView from "@/views/ImageUploadView.vue";
+import CropImageView from "@/views/CropImageView.vue";
+import { userStore } from "@/stores/userStore";
+
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes: [
+    {
+      path: "/",
+      redirect: "/dashboard",
+    },
+    {
+      path: "/dashboard",
+      name: "dashboard",
+      component: DashboardView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/crops",
+      name: "crops",
+      component: CropsView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/3d",
+      name: "3d",
+      component: Crops3dView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/imageupload",
+      name: "imageupload",
+      component: ImageUploadView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/cropimage",
+      name: "cropimage",
+      component: CropImageView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: LoginView,
+    },
+    {
+      path: "/register",
+      name: "register",
+      component: RegisterView,
+    },
+    {
+      path: "/onboarding",
+      name: "onboarding",
+      component: OnboardingView,
+    },
+  ],
+});
+
+router.beforeEach((to, from, next) => {
+  if (import.meta.env.VITE_AUTH_REQUIRED === "true" && to.meta.requiresAuth) {
+    if (userStore().isAuthenticated) {
+      next();
+    } else {
+      next("/login");
+    }
+  } else {
+    next();
+  }
+});
+
+export default router;
