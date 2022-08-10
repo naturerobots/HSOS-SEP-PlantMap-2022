@@ -45,3 +45,22 @@ export async function getGardens(
       return undefined;
     });
 }
+
+export async function deleteGarden(
+  companyId: number,
+  gardenId: number
+): Promise<boolean> {
+  return true;
+  /* return await axios
+    .delete(baseURL + "/companies/" + companyId + "/gardens/" + gardenId, {
+      headers: {
+        Authorization: "Token " + storeToRefs(userStore()).getToken.value.token,
+      },
+    })
+    .then(function (): boolean {
+      return true;
+    })
+    .catch(function (): boolean {
+      return false;
+    }); */
+}
