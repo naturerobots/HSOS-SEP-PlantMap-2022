@@ -1,0 +1,92 @@
+[
+  {
+    "model": "restapi.coordinate",
+    "pk": 1,
+    "fields": {
+      "name": "top_right",
+      "latitude": "52.31724604719058",
+      "longitude": "7.630553394556046",
+      "garden": 1
+    }
+  },
+  {
+    "model": "restapi.coordinate",
+    "pk": 2,
+    "fields": {
+      "name": "top_left",
+      "latitude": "52.3170773725588",
+      "longitude": "7.630054503679276",
+      "garden": 1
+    }
+  },
+  {
+    "model": "restapi.coordinate",
+    "pk": 3,
+    "fields": {
+      "name": "bottom_left",
+      "latitude": "52.31686606722232",
+      "longitude": "7.630242593586445",
+      "garden": 1
+    }
+  },
+  {
+    "model": "restapi.coordinate",
+    "pk": 4,
+    "fields": {
+      "name": "top_right",
+      "latitude": "52.31724604719058",
+      "longitude": "7.630553394556046",
+      "garden": 3
+    }
+  },
+  {
+    "model": "restapi.coordinate",
+    "pk": 5,
+    "fields": {
+      "name": "top_left",
+      "latitude": "52.3170773725588",
+      "longitude": "7.630054503679276",
+      "garden": 3
+    }
+  },
+  {
+    "model": "restapi.coordinate",
+    "pk": 6,
+    "fields": {
+      "name": "bottom_left",
+      "latitude": "52.31686606722232",
+      "longitude": "7.630242593586445",
+      "garden": 3
+    }
+  },
+  {
+    "model": "restapi.coordinate",
+    "pk": 7,
+    "fields": {
+      "name": "top_right",
+      "latitude": "52.31724604719058",
+      "longitude": "7.630553394556046",
+      "garden": 4
+    }
+  },
+  {
+    "model": "restapi.coordinate",
+    "pk": 8,
+    "fields": {
+      "name": "top_left",
+      "latitude": "52.3170773725588",
+      "longitude": "7.630054503679276",
+      "garden": 4
+    }
+  },
+  {
+    "model": "restapi.coordinate",
+    "pk": 9,
+    "fields": {
+      "name": "bottom_left",
+      "latitude": "52.31686606722232",
+      "longitude": "7.630242593586445",
+      "garden": 4
+    }
+  }
+]

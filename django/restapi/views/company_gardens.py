@@ -1,16 +1,13 @@
 import base64
+import os
 import re
+from uuid import uuid4
 
 from rest_framework.decorators import api_view
-from restapi.helpers.auth import (
-    isCompanyAdmin,
-    isCompanyUser,
-    isGardenAdmin,
-    isGardenUser,
-)
-from restapi.helpers.company_gardens import *
 from restapi.models import *
-from restapi.models import Garden
+from restapi.serializer import CoordinateSerializer
+from restapi.util.auth import isCompanyAdmin, isCompanyUser, isGardenAdmin, isGardenUser
+from restapi.util.company_gardens import *
 
 from django.http import *
 

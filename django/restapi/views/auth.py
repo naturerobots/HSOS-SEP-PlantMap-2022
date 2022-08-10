@@ -3,8 +3,8 @@ from rest_framework import permissions, status
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from restapi.helpers.auth import *
-from restapi.models import UserSerializer
+from restapi.serializer import UserSerializer
+from restapi.util.auth import *
 
 from django.contrib.auth import login
 from django.http import *
