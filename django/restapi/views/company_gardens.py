@@ -79,8 +79,8 @@ def gardens(request, company_id: int):
 
 
 # /companies/{company_id}/gardens/{garden_id}
-@api_view(['GET'])
-def getGarden(request, company_id: int, garden_id: int):
+@api_view(['GET', 'DELETE'])
+def gardenView(request, company_id: int, garden_id: int):
 
     if request.method == 'GET':
         return getGarden(request, company_id, garden_id)
