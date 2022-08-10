@@ -5,16 +5,21 @@ import { getCompanies } from "@/services/companyApi";
 // TODO: move to types/store
 interface companyStore {
   companies: Company[];
+  selectedCompany: number | undefined;
 }
 
 export const companyStore = defineStore({
   id: "companyStore",
   state: (): companyStore => ({
     companies: [] as Company[],
+    selectedCompany: undefined,
   }),
   getters: {
     getCompanies(state: companyStore): Company[] {
       return state.companies;
+    },
+    getSelectedCompany(state: companyStore): number | undefined {
+      return state.selectedCompany;
     },
   },
   actions: {
@@ -23,6 +28,10 @@ export const companyStore = defineStore({
       if (response) {
         this.companies = response;
       }
+    },
+    setSelectedCompany(companyId: number): void {
+      /* TODO: check if id exists in companies */
+      this.selectedCompany = companyId;
     },
   },
 });

@@ -5,7 +5,10 @@
     :storeOptions="storeOptions"
   >
     <div class="row p-6">
-      <div v-if="storeOptions.indexOf('crops-table') > -1" class="col-8">
+      <div
+        v-if="crops.length > 0 && storeOptions.indexOf('crops-table') > -1"
+        class="col-8"
+      >
         <crops-table
           ref="cropsTableRef"
           title="Beds"
@@ -16,7 +19,10 @@
           @row-click="tableCropsClick"
         ></crops-table>
       </div>
-      <div v-if="storeOptions.indexOf('crops-map') > -1" class="col-4 pl-2">
+      <div
+        v-if="crops.length > 0 && storeOptions.indexOf('crops-map') > -1"
+        class="col-4 pl-2"
+      >
         <crops-map
           ref="cropsMapRef"
           :crops="crops"

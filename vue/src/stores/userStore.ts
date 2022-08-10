@@ -1,54 +1,58 @@
 import { defineStore } from "pinia";
-import type { Token, User } from "@/types/user";
+import type { Token, User, Settings } from "@/types/user";
 import type { StoreOption } from "@/types/widgetOption";
-import { loginUser, registerUser } from "@/services/userApi";
+import { getUser, loginUser, registerUser, editUser } from "@/services/userApi";
 
 // TODO: move to types/store
 interface userStore {
   user: User;
+  settings: Settings;
+  token: Token;
 }
 
 export const userStore = defineStore({
   id: "userStore",
   state: (): userStore => ({
-    user: {
-      settings: {
-        widgetOptions: [
-          "weather",
-          "garden-map",
-          "soil-parameter",
-          "crops-table",
-          "crops-map",
-          "3d-table",
-          "3d-map",
-        ], //TODO: delete later
-      },
-      token: {} as Token,
+    user: {} as User,
+    settings: {
+      widgetOptions: [
+        "weather",
+        "garden-map",
+        "soil-parameter",
+        "crops-table",
+        "crops-map",
+        "3d-table",
+        "3d-map",
+      ], //TODO: delete later
     },
+    token: {} as Token,
   }),
   getters: {
+    getUser(state: userStore): User {
+      return state.user;
+    },
     getOptions(state: userStore): StoreOption[] {
-      return state.user.settings.widgetOptions;
+      return state.settings.widgetOptions;
     },
     isAuthenticated(state: userStore): boolean {
       /* TODO: the token must be checked here */
-      if (state.user.token.token) return true;
+      if (state.token.token) return true;
 
       return false;
     },
     getToken(state: userStore): Token {
-      return state.user.token;
+      return state.token;
     },
   },
   actions: {
     addOption(storeOption: StoreOption): void {
-      this.user.settings.widgetOptions.push(storeOption);
+      this.settings.widgetOptions.push(storeOption);
       this.updateOptions();
     },
     removeOption(storeOption: StoreOption): void {
-      const index = this.user.settings.widgetOptions.indexOf(storeOption, 0);
+      const index = this.settings.widgetOptions.indexOf(storeOption, 0);
       if (index > -1) {
-        this.user.settings.widgetOptions.splice(index, 1);
+        this.settings.widgetOptions.splice(index, 1);
       }
       this.updateOptions();
     },
@@ -62,8 +66,16 @@ export const userStore = defineStore({
       if (username && password) {
         const token: Token | undefined = await loginUser(username, password);
         if (token) {
-          this.user.token = token;
-          return true;
+          this.token = token;
+
+          const user: User | undefined = await getUser();
+
+          if (user) {
+            this.user = user;
+            return true;
+          }
+
+          return false;
         }
       }
       return false;
@@ -71,22 +83,42 @@ export const userStore = defineStore({
     async registerUser(
       username: string | undefined,
       password: string | undefined,
-      firstname: string | undefined,
-      lastname: string | undefined
+      firstName: string | undefined,
+      lastName: string | undefined
     ): Promise<boolean> {
-      if (username && password && firstname && lastname) {
+      if (username && password && firstName && lastName) {
         const token: Token | undefined = await registerUser(
           username,
           password,
-          firstname,
-          lastname
+          firstName,
+          lastName
         );
         if (token) {
-          this.user.token = token;
-          return true;
+          this.token = token;
+
+          const user: User | undefined = await getUser();
+
+          if (user) {
+            this.user = user;
+            return true;
+          }
+
+          return false;
         }
       }
       return false;
+    },
+    async editUser(
+      firstName?: string | undefined,
+      lastName?: string | undefined,
+      username?: string | undefined,
+      password?: string | undefined
+    ): Promise<boolean> {
+      await editUser(firstName, lastName, username, password);
+      return true;
+    },
+    async resetStore(): Promise<void> {
+      this.$reset();
     },
   },
 });
