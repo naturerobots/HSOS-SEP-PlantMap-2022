@@ -3,6 +3,7 @@
     <div class="px-4 pt-4">
       <q-btn
         class="mr-2 bg-primary text-white"
+        v-if="markers.length == 3"
         rounded
         label="Save Image"
         @click="saveImage"
@@ -43,6 +44,9 @@ import { useQuasar } from "quasar";
 import type { QVueGlobals } from "quasar";
 import "leaflet/dist/leaflet.css";
 import "./LeafletRotation.ts";
+import { companyStore } from "@/stores/companyStore";
+import { gardenStore } from "@/stores/gardenStore";
+import type { Coordinate, GardenImage } from "@/types/gardenImage";
 
 const router = useRouter();
 const route = useRoute();
@@ -87,7 +91,14 @@ onMounted(() => {
     }
   ).addTo(leafletMap);
 
-  leafletMap.on("click", setMarker);
+  if (route.params.coordinates) {
+    const parsedCoordinates = JSON.parse(
+      route.params.coordinates as string
+    ) as Coordinate[];
+    setMarkerAndPlaceImage(parsedCoordinates);
+  } else {
+    leafletMap.on("click", setMarker);
+  }
 });
 
 function repositionImage() {
@@ -98,13 +109,10 @@ function repositionImage() {
       markers.value[2].getLatLng()
     );
   }
-
-  console.log(markers.value.map((value) => value?.getLatLng()));
 }
 
 function updateOpacity(opacityFactor: number) {
   opacity.value += opacityFactor;
-  console.log(opacity.value.toFixed(1));
   if (
     markers.value.length == 3 &&
     parseFloat(opacity.value.toFixed(1)) >= 0.0 &&
@@ -148,8 +156,72 @@ function setImage(): void {
   //leafletMap.fitBounds(bounds);
 }
 
+function setMarkerAndPlaceImage(coordinates: Coordinate[]): void {
+  const topLeft = coordinates.find((coord) => coord.name === "topLeft");
+  const topRight = coordinates.find((coord) => coord.name === "topRight");
+  const bottomLeft = coordinates.find((coord) => coord.name === "bottomLeft");
+
+  setMarkerFromCoordinate(topLeft);
+  setMarkerFromCoordinate(topRight);
+  setMarkerFromCoordinate(bottomLeft);
+
+  const bounds = L.latLngBounds(
+    new L.LatLng(topRight!.latitude, topRight!.longitude),
+    new L.LatLng(bottomLeft!.latitude, bottomLeft!.longitude)
+  );
+  leafletMap.fitBounds(bounds, { animate: true });
+
+  setImage();
+}
+
+function setMarkerFromCoordinate(coordinate: Coordinate | undefined): void {
+  if (coordinate) {
+    let point = L.latLng(coordinate.latitude, coordinate.longitude);
+    let marker: L.Marker = L.marker(point, {
+      draggable: true,
+      icon: greenIcon,
+    }).addTo(leafletMap);
+
+    markers.value.push(marker);
+    marker.on("drag dragend", repositionImage);
+  }
+}
+
 function saveImage(): void {
-  //TODO: Router to dashBoard, send to Server pos + img
+  if (markers.value.length < 3) {
+    $q.notify({
+      type: "negative",
+      message: "At least 3 markers has to be placed!",
+    });
+    return;
+  }
+
+  const gardenImage: GardenImage = {
+    image: route.params.src as string,
+    coordinates: [
+      {
+        name: "topLeft",
+        longitude: markers.value[0].getLatLng().lng,
+        latitude: markers.value[0].getLatLng().lat,
+      },
+      {
+        name: "topRight",
+        longitude: markers.value[1].getLatLng().lng,
+        latitude: markers.value[1].getLatLng().lat,
+      },
+      {
+        name: "bottomLeft",
+        longitude: markers.value[2].getLatLng().lng,
+        latitude: markers.value[2].getLatLng().lat,
+      },
+    ],
+  };
+
+  gardenStore().setSelectedGardenImg(
+    companyStore().getCompanies[0]?.id,
+    gardenImage
+  );
+
   router.push({ path: "/dashboard" });
 }
 </script>

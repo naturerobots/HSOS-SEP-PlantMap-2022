@@ -24,21 +24,3 @@ run-frontend-prod:
 	@echo "# Build and run vite for production #"
 	@echo "#####################################"
 	@cd vue && npm run build && npm run preview
-
-clean-docker-setup:
-	@echo "#########################"
-	@echo "# Clearing docker setup #"
-	@echo "#########################"
-	@echo "Shutdown development: "
-	@cd .devcontainer && docker compose down
-	@echo "Deleting Containers: "
-	@docker rm hsos-sep-plantmap-2022_devcontainer-postgres-1 \
-		hsos-sep-plantmap-2022_devcontainer-rabbitmq-1 \
-		hsos-sep-plantmap-2022_devcontainer-plant-map-dev-1
-	@echo "Deleting Images: "
-	@docker rmi postgres:latest \
-		rabbitmq:latest \
-		hsos-sep-plantmap-2022_devcontainer_plant-map-dev:latest \
-		vsc-hsos-sep-plantmap-2022-e203421f68d810d8e4b8972a3b2f3674-uid:latest
-	@echo "Deleting ALL volumes: "
-	@docker volume prune -f
