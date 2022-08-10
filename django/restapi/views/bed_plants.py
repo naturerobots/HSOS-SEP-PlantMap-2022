@@ -20,6 +20,12 @@ from project_query_pb2 import ProjectQuery
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from restapi import tasks
+from restapi.helpers.auth import (
+    isCompanyAdmin,
+    isCompanyUser,
+    isGardenAdmin,
+    isGardenUser,
+)
 from restapi.models import *
 from restapi.models import Garden
 from restapi.util.auth import isCompanyAdmin, isGardenUser
@@ -46,11 +52,12 @@ stubTf = tfService.TfServiceStub(channel)
 def getBeds(request, company_id: int, garden_id: int):
 
     # Check if requesting user is allowed to access the garden
-    if not isGardenUser(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
-        return HttpResponseForbidden()
-
-    # Check if authenticated user is allowed to request company_id, garden_id
-    if isGardenUser(garden_id, request.user.id) == False:
+    if (
+        not isGardenUser(garden_id, request.user.username)
+        and not isGardenAdmin(garden_id, request.user.username)
+        and not isCompanyUser(company_id, request.user.username)
+        and not isCompanyAdmin(company_id, request.user.username)
+    ):
         return HttpResponseForbidden()
 
     try:
@@ -217,7 +224,12 @@ def getBeds(request, company_id: int, garden_id: int):
 def getPlants(request, company_id: int, garden_id: int, bed_id: int):
 
     # Check if requesting user is allowed to access the garden
-    if not isGardenUser(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
+    if (
+        not isGardenUser(garden_id, request.user.username)
+        and not isGardenAdmin(garden_id, request.user.username)
+        and not isCompanyUser(company_id, request.user.username)
+        and not isCompanyAdmin(company_id, request.user.username)
+    ):
         return HttpResponseForbidden()
 
     requests = 0

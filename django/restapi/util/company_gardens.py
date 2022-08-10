@@ -1,4 +1,5 @@
 import json
+from urllib.request import HTTPBasicAuthHandler
 
 from restapi.models import *
 from restapi.serializer import CompanySerializer, GardenSerializer
@@ -7,6 +8,8 @@ from restapi.util.auth import (
     isCompanyAdmin,
     isCompanyUser,
     isCreateCompanyOrGardenRequestValid,
+    isGardenAdmin,
+    isGardenUser,
 )
 from restapi.util.company_gardens import *
 
@@ -42,19 +45,51 @@ def createCompany(request):
 
     # Give the user admin permissions on new company
     # Delete company if permission could not be set successfully
-    if not createCompanyPermission(company.id, request.user.id, 'a'):
-        Company.objects.delete(company)
+    if not createCompanyPermission(company.id, request.user.username, 'a'):
+        try:
+            Company.objects.filter(id=company.id).delete()
+        except:
+            pass
         return HttpResponseBadRequest()
 
     return JsonResponse({'id': company.id})
+
+
+# Endpoint to get a company
+def getCompany(request, company_id):
+
+    # Check if requesting user is allowed to access company
+    if not isCompanyUser(company_id, request.user.username) and not isCompanyAdmin(company_id, request.user.username):
+        return HttpResponseForbidden()
+
+    try:
+        company = Company.objects.get(id=company_id)
+        serializer = CompanySerializer(company)
+        return JsonResponse(serializer.data, safe=False)
+    except:
+        return HttpResponseBadRequest()
+
+
+# Endpoint to delete a company
+def deleteCompany(request, company_id):
+
+    # Check if requesting user is company admin
+    if not isCompanyAdmin(company_id, request.user.username):
+        return HttpResponseForbidden()
+
+    try:
+        Company.objects.filter(id=company_id).delete()
+    except:
+        return HttpResponseBadRequest()
+
+    return HttpResponse(status=200)
 
 
 # Endpoint that returns all gardens of the requested company the user has permissions on
 def getGardens(request, company_id):
 
     # Check if requesting user is allowed to access company
-    userIsCompanyAdmin = isCompanyAdmin(company_id, request.user.id)
-    if not isCompanyUser(company_id, request.user.id) and not userIsCompanyAdmin:
+    if not isCompanyUser(company_id, request.user.username) and not isCompanyAdmin(company_id, request.user.username):
         return HttpResponseForbidden()
 
     try:
@@ -63,18 +98,7 @@ def getGardens(request, company_id):
     except:
         return HttpResponseBadRequest()
 
-    # Company admin can access all gardens
-    if userIsCompanyAdmin:
-        serializer = GardenSerializer(gardens, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-    # Check company user permissions on each garden
-    authorizedGardens = []
-    for g in gardens.iterator():
-        if GardenPermission.objects.filter(user=request.user, garden=g).count() > 0:
-            authorizedGardens.append(g)
-
-    serializer = GardenSerializer(authorizedGardens, many=True)
+    serializer = GardenSerializer(gardens, many=True)
     return JsonResponse(serializer.data, safe=False)
 
 
@@ -82,7 +106,7 @@ def getGardens(request, company_id):
 def createGarden(request, company_id):
 
     # Check if requesting user has admin permissions on company
-    if not isCompanyAdmin(company_id, request.user.id):
+    if not isCompanyAdmin(company_id, request.user.username):
         return HttpResponseForbidden()
 
     if not isCreateCompanyOrGardenRequestValid(request):
@@ -96,3 +120,72 @@ def createGarden(request, company_id):
         return HttpResponseBadRequest()
 
     return JsonResponse({'id': garden.id})
+
+
+# Endpoint to get a garden
+def getGarden(request, company_id, garden_id):
+
+    # Check if requesting user is allowed to access the garden
+    if (
+        not isGardenUser(garden_id, request.user.username)
+        and not isGardenAdmin(garden_id, request.user.username)
+        and not isCompanyUser(company_id, request.user.username)
+        and not isCompanyAdmin(company_id, request.user.username)
+    ):
+        return HttpResponseForbidden()
+
+    try:
+        company = Company.objects.get(id=company_id)
+        garden = Garden.objects.get(id=garden_id, company=company)
+    except:
+        return HttpResponseBadRequest()
+
+    serializer = GardenSerializer(garden)
+    return JsonResponse(serializer.data, safe=False)
+
+
+# Endpoint to delete a garden
+def deleteGarden(request, company_id, garden_id):
+
+    # Check if requesting user is admin of company or garden
+    if not isGardenAdmin(garden_id, request.user.username) and not isCompanyAdmin(company_id, request.user.username):
+        return HttpResponseForbidden()
+
+    try:
+        Garden.objects.filter(id=garden_id).delete()
+    except:
+        return HttpResponseBadRequest()
+
+    return HttpResponse(status=200)
+
+
+def getWidget(request):
+
+    try:
+        widget = Widget.objects.filter(user=request.user).first()
+    except:
+        return HttpResponseBadRequest()
+
+    if not widget:
+        return JsonResponse({})
+    else:
+        return HttpResponse(json.dumps(widget.data), content_type="application/json")
+
+
+def createOrEditWidget(request):
+
+    if not request.body:
+        return HttpResponseBadRequest()
+
+    # Save widget settings
+    try:
+        widget = Widget.objects.filter(user=request.user).first()
+        if widget:
+            widget.data = json.loads(request.body)
+            widget.save()
+        else:
+            Widget.objects.create(user=request.user, data=json.loads(request.body))
+    except:
+        return HttpResponseBadRequest()
+
+    return HttpResponse(status=200)
