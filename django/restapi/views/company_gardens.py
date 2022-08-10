@@ -121,7 +121,7 @@ def uploadImage(request, company_id, garden_id):
     for position in request.data['coordinates']:
         # if coordinates already exist just update, else create new ones
         try:
-            coordinate = Coordinate.objects.get(name=position['name'])
+            coordinate = Coordinate.objects.get(name=position['name'], garden=garden_id)
             coordinate.latitude = position['latitude']
             coordinate.longitude = position['longitude']
             coordinate.save()
