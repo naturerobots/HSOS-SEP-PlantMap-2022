@@ -42,7 +42,7 @@ export async function registerUser(
     });
 }
 
-export async function logout(): Promise<void> {
+export async function logout(): Promise<boolean> {
   return await axios
     .post(
       baseURL + "/logout",
@@ -54,12 +54,12 @@ export async function logout(): Promise<void> {
         },
       }
     )
-    .then(function (): void {
-      userStore().resetStore();
+    .then(function (): boolean {
+      return true;
     })
-    .catch(function (): undefined {
+    .catch(function (): boolean {
       //console.log(error.response);
-      return undefined;
+      return false;
     });
 }
 

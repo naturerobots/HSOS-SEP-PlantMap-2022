@@ -1,6 +1,11 @@
 import { defineStore } from "pinia";
 import type { Garden } from "@/types/garden";
-import { getGardenImg, getGardens, postGardenImg } from "@/services/gardenApi";
+import {
+  deleteGarden,
+  getGardenImg,
+  getGardens,
+  postGardenImg,
+} from "@/services/gardenApi";
 import type { GardenImage } from "@/types/gardenImage";
 
 // TODO: move to types/store
@@ -40,7 +45,13 @@ export const gardenStore = defineStore({
         this.gardens = response;
       }
     },
-    setSelectedGarden(gardenId: number): void {
+    async loadGardens(companyId: number): Promise<Garden[] | undefined> {
+      const response = await getGardens(companyId);
+      if (response) {
+        return response;
+      }
+    },
+    setSelectedGarden(gardenId: number | undefined): void {
       /* TODO: check if id exists in gardens */
       this.selectedGarden = gardenId;
     },
@@ -101,6 +112,31 @@ export const gardenStore = defineStore({
       if (responseImg && this.gardenImage) {
         this.gardenImage.image = gardenImage;
       }
+    },
+    async disposeStore(): Promise<void> {
+      this.$dispose();
+    },
+    async resetStore(): Promise<void> {
+      this.$reset();
+    },
+    async deleteGarden(companyId: number, gardenId: number): Promise<boolean> {
+      /* TODO: check if id exists in gardens */
+      if (await deleteGarden(companyId, gardenId)) {
+        for (let index = 0; index < this.gardens.length; index++) {
+          if (this.gardens[index].id == gardenId) {
+            this.gardens.splice(index, 1);
+
+            if (this.gardens.length <= 0) {
+              this.selectedGarden = undefined;
+              break;
+            }
+
+            this.selectedGarden = this.gardens[0].id;
+            break;
+          }
+        }
+      }
+      return false;
     },
   },
 });

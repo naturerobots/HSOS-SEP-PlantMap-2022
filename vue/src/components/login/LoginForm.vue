@@ -64,6 +64,7 @@ async function login(): Promise<void> {
   if (isLoggedIn) {
     await companyStore().loadDataFromApi();
     const companyId = storeToRefs(companyStore()).getCompanies?.value[0]?.id;
+
     if (companyId) {
       companyStore().setSelectedCompany(companyId);
       await gardenStore().loadDataFromApi(companyId);
@@ -72,6 +73,9 @@ async function login(): Promise<void> {
         gardenStore().setSelectedGarden(gardenId);
         await gardenStore().loadSelectedGardenImg(companyId);
       }
+    } else {
+      companyStore().setSelectedCompany(undefined);
+      gardenStore().setSelectedGarden(undefined);
     }
 
     router.push({ path: "/" });

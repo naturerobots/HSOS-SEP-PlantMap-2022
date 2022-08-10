@@ -51,9 +51,16 @@
           <button
             type="submit"
             class="w-full flex justify-center outline outline-1 outline-danger hover:text-white transition ease-in-out duration-300 text-[#FFA6A6] hover:bg-danger p-3 rounded-full tracking-wide font-bold shadow-lg"
+            @click="deleteGarden()"
+          >
+            Delete current garden
+          </button>
+          <button
+            type="submit"
+            class="w-full flex justify-center outline outline-1 outline-danger hover:text-white transition ease-in-out duration-300 text-[#FFA6A6] hover:bg-danger p-3 rounded-full tracking-wide font-bold shadow-lg"
             @click="deleteCompany()"
           >
-            Delete Company
+            Delete current Company
           </button>
         </div>
       </div>
@@ -66,6 +73,8 @@ import { onMounted, ref, type Ref } from "vue";
 import { storeToRefs } from "pinia";
 import BaseLayout from "@/components/layout/BaseLayout.vue";
 import { userStore } from "@/stores/userStore";
+import { companyStore } from "@/stores/companyStore";
+import { gardenStore } from "@/stores/gardenStore";
 import type { User } from "@/types/user";
 
 const email: Ref<string | undefined> = ref<string>();
@@ -74,6 +83,13 @@ const firstName: Ref<string | undefined> = ref<string>();
 const lastName: Ref<string | undefined> = ref<string>();
 
 const user: Ref<User> = storeToRefs(userStore()).getUser;
+
+const companyId: Ref<number | undefined> = storeToRefs(
+  companyStore()
+).getSelectedCompany;
+const gardenId: Ref<number | undefined> = storeToRefs(
+  gardenStore()
+).getSelectedGarden;
 
 onMounted(() => {
   firstName.value = user.value.first_name;
@@ -90,7 +106,37 @@ async function changeUserDetails(): Promise<void> {
   );
 }
 
+async function deleteGarden(): Promise<void> {
+  if (!companyId.value || !gardenId.value) return;
+
+  if (!(await gardenStore().deleteGarden(companyId.value, gardenId.value))) {
+    console.log("Don't have the permissions to delete the garden"); //TODO: user feedback
+    return;
+  }
+
+  //TODO: success: user feedback
+}
+
 async function deleteCompany(): Promise<void> {
-  /* TODO: implement delete */
+  if (!companyId.value) return;
+
+  if (!(await companyStore().deleteCompany(companyId.value))) {
+    console.log("Don't have the permissions to delete the company"); //TODO: user feedback
+    return;
+  }
+
+  if (companyId.value) {
+    await gardenStore().loadDataFromApi(companyId.value);
+    const gardenId = storeToRefs(gardenStore()).getGardens?.value[0]?.id;
+    if (gardenId) {
+      gardenStore().setSelectedGarden(gardenId);
+    } else {
+      gardenStore().setSelectedGarden(undefined);
+    }
+  } else {
+    await gardenStore().resetStore();
+  }
+
+  //TODO: success: user feedback
 }
 </script>
