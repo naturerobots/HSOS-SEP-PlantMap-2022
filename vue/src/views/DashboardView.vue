@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, type Ref } from "vue";
+import { onMounted, ref, type Ref } from "vue";
 import { storeToRefs } from "pinia";
 import { sensorStore } from "@/stores/sensorStore";
 import { userStore } from "@/stores/userStore";
@@ -58,6 +58,8 @@ import WeatherComp from "@/components/weather/WeatherComp.vue";
 import SensorComp from "@/components/sensor/SensorComp.vue";
 import GardenMap from "@/components/map/GardenMap.vue";
 import BaseLayout from "@/components/layout/BaseLayout.vue";
+import { cropsStore } from "@/stores/cropsStore";
+import { bedStore } from "@/stores/bedStore";
 
 const sensors: Ref<Sensor[]> = storeToRefs(sensorStore()).getSensors;
 const storeOptions: Ref<StoreOption[]> = storeToRefs(userStore()).getOptions;
@@ -69,6 +71,12 @@ const widgetOptionsDashboard: WidgetOption[] = [
   widgetOptions.gardenMap,
   widgetOptions.notification,
 ];
+
+onMounted(() => {
+  console.log("onMounted");
+  cropsStore().loadDataFromApi();
+  bedStore().loadDataFromApi();
+});
 
 // Sensor - Map interaction
 function mapSensorEnter(sensorId: number): void {

@@ -14,6 +14,8 @@
 
 <script setup lang="ts">
 import BaseMap from "@/components/map/BaseMap.vue";
+import type { Bed } from "@/types/bed";
+import type { Beds } from "@/types/beds";
 import type { Crop } from "@/types/crop";
 import type { MapImage } from "@/types/mapImage";
 import L, { LatLng, polygon, Polygon } from "leaflet";
@@ -23,7 +25,7 @@ const baseMapRef = ref<InstanceType<typeof BaseMap> | null>(null);
 const polygonMap: Map<number, L.Polygon<any>> = new Map();
 
 const props = defineProps<{
-  crops: Crop[];
+  beds: Beds;
 }>();
 
 const emit = defineEmits<{
@@ -46,7 +48,7 @@ const mapImage: MapImage = {
 };
 
 onMounted(() => {
-  props.crops.forEach(function (crop) {
+  props.beds.beds.forEach(function (crop) {
     addCropsPolygon(crop);
   });
 });
@@ -159,10 +161,10 @@ function setPolygonClicked(cropsId: number): void {
   }
 }
 
-function getCropById(cropsId: number): Crop | undefined {
-  for (let i = 0; i < props.crops.length; i++) {
-    if (props.crops[i].id == cropsId) {
-      return props.crops[i];
+function getCropById(cropsId: number): Bed | undefined {
+  for (let i = 0; i < props.beds.beds.length; i++) {
+    if (props.beds.beds[i].id == cropsId) {
+      return props.beds.beds[i];
     }
   }
   return undefined;

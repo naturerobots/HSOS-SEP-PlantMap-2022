@@ -6,26 +6,26 @@
   >
     <div class="row p-6">
       <div
-        v-if="crops.length > 0 && storeOptions.indexOf('3d-table') > -1"
+        v-if="beds.beds.length > 0 && storeOptions.indexOf('3d-table') > -1"
         class="col-4"
       >
         <crops-table
           ref="cropsTableRef"
           title="Plants"
           :visibleColumns="columns"
-          :crops="crops"
+          :beds="beds"
           @row-enter="tableCropsEnter"
           @row-leave="tableCropsLeave"
           @row-click="tableCropsClick"
         ></crops-table>
       </div>
       <div
-        v-if="crops.length > 0 && storeOptions.indexOf('3d-map') > -1"
+        v-if="beds.beds.length > 0 && storeOptions.indexOf('3d-map') > -1"
         class="col-8 pl-2"
       >
         <crops-map
           ref="cropsMapRef"
-          :crops="crops"
+          :beds="beds"
           @polygon-enter="mapCropsEnter"
           @polygon-leave="mapCropsLeave"
           @polygon-click="mapCropsClick"
@@ -53,6 +53,9 @@ import CropsTable from "@/components/table/CropsTable.vue";
 import CropsMap from "@/components/map/CropsMap.vue";
 import BaseLayout from "@/components/layout/BaseLayout.vue";
 import type { Crop } from "@/types/crop";
+import type { Bed } from "@/types/bed";
+import { bedStore } from "@/stores/bedStore";
+import type { Beds } from "@/types/beds";
 
 const storeOptions: Ref<StoreOption[]> = storeToRefs(userStore()).getOptions;
 const widgetOptions3D: WidgetOption[] = [
@@ -62,7 +65,7 @@ const widgetOptions3D: WidgetOption[] = [
 
 let columns: string[] = ["id", "plant", "location"];
 
-const crops: Ref<Crop[]> = storeToRefs(cropsStore()).getCrops;
+const beds: Ref<Beds> = storeToRefs(bedStore()).getBeds;
 const cropsMapRef = ref<InstanceType<typeof CropsMap> | null>(null);
 const cropsTableRef = ref<InstanceType<typeof CropsTable> | null>(null);
 

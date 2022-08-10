@@ -71,6 +71,7 @@ export async function getUser(): Promise<User | undefined> {
       },
     })
     .then(function (response): User {
+      console.log(response.data);
       return response.data;
     })
     .catch(function (): undefined {

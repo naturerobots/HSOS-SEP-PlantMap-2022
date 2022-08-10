@@ -6,13 +6,13 @@
   >
     <div class="row p-6">
       <div
-        v-if="crops.length > 0 && storeOptions.indexOf('crops-table') > -1"
+        v-if="beds.beds.length > 0 && storeOptions.indexOf('crops-table') > -1"
         class="col-8"
       >
         <crops-table
           ref="cropsTableRef"
           title="Beds"
-          :crops="crops"
+          :beds="beds"
           :visibleColumns="columns"
           @row-enter="tableCropsEnter"
           @row-leave="tableCropsLeave"
@@ -20,12 +20,12 @@
         ></crops-table>
       </div>
       <div
-        v-if="crops.length > 0 && storeOptions.indexOf('crops-map') > -1"
+        v-if="beds.beds.length > 0 && storeOptions.indexOf('crops-map') > -1"
         class="col-4 pl-2"
       >
         <crops-map
           ref="cropsMapRef"
-          :crops="crops"
+          :beds="beds"
           @polygon-enter="mapCropsEnter"
           @polygon-leave="mapCropsLeave"
           @polygon-click="mapCropsClick"
@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { type Ref, ref } from "vue";
+import { type Ref, ref, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { cropsStore } from "@/stores/cropsStore";
 import { userStore } from "@/stores/userStore";
@@ -49,11 +49,20 @@ import CropsTable from "@/components/table/CropsTable.vue";
 import CropsMap from "@/components/map/CropsMap.vue";
 import BaseLayout from "@/components/layout/BaseLayout.vue";
 import type { Crop } from "@/types/crop";
+import type { Plants } from "@/types/plants";
+import { bedStore } from "@/stores/bedStore";
+import type { Bed } from "@/types/bed";
+import type { Beds } from "@/types/beds";
 const storeOptions: Ref<StoreOption[]> = storeToRefs(userStore()).getOptions;
 const widgetOptionsCrops: WidgetOption[] = [
   widgetOptions.cropsTable,
   widgetOptions.cropsMap,
 ];
+
+// onMounted(() => {
+//   console.log("onMounted");
+//   cropsStore().loadDataFromApi();
+// });
 
 let columns: string[] = [
   "id",
@@ -68,7 +77,7 @@ let columns: string[] = [
   "3d",
 ];
 
-const crops: Ref<Crop[]> = storeToRefs(cropsStore()).getCrops;
+const beds: Ref<Beds> = storeToRefs(bedStore()).getBeds;
 const cropsMapRef = ref<InstanceType<typeof CropsMap> | null>(null);
 const cropsTableRef = ref<InstanceType<typeof CropsTable> | null>(null);
 

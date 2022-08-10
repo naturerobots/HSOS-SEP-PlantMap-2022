@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
-import type { Bed } from "@/types/crop";
+import type { Crop } from "@/types/crop";
 import { getCrops } from "@/services/cropsApi";
+import type { Plants } from "@/types/plants";
 
 export const cropsStore = defineStore({
   id: "cropsStore",
   state: () => ({
-    crops: [] as Bed[],
+    crops: {} as Plants,
   }),
   getters: {
     getCrops: (state) => state.crops,

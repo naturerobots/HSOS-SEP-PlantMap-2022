@@ -6,7 +6,7 @@
           ref="table"
           class="crops-table no-shadow crops-table-hover"
           :title="title"
-          :rows="crops"
+          :rows="beds.beds"
           :columns="columns"
           no-data-label="I didn't find anything for you"
           row-key="id"
@@ -31,7 +31,7 @@
               "
             >
               <q-td key="location" :props="props">
-                {{ props.row.location }}
+                {{ props.row.id }}
               </q-td>
 
               <q-td key="plant" :props="props">
@@ -42,8 +42,8 @@
                 {{ props.row.variety }}
               </q-td>
 
-              <q-td key="soilHumidity" :props="props">
-                {{ props.row.soilHumidity }}
+              <q-td key="soil_humidity" :props="props">
+                {{ props.row.soil_humidity }}
               </q-td>
 
               <q-td key="health" :props="props">
@@ -70,9 +70,9 @@
                 </div>
               </q-td>
 
-              <q-td key="status" :props="props">
+              <!-- <q-td key="status" :props="props">
                 {{ props.row.status }}
-              </q-td>
+              </q-td> -->
 
               <q-td key="harvest" :props="props">
                 {{ props.row.harvest }}
@@ -167,8 +167,8 @@
       </div>
       <div v-else>
         <q-table
-          :rows="rows2"
-          :columns="columns2"
+          :rows="plants.plants"
+          :columns="columns"
           row-key="name"
           class="crops-table no-shadow crops-table-hover"
           :pagination="pagination()"
@@ -184,7 +184,7 @@
                 <q-icon name="arrow_back_ios" style="font-size: 20px" />
               </button>
               <div class="ml-3 text-xl">
-                {{ activeRow?.location }} - {{ activeRow?.plant }}
+                {{ activeRow?.id }} - {{ activeRow?.plant }}
               </div>
             </div>
           </template>
@@ -217,6 +217,61 @@
               </template>
             </q-input>
           </template>
+          <template #body="props">
+            <q-tr no-hover :props="props" :key="props.row.id">
+              <q-td key="location" :props="props">
+                {{ props.row.bed_id }}
+              </q-td>
+
+              <q-td key="plant" :props="props">
+                {{ props.row.plant }}
+              </q-td>
+
+              <q-td key="variety" :props="props">
+                {{ props.row.variety }}
+              </q-td>
+
+              <q-td key="soil_humidity" :props="props">
+                {{ props.row.soil_humidity }}
+              </q-td>
+
+              <q-td key="health" :props="props">
+                <div class="flex flex-row w-24 text-center">
+                  <div
+                    class="round-badge mx-1 text-black text-bold transition hover:scale-125"
+                    v-for="h in props.row.health"
+                    :key="h"
+                    :class="{
+                      'bg-n/a': h.loglevel === 0,
+                      'bg-ok': h.loglevel === 1,
+                      'bg-warning-custom': h.loglevel === 2,
+                      'bg-danger': h.loglevel === 3,
+                    }"
+                  >
+                    {{ getShortcut(h.type) }}
+                    <status-popup
+                      :health="h"
+                      :plant="props.row.plant"
+                      :props="props"
+                      @remove-clicked="rowclicked(props.row.id)"
+                    ></status-popup>
+                  </div>
+                </div>
+              </q-td>
+
+              <!-- <q-td key="status" :props="props">
+                {{ props.row.status }}
+              </q-td> -->
+
+              <q-td key="harvest" :props="props">
+                {{ props.row.harvest }}
+              </q-td>
+
+              <q-td key="yield" :props="props">
+                {{ props.row.yield }}
+              </q-td>
+            </q-tr>
+          </template>
         </q-table>
       </div>
     </div>
@@ -231,8 +286,12 @@ import { cropsStore } from "@/stores/cropsStore";
 import { ref } from "vue";
 import type { QTable, QTableProps } from "quasar";
 import StatusPopup from "@/components/StatusPopup.vue";
+import type { Plants } from "@/types/plants";
+import type { Bed } from "@/types/bed";
+import type { Beds } from "@/types/beds";
 
-const crops: Ref<Crop[]> = storeToRefs(cropsStore()).getCrops;
+const plants: Ref<Plants> = storeToRefs(cropsStore()).getCrops;
+// const crops: Ref<Plants> = storeToRefs(cropsStore()).getCrops;
 let input = ref<string>("");
 const table = ref<null | InstanceType<typeof QTable>>(null);
 
@@ -243,7 +302,7 @@ const activeRow = ref<Crop>();
 const props = defineProps<{
   title: string;
   visibleColumns: string[];
-  crops: Crop[];
+  beds: Beds;
 }>();
 
 const emit = defineEmits<{
@@ -260,7 +319,7 @@ defineExpose({
 });
 
 function getShortcut(healthType: string): string {
-  return Array.from(healthType)[0];
+  return Array.from(healthType)[0].toUpperCase();
 }
 
 function getRowByCropsId(cropsId: number): HTMLTableRowElement | undefined {
@@ -379,7 +438,7 @@ const columns: QTableProps["columns"] = [
     name: "location",
     align: "left",
     label: "Location",
-    field: "location",
+    field: "id",
     sortable: true,
   },
   {
@@ -398,12 +457,12 @@ const columns: QTableProps["columns"] = [
   },
 
   {
-    name: "soilHumidity",
+    name: "soil_humidity",
     align: "left",
     label: "Humidity",
-    field: "soilHumidity",
+    field: "soil_humidity",
     sortable: true,
-    sort: (a: any, b: any) => parseInt(a, 10) - parseInt(b, 10),
+    // sort: (a: any, b: any) => parseInt(a, 10) - parseInt(b, 10),
   },
   {
     name: "health",
@@ -412,13 +471,13 @@ const columns: QTableProps["columns"] = [
     field: "health",
     sortable: false,
   },
-  {
-    name: "status",
-    align: "left",
-    label: "Status",
-    field: "status",
-    sortable: true,
-  },
+  // {
+  //   name: "status",
+  //   align: "left",
+  //   label: "Status",
+  //   field: "status",
+  //   sortable: true,
+  // },
   {
     name: "harvest",
     align: "left",

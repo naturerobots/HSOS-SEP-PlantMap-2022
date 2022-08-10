@@ -17,7 +17,9 @@
           'bg-danger': health.loglevel === 3,
         }"
       >
-        <div class="font-bold">{{ health.type }}</div>
+        <div class="font-bold">
+          {{ health.type[0].toUpperCase() + health.type.slice(1) }}
+        </div>
       </q-badge>
       <div>
         <div
@@ -32,13 +34,13 @@
           {{ health.loglevel }}: {{ infoLoglevel[health.loglevel] }}
         </div>
         <div class="font-bold text-black text-sm">
-          <div v-if="health.type === 'Watering'">
+          <div v-if="health.type === 'water'">
             {{ infoWatering[health.loglevel] }} {{ plant }}.
           </div>
-          <div v-else-if="health.type === 'Nutrient Deficiency'">
+          <div v-else-if="health.type === 'nutrients'">
             {{ infoNutrient[health.loglevel] }} {{ plant }}.
           </div>
-          <div v-else-if="health.type === 'Disease Detection'">
+          <div v-else-if="health.type === 'diseases'">
             {{ infoDisease[health.loglevel] }} {{ plant }}.
           </div>
         </div>
@@ -50,7 +52,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import type CropsTable from "@/components/CropsTable.vue";
+import type CropsTable from "@/components/table/CropsTable.vue";
 import type { Health } from "@/types/health";
 
 const cropsTableRef = ref<InstanceType<typeof CropsTable> | null>(null);
