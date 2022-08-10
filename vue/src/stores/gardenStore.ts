@@ -29,7 +29,13 @@ export const gardenStore = defineStore({
         this.gardens = response;
       }
     },
-    setSelectedGarden(gardenId: number): void {
+    async loadGardens(companyId: number): Promise<Garden[] | undefined> {
+      const response = await getGardens(companyId);
+      if (response) {
+        return response;
+      }
+    },
+    setSelectedGarden(gardenId: number | undefined): void {
       /* TODO: check if id exists in gardens */
       this.selectedGarden = gardenId;
     },

@@ -29,7 +29,7 @@ export const companyStore = defineStore({
         this.companies = response;
       }
     },
-    setSelectedCompany(companyId: number): void {
+    setSelectedCompany(companyId: number | undefined): void {
       /* TODO: check if id exists in companies */
       this.selectedCompany = companyId;
     },
