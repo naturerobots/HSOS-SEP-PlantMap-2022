@@ -53,6 +53,7 @@ def get3dPlants(request, company_id: int, garden_id: int, bed_id: int):
     for file in onlyfiles:
         geometryUUID = file[:-4]
         locationOffset = plantLocationOffset(projectUUID=projectUUID, geometryUUID=geometryUUID)
+        '''
         plant = {
             "geometryUUID": geometryUUID,
             "url": url + file,
@@ -73,6 +74,36 @@ def get3dPlants(request, company_id: int, garden_id: int, bed_id: int):
             "Harvest": "2 Weeks",
             "progress": 0.6,
         }
+        '''
+
+        plant = {
+            "geometryUUID": geometryUUID,
+            "url": url + file,
+            "name": "Swiss Chard",
+            "locationDescription": "Row 12",
+            "location3d": {
+                "x": str(locationOffset[0]),
+                "y": str(locationOffset[1]),
+                "z": str(locationOffset[2]),
+            },
+            "health": [
+                {
+                    "type": "type1",
+                    "loglevel": 1,
+                    "shortcut": "shortcut1",
+                },
+                {
+                    "type": "type2",
+                    "loglevel": 2,
+                    "shortcut": "shortcut2",
+                },
+            ],
+            "yield": "N/A",
+            "status": "Vegetating",
+            "Harvest": "2 Weeks",
+            "progress": 0.6,
+        }
+
         # plants[geometryUUID]=plant
         plants.append(plant)
 

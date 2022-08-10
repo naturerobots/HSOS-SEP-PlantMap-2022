@@ -1,6 +1,7 @@
 <template>
   <div class="scene">
     <div id="three-scene-canvas"></div>
+
     <div id="info-card">
       <div id="info-detail">
         <div class="hole"></div>
@@ -12,8 +13,11 @@
 
 <style>
 .description {
+  z-index: 100;
   margin-top: 20px;
   margin-left: 240px;
+  width: 100%;
+  height: 100%;
 }
 .hole {
   position: absolute;
@@ -21,7 +25,8 @@
   left: 20px;
   width: 200px;
   height: 160px;
-  box-shadow: 0 0 0 9999px rgba(0, 0, 255, 0.2);
+  box-shadow: 0 0 0 9999px rgba(255, 255, 255, 1);
+  border-radius: 8px;
 }
 .scene {
   position: relative;
@@ -33,9 +38,12 @@
   width: 400px;
   height: 200px;
   /*background-color: red;*/
+  border-radius: 16px;
+  box-shadow: 0px 0px 150px -50px rgba(0, 0, 0, 0.5);
 }
 
 #info-card {
+  pointer-events: none;
   position: absolute; /* let us position them inside the container */
   left: 0; /* make their default position the top left of the container */
   top: 0;
@@ -46,9 +54,6 @@
     0 -1px 0 #000, 1px -1px 0 #000, 1px 0 0 #000, 1px 1px 0 #000, 0 1px 0 #000,
     -1px 1px 0 #000, -1px 0 0 #000;
 }
-#info-card:hover {
-  color: red;
-}
 </style>
 
 <script setup lang="ts">
@@ -57,7 +62,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 //import { PLYLoader } from "three/examples/jsm/loaders/PLYLoader.js";
 //import { CustomPLYLoader } from "@/components/three-scenes/CustomPlyLoader.js";
 import { CustomPLYLoader } from "./CustomPlyLoader.ts";
-import { onMounted } from "vue";
+import { onMounted, computed } from "vue";
 import axios from "axios";
 
 // 'http://localhost:8000/media/pointclouds/ply/e1ef73b1258b475a996d2b72924c27ac/0bf37a0851b7402d88674e153f58e6f8.ply'
@@ -68,8 +73,8 @@ import axios from "axios";
 // The InfoCard is realized like shown in this tutorial
 // https://r105.threejsfundamentals.org/threejs/lessons/threejs-align-html-elements-to-3d.html
 
-console.log("THREE", THREE);
-console.log("OrbitControls", OrbitControls);
+//console.log("THREE", THREE);
+//console.log("OrbitControls", OrbitControls);
 
 const size = {
   // width: 300, // window.innerWidth
@@ -83,12 +88,12 @@ var camera: THREE.PerspectiveCamera;
 var scene: THREE.Scene;
 var controls: OrbitControls;
 
-var loader = new CustomPLYLoader();
+var loader: CustomPLYLoader;
 
-var infoCardCube;
+var infoCardCube: THREE.Mesh;
 const tempV = new THREE.Vector3();
 
-var selectedPlant;
+var highlightedPlant = null;
 
 onMounted(() => {
   var canvasScene: Element | null = document.querySelector(
@@ -110,6 +115,14 @@ onMounted(() => {
   spotLight.position.set(20, 20, 20);
   scene.add(spotLight);
 
+  var geometry: THREE.BoxGeometry = new THREE.BoxGeometry(0, 0, 0);
+  var material: THREE.MeshNormalMaterial = new THREE.MeshNormalMaterial();
+
+  infoCardCube = new THREE.Mesh(geometry, material);
+  scene.add(infoCardCube);
+
+  loader = new CustomPLYLoader();
+
   loader.setPropertyNameMapping({
     r: "red",
     g: "green",
@@ -117,7 +130,7 @@ onMounted(() => {
   });
 
   let token =
-    "0d59c8f03059643e894d8f54c3d1665f56edb7786cafa38494b1132f23d00a80";
+    "5726934a783cfffa69dc7664dccd9a10c6028408c7b39eea50524804beac31d0";
   let url = "http://localhost:8000/companies/1/gardens/1/beds/1/3d-scene/";
 
   axios.defaults.baseURL = "http://localhost:8000/";
@@ -126,16 +139,15 @@ onMounted(() => {
   axios
     .post(url)
     .then(function (response) {
-      console.log("then", response);
+      //console.log("then", response);
 
       // load Plant Ply files
       let plants = response["data"]["plants"];
       loadPlants(plants);
 
       // Set Camera position
-      let plant = plants[2];
-      selectedPlant = plant;
-      setCameraToPlant(plant);
+      highlightedPlant = plants[1];
+      setCameraToPlant(highlightedPlant);
     })
     .catch(function (error) {
       console.log("catch", error);
@@ -162,7 +174,7 @@ let animationCallback = (time: number): void => {
 };
 
 let setCameraToPlant = (plant): void => {
-  let location = plant["location"];
+  let location = plant["location3d"];
 
   let x = parseFloat(location["x"]);
   let y = parseFloat(location["y"]);
@@ -173,20 +185,14 @@ let setCameraToPlant = (plant): void => {
   camera.lookAt(new THREE.Vector3(x, y, z));
   controls.update();
 
-  var geometry: THREE.BoxGeometry = new THREE.BoxGeometry(0, 0, 0);
-  var material: THREE.MeshNormalMaterial = new THREE.MeshNormalMaterial();
-
-  infoCardCube = new THREE.Mesh(geometry, material);
-  scene.add(infoCardCube);
-
   infoCardCube.position.set(x, y, z);
 
-  //updateInfoCard();
+  updateInfoCard();
 };
 
 let updateInfoCard = (): void => {
   if (typeof infoCardCube != "undefined") {
-    console.log("renderer.domElement.position().left ", renderer.domElement);
+    //console.log("renderer.domElement.position().left ", renderer.domElement);
 
     // get the position of the center of the cube
     infoCardCube.updateWorldMatrix(true, false);
@@ -206,7 +212,9 @@ let updateInfoCard = (): void => {
     // move the elem to that position
     //elem.style.transform = `translate(-50%, -50%) translate(${x2}px,${y2}px)`;
     var infoCard: Element | null = document.querySelector("#info-card");
-    infoCard.style.transform = `translate(-50%, -50%) translate(${x2}px,${y2}px)`;
+    if (infoCard != null) {
+      infoCard.style.transform = `translate(-50%, -50%) translate(${x2}px,${y2}px)`;
+    }
   }
 };
 
@@ -221,7 +229,7 @@ let loadPly = (url): void => {
   loader.load(url, function (geometry: any) {
     //geometry.computeVertexNormals();
 
-    console.log("geometry", geometry);
+    //console.log("geometry", geometry);
 
     let nanCollection = [];
 
