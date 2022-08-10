@@ -1,8 +1,9 @@
 {
-  "name": "plant-map-devcontainer",
-  "dockerComposeFile": "docker-compose.dev.yml",
-  "shutdownAction": "stopCompose",
+  "name": "plant-map-digital-logbook",
+  "dockerComposeFile": "docker-compose.yml",
   "service": "plant-map-dev",
+  "shutdownAction": "stopCompose",
+  "workspaceFolder": "/workdir",
   "remoteUser": "docker",
   "extensions": [
     "compulim.compulim-vscode-closetag",
@@ -22,6 +23,5 @@
     "yzhang.markdown-all-in-one",
     "streetsidesoftware.code-spell-checker"
   ],
-  "workspaceFolder": "/workdir",
   "postStartCommand": ".devcontainer/post-create-setup.sh"
 }

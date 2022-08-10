@@ -1,6 +1,7 @@
 import json
 
 from restapi.models import *
+from restapi.serializer import CompanyPermissionSerializer, GardenPermissionSerializer
 
 # Authorization methods
 

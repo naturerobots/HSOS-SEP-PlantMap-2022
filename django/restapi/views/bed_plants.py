@@ -5,10 +5,6 @@ import sys
 from time import time
 
 import grpc
-
-# there is definitly a better way to add an import path
-sys.path.append(r'/workdir/build/gRPC/')
-
 import label_service_pb2_grpc as labelService
 import measurement_service_pb2_grpc as measurementService
 import meta_operations_service_pb2_grpc as metaOperations
@@ -24,9 +20,9 @@ from project_query_pb2 import ProjectQuery
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from restapi import tasks
-from restapi.helpers.auth import isCompanyAdmin, isGardenUser
 from restapi.models import *
 from restapi.models import Garden
+from restapi.util.auth import isCompanyAdmin, isGardenUser
 from transform_stamped_query_pb2 import TransformStampedQuery
 
 from django.http import *
