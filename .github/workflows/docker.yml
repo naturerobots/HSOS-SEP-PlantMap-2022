@@ -46,7 +46,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          file: .devcontainer/Dockerfile.dev
+          file: .devcontainer/Dockerfile
           tags: ${{ env.image_id}}:${{ github.event.inputs.imageTag }}
           cache-from: type=registry,ref=${{ env.image_id }}:${{ github.event.inputs.imageTag }}
           cache-to: type=inline
