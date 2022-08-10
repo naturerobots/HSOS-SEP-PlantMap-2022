@@ -92,9 +92,10 @@ onMounted(() => {
   ).addTo(leafletMap);
 
   if (route.params.coordinates) {
-    setMarkerAndPlaceImage(
-      JSON.parse(route.params.coordinates) as Coordinate[]
-    );
+    const parsedCoordinates = JSON.parse(
+      route.params.coordinates as string
+    ) as Coordinate[];
+    setMarkerAndPlaceImage(parsedCoordinates);
   } else {
     leafletMap.on("click", setMarker);
   }

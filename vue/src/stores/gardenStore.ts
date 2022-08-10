@@ -46,13 +46,31 @@ export const gardenStore = defineStore({
     },
     async loadSelectedGardenImg(companyId: number): Promise<void> {
       if (!this.selectedGarden) {
-        Promise.reject(new Error("Selected Garden is undefined"));
+        Promise.reject("Selected Garden is undefined");
+      }
+
+      const currentGarden: Garden | undefined = this.gardens.find(
+        (garden) => garden.id === this.selectedGarden
+      );
+
+      if (!currentGarden) {
+        Promise.reject("Garden does not exist");
+      }
+
+      if (!currentGarden?.image_path) {
+        return;
       }
 
       const responseImg = await getGardenImg(
-        companyId,
+        this.gardens.find((garden) => garden.id === this.selectedGarden)!
+          .company,
         this.selectedGarden as number
       );
+
+      // const responseImg = await getGardenImg(
+      //   companyId,
+      //   this.selectedGarden as number
+      // );
 
       if (responseImg) {
         this.gardenImage.image = responseImg;
@@ -63,11 +81,19 @@ export const gardenStore = defineStore({
       gardenImage: GardenImage
     ): Promise<void> {
       if (!this.selectedGarden) {
-        Promise.reject(new Error("Selected Garden is undefined"));
+        Promise.reject("Selected Garden is undefined");
+      }
+
+      const currentGarden: Garden | undefined = this.gardens.find(
+        (garden) => garden.id === this.selectedGarden
+      );
+
+      if (!currentGarden) {
+        Promise.reject("Garden does not exist");
       }
 
       const responseImg = await postGardenImg(
-        companyId,
+        currentGarden!.company,
         this.selectedGarden as number,
         gardenImage
       );
