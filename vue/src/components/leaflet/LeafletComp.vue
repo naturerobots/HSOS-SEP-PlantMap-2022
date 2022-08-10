@@ -81,10 +81,10 @@ onMounted(() => {
   setTimeout(function () {
     if (gardenImage) {
       var coordTopRight = gardenImage.coordinates.find(
-        (coord) => coord.name === "topRight"
+        (coord) => coord.name === "top_right"
       );
       var coordBottomLeft = gardenImage.coordinates.find(
-        (coord) => coord.name === "bottomLeft"
+        (coord) => coord.name === "bottom_left"
       );
 
       leafletMap.invalidateSize(true);
@@ -125,13 +125,13 @@ function addGardenImage(updatedGardenImage: GardenImage): void {
   }
 
   var coordTopLeft = gardenImage.coordinates.find(
-    (coord) => coord.name === "topLeft"
+    (coord) => coord.name === "top_left"
   );
   var coordTopRight = gardenImage.coordinates.find(
-    (coord) => coord.name === "topRight"
+    (coord) => coord.name === "top_right"
   );
   var coordBottomLeft = gardenImage.coordinates.find(
-    (coord) => coord.name === "bottomLeft"
+    (coord) => coord.name === "bottom_left"
   );
 
   overlay = L.imageOverlay.rotated(

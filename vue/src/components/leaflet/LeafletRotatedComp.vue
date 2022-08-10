@@ -157,9 +157,9 @@ function setImage(): void {
 }
 
 function setMarkerAndPlaceImage(coordinates: Coordinate[]): void {
-  const topLeft = coordinates.find((coord) => coord.name === "topLeft");
-  const topRight = coordinates.find((coord) => coord.name === "topRight");
-  const bottomLeft = coordinates.find((coord) => coord.name === "bottomLeft");
+  const topLeft = coordinates.find((coord) => coord.name === "top_left");
+  const topRight = coordinates.find((coord) => coord.name === "top_right");
+  const bottomLeft = coordinates.find((coord) => coord.name === "bottom_left");
 
   setMarkerFromCoordinate(topLeft);
   setMarkerFromCoordinate(topRight);
@@ -200,17 +200,17 @@ function saveImage(): void {
     image: route.params.src as string,
     coordinates: [
       {
-        name: "topLeft",
+        name: "top_left",
         longitude: markers.value[0].getLatLng().lng,
         latitude: markers.value[0].getLatLng().lat,
       },
       {
-        name: "topRight",
+        name: "top_right",
         longitude: markers.value[1].getLatLng().lng,
         latitude: markers.value[1].getLatLng().lat,
       },
       {
-        name: "bottomLeft",
+        name: "bottom_left",
         longitude: markers.value[2].getLatLng().lng,
         latitude: markers.value[2].getLatLng().lat,
       },
