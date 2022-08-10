@@ -3,8 +3,36 @@
     "model": "restapi.garden",
     "pk": 1,
     "fields": {
-      "name": "Demo-Garden-1",
-      "company": 1
+      "name": "Garden-1",
+      "company": 1,
+      "image_path": "/workdir/django/storage/images/goeoentueuegs_ibbenbueren.png"
+    }
+  },
+  {
+    "model": "restapi.garden",
+    "pk": 2,
+    "fields": {
+      "name": "Garden-2",
+      "company": 1,
+      "image_path": ""
+    }
+  },
+  {
+    "model": "restapi.garden",
+    "pk": 3,
+    "fields": {
+      "name": "Garden-3",
+      "company": 2,
+      "image_path": "/workdir/django/storage/images/goeoentueuegs_ibbenbueren.png"
+    }
+  },
+  {
+    "model": "restapi.garden",
+    "pk": 4,
+    "fields": {
+      "name": "Garden-2",
+      "company": 4,
+      "image_path": "/workdir/django/storage/images/goeoentueuegs_ibbenbueren.png"
     }
   }
 ]

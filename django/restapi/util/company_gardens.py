@@ -1,13 +1,14 @@
 import json
 
-from restapi.helpers.auth import (
+from restapi.models import *
+from restapi.serializer import CompanySerializer, GardenSerializer
+from restapi.util.auth import (
     createCompanyPermission,
     isCompanyAdmin,
     isCompanyUser,
     isCreateCompanyOrGardenRequestValid,
 )
-from restapi.helpers.company_gardens import *
-from restapi.models import *
+from restapi.util.company_gardens import *
 
 from django.http import *
 

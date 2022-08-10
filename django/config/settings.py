@@ -157,13 +157,13 @@ LOGGING = {
         'debugFile': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': './storage/logs//debug.log',
+            'filename': './storage/logs/django/debug.log',
             'formatter': 'extended',
         },
         'infoFile': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': './storage/logs/info.log',
+            'filename': './storage/logs/django/info.log',
             'formatter': 'extended',
         },
         'console': {'level': 'INFO', 'class': 'logging.StreamHandler', 'formatter': 'simple'},
