@@ -47,13 +47,7 @@
           </a>
         </div>
         <div>
-          <a href="#" class="block relative">
-            <img
-              alt="profil"
-              src="https://images.pexels.com/photos/7457498/pexels-photo-7457498.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-              class="mx-auto object-cover rounded-full h-10 w-10"
-            />
-          </a>
+          <profile-dropdown></profile-dropdown>
         </div>
       </div>
     </div>
@@ -62,6 +56,7 @@
 
 <script setup lang="ts">
 import WidgetComp from "@/components/header/widget/WidgetComp.vue";
+import ProfileDropdown from "@/components/header/ProfileDropdown.vue";
 import type { WidgetOption, StoreOption } from "@/types/widgetOption";
 
 defineProps<{

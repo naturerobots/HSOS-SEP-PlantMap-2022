@@ -3,9 +3,12 @@ import DashboardView from "@/views/DashboardView.vue";
 import CropsView from "@/views/CropsView.vue";
 import Crops3dView from "@/views/Crops3dView.vue";
 import LoginView from "@/views/LoginView.vue";
+import OnboardingCompany from "@/views/onboarding/OnboardingCompany.vue";
+import OnboardingGarden from "@/views/onboarding/OnboardingGarden.vue";
 import RegisterView from "@/views/RegisterView.vue";
 import ImageUploadView from "@/views/ImageUploadView.vue";
 import CropImageView from "@/views/CropImageView.vue";
+import SettingsView from "@/views/SettingsView.vue";
 import { userStore } from "@/stores/userStore";
 
 const router = createRouter({
@@ -51,9 +54,27 @@ const router = createRouter({
       component: LoginView,
     },
     {
+      path: "/settings",
+      name: "settings",
+      component: SettingsView,
+      meta: { requiresAuth: true },
+    },
+    {
       path: "/register",
       name: "register",
       component: RegisterView,
+    },
+    {
+      path: "/onboarding-company",
+      name: "onboarding-company",
+      component: OnboardingCompany,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/onboarding-garden",
+      name: "onboarding-garden",
+      component: OnboardingGarden,
+      meta: { requiresAuth: true },
     },
   ],
 });

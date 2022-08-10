@@ -1,9 +1,7 @@
 version: "3.8"
 services:
   plant-map-dev:
-    build:
-      context: ..
-      dockerfile: .devcontainer/Dockerfile.dev
+    image: ghcr.io/naturerobots/plant-map-digital-logbook:latest
     volumes:
       - ..:/workdir:cached
     depends_on:

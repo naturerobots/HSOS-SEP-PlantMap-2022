@@ -3,9 +3,10 @@
     "model": "auth.user",
     "pk": 1,
     "fields": {
-      "username": "demo",
-      "first_name": "demo",
-      "last_name": "user",
+      "username": "Admin",
+      "first_name": "admin",
+      "last_name": "admin",
+      "email": "admin@test-mail.de",
       "password": "pbkdf2_sha256$320000$LuKlEyk1ZdbXx8ctkvF9c7$21bgLk3zi8fHBCZdTkAKQT8e0nIGe7A+gmS4zFaqzd4="
     }
   },
@@ -13,11 +14,44 @@
     "model": "auth.user",
     "pk": 2,
     "fields": {
-      "username": "admin",
-      "first_name": "admin",
-      "last_name": "admin",
-      "password": "pbkdf2_sha256$320000$LuKlEyk1ZdbXx8ctkvF9c7$21bgLk3zi8fHBCZdTkAKQT8e0nIGe7A+gmS4zFaqzd4=",
-      "is_superuser": true
+      "username": "Gardener-1",
+      "first_name": "gardener-1",
+      "last_name": "gardener-1",
+      "email": "gardener-1@test-mail.de",
+      "password": "pbkdf2_sha256$320000$LuKlEyk1ZdbXx8ctkvF9c7$21bgLk3zi8fHBCZdTkAKQT8e0nIGe7A+gmS4zFaqzd4="
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 3,
+    "fields": {
+      "username": "Gardener-2",
+      "first_name": "gardener-2",
+      "last_name": "gardener-2",
+      "email": "gardener-2@test-mail.de",
+      "password": "pbkdf2_sha256$320000$LuKlEyk1ZdbXx8ctkvF9c7$21bgLk3zi8fHBCZdTkAKQT8e0nIGe7A+gmS4zFaqzd4="
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 4,
+    "fields": {
+      "username": "Gardener-3",
+      "first_name": "gardener-3",
+      "last_name": "gardener-3",
+      "email": "gardener-3@test-mail.de",
+      "password": "pbkdf2_sha256$320000$LuKlEyk1ZdbXx8ctkvF9c7$21bgLk3zi8fHBCZdTkAKQT8e0nIGe7A+gmS4zFaqzd4="
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 5,
+    "fields": {
+      "username": "Gardener-4",
+      "first_name": "gardener-4",
+      "last_name": "gardener-4",
+      "email": "gardener-4@test-mail.de",
+      "password": "pbkdf2_sha256$320000$LuKlEyk1ZdbXx8ctkvF9c7$21bgLk3zi8fHBCZdTkAKQT8e0nIGe7A+gmS4zFaqzd4="
     }
   }
 ]

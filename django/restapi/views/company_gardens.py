@@ -1,17 +1,14 @@
 import base64
+import os
 import re
 from http.client import HTTPResponse
+from uuid import uuid4
 
 from rest_framework.decorators import api_view
-from restapi.helpers.auth import (
-    isCompanyAdmin,
-    isCompanyUser,
-    isGardenAdmin,
-    isGardenUser,
-)
-from restapi.helpers.company_gardens import *
 from restapi.models import *
-from restapi.models import Garden
+from restapi.serializer import CoordinateSerializer
+from restapi.util.auth import isCompanyAdmin, isCompanyUser, isGardenAdmin, isGardenUser
+from restapi.util.company_gardens import *
 
 from django.http import *
 
@@ -82,8 +79,8 @@ def gardens(request, company_id: int):
 
 
 # /companies/{company_id}/gardens/{garden_id}
-@api_view(['GET', 'DELETE'])
-def gardenView(request, company_id: int, garden_id: int):
+@api_view(['GET'])
+def getGarden(request, company_id: int, garden_id: int):
 
     if request.method == 'GET':
         return getGarden(request, company_id, garden_id)
@@ -143,7 +140,7 @@ def uploadImage(request, company_id, garden_id):
     for position in request.data['coordinates']:
         # if coordinates already exist just update, else create new ones
         try:
-            coordinate = Coordinate.objects.get(name=position['name'])
+            coordinate = Coordinate.objects.get(name=position['name'], garden=garden_id)
             coordinate.latitude = position['latitude']
             coordinate.longitude = position['longitude']
             coordinate.save()

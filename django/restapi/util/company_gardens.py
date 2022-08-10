@@ -1,7 +1,9 @@
 import json
 from urllib.request import HTTPBasicAuthHandler
 
-from restapi.helpers.auth import (
+from restapi.models import *
+from restapi.serializer import CompanySerializer, GardenSerializer
+from restapi.util.auth import (
     createCompanyPermission,
     isCompanyAdmin,
     isCompanyUser,
@@ -9,8 +11,7 @@ from restapi.helpers.auth import (
     isGardenAdmin,
     isGardenUser,
 )
-from restapi.helpers.company_gardens import *
-from restapi.models import *
+from restapi.util.company_gardens import *
 
 from django.http import *
 

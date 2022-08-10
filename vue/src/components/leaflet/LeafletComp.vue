@@ -6,16 +6,17 @@
 
 <script setup lang="ts">
 import "leaflet/dist/leaflet.css";
-import { onMounted } from "vue";
-import L from "leaflet";
+import { onMounted, onUpdated } from "vue";
+import L, { LatLng } from "leaflet";
 import "./LeafletRotation.ts";
-import type { MapImage } from "@/types/mapImage";
+import type { GardenImage } from "@/types/gardenImage";
 
 let leafletMap: L.Map;
+let overlay: L.imageOverlay;
+let gardenImage: GardenImage;
 
 const props = withDefaults(
   defineProps<{
-    mapImage: MapImage;
     maxZoom?: number;
     zoom?: number;
     zoomControl?: boolean;
@@ -34,6 +35,7 @@ defineExpose({
   addMarker,
   addPolygon,
   setView,
+  addGardenImage,
 });
 
 onMounted(() => {
@@ -76,29 +78,27 @@ onMounted(() => {
     }
   ).addTo(leafletMap);
 
-  if (props.mapImage) {
-    let overlay = L.imageOverlay.rotated(
-      props.mapImage.src,
-      props.mapImage.top_left,
-      props.mapImage.top_right,
-      props.mapImage.bottom_left,
-      {
-        opacity: 1,
-      }
-    );
+  setTimeout(function () {
+    if (gardenImage) {
+      var coordTopRight = gardenImage.coordinates.find(
+        (coord) => coord.name === "top_right"
+      );
+      var coordBottomLeft = gardenImage.coordinates.find(
+        (coord) => coord.name === "bottom_left"
+      );
 
-    leafletMap.addLayer(overlay);
-
-    //TODO not the best solution, map doens't appear right on first load with 100% height. For now it worked with setTimeout and invalidateSize.
-    setTimeout(function () {
       leafletMap.invalidateSize(true);
       const bounds = L.latLngBounds(
-        props.mapImage.bottom_left,
-        props.mapImage.top_right
+        new L.LatLng(coordTopRight!.latitude, coordTopRight!.longitude),
+        new L.LatLng(coordBottomLeft!.latitude, coordBottomLeft!.longitude)
       );
       leafletMap.fitBounds(bounds, { animate: true });
-    }, 100);
-  }
+    } else {
+      leafletMap.invalidateSize(true);
+      leafletMap.invalidateSize(false);
+      leafletMap.setView(new L.LatLng(52.2719595, 8.047635), 19);
+    }
+  }, 100);
 });
 
 function addTileLayer(tileLayer: L.TileLayer) {
@@ -115,5 +115,42 @@ function addPolygon(polygon: L.Polygon): void {
 
 function setView(latlng: L.LatLng, zoom: number): void {
   leafletMap.setView(latlng, zoom);
+}
+
+function addGardenImage(updatedGardenImage: GardenImage): void {
+  gardenImage = updatedGardenImage;
+
+  if (overlay) {
+    leafletMap.removeLayer(overlay);
+  }
+
+  var coordTopLeft = gardenImage.coordinates.find(
+    (coord) => coord.name === "top_left"
+  );
+  var coordTopRight = gardenImage.coordinates.find(
+    (coord) => coord.name === "top_right"
+  );
+  var coordBottomLeft = gardenImage.coordinates.find(
+    (coord) => coord.name === "bottom_left"
+  );
+
+  overlay = L.imageOverlay.rotated(
+    gardenImage.image,
+    new L.LatLng(coordTopLeft!.latitude, coordTopLeft!.longitude),
+    new L.LatLng(coordTopRight!.latitude, coordTopRight!.longitude),
+    new L.LatLng(coordBottomLeft!.latitude, coordBottomLeft!.longitude),
+    {
+      opacity: 1,
+    }
+  );
+
+  leafletMap.addLayer(overlay);
+
+  leafletMap.invalidateSize(true);
+  const bounds = L.latLngBounds(
+    new L.LatLng(coordTopRight!.latitude, coordTopRight!.longitude),
+    new L.LatLng(coordBottomLeft!.latitude, coordBottomLeft!.longitude)
+  );
+  leafletMap.fitBounds(bounds, { animate: true });
 }
 </script>

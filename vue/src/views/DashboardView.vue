@@ -5,6 +5,7 @@
     :storeOptions="storeOptions"
   >
     <div
+      v-if="storeToRefs(companyStore()).getCompanies.value.length > 0"
       class="grow grid grid-cols-3 gap-4 place-items-stretch p-6 w-full h-fit"
     >
       <div v-if="storeOptions.indexOf('weather') > -1">
@@ -23,7 +24,9 @@
           ></garden-map>
         </div>
       </div>
-      <div v-if="storeOptions.indexOf('soil-parameter') > -1">
+      <div
+        v-if="sensors.length > 0 && storeOptions.indexOf('soil-parameter') > -1"
+      >
         <sensor-comp
           ref="sensorCompRef"
           :sensors="sensors"
@@ -33,6 +36,9 @@
         </sensor-comp>
       </div>
     </div>
+    <div v-else>
+      <h6>Please create a Company</h6>
+    </div>
   </base-layout>
 </template>
 
@@ -41,6 +47,7 @@ import { ref, type Ref } from "vue";
 import { storeToRefs } from "pinia";
 import { sensorStore } from "@/stores/sensorStore";
 import { userStore } from "@/stores/userStore";
+import { companyStore } from "@/stores/companyStore";
 import type { Sensor } from "@/types/sensor";
 import {
   widgetOptions,

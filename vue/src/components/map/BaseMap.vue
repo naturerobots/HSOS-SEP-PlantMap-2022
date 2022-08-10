@@ -3,7 +3,6 @@
     <leaflet-comp
       :maxZoom="maxZoom"
       :zoom="zoom"
-      :map-image="mapImage"
       :zoom-control="zoomControl"
       :map-interaction="mapInteraction"
       ref="leafletRef"
@@ -14,15 +13,13 @@
 
 <script setup lang="ts">
 import LeafletComp from "@/components/leaflet/LeafletComp.vue";
-import type { MapImage } from "@/types/mapImage";
 import { ref } from "vue";
 import type L from "leaflet";
 import type { LeafletEvent } from "leaflet";
-
+import type { GardenImage } from "@/types/gardenImage";
 const leafletRef = ref<InstanceType<typeof LeafletComp> | null>(null);
 
 defineProps<{
-  mapImage: MapImage;
   maxZoom?: number;
   zoom?: number;
   zoomControl?: boolean;
@@ -41,6 +38,7 @@ const emit = defineEmits<{
 defineExpose({
   addMarker,
   addPolygon,
+  addGardenImage,
 });
 
 function addMarker(marker: L.Marker): void {
@@ -55,6 +53,12 @@ function addPolygon(polygon: L.Polygon): void {
   polygon.on("mouseover", emitPolygonEnter);
   polygon.on("mouseout", emitPolygonLeave);
   leafletRef.value?.addPolygon(polygon);
+}
+
+function addGardenImage(gardenImage: GardenImage | undefined): void {
+  if (!gardenImage) throw new Error("Garden Image should not be undefined");
+
+  leafletRef.value?.addGardenImage(gardenImage);
 }
 
 function emitMarkerClick(event: LeafletEvent): void {
