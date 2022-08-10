@@ -1,4 +1,5 @@
 import json
+import string
 from http.client import HTTPResponse
 
 from restapi.models import *
@@ -56,13 +57,6 @@ def editUser(request):
 
 # Authorization methods
 
-# Checks if given user-id is valid
-def isUserIdValid(user_id):
-    if not user_id or not isinstance(user_id, int) or user_id < 1:
-        return False
-    return True
-
-
 # Checks if given permission is valid
 def isPermissionValid(permission):
     if not permission or not permission in ['u', 'a']:
@@ -92,14 +86,14 @@ def isCreatePermissionRequestValid(request):
         return False
 
     data = json.loads(request.body)
-    if not data or not 'user_id' in data or not 'permission' in data:
+    if not data or not 'username' in data or not 'permission' in data:
         return False
 
-    if not isPermissionValid(data['permission']) or not isUserIdValid(data['user_id']):
+    if not isPermissionValid(data['permission']) or not data['username']:
         return False
 
     # Deny overwriting users own permissions
-    if request.user.id == data['user_id']:
+    if request.user.username == data['username']:
         return False
 
     return True
@@ -113,14 +107,14 @@ def isRemovePermissionRequestValid(request):
         return False
 
     data = json.loads(request.body)
-    if not data or not 'user_id' in data:
+    if not data or not 'username' in data:
         return False
 
-    if not isUserIdValid(data['user_id']):
+    if not data['username']:
         return False
 
     # Deny removing users own permissions
-    if request.user.id == data['user_id']:
+    if request.user.username == data['username']:
         return False
 
     return True
@@ -143,11 +137,11 @@ def isCreateCompanyOrGardenRequestValid(request):
     return True
 
 
-# Returns True, if user_id is allowed to access company_id
-def isCompanyUser(company_id, user_id):
+# Returns True, if username is allowed to access company_id
+def isCompanyUser(company_id, username):
     try:
         company = Company.objects.get(id=company_id)
-        user = User.objects.get(id=user_id)
+        user = User.objects.get(username=username)
         companyPermission = CompanyPermission.objects.filter(company=company, user=user).first()
         serializer = CompanyPermissionSerializer(companyPermission)
     except:
@@ -163,11 +157,11 @@ def isCompanyUser(company_id, user_id):
     return True
 
 
-# Returns True, if user_id is admin of company_id
-def isCompanyAdmin(company_id, user_id):
+# Returns True, if username is admin of company_id
+def isCompanyAdmin(company_id, username):
     try:
         company = Company.objects.get(id=company_id)
-        user = User.objects.get(id=user_id)
+        user = User.objects.get(username=username)
         companyPermission = CompanyPermission.objects.filter(company=company, user=user).first()
         serializer = CompanyPermissionSerializer(companyPermission)
     except:
@@ -184,10 +178,10 @@ def isCompanyAdmin(company_id, user_id):
 
 # Function to create a new company permission
 # Returns True, if permission was created successfully
-def createCompanyPermission(company_id, user_id, permission):
+def createCompanyPermission(company_id, username, permission):
     try:
         company = Company.objects.get(id=company_id)
-        user = User.objects.get(id=user_id)
+        user = User.objects.get(username=username)
 
         # Filter for permission, update if exists or create new permission
         companyPermission = CompanyPermission.objects.filter(company=company, user=user).first()
@@ -204,10 +198,10 @@ def createCompanyPermission(company_id, user_id, permission):
 
 # Function to remove a users permissions for a company
 # Returns True, if permission was deleted successfully or does not exist
-def removeCompanyPermission(company_id, user_id):
+def removeCompanyPermission(company_id, username):
     try:
         company = Company.objects.get(id=company_id)
-        user = User.objects.get(id=user_id)
+        user = User.objects.get(username=username)
 
         # Filter for permission and delete it
         CompanyPermission.objects.filter(company=company, user=user).delete()
@@ -217,11 +211,11 @@ def removeCompanyPermission(company_id, user_id):
         return False
 
 
-# Returns True, if user_id is allowed to access garden_id
-def isGardenUser(garden_id, user_id):
+# Returns True, if username is allowed to access garden_id
+def isGardenUser(garden_id, username):
     try:
         garden = Garden.objects.get(id=garden_id)
-        user = User.objects.get(id=user_id)
+        user = User.objects.get(username=username)
         gardenPermission = GardenPermission.objects.filter(garden=garden, user=user).first()
         serializer = GardenPermissionSerializer(gardenPermission)
     except:
@@ -237,11 +231,11 @@ def isGardenUser(garden_id, user_id):
     return True
 
 
-# Returns True, if user_id is admin of garden_id
-def isGardenAdmin(garden_id, user_id):
+# Returns True, if username is admin of garden_id
+def isGardenAdmin(garden_id, username):
     try:
         garden = Garden.objects.get(id=garden_id)
-        user = User.objects.get(id=user_id)
+        user = User.objects.get(username=username)
         gardenPermission = GardenPermission.objects.filter(garden=garden, user=user).first()
         serializer = GardenPermissionSerializer(gardenPermission)
     except:
@@ -258,10 +252,10 @@ def isGardenAdmin(garden_id, user_id):
 
 # Function to create a new garden permission
 # Returns True, if permission was created successfully
-def createGardenPermission(garden_id, user_id, permission):
+def createGardenPermission(garden_id, username, permission):
     try:
         garden = Garden.objects.get(id=garden_id)
-        user = User.objects.get(id=user_id)
+        user = User.objects.get(username=username)
 
         # Filter for permission, update if it already exists or create a new permission
         gardenPermission = GardenPermission.objects.filter(garden=garden, user=user).first()
@@ -278,10 +272,10 @@ def createGardenPermission(garden_id, user_id, permission):
 
 # Function to remove a garden permission
 # Returns True, if permission was deleted successfully or does not exist
-def removeGardenPermission(garden_id, user_id):
+def removeGardenPermission(garden_id, username):
     try:
         garden = Garden.objects.get(id=garden_id)
-        user = User.objects.get(id=user_id)
+        user = User.objects.get(username=username)
 
         # Filter for permission and delete it
         GardenPermission.objects.filter(garden=garden, user=user).delete()

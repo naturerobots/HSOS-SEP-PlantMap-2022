@@ -46,7 +46,7 @@ class RegisterView(KnoxLoginView):
 def createCompanyPermissionView(request, company_id: int):
 
     # Check if requesting user has admin permissions on company
-    if not isCompanyAdmin(company_id, request.user.id):
+    if not isCompanyAdmin(company_id, request.user.username):
         return HttpResponseForbidden()
 
     if not isCreatePermissionRequestValid(request):
@@ -54,7 +54,7 @@ def createCompanyPermissionView(request, company_id: int):
 
     inputData = json.loads(request.body)
 
-    if not createCompanyPermission(company_id, inputData['user_id'], inputData['permission']):
+    if not createCompanyPermission(company_id, inputData['username'], inputData['permission']):
         return HttpResponseBadRequest()
 
     return HttpResponse(status=201)
@@ -65,13 +65,13 @@ def createCompanyPermissionView(request, company_id: int):
 def removeCompanyPermissionView(request, company_id: int):
 
     # Check if requesting user has admin permissions on company
-    if not isCompanyAdmin(company_id, request.user.id):
+    if not isCompanyAdmin(company_id, request.user.username):
         return HttpResponseForbidden()
 
     if not isRemovePermissionRequestValid(request):
         return HttpResponseBadRequest()
 
-    if not removeCompanyPermission(company_id, json.loads(request.body)['user_id']):
+    if not removeCompanyPermission(company_id, json.loads(request.body)['username']):
         return HttpResponseBadRequest()
 
     return HttpResponse(status=200)
@@ -82,7 +82,7 @@ def removeCompanyPermissionView(request, company_id: int):
 def createGardenPermissionView(request, company_id: int, garden_id: int):
 
     # Check if requesting user has admin permissions on garden or company
-    if not isGardenAdmin(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
+    if not isGardenAdmin(garden_id, request.user.username) and not isCompanyAdmin(company_id, request.user.username):
         return HttpResponseForbidden()
 
     if not isCreatePermissionRequestValid(request):
@@ -90,7 +90,7 @@ def createGardenPermissionView(request, company_id: int, garden_id: int):
 
     inputData = json.loads(request.body)
 
-    if not createGardenPermission(garden_id, inputData['user_id'], inputData['permission']):
+    if not createGardenPermission(garden_id, inputData['username'], inputData['permission']):
         return HttpResponseBadRequest()
 
     return HttpResponse(status=201)
@@ -101,13 +101,13 @@ def createGardenPermissionView(request, company_id: int, garden_id: int):
 def removeGardenPermissionView(request, company_id: int, garden_id: int):
 
     # Check if requesting user has admin permissions on garden or company
-    if not isGardenAdmin(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
+    if not isGardenAdmin(garden_id, request.user.username) and not isCompanyAdmin(company_id, request.user.username):
         return HttpResponseForbidden()
 
     if not isRemovePermissionRequestValid(request):
         return HttpResponseForbidden()
 
-    if not removeGardenPermission(garden_id, json.loads(request.body)['user_id']):
+    if not removeGardenPermission(garden_id, json.loads(request.body)['username']):
         return HttpResponseBadRequest()
 
     return HttpResponse(status=200)

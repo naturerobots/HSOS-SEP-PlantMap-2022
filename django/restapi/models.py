@@ -86,7 +86,6 @@ class Garden(models.Model):
 class Widget(models.Model):
     id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    garden = models.ForeignKey(Garden, on_delete=models.CASCADE)
     data = models.JSONField()
 
     class Meta:
