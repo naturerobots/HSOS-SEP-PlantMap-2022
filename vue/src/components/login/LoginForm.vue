@@ -70,8 +70,10 @@ async function login(): Promise<void> {
       const gardenId = storeToRefs(gardenStore()).getGardens?.value[0]?.id;
       if (gardenId) {
         gardenStore().setSelectedGarden(gardenId);
+        await gardenStore().loadSelectedGardenImg(companyId);
       }
     }
+
     router.push({ path: "/" });
   } else {
     console.log("User Feedback: Login failed");

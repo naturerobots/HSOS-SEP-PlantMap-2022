@@ -98,8 +98,8 @@ const gardenName: Ref<string | undefined> = ref<string>();
 let gardenId: number | undefined;
 
 async function garden(): Promise<void> {
-  if (gardenName.value && storeCompanyId) {
-    gardenId = await createGarden(storeCompanyId, gardenName.value);
+  if (gardenName.value && storeCompanyId.value) {
+    gardenId = await createGarden(storeCompanyId.value, gardenName.value);
 
     if (gardenId) {
       finishOnboarding();
