@@ -117,8 +117,8 @@ export const userStore = defineStore({
       await editUser(firstName, lastName, username, password);
       return true;
     },
-    async resetStore(): Promise<void> {
-      this.$reset();
+    async disposeStore(): Promise<void> {
+      this.$dispose();
     },
   },
 });

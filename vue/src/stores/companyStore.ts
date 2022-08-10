@@ -33,5 +33,8 @@ export const companyStore = defineStore({
       /* TODO: check if id exists in companies */
       this.selectedCompany = companyId;
     },
+    async disposeStore(): Promise<void> {
+      this.$dispose();
+    },
   },
 });

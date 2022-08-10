@@ -14,5 +14,8 @@ export const sensorStore = defineStore({
     async loadDataFromApi(): Promise<void> {
       this.sensors = await getSensorInformation();
     },
+    async disposeStore(): Promise<void> {
+      this.$dispose();
+    },
   },
 });

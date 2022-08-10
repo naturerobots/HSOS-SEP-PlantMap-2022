@@ -33,5 +33,8 @@ export const gardenStore = defineStore({
       /* TODO: check if id exists in gardens */
       this.selectedGarden = gardenId;
     },
+    async disposeStore(): Promise<void> {
+      this.$dispose();
+    },
   },
 });

@@ -63,6 +63,8 @@
 <script setup lang="ts">
 import { logout } from "@/services/userApi";
 import { companyStore } from "@/stores/companyStore";
+import { sensorStore } from "@/stores/sensorStore";
+import { userStore } from "@/stores/userStore";
 import { gardenStore } from "@/stores/gardenStore";
 import type { Company } from "@/types/company";
 import { storeToRefs } from "pinia";
@@ -83,7 +85,12 @@ const storeGardenId: Ref<number | undefined> = storeToRefs(
   gardenStore()
 ).getSelectedGarden;
 async function logoutUser(): Promise<void> {
-  await logout();
+  if (await logout()) {
+    userStore().disposeStore();
+    companyStore().disposeStore();
+    gardenStore().disposeStore();
+    sensorStore().disposeStore();
+  }
   router.push({ name: "login" });
 }
 
