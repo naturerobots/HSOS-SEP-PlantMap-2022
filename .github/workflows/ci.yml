@@ -63,7 +63,7 @@ jobs:
         uses: tj-actions/changed-files@v8.1
         with:
           files: |
-            .devcontainer/Dockerfile.dev
+            .devcontainer/Dockerfile
 
       - name: Set up Docker Buildx
         if: github.ref_type == 'tag' || steps.changed-files-specific-docker.outputs.any_changed == 'true'
@@ -81,7 +81,7 @@ jobs:
         if: github.ref_type == 'tag' || steps.changed-files-specific-docker.outputs.any_changed == 'true'
         uses: docker/build-push-action@v2
         with:
-          file: .devcontainer/Dockerfile.dev
+          file: .devcontainer/Dockerfile
           push: ${{ GitHub.event_name != 'pull_request'}}
           tags: ${{ needs.create-ids.outputs.image_id }}:${{ needs.create-ids.outputs.version }}
           cache-from: type=registry,ref=${{ needs.create-ids.outputs.image_id }}:${{ needs.create-ids.outputs.version }}
