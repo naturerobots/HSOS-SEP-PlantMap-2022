@@ -42,8 +42,7 @@ export async function getCompanies(): Promise<Company[] | undefined> {
 }
 
 export async function deleteCompany(companyId: number): Promise<boolean> {
-  return true;
-  /* return await axios
+  return await axios
     .delete(baseURL + "/companies/" + companyId, {
       headers: {
         Authorization: "Token " + storeToRefs(userStore()).getToken.value.token,
@@ -54,5 +53,5 @@ export async function deleteCompany(companyId: number): Promise<boolean> {
     })
     .catch(function (): boolean {
       return false;
-    }); */
+    });
 }
