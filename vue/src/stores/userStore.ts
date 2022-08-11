@@ -1,7 +1,16 @@
 import { defineStore } from "pinia";
 import type { Token, User, Settings } from "@/types/user";
 import type { StoreOption } from "@/types/widgetOption";
-import { getUser, loginUser, registerUser, editUser } from "@/services/userApi";
+import {
+  getUser,
+  loginUser,
+  registerUser,
+  editUser,
+  addPermissionToCompany,
+  addPermissionToGarden,
+  removePermissionFromCompany,
+  removePermissionFromGarden,
+} from "@/services/userApi";
 import { postWidgets, getWidgets } from "@/services/widgetApi";
 
 // TODO: move to types/store
@@ -128,6 +137,40 @@ export const userStore = defineStore({
     async disposeStore(): Promise<void> {
       this.$reset();
       this.$dispose();
+    },
+    async addPermissionToCompany(
+      username: string,
+      admin: boolean,
+      companyId: number
+    ): Promise<boolean> {
+      if (await addPermissionToCompany(username, admin, companyId)) return true;
+      return false;
+    },
+    async removePermissionFromCompany(
+      username: string,
+      companyId: number
+    ): Promise<boolean> {
+      if (await removePermissionFromCompany(username, companyId)) return true;
+      return false;
+    },
+    async addPermissionToGarden(
+      username: string,
+      admin: boolean,
+      companyId: number,
+      gardenId: number
+    ): Promise<boolean> {
+      if (await addPermissionToGarden(username, admin, companyId, gardenId))
+        return true;
+      return false;
+    },
+    async removePermissionFromGarden(
+      username: string,
+      companyId: number,
+      gardenId: number
+    ): Promise<boolean> {
+      if (await removePermissionFromGarden(username, companyId, gardenId))
+        return true;
+      return false;
     },
   },
 });
