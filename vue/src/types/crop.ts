@@ -1,7 +1,7 @@
 import type { Health } from "./health";
 
 export interface Crop {
-  id: number;
+  id: string;
   plant: string;
   variety: string;
   location: number;
