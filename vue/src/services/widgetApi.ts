@@ -8,7 +8,7 @@ const baseURL = "http://127.0.0.1:8000";
 export async function postWidgets(widgets: StoreOption[]): Promise<boolean> {
   return await axios
     .post<boolean>(
-      baseURL + "/user-info/widgets",
+      baseURL + "/user/widgets",
       { widgets: widgets },
       {
         headers: {
@@ -27,7 +27,7 @@ export async function postWidgets(widgets: StoreOption[]): Promise<boolean> {
 
 export async function getWidgets(): Promise<StoreOption[] | undefined> {
   return await axios
-    .get<StoreOption[]>(baseURL + "/user-info/widgets", {
+    .get<StoreOption[]>(baseURL + "/user/widgets", {
       headers: {
         Authorization: "Token " + storeToRefs(userStore()).getToken.value.token,
       },

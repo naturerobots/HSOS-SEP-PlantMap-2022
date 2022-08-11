@@ -65,7 +65,7 @@ export async function logout(): Promise<boolean> {
 
 export async function getUser(): Promise<User | undefined> {
   return await axios
-    .get<User>(baseURL + "/user-info", {
+    .get<User>(baseURL + "/user", {
       headers: {
         Authorization: "Token " + storeToRefs(userStore()).getToken.value.token,
       },
@@ -87,7 +87,7 @@ export async function editUser(
 ): Promise<boolean | undefined> {
   return await axios
     .put<boolean>(
-      baseURL + "/user-info",
+      baseURL + "/user",
       {
         first_name: firstName,
         last_name: lastName,
