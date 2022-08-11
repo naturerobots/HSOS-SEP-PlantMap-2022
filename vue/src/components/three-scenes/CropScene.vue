@@ -5,21 +5,117 @@
     <div id="info-card">
       <div id="info-detail">
         <div class="hole"></div>
-        <div class="description">test</div>
+        <div v-if="highlightedCrop3d" class="description">
+          <div class="heading">{{ highlightedCrop3d.name }}</div>
+
+          <table id="properties">
+            <tr>
+              <th class="table-entry">Location:</th>
+              <th class="table-entry">
+                {{ highlightedCrop3d.locationDescription }}
+              </th>
+            </tr>
+            <tr>
+              <th class="table-entry">Type:</th>
+              <th class="table-entry">{{ highlightedCrop3d.type }}</th>
+            </tr>
+            <!-- <div>Health: {{ highlightedCrop3d.health }}</div> -->
+            <tr>
+              <th class="table-entry">Health:</th>
+              <th class="table-entry">
+                <span
+                  v-for="health in highlightedCrop3d.health"
+                  :key="health.type"
+                >
+                  {{ health.shortcut }}
+                </span>
+              </th>
+            </tr>
+            <tr>
+              <th class="table-entry">Yield:</th>
+              <th class="table-entry">{{ highlightedCrop3d.yield }}</th>
+            </tr>
+            <tr>
+              <th class="table-entry">Status:</th>
+              <th class="table-entry">{{ highlightedCrop3d.status }}</th>
+            </tr>
+            <tr>
+              <th class="table-entry">Harvest:</th>
+              <th class="table-entry">{{ highlightedCrop3d.harvest }}</th>
+            </tr>
+          </table>
+
+          <!-- progress bar -->
+          <div class="progress-bar">
+            <div class="progress"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style>
+.progress-bar {
+  /*position: relative;*/
+  width: 100%;
+  background-color: gray;
+  border-radius: 16px;
+}
+
+.progress-bar .progress {
+  /*position: absolute;*/
+  background-color: green;
+  width: 50%;
+  height: 10px;
+  border-radius: 16px;
+}
+
+.heading {
+  text-align: center;
+  font-size: larger;
+  font-weight: normal;
+}
+
+#properties {
+  width: 100%;
+}
+
+#properties .table-entry {
+  font-family: "Roboto", "-apple-system", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  font-size: small;
+  font-weight: lighter;
+  width: 50%;
+  text-align: left;
+}
+
 .description {
-  z-index: 100;
-  margin-top: 20px;
-  margin-left: 240px;
+  /*
+  font-family: "Roboto", "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  line-height: 1.5 !important;
+  font-weight: normal !important;
+  font-size: medium !important;
+  */
+
+  padding-top: 20px;
+  padding-left: 240px;
+  padding-bottom: 20px;
+  padding-right: 20px;
   width: 100%;
   height: 100%;
 }
+
+.description > div {
+  font-family: "Roboto", "-apple-system", "Helvetica Neue", Helvetica, Arial,
+    sans-serif !important;
+  line-height: 1.5 !important;
+  font-weight: normal !important;
+  font-size: medium !important;
+}
+
 .hole {
+  z-index: -1;
   position: absolute;
   top: 20px;
   left: 20px;
@@ -34,8 +130,8 @@
 #info-detail {
   overflow: hidden;
   position: relative;
-  margin-left: 20%;
-  width: 400px;
+  margin-left: 25%;
+  width: 500px;
   height: 200px;
   /*background-color: red;*/
   border-radius: 16px;
@@ -43,7 +139,9 @@
 }
 
 #info-card {
+  z-index: 0;
   pointer-events: none;
+
   position: absolute; /* let us position them inside the container */
   left: 0; /* make their default position the top left of the container */
   top: 0;
@@ -53,6 +151,13 @@
   text-shadow:         /* create a black outline */ -1px -1px 0 #000,
     0 -1px 0 #000, 1px -1px 0 #000, 1px 0 0 #000, 1px 1px 0 #000, 0 1px 0 #000,
     -1px 1px 0 #000, -1px 0 0 #000;
+
+  /*
+  -webkit-filter: blur(0.000001px);
+  -webkit-font-smoothing: antialiased;
+  -webkit-transform: translateZ(0);
+  transform: translate(0);
+  */
 }
 </style>
 
@@ -62,8 +167,11 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 //import { PLYLoader } from "three/examples/jsm/loaders/PLYLoader.js";
 //import { CustomPLYLoader } from "@/components/three-scenes/CustomPlyLoader.js";
 import { CustomPLYLoader } from "./CustomPlyLoader.ts";
-import { onMounted, computed } from "vue";
+import { onMounted, ref } from "vue";
 import axios from "axios";
+
+import type { Crop3dArray, Crop3d } from "@/types/crop3d";
+import type { Location3d } from "@/types/location3d";
 
 // 'http://localhost:8000/media/pointclouds/ply/e1ef73b1258b475a996d2b72924c27ac/0bf37a0851b7402d88674e153f58e6f8.ply'
 // https://pointly.medium.com/how-to-convert-ply-files-to-las-laz-d4100ef3625a
@@ -77,8 +185,6 @@ import axios from "axios";
 //console.log("OrbitControls", OrbitControls);
 
 const size = {
-  // width: 300, // window.innerWidth
-  // height: 300, // window.innerHeight
   width: window.innerWidth - 200,
   height: window.innerHeight - 200,
 };
@@ -91,9 +197,12 @@ var controls: OrbitControls;
 var loader: CustomPLYLoader;
 
 var infoCardCube: THREE.Mesh;
-const tempV = new THREE.Vector3();
+var tempV: THREE.Vector3; // new THREE.Vector3();
 
-var highlightedPlant = null;
+var crop3dArray: Crop3dArray;
+var highlightedCrop3d = ref<Crop3d>();
+
+//var highlightedCrop3d = ref<Crop3d | null>(null);
 
 onMounted(() => {
   var canvasScene: Element | null = document.querySelector(
@@ -103,23 +212,21 @@ onMounted(() => {
   // https://r105.threejsfundamentals.org/threejs/lessons/threejs-align-html-elements-to-3d.html
 
   renderer = new THREE.WebGLRenderer();
-
   camera = new THREE.PerspectiveCamera(75, size.width / size.height, 0.01, 10);
-
   controls = new OrbitControls(camera, renderer.domElement);
-
   scene = new THREE.Scene();
+
+  var geometry: THREE.BoxGeometry = new THREE.BoxGeometry(0, 0, 0);
+  var material: THREE.MeshNormalMaterial = new THREE.MeshNormalMaterial();
+  infoCardCube = new THREE.Mesh(geometry, material);
+  scene.add(infoCardCube);
+
+  tempV = new THREE.Vector3();
 
   // add spotlight for the shadows
   var spotLight = new THREE.SpotLight(0xffffff);
   spotLight.position.set(20, 20, 20);
   scene.add(spotLight);
-
-  var geometry: THREE.BoxGeometry = new THREE.BoxGeometry(0, 0, 0);
-  var material: THREE.MeshNormalMaterial = new THREE.MeshNormalMaterial();
-
-  infoCardCube = new THREE.Mesh(geometry, material);
-  scene.add(infoCardCube);
 
   loader = new CustomPLYLoader();
 
@@ -130,7 +237,7 @@ onMounted(() => {
   });
 
   let token =
-    "5726934a783cfffa69dc7664dccd9a10c6028408c7b39eea50524804beac31d0";
+    "c2509c1c164500ffaab233875ef53aaf72e8529e5b8c11c81f6cfc6939255398";
   let url = "http://localhost:8000/companies/1/gardens/1/beds/1/3d-scene/";
 
   axios.defaults.baseURL = "http://localhost:8000/";
@@ -142,12 +249,15 @@ onMounted(() => {
       //console.log("then", response);
 
       // load Plant Ply files
-      let plants = response["data"]["plants"];
-      loadPlants(plants);
+      //let plants = response["data"]["plants"];
+
+      crop3dArray = response["data"]["plants"];
+      loadPlants(crop3dArray);
 
       // Set Camera position
-      highlightedPlant = plants[1];
-      setCameraToPlant(highlightedPlant);
+      highlightedCrop3d.value = crop3dArray[1];
+
+      setCameraToLocation(highlightedCrop3d.value?.location3d);
     })
     .catch(function (error) {
       console.log("catch", error);
@@ -168,17 +278,23 @@ onMounted(() => {
 });
 
 let animationCallback = (time: number): void => {
-  updateInfoCard();
+  updateInfoCardPosition();
   controls.update();
   renderer.render(scene, camera);
 };
 
-let setCameraToPlant = (plant): void => {
-  let location = plant["location3d"];
+let setCameraToLocation = (location: Location3d): void => {
+  //let location = plant["location3d"];
 
+  /*
   let x = parseFloat(location["x"]);
   let y = parseFloat(location["y"]);
   let z = parseFloat(location["z"]);
+  */
+
+  let x = parseFloat(location.x);
+  let y = parseFloat(location.y);
+  let z = parseFloat(location.z);
 
   controls.target.set(x, y, z);
   camera.position.set(x, -1, 0);
@@ -187,10 +303,10 @@ let setCameraToPlant = (plant): void => {
 
   infoCardCube.position.set(x, y, z);
 
-  updateInfoCard();
+  updateInfoCardPosition();
 };
 
-let updateInfoCard = (): void => {
+let updateInfoCardPosition = (): void => {
   if (typeof infoCardCube != "undefined") {
     //console.log("renderer.domElement.position().left ", renderer.domElement);
 
@@ -204,28 +320,40 @@ let updateInfoCard = (): void => {
     tempV.project(camera);
 
     // convert the normalized position to CSS coordinates
-    //const x2 = (tempV.x *  .5 + .5) * renderer.domElement.clientWidth;
-    //const y2 = (tempV.y * -.5 + .5) * renderer.domElement.clientHeight;
     const x2 = (tempV.x * 0.5 + 0.5) * renderer.domElement.clientWidth;
     const y2 = (tempV.y * -0.5 + 0.5) * renderer.domElement.clientHeight;
+    //const y2 = (tempV.y * 0.5 + 0.5) * renderer.domElement.clientHeight - 0.5;
 
     // move the elem to that position
-    //elem.style.transform = `translate(-50%, -50%) translate(${x2}px,${y2}px)`;
     var infoCard: Element | null = document.querySelector("#info-card");
     if (infoCard != null) {
       infoCard.style.transform = `translate(-50%, -50%) translate(${x2}px,${y2}px)`;
+      //infoCard.style.transform = `translate(-50%, -50%) translate(${x2}px,${y2}px)`;
+      //infoCard.style.transform = `translateX(-50%) translateY(calc(-50% - 0.5px)) translateX(${x2}px) translateY(calc(${y2}px - 0.5px)`;
+
+      /*
+      translateX(-50%)
+      translateY(calc(-50% - 0.5px))
+      translateX(378px)
+      translateY(calc(135px))
+      */
+
+      /*
+      translate(-50%, -50%)
+      translate(378px, 135.5px)
+      */
     }
   }
 };
 
-let loadPlants = (plants): void => {
-  plants.forEach((plant) => {
+let loadPlants = (plants: Crop3dArray): void => {
+  plants.forEach((plant: Crop3d) => {
     let url = plant["url"];
     loadPly(url);
   });
 };
 
-let loadPly = (url): void => {
+let loadPly = (url: string): void => {
   loader.load(url, function (geometry: any) {
     //geometry.computeVertexNormals();
 

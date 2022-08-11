@@ -81,6 +81,7 @@ def get3dPlants(request, company_id: int, garden_id: int, bed_id: int):
             "url": url + file,
             "name": "Swiss Chard",
             "locationDescription": "Row 12",
+            "type": "11 Cluster",
             "location3d": {
                 "x": str(locationOffset[0]),
                 "y": str(locationOffset[1]),
@@ -90,17 +91,17 @@ def get3dPlants(request, company_id: int, garden_id: int, bed_id: int):
                 {
                     "type": "type1",
                     "loglevel": 1,
-                    "shortcut": "shortcut1",
+                    "shortcut": "O",
                 },
                 {
                     "type": "type2",
                     "loglevel": 2,
-                    "shortcut": "shortcut2",
+                    "shortcut": "T",
                 },
             ],
             "yield": "N/A",
             "status": "Vegetating",
-            "Harvest": "2 Weeks",
+            "harvest": "2 Weeks",
             "progress": 0.6,
         }
 
