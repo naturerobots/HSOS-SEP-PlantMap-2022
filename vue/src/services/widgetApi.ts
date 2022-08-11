@@ -9,7 +9,7 @@ export async function postWidgets(widgets: StoreOption[]): Promise<boolean> {
   return await axios
     .post<boolean>(
       baseURL + "/user/widgets",
-      { widgets: widgets },
+      { widgets },
       {
         headers: {
           Authorization:
@@ -32,8 +32,10 @@ export async function getWidgets(): Promise<StoreOption[] | undefined> {
         Authorization: "Token " + storeToRefs(userStore()).getToken.value.token,
       },
     })
-    .then(function (response): StoreOption[] {
-      return response.data;
+    .then(function (response): StoreOption[] | undefined {
+      if (Object.keys(response.data).length === 0) return undefined;
+
+      return response.data["widgets"];
     })
     .catch(function (): undefined {
       return undefined;

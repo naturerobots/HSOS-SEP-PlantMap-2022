@@ -16,15 +16,7 @@ export const userStore = defineStore({
   state: (): userStore => ({
     user: {} as User,
     settings: {
-      widgetOptions: [
-        "weather",
-        "garden-map",
-        "soil-parameter",
-        "crops-table",
-        "crops-map",
-        "3d-table",
-        "3d-map",
-      ], //TODO: delete later
+      widgetOptions: [] as StoreOption[],
     },
     token: {} as Token,
   }),
@@ -74,7 +66,12 @@ export const userStore = defineStore({
           if (user) {
             this.user = user;
             const widgetOptions: StoreOption[] | undefined = await getWidgets();
-            if (widgetOptions) this.settings.widgetOptions = widgetOptions;
+            if (!widgetOptions) {
+              this.settings.widgetOptions = [];
+              return true;
+            }
+
+            this.settings.widgetOptions = widgetOptions;
             return true;
           }
 
