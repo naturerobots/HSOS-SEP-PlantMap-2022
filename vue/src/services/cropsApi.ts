@@ -10,23 +10,20 @@ import type { Garden } from "@/types/garden";
 
 const baseURL = "http://127.0.0.1:8000";
 
-export async function getCrops(): Promise<Plants> {
-  const companyId: Ref<number | undefined> = storeToRefs(
-    companyStore()
-  ).getSelectedCompany;
-  const gardenId: Ref<number | undefined> = storeToRefs(
-    gardenStore()
-  ).getSelectedGarden;
-  console.log("Company: " + companyId.value);
-  console.log("Garden: " + gardenId.value);
+export async function getCrops(plantsUrl: string): Promise<Plants> {
+  // const companyId: Ref<number | undefined> = storeToRefs(
+  //   companyStore()
+  // ).getSelectedCompany;
+  // const gardenId: Ref<number | undefined> = storeToRefs(
+  //   gardenStore()
+  // ).getSelectedGarden;
+  // console.log("Company: " + companyId.value);
+  // console.log("Garden: " + gardenId.value);
   return await axios
     .get<Plants>(
-      baseURL +
-        "/companies/" +
-        companyId.value +
-        "/gardens/" +
-        gardenId.value +
-        "/beds/1/plants",
+      // baseURL +
+      //   "/companies/1/gardens/1/beds/1/plants",
+      plantsUrl,
       {
         headers: {
           Authorization:

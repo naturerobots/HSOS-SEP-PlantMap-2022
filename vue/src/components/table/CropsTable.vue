@@ -16,6 +16,7 @@
           :rows-per-page-options="[0]"
           :pagination="pagination()"
           hide-bottom
+          :loading="isLoading"
         >
           <template #body="props">
             <q-tr
@@ -167,7 +168,7 @@
       </div>
       <div v-else>
         <q-table
-          :rows="plants.plants"
+          :rows="plantsPlants.plants"
           :columns="columns"
           row-key="name"
           class="crops-table no-shadow crops-table-hover"
@@ -204,6 +205,8 @@
               style="min-width: 120px"
               class="mx-2"
             />
+            "bed_id"
+
             <q-input
               outlined
               dense
@@ -289,9 +292,14 @@ import StatusPopup from "@/components/StatusPopup.vue";
 import type { Plants } from "@/types/plants";
 import type { Bed } from "@/types/bed";
 import type { Beds } from "@/types/beds";
+import { bedStore } from "@/stores/bedStore";
 
-const plants: Ref<Plants> = storeToRefs(cropsStore()).getCrops;
-// const crops: Ref<Plants> = storeToRefs(cropsStore()).getCrops;
+let plantsPlants: Ref<Plants> = storeToRefs(cropsStore()).getCrops;
+// let plants =  ref<Crop[]>();
+// const beds: Ref<Beds> = storeToRefs(bedStore()).getBeds;
+const isLoading: Ref<boolean | undefined> = storeToRefs(
+  bedStore()
+).getIsLoading;
 let input = ref<string>("");
 const table = ref<null | InstanceType<typeof QTable>>(null);
 
@@ -405,12 +413,25 @@ function rowLeave(cropsId: number): void {
   emit("rowLeave", cropsId);
 }
 
-function rowclicked(cropsId: number): void {
-  console.log("rowClicked " + cropsId);
+function rowclicked(bedId: number): void {
+  console.log("rowClicked " + bedId);
+  bedStore().setSelectedBedId(bedId);
+  const num = storeToRefs(bedStore()).getSelectedBedId;
+  // console.log("PlantsId: " + beds.value.beds[cropsId-1].plants)
+  const bed = storeToRefs(bedStore()).getSelectedBed;
+  console.log(bed.value);
+  if (bed.value) {
+    console.log("BedId: " + bed.value.id);
+    cropsStore().loadDataFromApi(bed.value.plants);
+  }
+
+  // plantsPlants = storeToRefs(cropsStore()).getCrops;
+  // console.log("plantsPlants: " + plantsPlants.value.plants[0].bed_id);
+  // plants = plantsPlants.value.plants;
 
   // removeClickedRow();
-  emit("rowClick", cropsId);
-  const row: HTMLTableRowElement | undefined = getRowByCropsId(cropsId);
+  emit("rowClick", bedId);
+  const row: HTMLTableRowElement | undefined = getRowByCropsId(bedId);
   if (row) {
     if (row.classList.contains("crops-row-clicked")) {
       removeClickedRow();

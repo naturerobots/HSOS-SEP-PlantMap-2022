@@ -72,11 +72,11 @@ const widgetOptionsDashboard: WidgetOption[] = [
   widgetOptions.notification,
 ];
 
-onMounted(() => {
-  console.log("onMounted");
-  cropsStore().loadDataFromApi();
-  bedStore().loadDataFromApi();
-});
+// onMounted(() => {
+//   console.log("onMounted");
+//   // cropsStore().loadDataFromApi();
+//   bedStore().loadDataFromApi();
+// });
 
 // Sensor - Map interaction
 function mapSensorEnter(sensorId: number): void {

@@ -1,42 +1,113 @@
+import { bedStore } from "@/stores/bedStore";
+import { companyStore } from "@/stores/companyStore";
+import { gardenStore } from "@/stores/gardenStore";
 import { userStore } from "@/stores/userStore";
 import type { Bed } from "@/types/bed";
 import type { Beds } from "@/types/beds";
-import axios from "axios";
+import axios, { type AxiosResponse } from "axios";
 import { storeToRefs } from "pinia";
 import type { Stream } from "stream";
+import type { Ref } from "vue";
 
 const baseURL = "http://127.0.0.1:8000";
 
-export async function getBeds() {
-  // return await axios.get<Beds>(baseURL + "/companies/1/gardens/1/beds", {
-  //     headers: {
-  //       Authorization: "Token " + storeToRefs(userStore()).getToken.value.token
-  //     },
-  //     responseType: 'stream'
-  //   })
-  //   .then(function (response): Beds {
-  //     console.log(response);
-  //     // console.log(response.data.beds[0].plant);
-  //     return response.data;
-  //   });
+export async function loadBeds(): Promise<boolean> {
+  const companyId: Ref<number | undefined> = storeToRefs(
+    companyStore()
+  ).getSelectedCompany;
+  const gardenId: Ref<number | undefined> = storeToRefs(
+    gardenStore()
+  ).getSelectedGarden;
 
-  const response = await axios.get(baseURL + "/companies/1/gardens/1/beds", {
-    headers: {
-      Authorization: "Token " + storeToRefs(userStore()).getToken.value.token,
-    },
-    responseType: "stream",
+  const loading = fetch(
+    baseURL +
+      "/companies/" +
+      companyId.value +
+      "/gardens/" +
+      gardenId.value +
+      "/beds",
+    {
+      headers: {
+        Authorization: "Token " + storeToRefs(userStore()).getToken.value.token,
+      },
+    }
+  ).then(async (response) => {
+    // response.body is a ReadableStream
+    const reader = response.body?.getReader();
+    const beds: Beds = {
+      beds: [],
+    };
+    for await (const chunk of readChunks(reader)) {
+      console.log(`received chunk of size ${chunk?.length}`);
+      if (chunk) {
+        console.log(Utf8ArrayToStr(chunk));
+        const json = JSON.parse(Utf8ArrayToStr(chunk));
+        console.log(json);
+        beds.beds.push(json);
+        console.log(beds);
+        bedStore().setBed(json);
+      }
+    }
+    return false;
   });
+  return loading;
 
-  const stream = response.data;
+  // readChunks() reads from the provided reader and yields the results into an async iterable
+  function readChunks(
+    reader: ReadableStreamDefaultReader<Uint8Array> | undefined
+  ) {
+    return {
+      async *[Symbol.asyncIterator]() {
+        let readResult = await reader?.read();
+        while (!readResult?.done) {
+          yield readResult?.value;
+          readResult = await reader?.read();
+        }
+      },
+    };
+  }
 
-  console.log(stream);
-  stream.on("data", (data: any) => {
-    console.log(data);
-  });
+  //https://jsfiddle.net/3VuLx/2/
+  function Utf8ArrayToStr(array: any) {
+    let out, i, c;
+    let char2, char3;
 
-  stream.on("end", () => {
-    console.log("stream done");
-  });
+    out = "";
+    const len = array.length;
+    i = 0;
+    while (i < len) {
+      c = array[i++];
+      switch (c >> 4) {
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+          // 0xxxxxxx
+          out += String.fromCharCode(c);
+          break;
+        case 12:
+        case 13:
+          // 110x xxxx   10xx xxxx
+          char2 = array[i++];
+          out += String.fromCharCode(((c & 0x1f) << 6) | (char2 & 0x3f));
+          break;
+        case 14:
+          // 1110 xxxx  10xx xxxx  10xx xxxx
+          char2 = array[i++];
+          char3 = array[i++];
+          out += String.fromCharCode(
+            ((c & 0x0f) << 12) | ((char2 & 0x3f) << 6) | ((char3 & 0x3f) << 0)
+          );
+          break;
+      }
+    }
+
+    return out;
+  }
 
   //static demo data
   //   const crops: Bed[] = [];
