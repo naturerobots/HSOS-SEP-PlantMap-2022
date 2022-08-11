@@ -16,7 +16,7 @@
           :rows-per-page-options="[0]"
           :pagination="pagination()"
           hide-bottom
-          :loading="isLoading"
+          :loading="isLoadingBeds"
         >
           <template #body="props">
             <q-tr
@@ -176,6 +176,7 @@
           virtual-scroll
           :rows-per-page-options="[0]"
           hide-bottom
+          :loading="isLoadingPlants"
         >
           <template v-slot:top-left>
             <div class="row">
@@ -297,8 +298,11 @@ import { bedStore } from "@/stores/bedStore";
 let plantsPlants: Ref<Plants> = storeToRefs(cropsStore()).getCrops;
 // let plants =  ref<Crop[]>();
 // const beds: Ref<Beds> = storeToRefs(bedStore()).getBeds;
-const isLoading: Ref<boolean | undefined> = storeToRefs(
+const isLoadingBeds: Ref<boolean | undefined> = storeToRefs(
   bedStore()
+).getIsLoading;
+const isLoadingPlants: Ref<boolean | undefined> = storeToRefs(
+  cropsStore()
 ).getIsLoading;
 let input = ref<string>("");
 const table = ref<null | InstanceType<typeof QTable>>(null);

@@ -7,6 +7,7 @@ import type { Ref } from "vue";
 import { companyStore } from "@/stores/companyStore";
 import { gardenStore } from "@/stores/gardenStore";
 import type { Garden } from "@/types/garden";
+import { cropsStore } from "@/stores/cropsStore";
 
 const baseURL = "http://127.0.0.1:8000";
 
@@ -33,6 +34,7 @@ export async function getCrops(plantsUrl: string): Promise<Plants> {
     )
     .then(function (response): Plants {
       console.log(response.data.plants[0].plant);
+      cropsStore().setCrops(response.data.plants);
       return response.data;
     });
 
