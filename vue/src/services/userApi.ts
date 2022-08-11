@@ -109,3 +109,119 @@ export async function editUser(
       return undefined;
     });
 }
+
+export async function addPermissionToCompany(
+  username: string,
+  admin: boolean,
+  companyId: number
+): Promise<boolean> {
+  return await axios
+    .post(
+      baseURL + "/companies/" + companyId + "/createPermission",
+      {
+        username: username,
+        permission: admin ? "a" : "u",
+      },
+      {
+        headers: {
+          Authorization:
+            "Token " + storeToRefs(userStore()).getToken.value.token,
+        },
+      }
+    )
+    .then(function (): boolean {
+      return true;
+    })
+    .catch(function (): boolean {
+      return false;
+    });
+}
+
+export async function removePermissionFromCompany(
+  username: string,
+  companyId: number
+): Promise<boolean | undefined> {
+  return await axios
+    .post(
+      baseURL + "/companies/" + companyId + "/removePermission",
+      {
+        username: username,
+      },
+      {
+        headers: {
+          Authorization:
+            "Token " + storeToRefs(userStore()).getToken.value.token,
+        },
+      }
+    )
+    .then(function (): boolean {
+      return true;
+    })
+    .catch(function (): boolean {
+      return false;
+    });
+}
+
+export async function addPermissionToGarden(
+  username: string,
+  admin: boolean,
+  companyId: number,
+  gardenId: number
+): Promise<boolean | undefined> {
+  return await axios
+    .post(
+      baseURL +
+        "/companies/" +
+        companyId +
+        "/gardens/" +
+        gardenId +
+        "/createPermission",
+      {
+        username: username,
+        permission: admin ? "a" : "u",
+      },
+      {
+        headers: {
+          Authorization:
+            "Token " + storeToRefs(userStore()).getToken.value.token,
+        },
+      }
+    )
+    .then(function (): boolean {
+      return true;
+    })
+    .catch(function (): boolean {
+      return false;
+    });
+}
+
+export async function removePermissionFromGarden(
+  username: string,
+  companyId: number,
+  gardenId: number
+): Promise<boolean | undefined> {
+  return await axios
+    .post(
+      baseURL +
+        "/companies/" +
+        companyId +
+        "/gardens/" +
+        gardenId +
+        "/removePermission",
+      {
+        username: username,
+      },
+      {
+        headers: {
+          Authorization:
+            "Token " + storeToRefs(userStore()).getToken.value.token,
+        },
+      }
+    )
+    .then(function (): boolean {
+      return true;
+    })
+    .catch(function (): boolean {
+      return false;
+    });
+}
