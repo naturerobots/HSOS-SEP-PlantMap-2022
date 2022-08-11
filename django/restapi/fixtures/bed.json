@@ -12,7 +12,23 @@
     "pk": 2,
     "fields": {
       "uuid": "18f89a2118d24d19b1c66345ec499f43",
-      "garden": 1
+      "garden": 2
+    }
+  },
+  {
+    "model": "restapi.bed",
+    "pk": 3,
+    "fields": {
+      "uuid": "4cc5a79a245c41578beaeffe68cb5289",
+      "garden": 3
+    }
+  },
+  {
+    "model": "restapi.bed",
+    "pk": 4,
+    "fields": {
+      "uuid": "05717c979b0d4bd790d31ce218cd58ee",
+      "garden": 4
     }
   }
 ]

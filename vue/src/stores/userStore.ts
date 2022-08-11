@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import type { Token, User, Settings } from "@/types/user";
 import type { StoreOption } from "@/types/widgetOption";
 import { getUser, loginUser, registerUser, editUser } from "@/services/userApi";
+import { postWidgets, getWidgets } from "@/services/widgetApi";
 
 // TODO: move to types/store
 interface userStore {
@@ -15,15 +16,7 @@ export const userStore = defineStore({
   state: (): userStore => ({
     user: {} as User,
     settings: {
-      widgetOptions: [
-        "weather",
-        "garden-map",
-        "soil-parameter",
-        "crops-table",
-        "crops-map",
-        "3d-table",
-        "3d-map",
-      ], //TODO: delete later
+      widgetOptions: [] as StoreOption[],
     },
     token: {} as Token,
   }),
@@ -72,6 +65,13 @@ export const userStore = defineStore({
 
           if (user) {
             this.user = user;
+            const widgetOptions: StoreOption[] | undefined = await getWidgets();
+            if (!widgetOptions) {
+              this.settings.widgetOptions = [];
+              return true;
+            }
+
+            this.settings.widgetOptions = widgetOptions;
             return true;
           }
 
@@ -114,11 +114,20 @@ export const userStore = defineStore({
       username?: string | undefined,
       password?: string | undefined
     ): Promise<boolean> {
-      await editUser(firstName, lastName, username, password);
+      if (!(await editUser(firstName, lastName, username, password)))
+        return false;
+
+      this.user.first_name = firstName ? firstName : this.user.first_name;
+      this.user.last_name = lastName ? lastName : this.user.last_name;
+      this.user.username = username ? username : this.user.username;
       return true;
     },
-    async resetStore(): Promise<void> {
+    async saveWidgets(): Promise<boolean> {
+      return await postWidgets(this.settings.widgetOptions);
+    },
+    async disposeStore(): Promise<void> {
       this.$reset();
+      this.$dispose();
     },
   },
 });

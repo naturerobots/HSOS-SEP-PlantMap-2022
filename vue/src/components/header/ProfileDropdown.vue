@@ -32,18 +32,28 @@
         <div class="text-h6">Administration</div>
       </q-card-section>
       <q-card-section class="q-pt-none">
-        Select Company
-        <q-select
-          v-model="selectedCompany"
-          :options="company"
-          option-value="id"
-          option-label="name"
-          emit-value
-          map-options
-        />
-        <!-- Select Garden
-        <q-select v-model="selectedGarden" :options="garden" option-value="id" option-label="name" emit-value
-          map-options /> -->
+        <div v-if="storeCompanyId">
+          <p class="m-0">Select Company</p>
+          <q-select
+            v-model="selectedCompany"
+            :options="companies"
+            option-value="id"
+            option-label="name"
+            emit-value
+            map-options
+          />
+        </div>
+        <div v-if="storeGardenId">
+          <p class="m-0">Select Garden</p>
+          <q-select
+            v-model="selectedGarden"
+            :options="gardens"
+            option-value="id"
+            option-label="name"
+            emit-value
+            map-options
+          />
+        </div>
       </q-card-section>
 
       <q-card-actions align="right">
@@ -63,18 +73,23 @@
 <script setup lang="ts">
 import { logout } from "@/services/userApi";
 import { companyStore } from "@/stores/companyStore";
+import { sensorStore } from "@/stores/sensorStore";
+import { userStore } from "@/stores/userStore";
 import { gardenStore } from "@/stores/gardenStore";
 import type { Company } from "@/types/company";
+import type { Garden } from "@/types/garden";
 import { storeToRefs } from "pinia";
-import { ref, type Ref } from "vue";
+import { ref, type Ref, watch } from "vue";
 import { useRouter, type Router } from "vue-router";
-const company: Ref<Company[]> = storeToRefs(companyStore()).getCompanies;
-const garden: Ref<Company[]> = storeToRefs(gardenStore()).getGardens;
-const router: Router = useRouter();
 
+const router: Router = useRouter();
 const alert: Ref<boolean> = ref(false);
-const selectedCompany: Ref<number | undefined> = ref<number>();
-const selectedGarden: Ref<number | undefined> = ref<number>();
+
+let companies: Ref<Company[]> = storeToRefs(companyStore()).getCompanies;
+let gardens: Ref<Garden[]> = ref<Garden[]>([]);
+
+let selectedCompany: Ref<number | undefined> = ref<number>();
+let selectedGarden: Ref<number | undefined> = ref<number>();
 
 const storeCompanyId: Ref<number | undefined> = storeToRefs(
   companyStore()
@@ -82,19 +97,56 @@ const storeCompanyId: Ref<number | undefined> = storeToRefs(
 const storeGardenId: Ref<number | undefined> = storeToRefs(
   gardenStore()
 ).getSelectedGarden;
+
 async function logoutUser(): Promise<void> {
-  await logout();
-  router.push({ name: "login" });
+  if (await logout()) {
+    userStore().disposeStore();
+    companyStore().disposeStore();
+    gardenStore().disposeStore();
+    sensorStore().disposeStore();
+    router.push({ name: "login" });
+  }
 }
 
-function openAdministration(): void {
+watch(selectedCompany, async (newSelectedCompany, oldSelectedCompany) => {
+  if (storeCompanyId.value && newSelectedCompany != oldSelectedCompany) {
+    gardens.value = await gardenStore().loadGardens(newSelectedCompany);
+
+    if (gardens.value[0]) {
+      selectedGarden.value = gardens.value[0].id;
+    }
+  }
+});
+
+async function openAdministration(): Promise<void> {
+  if (!storeCompanyId.value && !storeGardenId.value) return;
+
+  if (storeGardenId.value) {
+    selectedGarden.value = storeGardenId.value;
+    if (storeCompanyId.value) {
+      gardens.value = await gardenStore().loadGardens(storeCompanyId.value);
+    } else {
+      gardens.value = await gardenStore().loadUserGardens();
+      if (gardens.value[0]) {
+        selectedGarden.value = gardens.value[0].id;
+      }
+    }
+  }
+
   selectedCompany.value = storeCompanyId.value;
-  selectedGarden.value = storeGardenId.value;
   alert.value = true;
 }
 
-function setCompanyAndGarden(): void {
-  companyStore().setSelectedCompany(selectedCompany.value);
-  gardenStore().setSelectedGarden(selectedGarden.value);
+async function setCompanyAndGarden(): Promise<void> {
+  if (selectedCompany.value) {
+    companyStore().setSelectedCompany(selectedCompany.value);
+  }
+
+  if (selectedGarden.value) {
+    gardenStore().setSelectedGarden(selectedGarden.value);
+    if (selectedCompany.value) {
+      gardenStore().loadDataFromApi(selectedCompany.value);
+    }
+  }
 }
 </script>

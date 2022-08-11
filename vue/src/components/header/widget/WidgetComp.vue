@@ -44,7 +44,7 @@ import { ref, onMounted } from "vue";
 import type { WidgetOption, StoreOption } from "@/types/widgetOption";
 import { userStore } from "@/stores/userStore";
 
-const { addOption, removeOption } = userStore();
+const { addOption, removeOption, saveWidgets } = userStore();
 
 let widgetModel = ref<StoreOption[]>([]);
 
@@ -59,11 +59,13 @@ onMounted(() => {
 });
 
 //TODO: change type
-function add(item: any): void {
+async function add(item: any): Promise<void> {
   addOption(item.value);
+  await saveWidgets();
 }
 //TODO: change type
-function remove(item: any): void {
+async function remove(item: any): Promise<void> {
   removeOption(item.value);
+  await saveWidgets();
 }
 </script>

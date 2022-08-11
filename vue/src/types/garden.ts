@@ -1,6 +1,6 @@
 export interface Garden {
   id: number;
   name: string;
-  imagePath: string;
+  image_path: string;
   company: number;
 }

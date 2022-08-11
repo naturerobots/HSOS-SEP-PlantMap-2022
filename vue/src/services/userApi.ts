@@ -42,7 +42,7 @@ export async function registerUser(
     });
 }
 
-export async function logout(): Promise<void> {
+export async function logout(): Promise<boolean> {
   return await axios
     .post(
       baseURL + "/logout",
@@ -54,18 +54,18 @@ export async function logout(): Promise<void> {
         },
       }
     )
-    .then(function (): void {
-      userStore().resetStore();
+    .then(function (): boolean {
+      return true;
     })
-    .catch(function (): undefined {
+    .catch(function (): boolean {
       //console.log(error.response);
-      return undefined;
+      return false;
     });
 }
 
 export async function getUser(): Promise<User | undefined> {
   return await axios
-    .get<User>(baseURL + "/user-info", {
+    .get<User>(baseURL + "/user", {
       headers: {
         Authorization: "Token " + storeToRefs(userStore()).getToken.value.token,
       },
@@ -88,7 +88,7 @@ export async function editUser(
 ): Promise<boolean | undefined> {
   return await axios
     .put<boolean>(
-      baseURL + "/user-info",
+      baseURL + "/user",
       {
         first_name: firstName,
         last_name: lastName,
