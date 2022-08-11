@@ -14,7 +14,8 @@
           ref="cropsTableRef"
           title="Beds"
           :beds="beds"
-          :visibleColumns="columns"
+          :visibleColumnsBeds="colsBedTable"
+          :visibleColumnsCrops="colsCropsTable"
           @row-enter="tableCropsEnter"
           @row-leave="tableCropsLeave"
           @row-click="tableCropsClick"
@@ -70,17 +71,30 @@ onMounted(() => {
   bedStore().loadDataFromApi();
 });
 
-let columns: string[] = [
-  "id",
+let colsBedTable: string[] = [
+  // "id",
   "plant",
   "location",
   "variety",
-  "soilHumidity",
+  "soil_humidity",
   "health",
   "status",
   "harvest",
   "yield",
   "3d",
+];
+
+let colsCropsTable: string[] = [
+  // "id",
+  "plant",
+  // "location",
+  "variety",
+  "soil_humidity",
+  "health",
+  "status",
+  "harvest",
+  "yield",
+  // "3d",
 ];
 
 const beds: Ref<Beds> = storeToRefs(bedStore()).getBeds;
