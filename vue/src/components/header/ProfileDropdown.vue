@@ -32,24 +32,28 @@
         <div class="text-h6">Administration</div>
       </q-card-section>
       <q-card-section class="q-pt-none">
-        Select Company
-        <q-select
-          v-model="selectedCompany"
-          :options="companies"
-          option-value="id"
-          option-label="name"
-          emit-value
-          map-options
-        />
-        Select Garden
-        <q-select
-          v-model="selectedGarden"
-          :options="gardens"
-          option-value="id"
-          option-label="name"
-          emit-value
-          map-options
-        />
+        <div v-if="storeCompanyId">
+          <p class="m-0">Select Company</p>
+          <q-select
+            v-model="selectedCompany"
+            :options="companies"
+            option-value="id"
+            option-label="name"
+            emit-value
+            map-options
+          />
+        </div>
+        <div v-if="storeGardenId">
+          <p class="m-0">Select Garden</p>
+          <q-select
+            v-model="selectedGarden"
+            :options="gardens"
+            option-value="id"
+            option-label="name"
+            emit-value
+            map-options
+          />
+        </div>
       </q-card-section>
 
       <q-card-actions align="right">
@@ -105,7 +109,7 @@ async function logoutUser(): Promise<void> {
 }
 
 watch(selectedCompany, async (newSelectedCompany, oldSelectedCompany) => {
-  if (newSelectedCompany != oldSelectedCompany) {
+  if (storeCompanyId.value && newSelectedCompany != oldSelectedCompany) {
     gardens.value = await gardenStore().loadGardens(newSelectedCompany);
 
     if (gardens.value[0]) {
@@ -115,11 +119,18 @@ watch(selectedCompany, async (newSelectedCompany, oldSelectedCompany) => {
 });
 
 async function openAdministration(): Promise<void> {
-  if (!storeCompanyId.value) return;
+  if (!storeCompanyId.value && !storeGardenId.value) return;
 
-  if (selectedGarden.value) {
+  if (storeGardenId.value) {
     selectedGarden.value = storeGardenId.value;
-    gardens.value = await gardenStore().loadGardens(storeCompanyId.value);
+    if (storeCompanyId.value) {
+      gardens.value = await gardenStore().loadGardens(storeCompanyId.value);
+    } else {
+      gardens.value = await gardenStore().loadUserGardens();
+      if (gardens.value[0]) {
+        selectedGarden.value = gardens.value[0].id;
+      }
+    }
   }
 
   selectedCompany.value = storeCompanyId.value;
@@ -127,13 +138,15 @@ async function openAdministration(): Promise<void> {
 }
 
 async function setCompanyAndGarden(): Promise<void> {
-  if (!selectedCompany.value) return;
+  if (selectedCompany.value) {
+    companyStore().setSelectedCompany(selectedCompany.value);
+  }
 
-  companyStore().setSelectedCompany(selectedCompany.value);
-
-  if (!selectedGarden.value) return;
-
-  gardenStore().setSelectedGarden(selectedGarden.value);
-  gardenStore().loadDataFromApi(selectedCompany.value);
+  if (selectedGarden.value) {
+    gardenStore().setSelectedGarden(selectedGarden.value);
+    if (selectedCompany.value) {
+      gardenStore().loadDataFromApi(selectedCompany.value);
+    }
+  }
 }
 </script>

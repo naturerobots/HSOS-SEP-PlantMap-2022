@@ -114,13 +114,19 @@ export const userStore = defineStore({
       username?: string | undefined,
       password?: string | undefined
     ): Promise<boolean> {
-      await editUser(firstName, lastName, username, password);
+      if (!(await editUser(firstName, lastName, username, password)))
+        return false;
+
+      this.user.first_name = firstName ? firstName : this.user.first_name;
+      this.user.last_name = lastName ? lastName : this.user.last_name;
+      this.user.username = username ? username : this.user.username;
       return true;
     },
     async saveWidgets(): Promise<boolean> {
       return await postWidgets(this.settings.widgetOptions);
     },
     async disposeStore(): Promise<void> {
+      this.$reset();
       this.$dispose();
     },
   },

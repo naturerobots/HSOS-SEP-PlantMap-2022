@@ -75,7 +75,14 @@ async function login(): Promise<void> {
       }
     } else {
       companyStore().setSelectedCompany(undefined);
-      gardenStore().setSelectedGarden(undefined);
+      await gardenStore().loadUserGardens();
+      const gardenId = storeToRefs(gardenStore()).getGardens?.value[0]?.id;
+      if (gardenId) {
+        gardenStore().setSelectedGarden(gardenId);
+        await gardenStore().loadSelectedGardenImg(companyId);
+      } else {
+        gardenStore().setSelectedGarden(undefined);
+      }
     }
 
     router.push({ path: "/" });

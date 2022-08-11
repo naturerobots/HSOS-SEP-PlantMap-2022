@@ -4,6 +4,7 @@ import {
   deleteGarden,
   getGardenImg,
   getGardens,
+  getUserGardens,
   postGardenImg,
 } from "@/services/gardenApi";
 import type { GardenImage } from "@/types/gardenImage";
@@ -49,6 +50,13 @@ export const gardenStore = defineStore({
       const response = await getGardens(companyId);
       if (response) {
         return response;
+      }
+    },
+    async loadUserGardens(): Promise<Garden[] | undefined> {
+      const response = await getUserGardens();
+      if (response) {
+        this.gardens = response;
+        return this.gardens;
       }
     },
     setSelectedGarden(gardenId: number | undefined): void {
@@ -114,6 +122,7 @@ export const gardenStore = defineStore({
       }
     },
     async disposeStore(): Promise<void> {
+      this.resetStore();
       this.$dispose();
     },
     async resetStore(): Promise<void> {

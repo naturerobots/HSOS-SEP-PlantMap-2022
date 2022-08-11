@@ -113,3 +113,20 @@ export async function deleteGarden(
       return false;
     });
 }
+
+export async function getUserGardens(): Promise<Garden[] | undefined> {
+  return await axios
+    .get<Garden[]>(baseURL + "/gardens", {
+      headers: {
+        Authorization: "Token " + storeToRefs(userStore()).getToken.value.token,
+      },
+    })
+    .then(function (response): Garden[] | undefined {
+      if (response.data.length <= 0) return undefined;
+
+      return response.data;
+    })
+    .catch(function (): undefined {
+      return undefined;
+    });
+}

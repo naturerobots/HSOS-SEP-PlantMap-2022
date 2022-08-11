@@ -34,6 +34,7 @@ export const companyStore = defineStore({
       this.selectedCompany = companyId;
     },
     async disposeStore(): Promise<void> {
+      this.$reset();
       this.$dispose();
     },
     async deleteCompany(companyId: number): Promise<boolean> {
