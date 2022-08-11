@@ -12,5 +12,4 @@ project:
 - <https://code.visualstudio.com/docs/remote/containers>
 - <https://code.visualstudio.com/docs/remote/create-dev-container>
 - <https://code.visualstudio.com/docs/remote/containers-advanced>
-- <https://code.visualstudio.com/docs/remote/containers-advanced#_developing-inside-a-container-on-a-remote-docker-host>
 - <https://code.visualstudio.com/docs/remote/devcontainerjson-reference>
