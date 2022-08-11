@@ -1,68 +1,79 @@
 <template>
   <base-layout title="Settings">
-    <div class="p-4 max-w-lg">
-      <div class="grid grid-cols-4 gap-4 place-items-stretch">
-        <div class="col-span-4 space-y-2">
-          <label class="font-bold text-black"> First Name </label>
-          <input
-            v-model="firstName"
-            class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-            type="text"
-            placeholder="Enter First Name"
-          />
+    <div class="p-4 grid grid-cols-6 gap-4">
+      <div class="col-span-2">
+        <div class="grid grid-cols-4 gap-4 place-items-stretch">
+          <div class="col-span-4 space-y-2">
+            <label class="font-bold text-black"> First Name </label>
+            <input
+              v-model="firstName"
+              class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+              type="text"
+              placeholder="Enter First Name"
+            />
+          </div>
+          <div class="col-span-4 space-y-2">
+            <label class="font-bold text-black"> Last Name </label>
+            <input
+              v-model="lastName"
+              class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+              type="text"
+              placeholder="Enter Last Name"
+            />
+          </div>
+          <div class="col-span-4 space-y-2">
+            <label class="font-bold text-black"> Email </label>
+            <input
+              v-model="email"
+              class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+              type="email"
+              placeholder="Enter Email Address"
+            />
+          </div>
+          <div class="col-span-4 space-y-2">
+            <label class="font-bold text-black"> Password </label>
+            <input
+              v-model="password"
+              class="w-full content-center text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+              type="text"
+              placeholder="Password"
+            />
+          </div>
+          <div class="col-span-4 space-y-2 pt-3">
+            <button
+              type="submit"
+              class="w-full flex justify-center bg-primary text-white p-3 rounded-full tracking-wide font-bold shadow-lg"
+              @click="changeUserDetails()"
+            >
+              Save
+            </button>
+          </div>
+          <div class="col-span-4 space-y-2 pt-3">
+            <button
+              type="submit"
+              class="w-full flex justify-center outline outline-1 outline-danger hover:text-white transition ease-in-out duration-300 text-[#FFA6A6] hover:bg-danger p-3 rounded-full tracking-wide font-bold shadow-lg"
+              @click="deleteGarden()"
+            >
+              Delete current garden
+            </button>
+            <button
+              type="submit"
+              class="w-full flex justify-center outline outline-1 outline-danger hover:text-white transition ease-in-out duration-300 text-[#FFA6A6] hover:bg-danger p-3 rounded-full tracking-wide font-bold shadow-lg"
+              @click="deleteCompany()"
+            >
+              Delete current Company
+            </button>
+          </div>
         </div>
-        <div class="col-span-4 space-y-2">
-          <label class="font-bold text-black"> Last Name </label>
-          <input
-            v-model="lastName"
-            class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-            type="text"
-            placeholder="Enter Last Name"
-          />
-        </div>
-        <div class="col-span-4 space-y-2">
-          <label class="font-bold text-black"> Email </label>
-          <input
-            v-model="email"
-            class="w-full text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-            type="email"
-            placeholder="Enter Email Address"
-          />
-        </div>
-        <div class="col-span-4 space-y-2">
-          <label class="font-bold text-black"> Password </label>
-          <input
-            v-model="password"
-            class="w-full content-center text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-            type="text"
-            placeholder="Password"
-          />
-        </div>
-        <div class="col-span-4 space-y-2 pt-3">
-          <button
-            type="submit"
-            class="w-full flex justify-center bg-primary text-white p-3 rounded-full tracking-wide font-bold shadow-lg"
-            @click="changeUserDetails()"
-          >
-            Save
-          </button>
-        </div>
-        <div class="col-span-4 space-y-2 pt-3">
-          <button
-            type="submit"
-            class="w-full flex justify-center outline outline-1 outline-danger hover:text-white transition ease-in-out duration-300 text-[#FFA6A6] hover:bg-danger p-3 rounded-full tracking-wide font-bold shadow-lg"
-            @click="deleteGarden()"
-          >
-            Delete current garden
-          </button>
-          <button
-            type="submit"
-            class="w-full flex justify-center outline outline-1 outline-danger hover:text-white transition ease-in-out duration-300 text-[#FFA6A6] hover:bg-danger p-3 rounded-full tracking-wide font-bold shadow-lg"
-            @click="deleteCompany()"
-          >
-            Delete current Company
-          </button>
-        </div>
+      </div>
+      <div>
+        <button
+          type="submit"
+          class="w-full flex justify-center outline outline-1 outline-primary hover:text-white transition ease-in-out duration-300 text-[#79b729] hover:bg-primary p-3 rounded-full tracking-wide font-bold shadow-lg"
+          @click="repositionGardenImage()"
+        >
+          Reposition garden image
+        </button>
       </div>
     </div>
   </base-layout>
@@ -76,7 +87,9 @@ import { userStore } from "@/stores/userStore";
 import { companyStore } from "@/stores/companyStore";
 import { gardenStore } from "@/stores/gardenStore";
 import type { User } from "@/types/user";
+import { useRouter, type Router } from "vue-router";
 
+const router: Router = useRouter();
 const email: Ref<string | undefined> = ref<string>();
 const password: Ref<string | undefined> = ref<string>();
 const firstName: Ref<string | undefined> = ref<string>();
@@ -96,6 +109,10 @@ onMounted(() => {
   lastName.value = user.value.last_name;
   email.value = user.value.username;
 });
+
+function repositionGardenImage(): void {
+  router.push({ path: "/cropimage" });
+}
 
 async function changeUserDetails(): Promise<void> {
   userStore().editUser(
