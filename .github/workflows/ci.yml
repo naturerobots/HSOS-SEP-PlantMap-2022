@@ -91,6 +91,19 @@ jobs:
   build-code:
     needs: [build-docker, create-ids]
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: github_actions
+        ports:
+          - 5432:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
     container:
       image: ${{ needs.create-ids.outputs.image_id }}:${{ needs.create-ids.outputs.version }}
       options: --user docker --workdir /PlantMap
@@ -98,12 +111,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Build workspace
-      - name: Build the proto files
+      # Run migrations
+      - name: Run migrations
         run: |
-          mkdir -p build/gRPC
-          python3 -m grpc_tools.protoc -I=protobuf-msgs --python_out=build/gRPC --grpc_python_out=build/gRPC protobuf-msgs/*
-        shell: bash
+          cd django
+          python3 manage.py migrate
 
       # Build vue frontend
       - name: Build vue
@@ -111,6 +123,13 @@ jobs:
           cd vue
           npm ci
           npm run build
+        shell: bash
+
+      # Build python classes from protobuf files
+      - name: Build the proto files
+        run: |
+          mkdir -p build/gRPC
+          python3 -m grpc_tools.protoc -I=protobuf-msgs --python_out=build/gRPC --grpc_python_out=build/gRPC protobuf-msgs/*
         shell: bash
 
       # Run pre-commit checks

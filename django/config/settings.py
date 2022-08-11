@@ -91,6 +91,18 @@ DATABASES = {
     }
 }
 
+if os.environ.get('GITHUB_WORKFLOW'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'github_actions',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
+        }
+    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -157,13 +169,13 @@ LOGGING = {
         'debugFile': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': './storage/logs/django/debug.log',
+            'filename': './storage/logs/debug.log',
             'formatter': 'extended',
         },
         'infoFile': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
-            'filename': './storage/logs/django/info.log',
+            'filename': './storage/logs/info.log',
             'formatter': 'extended',
         },
         'console': {'level': 'INFO', 'class': 'logging.StreamHandler', 'formatter': 'simple'},
