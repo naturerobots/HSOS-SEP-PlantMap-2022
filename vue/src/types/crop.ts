@@ -12,5 +12,5 @@ export interface Crop {
   harvest: string;
   yield: string;
   health: Health[];
-  // plant_coords: Coords;
+  plant_coords: Coords;
 }

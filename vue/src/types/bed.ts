@@ -9,5 +9,5 @@ export interface Bed {
   harvest: string;
   yield: string;
   health: Health[];
-  //plant_coords
+  plant_coords: L.LatLng[];
 }

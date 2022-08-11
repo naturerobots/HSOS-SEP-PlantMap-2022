@@ -42,9 +42,9 @@ export async function loadBeds(): Promise<boolean> {
       if (chunk) {
         console.log(Utf8ArrayToStr(chunk));
         const json = JSON.parse(Utf8ArrayToStr(chunk));
-        console.log(json);
+        //console.log(json);
         beds.beds.push(json);
-        console.log(beds);
+        //console.log(beds);
         bedStore().setBed(json);
       }
     }

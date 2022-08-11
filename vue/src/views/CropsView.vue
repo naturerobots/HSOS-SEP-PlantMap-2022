@@ -25,13 +25,7 @@
         v-if="beds.beds && storeOptions.indexOf('crops-map') > -1"
         class="col-4 pl-2"
       >
-        <crops-map
-          ref="cropsMapRef"
-          :beds="beds"
-          @polygon-enter="mapCropsEnter"
-          @polygon-leave="mapCropsLeave"
-          @polygon-click="mapCropsClick"
-        ></crops-map>
+        <crops-map ref="cropsMapRef" :beds="beds"></crops-map>
       </div>
     </div>
   </base-layout>
@@ -62,8 +56,7 @@ const widgetOptionsCrops: WidgetOption[] = [
 ];
 
 // onMounted(() => {
-//   console.log("onMounted");
-//   cropsStore().loadDataFromApi();
+//   bedStore().loadDataFromApi();
 // });
 
 onMounted(() => {
@@ -98,31 +91,33 @@ let colsCropsTable: string[] = [
 ];
 
 const beds: Ref<Beds> = storeToRefs(bedStore()).getBeds;
+const plants: Ref<Plants> = storeToRefs(cropsStore()).getCrops;
+
 const cropsMapRef = ref<InstanceType<typeof CropsMap> | null>(null);
 const cropsTableRef = ref<InstanceType<typeof CropsTable> | null>(null);
 
 // Table - Map interaction
-function mapCropsEnter(cropsId: number): void {
-  cropsTableRef.value?.setRowActive(cropsId);
-}
+// function mapCropsEnter(cropsId: number): void {
+//   cropsTableRef.value?.setRowActive(cropsId);
+// }
 
-function mapCropsLeave(cropsId: number): void {
-  cropsTableRef.value?.setRowInactive(cropsId);
-}
+// function mapCropsLeave(cropsId: number): void {
+//   cropsTableRef.value?.setRowInactive(cropsId);
+// }
 
-function mapCropsClick(cropsId: number): void {
-  cropsTableRef.value?.setRowClicked(cropsId);
-}
+// function mapCropsClick(cropsId: number): void {
+//   cropsTableRef.value?.setRowClicked(cropsId);
+// }
 
-function tableCropsEnter(cropsId: number): void {
-  cropsMapRef.value?.setPolygonActive(cropsId);
-}
+// function tableCropsEnter(cropsId: number): void {
+//   cropsMapRef.value?.setPolygonActive(cropsId);
+// }
 
-function tableCropsLeave(cropsId: number): void {
-  cropsMapRef.value?.setPolygonInactive(cropsId);
-}
+// function tableCropsLeave(cropsId: number): void {
+//   cropsMapRef.value?.setPolygonInactive(cropsId);
+// }
 
-function tableCropsClick(cropsId: number): void {
-  cropsMapRef.value?.setPolygonClicked(cropsId);
-}
+// function tableCropsClick(cropsId: number): void {
+//   cropsMapRef.value?.setPolygonClicked(cropsId);
+// }
 </script>
