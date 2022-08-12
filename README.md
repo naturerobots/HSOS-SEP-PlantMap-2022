@@ -45,13 +45,11 @@ SOFTWARE.
 
 ## Table of Contents
 
-- [README](#readme)
-  - [Table of Contents](#table-of-contents)
-  - [General](#general)
-  - [Quick Start](#quick-start)
-  - [Documentation](#documentation)
-  - [Contributing](#contributing)
-  - [License](#license)
+- [General](#general)
+- [Quick Start](#quick-start)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## General
 
@@ -59,8 +57,8 @@ This project was developed in the software engineering course of the [University
 of Applied Sciences Osnabrück](https://www.hs-osnabrueck.de/en/) in cooperation
 with [Nature Robots](https://naturerobots.de/) and the [DFKI PBR
 Osnabrück](https://www.dfki.de/web/forschung/forschungsbereiche/planbasierte-robotersteuerung).
-The goal was to create  a platform to support sustainable micro farming
-gardeners. Mirco farming focus on  the preservation and regeneration of the
+The goal was to create a platform to support sustainable micro farming
+gardeners. Mirco farming focus on the preservation and regeneration of the
 entire ecosystem, as well as on soil fertility. In this process, up to fifty
 different types of vegetables are cultivated close to each other in narrow
 culture strips.  
@@ -100,8 +98,7 @@ To get started, clone the repository and open it in Visual Studio Code:
 Next, we need to mount the current workspace into the projects docker container
 to use it as a preconfigured development environment. For that, you can press
 `F1` or `CTRL+SHIFT+P` and enter `Remote-Containers: Reopen Folder in Container`
-and confirm with `ENTER`. Often there is a notification in the bottom right
-corner with the same option. Now the [docker
+and confirm with `ENTER`. Visual Studio Code additionally shows a notification after opening the project in the bottom right corner with the same option. Now the [docker
 image](https://github.com/naturerobots/HSOS-SEP-PlantMap-2022/pkgs/container/plant-map-digital-logbook)
 of the project along with the images for the
 [PostgreSQL](https://www.postgresql.org/) database and the
