@@ -95,7 +95,7 @@ jobs:
 
     container:
       image: ${{ needs.create-ids.outputs.image_id }}:${{ needs.create-ids.outputs.version }}
-      options: --user docker --workdir /workdir/
+      options: --user docker --workdir /workdir
 
     services:
       postgres:
@@ -117,14 +117,16 @@ jobs:
         run: |
           mkdir -p build/gRPC
           python3 -m grpc_tools.protoc -I=protobuf-msgs --python_out=build/gRPC --grpc_python_out=build/gRPC protobuf-msgs/*
-          export PYTHONPATH=$PYTHONPATH:build/gRPC
         shell: bash
 
       # Run migrations
       - name: Run migrations
+        env:
+          PYTHONPATH: ../build/gRPC
         run: |
           cd django
           python3 manage.py migrate
+        shell: bash
 
       # Build vue frontend
       - name: Build vue
