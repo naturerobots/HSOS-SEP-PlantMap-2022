@@ -45,11 +45,13 @@ SOFTWARE.
 
 ## Table of Contents
 
-- [General](#general)
-- [Quick Start](#quick-start)
-- [Documentation](#documentation)
-- [Contributing](#contributing)
-- [License](#license)
+- [README](#readme)
+  - [Table of Contents](#table-of-contents)
+  - [General](#general)
+  - [Quick Start](#quick-start)
+  - [Documentation](#documentation)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 ## General
 
@@ -98,11 +100,13 @@ To get started, clone the repository and open it in Visual Studio Code:
 Next, we need to mount the current workspace into the projects docker container
 to use it as a preconfigured development environment. For that, you can press
 `F1` or `CTRL+SHIFT+P` and enter `Remote-Containers: Reopen Folder in Container`
-and confirm with `ENTER`. Visual Studio Code additionally shows a notification after opening the project in the bottom right corner with the same option. Now the [docker
+and confirm with `ENTER`. Visual Studio Code additionally shows a notification
+after opening the project in the bottom right corner with the same option. Now
+the [docker
 image](https://github.com/naturerobots/HSOS-SEP-PlantMap-2022/pkgs/container/plant-map-digital-logbook)
 of the project along with the images for the
-[PostgreSQL](https://www.postgresql.org/) database and the
-[RabbitMQ](https://www.rabbitmq.com/) message broker are downloaded.
+ [PostgreSQL](https://www.postgresql.org/) database and the
+ [RabbitMQ](https://www.rabbitmq.com/) message broker are downloaded.
  Additionally, the set-up of all required packages and extensions is handled.
 
 The default user for the container is:
