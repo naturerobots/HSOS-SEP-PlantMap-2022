@@ -117,7 +117,7 @@ def getBeds(request, company_id: int, garden_id: int):
 
                         if pcoords is not None:
                             (lat, lon, h) = pcoords
-                            plant_coords.append({"lat": lat, "lon": lon})
+                            plant_coords.append({"lat": lat, "lon": lon, "plant_id": plant.uuid})
                         else:
                             plys_missing = True
 
