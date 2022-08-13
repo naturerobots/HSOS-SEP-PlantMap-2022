@@ -117,7 +117,7 @@ def getBeds(request, company_id: int, garden_id: int):
 
                         if pcoords is not None:
                             (lat, lon, h) = pcoords
-                            plant_coords.append({"lat": lat, "lon": lon})
+                            plant_coords.append({"lat": lat, "lon": lon, "plant_id": plant.uuid})
                         else:
                             plys_missing = True
 
@@ -189,6 +189,10 @@ def getBeds(request, company_id: int, garden_id: int):
                 'plants-resource', kwargs={'company_id': company_id, 'garden_id': garden_id, 'bed_id': bed.id}
             )
 
+            if len(plant_coords) > 0:
+                avg_plant_lat = float(sum(i['lat'] for i in plant_coords)) / len(plant_coords)
+                avg_plant_lon = float(sum(i['lon'] for i in plant_coords)) / len(plant_coords)
+
             data = json.dumps(
                 {
                     "id": bed.id,
@@ -200,6 +204,8 @@ def getBeds(request, company_id: int, garden_id: int):
                     "yield": pyield,
                     "health": phealth,
                     "plant_coords": plant_coords,
+                    "avg_plant_lat": avg_plant_lat,
+                    "avg_plant_lon": avg_plant_lon,
                 }
             )
 
