@@ -33,6 +33,8 @@ const props = withDefaults(
 defineExpose({
   addTileLayer,
   addMarker,
+  addLayerGroup,
+  removeLayerGroup,
   addPolygon,
   setView,
   addGardenImage,
@@ -73,7 +75,7 @@ onMounted(() => {
     "https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v9/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibHNpZWJlbHMiLCJhIjoiY2wxdno3d2E0Mnh4ZDNqcXJzbHlqeWZoMCJ9.KXbrKH7ESK2qu28olSw6sQ",
     {
       maxNativeZoom: 19,
-      minZoom: 19,
+      //minZoom: 19,
       maxZoom: props.maxZoom,
     }
   ).addTo(leafletMap);
@@ -109,12 +111,47 @@ function addMarker(marker: L.Marker): void {
   marker.addTo(leafletMap);
 }
 
+function addLayerGroup(
+  markers: L.LayerGroup,
+  topRight: L.LatLng | undefined,
+  bottomLeft: L.LatLng | undefined
+): void {
+  markers.addTo(leafletMap);
+
+  if (topRight && bottomLeft) {
+    const bounds = L.latLngBounds(
+      new L.LatLng(topRight.lat, topRight.lng),
+      new L.LatLng(bottomLeft.lat, bottomLeft.lng)
+    );
+    leafletMap.fitBounds(bounds, { animate: true });
+  } else {
+    if (gardenImage) {
+      var coordTopRight = gardenImage.coordinates.find(
+        (coord) => coord.name === "top_right"
+      );
+      var coordBottomLeft = gardenImage.coordinates.find(
+        (coord) => coord.name === "bottom_left"
+      );
+
+      const bounds = L.latLngBounds(
+        new L.LatLng(coordTopRight!.latitude, coordTopRight!.longitude),
+        new L.LatLng(coordBottomLeft!.latitude, coordBottomLeft!.longitude)
+      );
+      leafletMap.fitBounds(bounds, { animate: true });
+    }
+  }
+}
+
+function removeLayerGroup(markers: L.LayerGroup): void {
+  markers.removeFrom(leafletMap);
+}
+
 function addPolygon(polygon: L.Polygon): void {
   polygon.addTo(leafletMap);
 }
 
-function setView(latlng: L.LatLng, zoom: number): void {
-  leafletMap.setView(latlng, zoom);
+function setView(coords: L.LatLng, zoom: number): void {
+  leafletMap.setView(coords, zoom);
 }
 
 function addGardenImage(updatedGardenImage: GardenImage): void {

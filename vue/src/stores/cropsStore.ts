@@ -19,28 +19,18 @@ export const cropsStore = defineStore({
   },
   actions: {
     async loadDataFromApi(plantsUrl: string): Promise<void> {
-      // const cropsData = localStorage.getItem("crops");
       this.isLoading = true;
-      this.crops.plants = [];
-
-      //The data is loaded from the local memory if it exists there.
-      //To refresh the data, the local memory must be deleted.
-
-      // if (cropsData) {
-      //   this.crops = JSON.parse(cropsData);
-      // } else {
-      //   this.crops = await getCrops(plantsUrl);
-      //   localStorage.setItem("crops", JSON.stringify(this.crops));
-      // }
-
-      this.crops = await getCrops(plantsUrl);
-      if (this.crops) {
+      this.crops.plants = (await getCrops(plantsUrl)).plants;
+      if (this.crops.plants.length > 0) {
         this.isLoading = false;
       }
-      // localStorage.setItem("crops", JSON.stringify(this.crops));
     },
     setCrops(crops: Crop[]) {
-      this.crops.crops = crops;
+      this.crops.plants = crops;
+    },
+    resetCrops() {
+      this.crops.plants.length = 0;
+      this.crops.plants = [];
     },
   },
 });

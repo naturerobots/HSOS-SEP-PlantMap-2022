@@ -2,7 +2,7 @@ import type { Coords } from "./coords";
 import type { Health } from "./health";
 
 export interface Crop {
-  id: number;
+  id: string;
   bed_id: number;
   plant: string;
   variety: string;

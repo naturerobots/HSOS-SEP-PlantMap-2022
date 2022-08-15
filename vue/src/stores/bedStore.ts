@@ -19,19 +19,18 @@ export const bedStore = defineStore({
       return state.selectedBed;
     },
     getSelectedBed(state): Bed | undefined {
-      console.log("selected Bed Id: " + state.selectedBed);
-      let bedtmp = {} as Bed;
+      let bedTmp = {} as Bed;
       state.beds.beds.forEach(function (bed) {
-        console.log("Bed Id for: " + bed.id);
-        console.log(bed.id == state.selectedBed);
+        //console.log("Bed Id for: " + bed.id);
+        //console.log(bed.id == state.selectedBed);
         if (bed.id == state.selectedBed) {
           //console.log("for");
-          bedtmp = bed;
+          bedTmp = bed;
           return bed;
         }
       });
       //console.log("bedtmp " + bedtmp.id);
-      return bedtmp;
+      return bedTmp;
     },
     getIsLoading(state): boolean | undefined {
       return state.isLoading;
@@ -40,7 +39,6 @@ export const bedStore = defineStore({
   actions: {
     async loadDataFromApi(): Promise<void> {
       // const bedData = localStorage.getItem("beds");
-      console.log("LOAD");
       this.isLoading = true;
       this.beds.beds = [];
       //The data is loaded from the local memory if it exists there.

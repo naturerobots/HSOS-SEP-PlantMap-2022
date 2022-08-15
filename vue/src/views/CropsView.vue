@@ -16,25 +16,29 @@
           :beds="beds"
           :visibleColumnsBeds="colsBedTable"
           :visibleColumnsCrops="colsCropsTable"
-          @row-enter="tableCropsEnter"
-          @row-leave="tableCropsLeave"
-          @row-click="tableCropsClick"
         ></crops-table>
       </div>
       <div
         v-if="beds.beds && storeOptions.indexOf('crops-map') > -1"
         class="col-4 pl-2"
       >
-        <crops-map ref="cropsMapRef" :beds="beds"></crops-map>
+        <crops-map
+          ref="cropsMapRef"
+          :beds="beds"
+          :plants="plants"
+          @bed-click="mapCropsClick"
+          @bed-enter="mapCropsEnter"
+          @bed-leave="mapCropsLeave"
+        >
+        </crops-map>
       </div>
     </div>
   </base-layout>
 </template>
 
 <script setup lang="ts">
-import { type Ref, ref, onMounted } from "vue";
+import { type Ref, ref } from "vue";
 import { storeToRefs } from "pinia";
-import { cropsStore } from "@/stores/cropsStore";
 import { userStore } from "@/stores/userStore";
 import {
   widgetOptions,
@@ -44,28 +48,18 @@ import {
 import CropsTable from "@/components/table/CropsTable.vue";
 import CropsMap from "@/components/map/CropsMap.vue";
 import BaseLayout from "@/components/layout/BaseLayout.vue";
-import type { Crop } from "@/types/crop";
-import type { Plants } from "@/types/plants";
 import { bedStore } from "@/stores/bedStore";
-import type { Bed } from "@/types/bed";
 import type { Beds } from "@/types/beds";
+import { cropsStore } from "@/stores/cropsStore";
+import type { Plants } from "@/types/plants";
 const storeOptions: Ref<StoreOption[]> = storeToRefs(userStore()).getOptions;
 const widgetOptionsCrops: WidgetOption[] = [
   widgetOptions.cropsTable,
   widgetOptions.cropsMap,
 ];
 
-// onMounted(() => {
-//   bedStore().loadDataFromApi();
-// });
-
-onMounted(() => {
-  console.log("onMounted");
-  bedStore().loadDataFromApi();
-});
-
 let colsBedTable: string[] = [
-  // "id",
+  //"id",
   "plant",
   "location",
   "variety",
@@ -78,7 +72,7 @@ let colsBedTable: string[] = [
 ];
 
 let colsCropsTable: string[] = [
-  // "id",
+  //"id",
   "plant",
   // "location",
   "variety",
@@ -97,17 +91,18 @@ const cropsMapRef = ref<InstanceType<typeof CropsMap> | null>(null);
 const cropsTableRef = ref<InstanceType<typeof CropsTable> | null>(null);
 
 // Table - Map interaction
-// function mapCropsEnter(cropsId: number): void {
-//   cropsTableRef.value?.setRowActive(cropsId);
-// }
+function mapCropsEnter(bedId: number): void {
+  cropsTableRef.value?.setRowActive(bedId);
+}
 
-// function mapCropsLeave(cropsId: number): void {
-//   cropsTableRef.value?.setRowInactive(cropsId);
-// }
+function mapCropsLeave(bedId: number): void {
+  cropsTableRef.value?.setRowInactive(bedId);
+}
 
-// function mapCropsClick(cropsId: number): void {
-//   cropsTableRef.value?.setRowClicked(cropsId);
-// }
+function mapCropsClick(bedId: number): void {
+  //cropsStore().loadDataFromApi(bedId);
+  cropsTableRef.value?.setRowClicked(bedId);
+}
 
 // function tableCropsEnter(cropsId: number): void {
 //   cropsMapRef.value?.setPolygonActive(cropsId);

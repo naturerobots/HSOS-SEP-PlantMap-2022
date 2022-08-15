@@ -1,5 +1,5 @@
+import type { Coords } from "./coords";
 import type { Health } from "./health";
-
 export interface Bed {
   id: number;
   plant: string;
@@ -9,5 +9,7 @@ export interface Bed {
   harvest: string;
   yield: string;
   health: Health[];
-  plant_coords: L.LatLng[];
+  plant_coords: Coords[];
+  avg_plant_lat: number;
+  avg_plant_lon: number;
 }
