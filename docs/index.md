@@ -50,7 +50,7 @@ With the development of the **PlantMap Digital Logbook** we want to tackle some
 of the existing problems, when switching to or running an environment friendly garden.
 
 <figure markdown>
-  ![Grööntüügs Ibbenbüren](imgs/mirco-farming-garden.jpg)
+  ![Grööntüügs Ibbenbüren](imgs/mirco-farming-garden.jpg){width=700px}
   <figcaption> Grööntüügs Ibbenbüren </figcaption>
 </figure>
 

@@ -26,7 +26,7 @@ dedicated to explaining them individually.
    location and semantic.
 
     <figure markdown>
-    ![Grööntüügs Ibbenbüren](imgs/concept.png)
+    ![project-overview](imgs/project-overview.png)
         <figcaption> Overview of the complete process from the data recording to displaying them in the web-application </figcaption>
     </figure>
 
