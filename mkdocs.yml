@@ -1,7 +1,10 @@
-site_name: PlantMap Documentation
+site_name: PlantMap Digital Logbook
 repo_url: https://github.com/naturerobots/HSOS-SEP-PlantMap-2022
+edit_uri: edit/main/docs/
 nav:
-  - Home: index.md
+  - Home:
+      - Introduction: index.md
+      - Project Overview: concept.md
   - Getting started:
       - Installation: "getting-started/installation.md"
       - Tutorials: "getting-started/tutorials.md"
@@ -16,7 +19,7 @@ nav:
           - Permission System: "reference/permissions.md"
       - Env Variables: "reference/env-vars.md"
       - Architecture: "reference/architecture.md"
-      - Definitions: "reference/definitions.md"
+      - Terminology: "reference/terminology.md"
 theme:
   name: material
   language: en
@@ -28,6 +31,8 @@ theme:
     - navigation.tracking
     - navigation.sections
     - navigation.tabs
+    - navigation.top
+    - navigation.instant
 extra_css:
   - stylesheets/extra.css
 markdown_extensions:
@@ -38,7 +43,14 @@ markdown_extensions:
   - pymdownx.superfences
   - meta
   - attr_list
+  - md_in_html
   - toc:
       permalink: "#"
   - pymdownx.striphtml:
       strip_comments: true #default
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - footnotes
+plugins:
+  - glightbox
