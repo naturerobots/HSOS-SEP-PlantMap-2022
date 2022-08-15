@@ -1,6 +1,6 @@
 # Home :house_with_garden:
 
-This page provides general information about the project, as well as context, to
+This page provides general information about the project, as well as context, too
 better understand the problems it tries to solve.
 
 This project was developed by students from the [University of Applied
@@ -12,16 +12,16 @@ Osnabrück](https://www.dfki.de/web/forschung/forschungsbereiche/planbasierte-ro
 ## Current Problems In Agriculture :tractor:
 
 The current industrial agriculture has a couple of different problems, that have
-an **impact on all of us**. First it is responsible for one quarter of the
-world's greenhouse gas emissions[^1]. Second the destruction of the Earths
-ecosystem resulting in substantial loss in biodiversity. Biodiversity describes
+an **impact on all of us**. First, it is responsible for one quarter of the
+world's greenhouse gas emissions[^1]. Second, the destruction of the Earths
+ecosystem, resulting in substantial loss in biodiversity. Biodiversity describes
 the variety of living species on Earth[^2], including plants, animals and
 others. Due to the highly international market for agricultural products,
-farmers try to optimizes for yields and income. This results in huge areas that
+farmers try to optimize for yields and income. This results in huge areas which
 are optimized for machines, rather than small animals and wild plants.
-Additionally the use of artificial fertilizer and pesticides, harm small insects
+Additionally, the use of artificial fertilizer and pesticides, harm small insects
 on the ground and in the air. A study from 2017 showed a 75% decline of the
-flying insect biomass in protected areas in germany[^3]. In conclusion, **we have to
+flying insect biomass in protected areas in Germany[^3]. In conclusion, **we have to
 change something** to preserve our Earth.
 
 ## Microfarming :seedling:
@@ -30,11 +30,10 @@ One possible solution could be mircofarming. Microfarming describes the use off
 small agricultural areas for the cultivation and sale of vegetables, which does
 not require large machinery. It focuses and the on the preservation and
 regeneration of the entire ecosystem by using mulch in combination with minimal
-tillage[^4]. Low investment costs and relatively high crop yields per cultivated
-area compared to conventional cultivation make it **competitive against
-conventional farming**. One example for a mircofarming garden is grööntüügs[^5]
-(lower germany for greenery) from Ibbenbüren a drone picture of their garden can
-be found below.
+tillage[^4]. Low investment costs and relatively high crop yields make it
+**competitive against conventional farming**. One example for a mircofarming
+garden is grööntüügs[^5] (lower German for greenery) from Ibbenbüren a drone
+picture of their garden can be found below.
 
 But there are some **hurdles to overcome** when starting or running a
 mircofarming garden:
@@ -42,9 +41,9 @@ mircofarming garden:
 - The management of the cultivation, crop rotations and work planning can be
   complex and can often lead to the fact that newcomers are not able to be
   economically profitable.
-- Scaling up the garden is often not possible due to the huge amount of time it
-  takes to monitor the plants manually.
-- Very little tools to support gardeners in their work (hardware and software).
+- Scaling up the garden is often not possible due to the amount of time
+  needed to monitor the plants manually.
+- Very little tools to support gardeners in their work (hardware and software wise).
 
 With the development of the **PlantMap Digital Logbook** we want to tackle some
 of the existing problems, when switching to or running an environment friendly garden.
@@ -66,7 +65,7 @@ have a look at [project overview](./concept.md) or the
   current status. It should also be possible to have multiple gardens in
   different locations.
 - Provide an overview of all beds and plants in a garden.
-- Add notifications for warnings e.g when the plants need water or a disease is detected.
+- Add notifications for warnings, e.g when the plants need water or a disease is detected.
 - Possibility to view recorded point clouds of individual beds.
 - Provide a user management, so that employees and admins can be assigned to a garden.
 
