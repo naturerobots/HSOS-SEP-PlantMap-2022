@@ -343,14 +343,16 @@ function getShortcut(healthType: string): string {
 
 function getRowByBedId(bedId: number): HTMLTableRowElement | undefined {
   const tableValue: any = table.value;
-  const filteredSortedRows = tableValue.filteredSortedRows;
-  if (table.value?.rows?.length) {
-    for (let i = 0; i < table.value.rows.length; i++) {
-      if (bedId == table.value.rows[i].id) {
-        const rowIndex = filteredSortedRows.indexOf(table.value.rows[i]);
-        return document
-          .getElementsByClassName("q-table")[0]
-          .getElementsByTagName("tr")[rowIndex + 2];
+  if (tableValue) {
+    const filteredSortedRows = tableValue.filteredSortedRows;
+    if (table.value?.rows?.length) {
+      for (let i = 0; i < table.value.rows.length; i++) {
+        if (bedId == table.value.rows[i].id) {
+          const rowIndex = filteredSortedRows.indexOf(table.value.rows[i]);
+          return document
+            .getElementsByClassName("q-table")[0]
+            .getElementsByTagName("tr")[rowIndex + 2];
+        }
       }
     }
   }
@@ -359,16 +361,18 @@ function getRowByBedId(bedId: number): HTMLTableRowElement | undefined {
 function removeClickedRow(): void {
   //console.log("removeClickedRow");
   const tableValue: any = table.value;
-  const filteredSortedRows = tableValue.filteredSortedRows;
-  if (table.value?.rows?.length) {
-    for (let i = 0; i < table.value.rows.length; i++) {
-      const rowIndex = filteredSortedRows.indexOf(table.value.rows[i]);
-      const row: HTMLTableRowElement = document
-        .getElementsByClassName("q-table")[0]
-        .getElementsByTagName("tr")[rowIndex + 1];
-      if (row.classList != null) {
-        if (row.classList.contains("crops-row-clicked")) {
-          row.classList.remove("crops-row-clicked");
+  if (tableValue) {
+    const filteredSortedRows = tableValue.filteredSortedRows;
+    if (table.value?.rows?.length) {
+      for (let i = 0; i < table.value.rows.length; i++) {
+        const rowIndex = filteredSortedRows.indexOf(table.value.rows[i]);
+        const row: HTMLTableRowElement = document
+          .getElementsByClassName("q-table")[0]
+          .getElementsByTagName("tr")[rowIndex + 1];
+        if (row.classList != null) {
+          if (row.classList.contains("crops-row-clicked")) {
+            row.classList.remove("crops-row-clicked");
+          }
         }
       }
     }

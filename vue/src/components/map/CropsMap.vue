@@ -20,7 +20,7 @@ import type { Beds } from "@/types/beds";
 import type { Crop } from "@/types/crop";
 import type { GardenImage } from "@/types/gardenImage";
 import type { Plants } from "@/types/plants";
-import L, { LatLng } from "leaflet";
+import L from "leaflet";
 import { storeToRefs } from "pinia";
 import { ref, onMounted, type Ref, watch } from "vue";
 
@@ -69,7 +69,7 @@ watch(props.beds, () => {
   if (marker) baseMapRef.value?.addEventsToMarker(marker);
 });
 
-watch(props.plants, (value) => {
+watch(props.plants, () => {
   if (props.plants.plants.length === 0) {
     baseMapRef.value?.removeLayerGroup(cropMarkers);
     baseMapRef.value?.addLayerGroup(bedMarkers, undefined, undefined);
