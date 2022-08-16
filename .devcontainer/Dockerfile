@@ -51,7 +51,7 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - \
         && rm -rf /var/lib/apt/lists/*
 
 # Install MkDocs
-RUN pip3 install mkdocs mkdocs-material
+RUN pip3 install mkdocs mkdocs-material mkdocs-glightbox
 
 # Add non root user
 RUN useradd -u 1001 --create-home --shell /bin/bash docker && echo "docker:docker" | chpasswd && adduser docker sudo
