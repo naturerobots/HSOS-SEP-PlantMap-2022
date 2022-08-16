@@ -46,7 +46,6 @@ SOFTWARE.
 ## Table of Contents
 
 - [README](#readme)
-  - [Table of Contents](#table-of-contents)
   - [General](#general)
   - [Quick Start](#quick-start)
   - [Documentation](#documentation)

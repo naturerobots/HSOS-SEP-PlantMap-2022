@@ -37,6 +37,9 @@ const emit = defineEmits<{
 
 defineExpose({
   addMarker,
+  addLayerGroup,
+  removeLayerGroup,
+  addEventsToMarker,
   addPolygon,
   addGardenImage,
 });
@@ -46,6 +49,30 @@ function addMarker(marker: L.Marker): void {
   marker.on("mouseover", emitMarkerEnter);
   marker.on("mouseout", emitMarkerLeave);
   leafletRef.value?.addMarker(marker);
+}
+
+function addLayerGroup(
+  markers: L.LayerGroup,
+  topRight: L.LatLng | undefined,
+  bottomLeft: L.LatLng | undefined
+): void {
+  markers.eachLayer(function (layer: any) {
+    layer.on("click", emitMarkerClick);
+    layer.on("mouseover", emitMarkerEnter);
+    layer.on("mouseout", emitMarkerLeave);
+  });
+
+  leafletRef.value?.addLayerGroup(markers, topRight, bottomLeft);
+}
+
+function removeLayerGroup(markers: L.LayerGroup): void {
+  leafletRef.value?.removeLayerGroup(markers);
+}
+
+function addEventsToMarker(marker: L.Marker): void {
+  marker.on("click", emitMarkerClick);
+  marker.on("mouseover", emitMarkerEnter);
+  marker.on("mouseout", emitMarkerLeave);
 }
 
 function addPolygon(polygon: L.Polygon): void {
