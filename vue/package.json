@@ -16,6 +16,7 @@
     "chartjs-plugin-datalabels": "^2.0.0",
     "pinia": "^2.0.14",
     "quasar": "^2.7.1",
+    "stream-to-array": "^2.3.0",
     "three": "^0.131.3",
     "vue": "^3.2.37",
     "vue-advanced-cropper": "^2.8.1",

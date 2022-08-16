@@ -5,27 +5,26 @@
     :storeOptions="storeOptions"
   >
     <div class="row p-6">
-      <div
-        v-if="crops.length > 0 && storeOptions.indexOf('3d-table') > -1"
-        class="col-4"
-      >
+      <div v-if="storeOptions.indexOf('3d-table') > -1" class="col-4">
         <crops-table
           ref="cropsTableRef"
           title="Plants"
-          :visibleColumns="columns"
-          :crops="crops"
+          :visibleColumnsBeds="visibleColsBedsTable"
+          :visibleColumnsCrops="visibleColsCropsTable"
+          :columns="columns"
+          :beds="beds"
           @row-enter="tableCropsEnter"
           @row-leave="tableCropsLeave"
           @row-click="tableCropsClick"
         ></crops-table>
       </div>
       <div
-        v-if="crops.length > 0 && storeOptions.indexOf('3d-map') > -1"
+        v-if="beds.beds && storeOptions.indexOf('3d-map') > -1"
         class="col-8 pl-2"
       >
         <crops-map
           ref="cropsMapRef"
-          :crops="crops"
+          :beds="beds"
           @polygon-enter="mapCropsEnter"
           @polygon-leave="mapCropsLeave"
           @polygon-click="mapCropsClick"
@@ -42,7 +41,6 @@
 import CropScene from "@/components/three-scenes/CropScene.vue";
 import { type Ref, ref } from "vue";
 import { storeToRefs } from "pinia";
-import { cropsStore } from "@/stores/cropsStore";
 import { userStore } from "@/stores/userStore";
 import {
   widgetOptions,
@@ -52,7 +50,9 @@ import {
 import CropsTable from "@/components/table/CropsTable.vue";
 import CropsMap from "@/components/map/CropsMap.vue";
 import BaseLayout from "@/components/layout/BaseLayout.vue";
-import type { Crop } from "@/types/crop";
+import { bedStore } from "@/stores/bedStore";
+import type { Beds } from "@/types/beds";
+import type { QTableProps } from "quasar";
 
 const storeOptions: Ref<StoreOption[]> = storeToRefs(userStore()).getOptions;
 const widgetOptions3D: WidgetOption[] = [
@@ -60,9 +60,10 @@ const widgetOptions3D: WidgetOption[] = [
   widgetOptions.crops3dMap,
 ];
 
-let columns: string[] = ["id", "plant", "location"];
+let visibleColsBedsTable: string[] = ["health", "plant", "location"];
+let visibleColsCropsTable: string[] = ["health", "plant"];
 
-const crops: Ref<Crop[]> = storeToRefs(cropsStore()).getCrops;
+const beds: Ref<Beds> = storeToRefs(bedStore()).getBeds;
 const cropsMapRef = ref<InstanceType<typeof CropsMap> | null>(null);
 const cropsTableRef = ref<InstanceType<typeof CropsTable> | null>(null);
 
@@ -90,4 +91,57 @@ function tableCropsLeave(cropsId: number): void {
 function tableCropsClick(cropsId: number): void {
   cropsMapRef.value?.setPolygonClicked(cropsId);
 }
+
+const columns: QTableProps["columns"] = [
+  {
+    name: "location",
+    align: "left",
+    label: "Location",
+    field: "id",
+    sortable: true,
+  },
+  {
+    name: "plant",
+    align: "left",
+    label: "Plant",
+    field: "plant",
+    sortable: true,
+  },
+  {
+    name: "variety",
+    align: "left",
+    label: "Variety",
+    field: "variety",
+    sortable: true,
+  },
+  {
+    name: "soil_humidity",
+    align: "left",
+    label: "Humidity",
+    field: "soil_humidity",
+    sortable: true,
+  },
+  {
+    name: "health",
+    align: "left",
+    label: "Health",
+    field: "health",
+    sortable: false,
+  },
+  {
+    name: "harvest",
+    align: "left",
+    label: "Harvest",
+    field: "harvest",
+    sortable: true,
+    sort: (a: any, b: any) => parseInt(a, 10) - parseInt(b, 10),
+  },
+  {
+    name: "yield",
+    align: "left",
+    label: "Yield",
+    field: "yield",
+    sortable: true,
+  },
+];
 </script>

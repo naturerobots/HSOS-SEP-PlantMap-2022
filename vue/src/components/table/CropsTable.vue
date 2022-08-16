@@ -6,16 +6,18 @@
           ref="table"
           class="crops-table no-shadow crops-table-hover"
           :title="title"
-          :rows="crops"
+          :rows="beds.beds"
           :columns="columns"
           no-data-label="I didn't find anything for you"
           row-key="id"
           :filter="input"
-          :visible-columns="visCols"
+          :visible-columns="visColsBedTable"
           virtual-scroll
           :rows-per-page-options="[0]"
           :pagination="pagination()"
           hide-bottom
+          :loading="isLoadingBeds"
+          color="primary"
         >
           <template #body="props">
             <q-tr
@@ -31,7 +33,7 @@
               "
             >
               <q-td key="location" :props="props">
-                {{ props.row.location }}
+                {{ props.row.id }}
               </q-td>
 
               <q-td key="plant" :props="props">
@@ -42,8 +44,8 @@
                 {{ props.row.variety }}
               </q-td>
 
-              <q-td key="soilHumidity" :props="props">
-                {{ props.row.soilHumidity }}
+              <q-td key="soil_humidity" :props="props">
+                {{ props.row.soil_humidity }}
               </q-td>
 
               <q-td key="health" :props="props">
@@ -70,16 +72,16 @@
                 </div>
               </q-td>
 
-              <q-td key="status" :props="props">
+              <!-- <q-td key="status" :props="props">
                 {{ props.row.status }}
-              </q-td>
+              </q-td> -->
 
               <q-td key="harvest" :props="props">
                 {{ props.row.harvest }}
               </q-td>
 
               <q-td key="yield" :props="props">
-                {{ props.row.yield }}
+                {{ roundTwoDec(props.row.yield) }}
               </q-td>
 
               <q-td :props="props" key="3d">
@@ -136,7 +138,7 @@
           </template>
           <template v-slot:top-right>
             <q-select
-              v-model="visCols"
+              v-model="visColsBedTable"
               multiple
               outlined
               dense
@@ -167,30 +169,34 @@
       </div>
       <div v-else>
         <q-table
-          :rows="rows2"
-          :columns="columns2"
+          :rows="plantsPlants.plants"
+          :columns="columns"
           row-key="name"
           class="crops-table no-shadow crops-table-hover"
           :pagination="pagination()"
           virtual-scroll
+          :visible-columns="visColsCropsTable"
           :rows-per-page-options="[0]"
           hide-bottom
+          :loading="isLoadingPlants"
+          color="primary"
         >
           <template v-slot:top-left>
             <div class="row">
+              <!--<button @click="(cropstable = !cropstable), $emit('removePolygon')">-->
               <button
-                @click="(cropstable = !cropstable), $emit('removePolygon')"
+                @click="(cropstable = !cropstable), cropsStore().resetCrops()"
               >
                 <q-icon name="arrow_back_ios" style="font-size: 20px" />
               </button>
               <div class="ml-3 text-xl">
-                {{ activeRow?.location }} - {{ activeRow?.plant }}
+                {{ activeRow?.id }} - {{ activeRow?.plant }}
               </div>
             </div>
           </template>
           <template v-slot:top-right>
             <q-select
-              v-model="visCols"
+              v-model="visColsCropsTable"
               multiple
               outlined
               dense
@@ -199,11 +205,12 @@
               :display-value="$q.lang.table.columns"
               emit-value
               map-options
-              :options="columns"
+              :options="visibleColumnsCrops"
               option-value="name"
               style="min-width: 120px"
               class="mx-2"
             />
+
             <q-input
               outlined
               dense
@@ -216,6 +223,61 @@
                 <q-icon name="search" class="search-icon" />
               </template>
             </q-input>
+          </template>
+          <template #body="props">
+            <q-tr no-hover :props="props" :key="props.row.id">
+              <q-td key="location" :props="props">
+                {{ props.row.bed_id }}
+              </q-td>
+
+              <q-td key="plant" :props="props">
+                {{ props.row.plant }}
+              </q-td>
+
+              <q-td key="variety" :props="props">
+                {{ props.row.variety }}
+              </q-td>
+
+              <q-td key="soil_humidity" :props="props">
+                {{ props.row.soil_humidity }}
+              </q-td>
+
+              <q-td key="health" :props="props">
+                <div class="flex flex-row w-24 text-center">
+                  <div
+                    class="round-badge mx-1 text-black text-bold transition hover:scale-125"
+                    v-for="h in props.row.health"
+                    :key="h"
+                    :class="{
+                      'bg-n/a': h.loglevel === 0,
+                      'bg-ok': h.loglevel === 1,
+                      'bg-warning-custom': h.loglevel === 2,
+                      'bg-danger': h.loglevel === 3,
+                    }"
+                  >
+                    {{ getShortcut(h.type) }}
+                    <status-popup
+                      :health="h"
+                      :plant="props.row.plant"
+                      :props="props"
+                      @remove-clicked="rowclicked(props.row.id)"
+                    ></status-popup>
+                  </div>
+                </div>
+              </q-td>
+
+              <!-- <q-td key="status" :props="props">
+                {{ props.row.status }}
+              </q-td> -->
+
+              <q-td key="harvest" :props="props">
+                {{ props.row.harvest }}
+              </q-td>
+
+              <q-td key="yield" :props="props">
+                {{ roundTwoDec(props.row.yield) }}
+              </q-td>
+            </q-tr>
           </template>
         </q-table>
       </div>
@@ -231,66 +293,108 @@ import { cropsStore } from "@/stores/cropsStore";
 import { ref } from "vue";
 import type { QTable, QTableProps } from "quasar";
 import StatusPopup from "@/components/StatusPopup.vue";
+import type { Plants } from "@/types/plants";
+import type { Beds } from "@/types/beds";
+import { bedStore } from "@/stores/bedStore";
 
-const crops: Ref<Crop[]> = storeToRefs(cropsStore()).getCrops;
-let input = ref<string>("");
+let plantsPlants: Ref<Plants> = storeToRefs(cropsStore()).getCrops;
+const isLoadingBeds: Ref<boolean | undefined> = storeToRefs(
+  bedStore()
+).getIsLoading;
+
+const isLoadingPlants: Ref<boolean | undefined> = storeToRefs(
+  cropsStore()
+).getIsLoading;
+
 const table = ref<null | InstanceType<typeof QTable>>(null);
-
 const cropstable = ref<boolean>(false);
-
 const activeRow = ref<Crop>();
 
 const props = defineProps<{
   title: string;
-  visibleColumns: string[];
-  crops: Crop[];
+  visibleColumnsBeds: string[];
+  visibleColumnsCrops: string[];
+  beds: Beds;
+  columns: QTableProps["columns"];
 }>();
+
+let visColsBedTable = ref(props.visibleColumnsBeds);
+let visColsCropsTable = ref(props.visibleColumnsCrops);
+let input = ref<string>("");
 
 const emit = defineEmits<{
   (event: "rowEnter", cropsId: number): void;
   (event: "rowLeave", cropsId: number): void;
   (event: "rowClick", cropsId: number): void;
-  (event: "removePolygon"): void;
 }>();
 
 defineExpose({
   setRowActive,
   setRowInactive,
   setRowClicked,
+  // setRowActive2,
 });
 
-function getShortcut(healthType: string): string {
-  return Array.from(healthType)[0];
+function roundTwoDec(num: number): number {
+  return Math.round(num * 100) / 100;
 }
 
-function getRowByCropsId(cropsId: number): HTMLTableRowElement | undefined {
+function getShortcut(healthType: string): string {
+  return Array.from(healthType)[0].toUpperCase();
+}
+
+function getRowByBedId(bedId: number): HTMLTableRowElement | undefined {
   const tableValue: any = table.value;
-  const filteredSortedRows = tableValue.filteredSortedRows;
-  if (table.value?.rows?.length) {
-    for (let i = 0; i < table.value.rows.length; i++) {
-      if (cropsId == table.value.rows[i].id) {
-        const rowIndex = filteredSortedRows.indexOf(table.value.rows[i]);
-        return document
-          .getElementsByClassName("q-table")[0]
-          .getElementsByTagName("tr")[rowIndex + 1];
+  if (tableValue) {
+    const filteredSortedRows = tableValue.filteredSortedRows;
+    if (table.value?.rows?.length) {
+      for (let i = 0; i < table.value.rows.length; i++) {
+        if (bedId == table.value.rows[i].id) {
+          const rowIndex = filteredSortedRows.indexOf(table.value.rows[i]);
+          return document
+            .getElementsByClassName("q-table")[0]
+            .getElementsByTagName("tr")[rowIndex + 2];
+        }
       }
     }
   }
 }
 
+// function getRowByPlantId(plantId: string): HTMLTableRowElement | undefined {
+//   console.log("getRowByPlantId");
+//   const tableValue: any = table.value;
+//   console.log("getRowByPlantId " + tableValue);
+//   if (tableValue) {
+//     const filteredSortedRows = tableValue.filteredSortedRows;
+//     if (table.value?.rows?.length) {
+//       for (let i = 0; i < table.value.rows.length; i++) {
+//         console.log("RowID: " + table.value.rows[i].id);
+//         if (plantId == table.value.rows[i].id) {
+//           const rowIndex = filteredSortedRows.indexOf(table.value.rows[i]);
+//           return document
+//             .getElementsByClassName("q-table")[0]
+//             .getElementsByTagName("tr")[rowIndex + 2];
+//         }
+//       }
+//     }
+//   }
+// }
+
 function removeClickedRow(): void {
-  console.log("removeClickedRow");
+  //console.log("removeClickedRow");
   const tableValue: any = table.value;
-  const filteredSortedRows = tableValue.filteredSortedRows;
-  if (table.value?.rows?.length) {
-    for (let i = 0; i < table.value.rows.length; i++) {
-      const rowIndex = filteredSortedRows.indexOf(table.value.rows[i]);
-      const row: HTMLTableRowElement = document
-        .getElementsByClassName("q-table")[0]
-        .getElementsByTagName("tr")[rowIndex + 1];
-      if (row.classList != null) {
-        if (row.classList.contains("crops-row-clicked")) {
-          row.classList.remove("crops-row-clicked");
+  if (tableValue) {
+    const filteredSortedRows = tableValue.filteredSortedRows;
+    if (table.value?.rows?.length) {
+      for (let i = 0; i < table.value.rows.length; i++) {
+        const rowIndex = filteredSortedRows.indexOf(table.value.rows[i]);
+        const row: HTMLTableRowElement = document
+          .getElementsByClassName("q-table")[0]
+          .getElementsByTagName("tr")[rowIndex + 1];
+        if (row.classList != null) {
+          if (row.classList.contains("crops-row-clicked")) {
+            row.classList.remove("crops-row-clicked");
+          }
         }
       }
     }
@@ -298,30 +402,34 @@ function removeClickedRow(): void {
 }
 
 function setRowActive(cropsId: number): void {
-  const row: HTMLTableRowElement | undefined = getRowByCropsId(cropsId);
+  const row: HTMLTableRowElement | undefined = getRowByBedId(cropsId);
   if (row) {
     row.classList.add("crops-row-active");
   }
 }
 
+// function setRowActive2(plantId: string): void {
+//   console.log("setRowActive2");
+//   const row: HTMLTableRowElement | undefined = getRowByPlantId(plantId);
+//   console.log("row: " + row);
+//   if (row) {
+//     row.classList.add("crops-row-active");
+//   }
+// }
+
 function setRowClicked(cropsId: number): void {
-  console.log("setRowClicked");
-  const row: HTMLTableRowElement | undefined = getRowByCropsId(cropsId);
-  // if (row) {
-  //   removeClickedRow();
-  //   row.classList.add("crops-row-clicked");
-  //   let element: HTMLElement = document.getElementsByClassName('crops-row-clicked')[0] as HTMLElement;
-  //   element.click();
-  // }
+  //("setRowClicked");
+  const row: HTMLTableRowElement | undefined = getRowByBedId(cropsId);
+
   if (row) {
     if (row.classList.contains("crops-row-clicked")) {
       removeClickedRow();
-      console.log("remove");
+      //console.log("remove");
       row.classList.remove("crops-row-clicked");
       emit("rowClick", cropsId);
     } else {
       removeClickedRow();
-      console.log("add");
+      //console.log("add");
       // row.classList.add("crops-row-clicked");
       let element: HTMLElement = document.getElementsByClassName(
         "crops-row-active"
@@ -332,7 +440,7 @@ function setRowClicked(cropsId: number): void {
 }
 
 function setRowInactive(cropsId: number): void {
-  const row: HTMLTableRowElement | undefined = getRowByCropsId(cropsId);
+  const row: HTMLTableRowElement | undefined = getRowByBedId(cropsId);
   if (row) {
     row.classList.remove("crops-row-active");
   }
@@ -346,26 +454,33 @@ function rowLeave(cropsId: number): void {
   emit("rowLeave", cropsId);
 }
 
-function rowclicked(cropsId: number): void {
-  console.log("rowClicked " + cropsId);
+function rowclicked(bedId: number): void {
+  //console.log("rowClicked " + bedId);
+  bedStore().setSelectedBedId(bedId);
+  const num = storeToRefs(bedStore()).getSelectedBedId;
+  // console.log("PlantsId: " + beds.value.beds[cropsId-1].plants)
+  const bed = storeToRefs(bedStore()).getSelectedBed;
+  //console.log(bed.value);
+  if (bed.value) {
+    //console.log("BedId: " + bed.value.id);
+    cropsStore().loadDataFromApi(bed.value.plants);
+  }
 
   // removeClickedRow();
-  emit("rowClick", cropsId);
-  const row: HTMLTableRowElement | undefined = getRowByCropsId(cropsId);
+  emit("rowClick", bedId);
+  const row: HTMLTableRowElement | undefined = getRowByBedId(bedId);
   if (row) {
     if (row.classList.contains("crops-row-clicked")) {
       removeClickedRow();
-      console.log("remove");
+      //console.log("remove");
       row.classList.remove("crops-row-clicked");
     } else {
       removeClickedRow();
-      console.log("add");
+      //console.log("add");
       row.classList.add("crops-row-clicked");
     }
   }
 }
-
-let visCols = ref(props.visibleColumns);
 
 function pagination(): { sortBy: string; rowsPerPage: number } {
   return {
@@ -374,206 +489,66 @@ function pagination(): { sortBy: string; rowsPerPage: number } {
   };
 }
 
-const columns: QTableProps["columns"] = [
-  {
-    name: "location",
-    align: "left",
-    label: "Location",
-    field: "location",
-    sortable: true,
-  },
-  {
-    name: "plant",
-    align: "left",
-    label: "Plant",
-    field: "plant",
-    sortable: true,
-  },
-  {
-    name: "variety",
-    align: "left",
-    label: "Variety",
-    field: "variety",
-    sortable: true,
-  },
+// const columns: QTableProps["columns"] = [
+//   {
+//     name: "location",
+//     align: "left",
+//     label: "Location",
+//     field: "id",
+//     sortable: true,
+//   },
+//   {
+//     name: "plant",
+//     align: "left",
+//     label: "Plant",
+//     field: "plant",
+//     sortable: true,
+//   },
+//   {
+//     name: "variety",
+//     align: "left",
+//     label: "Variety",
+//     field: "variety",
+//     sortable: true,
+//   },
 
-  {
-    name: "soilHumidity",
-    align: "left",
-    label: "Humidity",
-    field: "soilHumidity",
-    sortable: true,
-    sort: (a: any, b: any) => parseInt(a, 10) - parseInt(b, 10),
-  },
-  {
-    name: "health",
-    align: "left",
-    label: "Health",
-    field: "health",
-    sortable: false,
-  },
-  {
-    name: "status",
-    align: "left",
-    label: "Status",
-    field: "status",
-    sortable: true,
-  },
-  {
-    name: "harvest",
-    align: "left",
-    label: "Harvest",
-    field: "harvest",
-    sortable: true,
-    sort: (a: any, b: any) => parseInt(a, 10) - parseInt(b, 10),
-  },
-  {
-    name: "yield",
-    align: "left",
-    label: "Yield",
-    field: "yield",
-    sortable: true,
-  },
-  { name: "3d", align: "left", label: "3D", field: "3d", sortable: false },
-];
-
-const columns2: QTableProps["columns"] = [
-  {
-    name: "name",
-    required: true,
-    label: "Dessert",
-    align: "left",
-    field: (row) => row.name,
-    format: (val) => `${val}`,
-    sortable: true,
-  },
-  {
-    name: "calories",
-    align: "center",
-    label: "Calories",
-    field: "calories",
-    sortable: true,
-  },
-  { name: "fat", label: "Fat (g)", field: "fat", sortable: true },
-  { name: "carbs", label: "Carbs (g)", field: "carbs" },
-  { name: "protein", label: "Protein (g)", field: "protein" },
-  { name: "sodium", label: "Sodium (mg)", field: "sodium" },
-  {
-    name: "calcium",
-    label: "Calcium (%)",
-    field: "calcium",
-    sortable: true,
-    sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
-  },
-  {
-    name: "iron",
-    label: "Iron (%)",
-    field: "iron",
-    sortable: true,
-    sort: (a, b) => parseInt(a, 10) - parseInt(b, 10),
-  },
-];
-
-const rows2 = [
-  {
-    name: "Frozen Yogurt",
-    calories: 159,
-    fat: 6.0,
-    carbs: 24,
-    protein: 4.0,
-    sodium: 87,
-    calcium: "14%",
-    iron: "1%",
-  },
-  {
-    name: "Ice cream sandwich",
-    calories: 237,
-    fat: 9.0,
-    carbs: 37,
-    protein: 4.3,
-    sodium: 129,
-    calcium: "8%",
-    iron: "1%",
-  },
-  {
-    name: "Eclair",
-    calories: 262,
-    fat: 16.0,
-    carbs: 23,
-    protein: 6.0,
-    sodium: 337,
-    calcium: "6%",
-    iron: "7%",
-  },
-  {
-    name: "Cupcake",
-    calories: 305,
-    fat: 3.7,
-    carbs: 67,
-    protein: 4.3,
-    sodium: 413,
-    calcium: "3%",
-    iron: "8%",
-  },
-  {
-    name: "Gingerbread",
-    calories: 356,
-    fat: 16.0,
-    carbs: 49,
-    protein: 3.9,
-    sodium: 327,
-    calcium: "7%",
-    iron: "16%",
-  },
-  {
-    name: "Jelly bean",
-    calories: 375,
-    fat: 0.0,
-    carbs: 94,
-    protein: 0.0,
-    sodium: 50,
-    calcium: "0%",
-    iron: "0%",
-  },
-  {
-    name: "Lollipop",
-    calories: 392,
-    fat: 0.2,
-    carbs: 98,
-    protein: 0,
-    sodium: 38,
-    calcium: "0%",
-    iron: "2%",
-  },
-  {
-    name: "Honeycomb",
-    calories: 408,
-    fat: 3.2,
-    carbs: 87,
-    protein: 6.5,
-    sodium: 562,
-    calcium: "0%",
-    iron: "45%",
-  },
-  {
-    name: "Donut",
-    calories: 452,
-    fat: 25.0,
-    carbs: 51,
-    protein: 4.9,
-    sodium: 326,
-    calcium: "2%",
-    iron: "22%",
-  },
-  {
-    name: "KitKat",
-    calories: 518,
-    fat: 26.0,
-    carbs: 65,
-    protein: 7,
-    sodium: 54,
-    calcium: "12%",
-    iron: "6%",
-  },
-];
+//   {
+//     name: "soil_humidity",
+//     align: "left",
+//     label: "Humidity",
+//     field: "soil_humidity",
+//     sortable: true,
+//     // sort: (a: any, b: any) => parseInt(a, 10) - parseInt(b, 10),
+//   },
+//   {
+//     name: "health",
+//     align: "left",
+//     label: "Health",
+//     field: "health",
+//     sortable: false,
+//   },
+//   // {
+//   //   name: "status",
+//   //   align: "left",
+//   //   label: "Status",
+//   //   field: "status",
+//   //   sortable: true,
+//   // },
+//   {
+//     name: "harvest",
+//     align: "left",
+//     label: "Harvest",
+//     field: "harvest",
+//     sortable: true,
+//     sort: (a: any, b: any) => parseInt(a, 10) - parseInt(b, 10),
+//   },
+//   {
+//     name: "yield",
+//     align: "left",
+//     label: "Yield",
+//     field: "yield",
+//     sortable: true,
+//   },
+//   { name: "3d", align: "left", label: "3D", field: "3d", sortable: false },
+// ];
 </script>
