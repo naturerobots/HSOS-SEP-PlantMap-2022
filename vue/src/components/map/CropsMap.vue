@@ -44,7 +44,12 @@ const emit = defineEmits<{
   (event: "bedClick", bedId: number): void;
   (event: "bedEnter", bedId: number): void;
   (event: "bedLeave", bedId: number): void;
+
+  (event: "plantEnter", plantId: string): void;
+  (event: "plantLeave", plantId: string): void;
 }>();
+
+let showPlants = false;
 
 onMounted(() => {
   if (gardenImage.value.image) {
@@ -77,6 +82,8 @@ watch(props.plants, () => {
     cropMarkers.clearLayers();
     cropMarkerMap.clear();
 
+    showPlants = false;
+
     return;
   }
 
@@ -85,6 +92,8 @@ watch(props.plants, () => {
   props.plants.plants.forEach((crop: Crop) => {
     addCropMarker(crop);
   });
+
+  showPlants = true;
 
   baseMapRef.value?.addLayerGroup(cropMarkers, undefined, undefined);
 });
@@ -120,21 +129,53 @@ function markerClick(marker: L.Marker): void {
 }
 
 function markerEnter(marker: L.Marker): void {
-  const bedId: number | undefined = getIdByMarker(marker);
-  if (bedId) {
-    emit("bedEnter", bedId);
+  if (showPlants) {
+    const id: string | undefined = getPlantIdByMarker(marker);
+    if (id) {
+      emit("plantEnter", id);
+    }
+  } else {
+    const id: number | undefined = getIdByMarker(marker);
+    if (id) {
+      emit("bedEnter", id);
+    }
   }
+  //
 }
 
+// function markerLeave(marker: L.Marker): void {
+//   const bedId: number | undefined = getIdByMarker(marker);
+//   if (bedId) {
+//     emit("bedLeave", bedId);
+//   }
+// }
+
 function markerLeave(marker: L.Marker): void {
-  const bedId: number | undefined = getIdByMarker(marker);
-  if (bedId) {
-    emit("bedLeave", bedId);
+  if (showPlants) {
+    const id: string | undefined = getPlantIdByMarker(marker);
+    if (id) {
+      emit("plantLeave", id);
+    }
+  } else {
+    const id: number | undefined = getIdByMarker(marker);
+    if (id) {
+      emit("bedLeave", id);
+    }
   }
 }
 
 function getIdByMarker(marker: L.Marker): number | undefined {
   for (let [key, value] of bedMarkerMap.entries()) {
+    if (value === marker) {
+      console.log(key);
+      return key;
+    }
+  }
+  return undefined;
+}
+
+function getPlantIdByMarker(marker: L.Marker): string | undefined {
+  for (let [key, value] of cropMarkerMap.entries()) {
     if (value === marker) {
       console.log(key);
       return key;

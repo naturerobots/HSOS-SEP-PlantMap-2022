@@ -332,6 +332,7 @@ defineExpose({
   setRowActive,
   setRowInactive,
   setRowClicked,
+  // setRowActive2,
 });
 
 function roundTwoDec(num: number): number {
@@ -358,6 +359,26 @@ function getRowByBedId(bedId: number): HTMLTableRowElement | undefined {
     }
   }
 }
+
+// function getRowByPlantId(plantId: string): HTMLTableRowElement | undefined {
+//   console.log("getRowByPlantId");
+//   const tableValue: any = table.value;
+//   console.log("getRowByPlantId " + tableValue);
+//   if (tableValue) {
+//     const filteredSortedRows = tableValue.filteredSortedRows;
+//     if (table.value?.rows?.length) {
+//       for (let i = 0; i < table.value.rows.length; i++) {
+//         console.log("RowID: " + table.value.rows[i].id);
+//         if (plantId == table.value.rows[i].id) {
+//           const rowIndex = filteredSortedRows.indexOf(table.value.rows[i]);
+//           return document
+//             .getElementsByClassName("q-table")[0]
+//             .getElementsByTagName("tr")[rowIndex + 2];
+//         }
+//       }
+//     }
+//   }
+// }
 
 function removeClickedRow(): void {
   //console.log("removeClickedRow");
@@ -386,6 +407,15 @@ function setRowActive(cropsId: number): void {
     row.classList.add("crops-row-active");
   }
 }
+
+// function setRowActive2(plantId: string): void {
+//   console.log("setRowActive2");
+//   const row: HTMLTableRowElement | undefined = getRowByPlantId(plantId);
+//   console.log("row: " + row);
+//   if (row) {
+//     row.classList.add("crops-row-active");
+//   }
+// }
 
 function setRowClicked(cropsId: number): void {
   //("setRowClicked");

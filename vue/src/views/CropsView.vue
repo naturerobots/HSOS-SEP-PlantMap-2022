@@ -13,9 +13,6 @@
           :visibleColumnsBeds="visibleColsBedTable"
           :visibleColumnsCrops="visibleColsCropsTable"
           :columns="columns"
-          @row-enter="tableCropsEnter"
-          @row-leave="tableCropsLeave"
-          @row-click="tableCropsClick"
         ></crops-table>
       </div>
       <div
@@ -100,6 +97,15 @@ function mapCropsClick(bedId: number): void {
   //cropsStore().loadDataFromApi(bedId);
   cropsTableRef.value?.setRowClicked(bedId);
 }
+
+// function mapCropsEnter1(plantId: string): void {
+//   console.log("mapsCropsEnter1: " + plantId);
+//   cropsTableRef.value?.setRowActive2(plantId);
+// }
+
+// function mapCropsLeave1(plantId: string): void {
+//   console.log("mapsCropsLeave1: " + plantId);
+// }
 
 // function tableCropsEnter(cropsId: number): void {
 //   cropsMapRef.value?.setPolygonActive(cropsId);
