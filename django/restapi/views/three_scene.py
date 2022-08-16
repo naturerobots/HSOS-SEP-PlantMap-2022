@@ -8,6 +8,8 @@ from conversions.transform_coordinates import plantLocationOffset
 from plyfile import PlyData
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
+
+'''
 from restapi.helpers.auth import (
     isCompanyAdmin,
     isCompanyUser,
@@ -15,6 +17,7 @@ from restapi.helpers.auth import (
     isGardenUser,
 )
 from restapi.helpers.company_gardens import *
+'''
 from restapi.models import *
 from restapi.models import Garden
 

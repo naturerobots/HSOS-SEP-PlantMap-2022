@@ -144,6 +144,9 @@ import axios from "axios";
 import type { Crop3dArray, Crop3d } from "@/types/crop3d";
 import type { Position } from "@/types/position";
 
+//import { userStore } from "@/stores/userStore";
+//import { storeToRefs } from "pinia";
+
 const size = {
   width: window.innerWidth - 200,
   height: window.innerHeight - 200,
@@ -214,6 +217,41 @@ onMounted(() => {
 
     setCameraToPosition(globalPosition);
   });
+
+  /*
+  const baseURL = "http://127.0.0.1:8000";
+  const companyId = 1;
+  const gardenId = 1;
+  const bedId = 1;
+
+  axios
+    .post(
+      baseURL + "/companies/" + companyId + "/gardens/" + gardenId + "/bedId/" + bedId + "/3d-scene/",
+      {
+        headers: {
+          Authorization:
+            "Token " + storeToRefs(userStore()).getToken.value.token,
+        },
+      }
+    )
+    .then(function (response): void {
+
+      console.log("then", response);
+
+      crop3dArray = response["data"]["plants"];
+      globalPosition = response["data"]["global"]["position"];
+      loadPlants(crop3dArray);
+
+      setInfoCard(crop3dArray[2]);
+      //resetInfoCard();
+
+      setCameraToPosition(globalPosition);
+
+    })
+    .catch(function (): undefined {
+      return undefined;
+    });
+  */
 
   //var geometry: THREE.BoxGeometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
   //var material: THREE.MeshNormalMaterial = new THREE.MeshNormalMaterial();
