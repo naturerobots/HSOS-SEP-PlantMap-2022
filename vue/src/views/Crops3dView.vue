@@ -8,7 +8,7 @@
       <div v-if="storeOptions.indexOf('3d-table') > -1" class="col-4">
         <crops-table
           ref="cropsTableRef"
-          title="Plants"
+          title="Beds"
           :visibleColumnsBeds="visibleColsBedsTable"
           :visibleColumnsCrops="visibleColsCropsTable"
           :columns="columns"
@@ -62,8 +62,8 @@ const widgetOptions3D: WidgetOption[] = [
   widgetOptions.crops3dMap,
 ];
 
-let visibleColsBedsTable: string[] = ["health", "plant", "location"];
-let visibleColsCropsTable: string[] = ["health", "plant"];
+let visibleColsBedsTable: string[] = ["health", "plant", "location", "3d"];
+let visibleColsCropsTable: string[] = ["health", "plant", "3d"];
 
 const beds: Ref<Beds> = storeToRefs(bedStore()).getBeds;
 const plants: Ref<Plants> = storeToRefs(cropsStore()).getCrops;
@@ -154,5 +154,6 @@ const columns: QTableProps["columns"] = [
     field: "yield",
     sortable: true,
   },
+  { name: "3d", align: "left", label: "3D", field: "3d", sortable: false },
 ];
 </script>
