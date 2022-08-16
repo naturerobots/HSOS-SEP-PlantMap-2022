@@ -116,6 +116,4 @@ def get3dPlants(request, company_id: int, garden_id: int, bed_id: int):
         },
     }
 
-    data = json.dumps(str(result))
-
     return JsonResponse(result, safe=False)

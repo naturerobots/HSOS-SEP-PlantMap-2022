@@ -121,7 +121,7 @@
 
 #info-card {
   z-index: 0;
-  /* pointer-events: none; */
+  pointer-events: none;
 
   position: absolute; /* let us position them inside the container */
   left: 0; /* make their default position the top left of the container */
@@ -138,14 +138,23 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 //import { PLYLoader } from "three/examples/jsm/loaders/PLYLoader.js";
 //import { CustomPLYLoader } from "@/components/three-scenes/CustomPlyLoader.js";
 import { CustomPLYLoader } from "./CustomPlyLoader.ts";
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, Ref, computed } from "vue";
 import axios from "axios";
 
 import type { Crop3dArray, Crop3d } from "@/types/crop3d";
 import type { Position } from "@/types/position";
 
-//import { userStore } from "@/stores/userStore";
-//import { storeToRefs } from "pinia";
+import { storeToRefs } from "pinia";
+
+import { userStore } from "@/stores/userStore";
+
+import { companyStore } from "@/stores/companyStore";
+import { gardenStore } from "@/stores/gardenStore";
+import { bedStore } from "@/stores/bedStore";
+
+import type { Company } from "@/types/company";
+import type { Garden } from "@/types/garden";
+import type { Bed } from "@/types/bed";
 
 const size = {
   width: window.innerWidth - 200,
@@ -163,6 +172,24 @@ var tempV: THREE.Vector3;
 var crop3dArray: Crop3dArray;
 var highlightedCrop3d = ref<Crop3d>();
 var globalPosition: Position;
+
+const baseURL = "http://127.0.0.1:8000";
+const companyId: Ref<number | undefined> = storeToRefs(
+  companyStore()
+).getSelectedCompany;
+const gardenId: Ref<number | undefined> = storeToRefs(
+  gardenStore()
+).getSelectedGarden;
+const bedId: Ref<number | undefined> = storeToRefs(bedStore()).getSelectedBedId;
+const plantId = null;
+
+console.log("companyId", companyId);
+console.log("gardenId", gardenId);
+console.log("bedId", bedId);
+
+// const beds: Ref<Beds> = storeToRefs(bedStore()).getBeds;
+// const plants: Ref<Plants> = storeToRefs(cropsStore()).getCrops;
+// const beds: Ref<Company> = storeToRefs(companyStore()).getBeds;
 
 const showInfoCard = computed(() => {
   return highlightedCrop3d.value != undefined ? true : false;
@@ -198,60 +225,39 @@ onMounted(() => {
     b: "blue",
   });
 
-  let token =
-    "113588733107fdf102d3018202df1b944fdd25ad48bf64d07e243d77ad82b6aa";
-  let url = "http://localhost:8000/companies/1/gardens/1/beds/1/3d-scene/";
-
-  axios.defaults.baseURL = "http://localhost:8000/";
-  axios.defaults.headers.common = { Authorization: `Token ` + token };
-
-  axios.post(url).then(function (response) {
-    console.log("then", response);
-
-    crop3dArray = response["data"]["plants"];
-    globalPosition = response["data"]["global"]["position"];
-    loadPlants(crop3dArray);
-
-    setInfoCard(crop3dArray[2]);
-    //resetInfoCard();
-
-    setCameraToPosition(globalPosition);
-  });
-
-  /*
-  const baseURL = "http://127.0.0.1:8000";
-  const companyId = 1;
-  const gardenId = 1;
-  const bedId = 1;
+  let url =
+    baseURL +
+    "/companies/" +
+    companyId.value +
+    "/gardens/" +
+    gardenId.value +
+    "/beds/" +
+    bedId.value +
+    "/3d-scene/";
+  let payload = {};
+  let header = {
+    headers: {
+      Authorization: "Token " + storeToRefs(userStore()).getToken.value.token,
+    },
+  };
 
   axios
-    .post(
-      baseURL + "/companies/" + companyId + "/gardens/" + gardenId + "/bedId/" + bedId + "/3d-scene/",
-      {
-        headers: {
-          Authorization:
-            "Token " + storeToRefs(userStore()).getToken.value.token,
-        },
-      }
-    )
+    .post(url, payload, header)
     .then(function (response): void {
-
       console.log("then", response);
 
       crop3dArray = response["data"]["plants"];
       globalPosition = response["data"]["global"]["position"];
       loadPlants(crop3dArray);
 
-      setInfoCard(crop3dArray[2]);
+      //setInfoCard(crop3dArray[2]);
       //resetInfoCard();
 
       setCameraToPosition(globalPosition);
-
     })
     .catch(function (): undefined {
       return undefined;
     });
-  */
 
   //var geometry: THREE.BoxGeometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
   //var material: THREE.MeshNormalMaterial = new THREE.MeshNormalMaterial();
