@@ -4,6 +4,7 @@ from os import listdir
 from os.path import isfile, join
 
 import numpy as np
+from conversions.transform_coordinates import plantLocationOffset
 from plyfile import PlyData
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
@@ -18,21 +19,6 @@ from restapi.models import *
 from restapi.models import Garden
 
 from django.http import *
-
-
-def plantLocationOffset(projectUUID, geometryUUID):
-    try:
-        with open(
-            "/workdir/django/storage/media/pointclouds/ply/" + projectUUID + "/" + geometryUUID + ".ply", "rb"
-        ) as file:
-            plydata = PlyData.read(file)
-            # get an estimate of a plant's center, by taking the averge x and y
-            x_avg = np.average(plydata.elements[0].data['x'])
-            y_avg = np.average(plydata.elements[0].data['y'])
-            z_avg = np.average(plydata.elements[0].data['z'])
-            return np.array([x_avg, y_avg, z_avg])
-    except FileNotFoundError:
-        return None
 
 
 # @permission_classes([AllowAny])
@@ -56,7 +42,7 @@ def get3dPlants(request, company_id: int, garden_id: int, bed_id: int):
 
     for file in onlyfiles:
         geometryUUID = file[:-4]
-        locationOffset = plantLocationOffset(projectUUID=projectUUID, geometryUUID=geometryUUID)
+        locationOffset = plantLocationOffset(projectUUID=projectUUID, geometryUUID=geometryUUID, dimensions=3)
         '''
         plant = {
             "geometryUUID": geometryUUID,

@@ -121,7 +121,7 @@
 
 #info-card {
   z-index: 0;
-  /* cpointer-events: none; */
+  /* pointer-events: none; */
 
   position: absolute; /* let us position them inside the container */
   left: 0; /* make their default position the top left of the container */
@@ -143,17 +143,6 @@ import axios from "axios";
 
 import type { Crop3dArray, Crop3d } from "@/types/crop3d";
 import type { Position } from "@/types/position";
-
-// 'http://localhost:8000/media/pointclouds/ply/e1ef73b1258b475a996d2b72924c27ac/0bf37a0851b7402d88674e153f58e6f8.ply'
-// https://pointly.medium.com/how-to-convert-ply-files-to-las-laz-d4100ef3625a
-// https://gis.stackexchange.com/questions/314732/converting-ply-files-to-las-for-arcgis-input
-// https://pdal.io/apps/translate.html
-
-// The InfoCard is realized like shown in this tutorial
-// https://r105.threejsfundamentals.org/threejs/lessons/threejs-align-html-elements-to-3d.html
-
-//console.log("THREE", THREE);
-//console.log("OrbitControls", OrbitControls);
 
 const size = {
   width: window.innerWidth - 200,
@@ -180,8 +169,6 @@ onMounted(() => {
   var canvasScene: Element | null = document.querySelector(
     "#three-scene-canvas"
   );
-
-  // https://r105.threejsfundamentals.org/threejs/lessons/threejs-align-html-elements-to-3d.html
 
   renderer = new THREE.WebGLRenderer();
   camera = new THREE.PerspectiveCamera(75, size.width / size.height, 0.01, 10);
