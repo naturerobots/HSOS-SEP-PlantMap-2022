@@ -58,8 +58,8 @@ of the existing problems, when switching to or running an environment friendly g
 This section outlines the main goals of the developed **PlantMap Digital
 Logbook**. Most of them are directly derived from the above listed hurdles. If
 you are having trouble to grasp some of the concepts or terminology here, please
-have a look at [project overview](./concept.md) or the
-[terminology](reference/definitions.md) page.
+have a look at [project overview](reference/architecture.md#overview) or the
+[terminology](reference/terminology.md) page.
 
 - Create a digital representation of a garden, to have a better overview of it's
   current status. It should also be possible to have multiple gardens in
@@ -75,8 +75,7 @@ the [improvements section](getting-started/improvements.md).
 [^1]: [Our World in Data, Environmental Impacts of Food Production](https://ourworldindata.org/environmental-impacts-of-food#:~:text=The%20expansion%20of%20agriculture%20has,threat%20for%2024%2C000%20of%20them.)
 [^2]: [National Geographic, Biodiversity](https://education.nationalgeographic.org/resource/biodiversity)
 [^3]: [PLOS ONE, More than 75 percent decline over 27 years in total flying insect biomass
-    in protected areas](More than 75 percent decline over 27 years in total
-    flying insect biomass in protected areas)
+    in protected areas](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0185809)
 [^4]: [Nature Robots, Ökologische Anbausysteme: Mikrofarming
     (German)](https://naturerobots.de/blog/oekologische-anbausysteme-mikrofarming/)
 [^5]: [Open Food Network, Grööntüügs ](https://openfoodnetwork.de/groontuugs/shop#/about)
