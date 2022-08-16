@@ -51,6 +51,7 @@ import { useRouter, type Router } from "vue-router";
 import { userStore } from "@/stores/userStore";
 import { companyStore } from "@/stores/companyStore";
 import { gardenStore } from "@/stores/gardenStore";
+import { bedStore } from "@/stores/bedStore";
 
 const router: Router = useRouter();
 const email: Ref<string | undefined> = ref<string>();
@@ -71,6 +72,7 @@ async function login(): Promise<void> {
       const gardenId = storeToRefs(gardenStore()).getGardens?.value[0]?.id;
       if (gardenId) {
         gardenStore().setSelectedGarden(gardenId);
+        bedStore().loadDataFromApi();
         await gardenStore().loadSelectedGardenImg(companyId);
       }
     } else {
@@ -79,6 +81,7 @@ async function login(): Promise<void> {
       const gardenId = storeToRefs(gardenStore()).getGardens?.value[0]?.id;
       if (gardenId) {
         gardenStore().setSelectedGarden(gardenId);
+        bedStore().loadDataFromApi();
         await gardenStore().loadSelectedGardenImg(companyId);
       } else {
         gardenStore().setSelectedGarden(undefined);

@@ -1,16 +1,15 @@
 import type { Coords } from "./coords";
 import type { Health } from "./health";
-
-export interface Crop {
-  id: string;
-  bed_id: number;
+export interface Bed {
+  id: number;
   plant: string;
   variety: string;
-  // location: number;
-  soil_humidity: string;
-  // status: string;
+  plants: string;
+  soil_humidity: number;
   harvest: string;
   yield: string;
   health: Health[];
-  plant_coords: Coords;
+  plant_coords: Coords[];
+  avg_plant_lat: number;
+  avg_plant_lon: number;
 }

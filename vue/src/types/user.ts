@@ -1,4 +1,4 @@
-import type { StoreOption } from "@/types/WidgetOption";
+import type { StoreOption } from "@/types/widgetOption";
 
 export interface User {
   username: string;
