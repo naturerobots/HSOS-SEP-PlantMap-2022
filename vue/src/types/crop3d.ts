@@ -1,5 +1,5 @@
 // import type { Crop } from "./crop";
-import type { Location3d } from "./location3d";
+import type { Position } from "./position";
 import type { Health } from "./health";
 
 export type Crop3dArray = Crop3d[];
@@ -19,7 +19,7 @@ export interface Crop3d {
   name: string;
   type: string;
   locationDescription: string;
-  location3d: Location3d;
+  position: Position;
   health: Health[];
   yield: string;
   status: string;

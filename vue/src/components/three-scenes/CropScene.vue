@@ -2,29 +2,29 @@
   <div class="scene">
     <div id="three-scene-canvas"></div>
 
-    <div id="info-card">
+    <div v-if="showInfoCard" id="info-card">
       <div id="info-detail">
         <div class="hole"></div>
-        <div v-if="highlightedCrop3d" class="description">
-          <div class="heading">{{ highlightedCrop3d.name }}</div>
+        <div class="description">
+          <div class="heading">{{ highlightedCrop3d?.name }}</div>
 
           <table id="properties">
             <tr>
               <th class="table-entry">Location:</th>
               <th class="table-entry">
-                {{ highlightedCrop3d.locationDescription }}
+                {{ highlightedCrop3d?.locationDescription }}
               </th>
             </tr>
             <tr>
               <th class="table-entry">Type:</th>
-              <th class="table-entry">{{ highlightedCrop3d.type }}</th>
+              <th class="table-entry">{{ highlightedCrop3d?.type }}</th>
             </tr>
             <!-- <div>Health: {{ highlightedCrop3d.health }}</div> -->
             <tr>
               <th class="table-entry">Health:</th>
               <th class="table-entry">
                 <span
-                  v-for="health in highlightedCrop3d.health"
+                  v-for="health in highlightedCrop3d?.health"
                   :key="health.type"
                 >
                   {{ health.shortcut }}
@@ -33,21 +33,21 @@
             </tr>
             <tr>
               <th class="table-entry">Yield:</th>
-              <th class="table-entry">{{ highlightedCrop3d.yield }}</th>
+              <th class="table-entry">{{ highlightedCrop3d?.yield }}</th>
             </tr>
             <tr>
               <th class="table-entry">Status:</th>
-              <th class="table-entry">{{ highlightedCrop3d.status }}</th>
+              <th class="table-entry">{{ highlightedCrop3d?.status }}</th>
             </tr>
             <tr>
               <th class="table-entry">Harvest:</th>
-              <th class="table-entry">{{ highlightedCrop3d.harvest }}</th>
+              <th class="table-entry">{{ highlightedCrop3d?.harvest }}</th>
             </tr>
           </table>
 
           <!-- progress bar -->
           <div class="progress-bar">
-            <div class="progress"></div>
+            <div class="progress" :style="getProgressWidthStyle()"></div>
           </div>
         </div>
       </div>
@@ -58,23 +58,25 @@
 <style>
 .progress-bar {
   /*position: relative;*/
+  margin-top: 5px;
   width: 100%;
-  background-color: gray;
+  background-color: #9c9b9b;
   border-radius: 16px;
 }
 
 .progress-bar .progress {
   /*position: absolute;*/
-  background-color: green;
-  width: 50%;
-  height: 10px;
+  /* background-color: green; */
+  /*width: 50%;*/
+  background-color: #79b729;
+  height: 15px;
   border-radius: 16px;
 }
 
 .heading {
   text-align: center;
-  font-size: larger;
-  font-weight: normal;
+  font-size: x-large;
+  font-weight: bolder;
 }
 
 #properties {
@@ -82,8 +84,8 @@
 }
 
 #properties .table-entry {
-  font-family: "Roboto", "-apple-system", "Helvetica Neue", Helvetica, Arial,
-    sans-serif;
+  /* line-height: 1.5 */
+
   font-size: small;
   font-weight: lighter;
   width: 50%;
@@ -91,38 +93,16 @@
 }
 
 .description {
-  /*
-  font-family: "Roboto", "-apple-system", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
-  line-height: 1.5 !important;
-  font-weight: normal !important;
-  font-size: medium !important;
-  */
-
-  padding-top: 20px;
-  padding-left: 240px;
-  padding-bottom: 20px;
-  padding-right: 20px;
-  width: 100%;
-  height: 100%;
-}
-
-.description > div {
-  font-family: "Roboto", "-apple-system", "Helvetica Neue", Helvetica, Arial,
-    sans-serif !important;
-  line-height: 1.5 !important;
-  font-weight: normal !important;
-  font-size: medium !important;
+  padding-left: 50%;
 }
 
 .hole {
   z-index: -1;
   position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 200px;
-  height: 160px;
   box-shadow: 0 0 0 9999px rgba(255, 255, 255, 1);
   border-radius: 8px;
+  width: 40%;
+  height: 80%;
 }
 .scene {
   position: relative;
@@ -130,17 +110,18 @@
 #info-detail {
   overflow: hidden;
   position: relative;
+  padding: 5%;
   margin-left: 25%;
-  width: 500px;
-  height: 200px;
-  /*background-color: red;*/
   border-radius: 16px;
   box-shadow: 0px 0px 150px -50px rgba(0, 0, 0, 0.5);
+
+  width: 600px;
+  height: 250px;
 }
 
 #info-card {
   z-index: 0;
-  pointer-events: none;
+  /* cpointer-events: none; */
 
   position: absolute; /* let us position them inside the container */
   left: 0; /* make their default position the top left of the container */
@@ -148,16 +129,6 @@
   cursor: pointer; /* change the cursor to a hand when over us */
   font-size: large;
   user-select: none; /* don't let the text get selected */
-  text-shadow:         /* create a black outline */ -1px -1px 0 #000,
-    0 -1px 0 #000, 1px -1px 0 #000, 1px 0 0 #000, 1px 1px 0 #000, 0 1px 0 #000,
-    -1px 1px 0 #000, -1px 0 0 #000;
-
-  /*
-  -webkit-filter: blur(0.000001px);
-  -webkit-font-smoothing: antialiased;
-  -webkit-transform: translateZ(0);
-  transform: translate(0);
-  */
 }
 </style>
 
@@ -167,11 +138,11 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 //import { PLYLoader } from "three/examples/jsm/loaders/PLYLoader.js";
 //import { CustomPLYLoader } from "@/components/three-scenes/CustomPlyLoader.js";
 import { CustomPLYLoader } from "./CustomPlyLoader.ts";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import axios from "axios";
 
 import type { Crop3dArray, Crop3d } from "@/types/crop3d";
-import type { Location3d } from "@/types/location3d";
+import type { Position } from "@/types/position";
 
 // 'http://localhost:8000/media/pointclouds/ply/e1ef73b1258b475a996d2b72924c27ac/0bf37a0851b7402d88674e153f58e6f8.ply'
 // https://pointly.medium.com/how-to-convert-ply-files-to-las-laz-d4100ef3625a
@@ -193,16 +164,17 @@ var renderer: THREE.WebGLRenderer;
 var camera: THREE.PerspectiveCamera;
 var scene: THREE.Scene;
 var controls: OrbitControls;
-
 var loader: CustomPLYLoader;
 
 var infoCardCube: THREE.Mesh;
-var tempV: THREE.Vector3; // new THREE.Vector3();
-
+var tempV: THREE.Vector3;
 var crop3dArray: Crop3dArray;
 var highlightedCrop3d = ref<Crop3d>();
+var globalPosition: Position;
 
-//var highlightedCrop3d = ref<Crop3d | null>(null);
+const showInfoCard = computed(() => {
+  return highlightedCrop3d.value != undefined ? true : false;
+});
 
 onMounted(() => {
   var canvasScene: Element | null = document.querySelector(
@@ -237,31 +209,24 @@ onMounted(() => {
   });
 
   let token =
-    "c2509c1c164500ffaab233875ef53aaf72e8529e5b8c11c81f6cfc6939255398";
+    "113588733107fdf102d3018202df1b944fdd25ad48bf64d07e243d77ad82b6aa";
   let url = "http://localhost:8000/companies/1/gardens/1/beds/1/3d-scene/";
 
   axios.defaults.baseURL = "http://localhost:8000/";
   axios.defaults.headers.common = { Authorization: `Token ` + token };
 
-  axios
-    .post(url)
-    .then(function (response) {
-      //console.log("then", response);
+  axios.post(url).then(function (response) {
+    console.log("then", response);
 
-      // load Plant Ply files
-      //let plants = response["data"]["plants"];
+    crop3dArray = response["data"]["plants"];
+    globalPosition = response["data"]["global"]["position"];
+    loadPlants(crop3dArray);
 
-      crop3dArray = response["data"]["plants"];
-      loadPlants(crop3dArray);
+    setInfoCard(crop3dArray[2]);
+    //resetInfoCard();
 
-      // Set Camera position
-      highlightedCrop3d.value = crop3dArray[1];
-
-      setCameraToLocation(highlightedCrop3d.value?.location3d);
-    })
-    .catch(function (error) {
-      console.log("catch", error);
-    });
+    setCameraToPosition(globalPosition);
+  });
 
   //var geometry: THREE.BoxGeometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
   //var material: THREE.MeshNormalMaterial = new THREE.MeshNormalMaterial();
@@ -277,24 +242,32 @@ onMounted(() => {
   renderer.setClearColor(0xffffff, 1);
 });
 
+let setInfoCard = (crop: Crop3d): void => {
+  highlightedCrop3d.value = crop;
+};
+
+let resetInfoCard = (): void => {
+  highlightedCrop3d.value = undefined;
+};
+
+let getProgressWidthStyle = (): string => {
+  var width = highlightedCrop3d.value?.progress;
+  width = width * 100;
+  var widthStyle = "width: " + width + "%";
+  //console.log("widthStyle: "+widthStyle);
+  return widthStyle;
+};
+
 let animationCallback = (time: number): void => {
   updateInfoCardPosition();
   controls.update();
   renderer.render(scene, camera);
 };
 
-let setCameraToLocation = (location: Location3d): void => {
-  //let location = plant["location3d"];
-
-  /*
-  let x = parseFloat(location["x"]);
-  let y = parseFloat(location["y"]);
-  let z = parseFloat(location["z"]);
-  */
-
-  let x = parseFloat(location.x);
-  let y = parseFloat(location.y);
-  let z = parseFloat(location.z);
+let setCameraToPosition = (position: Position): void => {
+  let x = parseFloat(position.x);
+  let y = parseFloat(position.y);
+  let z = parseFloat(position.z);
 
   controls.target.set(x, y, z);
   camera.position.set(x, -1, 0);

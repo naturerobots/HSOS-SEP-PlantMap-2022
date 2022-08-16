@@ -50,6 +50,10 @@ def get3dPlants(request, company_id: int, garden_id: int, bed_id: int):
 
     plants = []
 
+    totalX = []
+    totalY = []
+    totalZ = []
+
     for file in onlyfiles:
         geometryUUID = file[:-4]
         locationOffset = plantLocationOffset(projectUUID=projectUUID, geometryUUID=geometryUUID)
@@ -76,13 +80,17 @@ def get3dPlants(request, company_id: int, garden_id: int, bed_id: int):
         }
         '''
 
+        totalX.append(locationOffset[0])
+        totalY.append(locationOffset[1])
+        totalZ.append(locationOffset[2])
+
         plant = {
             "geometryUUID": geometryUUID,
             "url": url + file,
             "name": "Swiss Chard",
             "locationDescription": "Row 12",
             "type": "11 Cluster",
-            "location3d": {
+            "position": {
                 "x": str(locationOffset[0]),
                 "y": str(locationOffset[1]),
                 "z": str(locationOffset[2]),
@@ -102,12 +110,23 @@ def get3dPlants(request, company_id: int, garden_id: int, bed_id: int):
             "yield": "N/A",
             "status": "Vegetating",
             "harvest": "2 Weeks",
-            "progress": 0.6,
+            "progress": "0.75",
         }
 
         # plants[geometryUUID]=plant
         plants.append(plant)
 
-    result = {"plants": plants}
+    result = {
+        "plants": plants,
+        "global": {
+            "position": {
+                "x": str(np.average(totalX)),
+                "y": str(np.average(totalY)),
+                "z": str(np.average(totalZ)),
+            }
+        },
+    }
 
-    return JsonResponse(result)
+    data = json.dumps(str(result))
+
+    return JsonResponse(result, safe=False)
