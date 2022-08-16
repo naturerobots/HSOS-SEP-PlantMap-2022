@@ -31,14 +31,10 @@
         ></crops-map>
       </div>
     </div>
-    <div class="row p-6">
-      <crop-scene></crop-scene>
-    </div>
   </base-layout>
 </template>
 
 <script setup lang="ts">
-import CropScene from "@/components/three-scenes/CropScene.vue";
 import { type Ref, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { userStore } from "@/stores/userStore";

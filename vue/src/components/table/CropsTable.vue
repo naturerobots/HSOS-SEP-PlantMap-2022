@@ -86,7 +86,7 @@
 
               <q-td :props="props" key="3d">
                 <div>
-                  <router-link to="/3d">
+                  <router-link to="/3d/Scene">
                     <svg
                       class="fill-black crops3d-icon-active mx-auto"
                       xmlns="http://www.w3.org/2000/svg"

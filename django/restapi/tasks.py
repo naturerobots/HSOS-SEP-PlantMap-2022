@@ -98,6 +98,20 @@ def save_ply(pcloud: PointCloud2, puuid: String, uuid: String):
                 ptype = "float64"
             else:
                 continue
+
+            '''
+            # set colors to red, green and blue, if shortcuts are used, to stick to the standard
+            name = field.name
+            if name == "r":
+                name = "red"
+            elif name == "g":
+                name = "green"
+            elif name == "b":
+                name = "blue"
+
+            properties += f"property {ptype} {name}\n"
+            '''
+
             properties += f"property {ptype} {field.name}\n"
 
         header = f"ply\nformat binary_{endianness}_endian 1.0\nelement vertex {point_amount}\n{properties}end_header\n"
@@ -117,8 +131,14 @@ def save_ply(pcloud: PointCloud2, puuid: String, uuid: String):
         logger.info("file_path " + str(file_path))
 
         if not default_storage.exists(file_path):
+
             file_content = ContentFile(header.encode('utf-8') + pcloud.data)
             default_storage.save(file_path, file_content)
+
+            # Path(file_path).mkdir(parents=True, exist_ok=True)
+            # file = open(file_path, "wb")
+            # file.write(header.encode('utf-8'))
+            # file.write(pcloud.data)
 
     except Exception as e:
         print(e)
