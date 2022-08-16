@@ -36,7 +36,7 @@ SOFTWARE.
   <h3 align="center">PlantMap Digital Logbook</h3>
 
   <p align="center">
-    A tool to support sustainable farming
+    A tool to support sustainable micro farming
     <br />
     <a href="https://naturerobots.github.io/HSOS-SEP-PlantMap-2022/"><strong>Documentation»</strong></a>
     <br />
