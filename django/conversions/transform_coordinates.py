@@ -5,14 +5,29 @@ from plyfile import PlyData
 from scipy.spatial.transform import Rotation
 
 
-def plantLocationOffset(projectUUID, geometryUUID):
+def plantLocationOffset(projectUUID, geometryUUID, dimensions=2):
     try:
         with open("storage/media/pointclouds/ply/" + projectUUID + "/" + geometryUUID + ".ply", "rb") as file:
             plydata = PlyData.read(file)
-            # get an estimate of a plant's center, by taking the averge x and y
-            x_avg = np.average(plydata.elements[0].data['x'])
-            y_avg = np.average(plydata.elements[0].data['y'])
-            return np.array([x_avg, y_avg, 0])
+            # get an estimate of a plant's center, by taking the averge x, y and z, dependent on the dimensions
+
+            x_avg = 0
+            y_avg = 0
+            z_avg = 0
+
+            if dimensions == 1:
+                x_avg = np.average(plydata.elements[0].data['x'])
+            elif dimensions == 2:
+                x_avg = np.average(plydata.elements[0].data['x'])
+                y_avg = np.average(plydata.elements[0].data['y'])
+            elif dimensions == 3:
+                x_avg = np.average(plydata.elements[0].data['x'])
+                y_avg = np.average(plydata.elements[0].data['y'])
+                z_avg = np.average(plydata.elements[0].data['z'])
+            else:
+                raise Exception("dimensions can only be 1,2 or 3 but it is: " + str(dimensions))
+
+            return np.array([x_avg, y_avg, z_avg])
     except FileNotFoundError:
         return None
 

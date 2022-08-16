@@ -1,6 +1,7 @@
 import base64
 import os
 import re
+from http.client import HTTPResponse
 from uuid import uuid4
 
 from rest_framework.decorators import api_view
@@ -25,20 +26,43 @@ def companies(request):
         return createCompany(request)
 
 
-# /companies/{company_id}
+# /gardens
+# Endpoint that returns all gardens a user has permissions on
 @api_view(['GET'])
-def getCompany(request, company_id: int):
-
-    # Check if requesting user is allowed to access company
-    if not isCompanyUser(company_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
-        return HttpResponseForbidden()
+def userGardens(request):
 
     try:
-        company = Company.objects.get(id=company_id)
-        serializer = CompanySerializer(company)
-        return JsonResponse(serializer.data, safe=False)
+        gardenPermissions = GardenPermission.objects.filter(user=request.user)
+        companyPermissions = CompanyPermission.objects.filter(user=request.user)
     except:
         return HttpResponseBadRequest()
+
+    gardens = []
+
+    for p in gardenPermissions.iterator():
+        gardens.append(p.garden)
+
+    for p in companyPermissions.iterator():
+        try:
+            companyGardens = Garden.objects.filter(company=p.company)
+        except:
+            continue
+        for g in companyGardens.iterator():
+            gardens.append(g)
+
+    serializer = GardenSerializer(gardens, many=True)
+    return JsonResponse(serializer.data, safe=False)
+
+
+# /companies/{company_id}
+@api_view(['GET', 'DELETE'])
+def companyView(request, company_id: int):
+
+    if request.method == 'GET':
+        return getCompany(request, company_id)
+
+    elif request.method == 'DELETE':
+        return deleteCompany(request, company_id)
 
 
 # /companies/{company_id}/gardens
@@ -55,28 +79,23 @@ def gardens(request, company_id: int):
 
 
 # /companies/{company_id}/gardens/{garden_id}
-@api_view(['GET'])
-def getGarden(request, company_id: int, garden_id: int):
+@api_view(['GET', 'DELETE'])
+def gardenView(request, company_id: int, garden_id: int):
 
-    # Check if requesting user is allowed to access the garden
-    if not isGardenUser(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
-        return HttpResponseForbidden()
+    if request.method == 'GET':
+        return getGarden(request, company_id, garden_id)
 
-    try:
-        company = Company.objects.get(id=company_id)
-        garden = Garden.objects.get(id=garden_id, company=company)
-    except:
-        return HttpResponseBadRequest()
-
-    serializer = GardenSerializer(garden)
-    return JsonResponse(serializer.data, safe=False)
+    elif request.method == 'DELETE':
+        return deleteGarden(request, company_id, garden_id)
 
 
 # TODO consider using class based views, for improved separation
 @api_view(['GET', 'POST'])
 def imageView(request, company_id: int, garden_id: int):
+
     if request.method == 'POST':
         return uploadImage(request, company_id, garden_id)
+
     elif request.method == 'GET':
         return getImage(request, company_id, garden_id)
 
@@ -87,7 +106,7 @@ def uploadImage(request, company_id, garden_id):
         return HttpResponseBadRequest()
 
     # Check if requesting user has admin permissions on garden
-    if not isGardenAdmin(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
+    if not isGardenAdmin(garden_id, request.user.username) and not isCompanyAdmin(company_id, request.user.username):
         return HttpResponseForbidden()
 
     # split image string to get file extension and raw bytes
@@ -121,7 +140,7 @@ def uploadImage(request, company_id, garden_id):
     for position in request.data['coordinates']:
         # if coordinates already exist just update, else create new ones
         try:
-            coordinate = Coordinate.objects.get(name=position['name'])
+            coordinate = Coordinate.objects.get(name=position['name'], garden=garden_id)
             coordinate.latitude = position['latitude']
             coordinate.longitude = position['longitude']
             coordinate.save()
@@ -137,7 +156,12 @@ def uploadImage(request, company_id, garden_id):
 def getImage(request, company_id, garden_id):
 
     # Check if requesting user is allowed to access the garden
-    if not isGardenUser(garden_id, request.user.id) and not isCompanyAdmin(company_id, request.user.id):
+    if (
+        not isGardenUser(garden_id, request.user.username)
+        and not isGardenAdmin(garden_id, request.user.username)
+        and not isCompanyUser(company_id, request.user.username)
+        and not isCompanyAdmin(company_id, request.user.username)
+    ):
         return HttpResponseForbidden()
 
     try:
@@ -156,3 +180,14 @@ def getImage(request, company_id, garden_id):
     coordinates = CoordinateSerializer(coordinates, many=True).data
 
     return JsonResponse({"image": image_string, "coordinates": coordinates})
+
+
+# /companies/{company_id}/gardens/{garden_id}/widget
+@api_view(['GET', 'POST'])
+def widgetView(request):
+
+    if request.method == 'GET':
+        return getWidget(request)
+
+    elif request.method == 'POST':
+        return createOrEditWidget(request)

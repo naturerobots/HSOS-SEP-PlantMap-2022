@@ -3,7 +3,6 @@
     <leaflet-comp
       :maxZoom="maxZoom"
       :zoom="zoom"
-      :map-image="mapImage"
       :zoom-control="zoomControl"
       :map-interaction="mapInteraction"
       ref="leafletRef"
@@ -14,15 +13,13 @@
 
 <script setup lang="ts">
 import LeafletComp from "@/components/leaflet/LeafletComp.vue";
-import type { MapImage } from "@/types/mapImage";
 import { ref } from "vue";
 import type L from "leaflet";
 import type { LeafletEvent } from "leaflet";
-
+import type { GardenImage } from "@/types/gardenImage";
 const leafletRef = ref<InstanceType<typeof LeafletComp> | null>(null);
 
 defineProps<{
-  mapImage: MapImage;
   maxZoom?: number;
   zoom?: number;
   zoomControl?: boolean;
@@ -40,7 +37,11 @@ const emit = defineEmits<{
 
 defineExpose({
   addMarker,
+  addLayerGroup,
+  removeLayerGroup,
+  addEventsToMarker,
   addPolygon,
+  addGardenImage,
 });
 
 function addMarker(marker: L.Marker): void {
@@ -50,11 +51,41 @@ function addMarker(marker: L.Marker): void {
   leafletRef.value?.addMarker(marker);
 }
 
+function addLayerGroup(
+  markers: L.LayerGroup,
+  topRight: L.LatLng | undefined,
+  bottomLeft: L.LatLng | undefined
+): void {
+  markers.eachLayer(function (layer: any) {
+    layer.on("click", emitMarkerClick);
+    layer.on("mouseover", emitMarkerEnter);
+    layer.on("mouseout", emitMarkerLeave);
+  });
+
+  leafletRef.value?.addLayerGroup(markers, topRight, bottomLeft);
+}
+
+function removeLayerGroup(markers: L.LayerGroup): void {
+  leafletRef.value?.removeLayerGroup(markers);
+}
+
+function addEventsToMarker(marker: L.Marker): void {
+  marker.on("click", emitMarkerClick);
+  marker.on("mouseover", emitMarkerEnter);
+  marker.on("mouseout", emitMarkerLeave);
+}
+
 function addPolygon(polygon: L.Polygon): void {
   polygon.on("click", emitPolygonClick);
   polygon.on("mouseover", emitPolygonEnter);
   polygon.on("mouseout", emitPolygonLeave);
   leafletRef.value?.addPolygon(polygon);
+}
+
+function addGardenImage(gardenImage: GardenImage | undefined): void {
+  if (!gardenImage) throw new Error("Garden Image should not be undefined");
+
+  leafletRef.value?.addGardenImage(gardenImage);
 }
 
 function emitMarkerClick(event: LeafletEvent): void {
