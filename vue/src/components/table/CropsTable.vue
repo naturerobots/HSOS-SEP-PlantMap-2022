@@ -315,6 +315,7 @@ const props = defineProps<{
   visibleColumnsBeds: string[];
   visibleColumnsCrops: string[];
   beds: Beds;
+  columns: QTableProps["columns"];
 }>();
 
 let visColsBedTable = ref(props.visibleColumnsBeds);
@@ -458,66 +459,66 @@ function pagination(): { sortBy: string; rowsPerPage: number } {
   };
 }
 
-const columns: QTableProps["columns"] = [
-  {
-    name: "location",
-    align: "left",
-    label: "Location",
-    field: "id",
-    sortable: true,
-  },
-  {
-    name: "plant",
-    align: "left",
-    label: "Plant",
-    field: "plant",
-    sortable: true,
-  },
-  {
-    name: "variety",
-    align: "left",
-    label: "Variety",
-    field: "variety",
-    sortable: true,
-  },
+// const columns: QTableProps["columns"] = [
+//   {
+//     name: "location",
+//     align: "left",
+//     label: "Location",
+//     field: "id",
+//     sortable: true,
+//   },
+//   {
+//     name: "plant",
+//     align: "left",
+//     label: "Plant",
+//     field: "plant",
+//     sortable: true,
+//   },
+//   {
+//     name: "variety",
+//     align: "left",
+//     label: "Variety",
+//     field: "variety",
+//     sortable: true,
+//   },
 
-  {
-    name: "soil_humidity",
-    align: "left",
-    label: "Humidity",
-    field: "soil_humidity",
-    sortable: true,
-    // sort: (a: any, b: any) => parseInt(a, 10) - parseInt(b, 10),
-  },
-  {
-    name: "health",
-    align: "left",
-    label: "Health",
-    field: "health",
-    sortable: false,
-  },
-  // {
-  //   name: "status",
-  //   align: "left",
-  //   label: "Status",
-  //   field: "status",
-  //   sortable: true,
-  // },
-  {
-    name: "harvest",
-    align: "left",
-    label: "Harvest",
-    field: "harvest",
-    sortable: true,
-    sort: (a: any, b: any) => parseInt(a, 10) - parseInt(b, 10),
-  },
-  {
-    name: "yield",
-    align: "left",
-    label: "Yield",
-    field: "yield",
-    sortable: true,
-  },
-  { name: "3d", align: "left", label: "3D", field: "3d", sortable: false },
-];
+//   {
+//     name: "soil_humidity",
+//     align: "left",
+//     label: "Humidity",
+//     field: "soil_humidity",
+//     sortable: true,
+//     // sort: (a: any, b: any) => parseInt(a, 10) - parseInt(b, 10),
+//   },
+//   {
+//     name: "health",
+//     align: "left",
+//     label: "Health",
+//     field: "health",
+//     sortable: false,
+//   },
+//   // {
+//   //   name: "status",
+//   //   align: "left",
+//   //   label: "Status",
+//   //   field: "status",
+//   //   sortable: true,
+//   // },
+//   {
+//     name: "harvest",
+//     align: "left",
+//     label: "Harvest",
+//     field: "harvest",
+//     sortable: true,
+//     sort: (a: any, b: any) => parseInt(a, 10) - parseInt(b, 10),
+//   },
+//   {
+//     name: "yield",
+//     align: "left",
+//     label: "Yield",
+//     field: "yield",
+//     sortable: true,
+//   },
+//   { name: "3d", align: "left", label: "3D", field: "3d", sortable: false },
+// ];
 </script>

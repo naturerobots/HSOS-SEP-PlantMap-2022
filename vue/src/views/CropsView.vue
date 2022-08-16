@@ -5,17 +5,17 @@
     :storeOptions="storeOptions"
   >
     <div class="row p-6">
-      <!-- <div
-        v-if="beds.beds && storeOptions.indexOf('crops-table') > -1"
-        class="col-8"
-      > -->
       <div v-if="storeOptions.indexOf('crops-table') > -1" class="col-8">
         <crops-table
           ref="cropsTableRef"
           title="Beds"
           :beds="beds"
-          :visibleColumnsBeds="colsBedTable"
-          :visibleColumnsCrops="colsCropsTable"
+          :visibleColumnsBeds="visibleColsBedTable"
+          :visibleColumnsCrops="visibleColsCropsTable"
+          :columns="columns"
+          @row-enter="tableCropsEnter"
+          @row-leave="tableCropsLeave"
+          @row-click="tableCropsClick"
         ></crops-table>
       </div>
       <div
@@ -52,14 +52,14 @@ import { bedStore } from "@/stores/bedStore";
 import type { Beds } from "@/types/beds";
 import { cropsStore } from "@/stores/cropsStore";
 import type { Plants } from "@/types/plants";
+import type { QTableProps } from "quasar";
 const storeOptions: Ref<StoreOption[]> = storeToRefs(userStore()).getOptions;
 const widgetOptionsCrops: WidgetOption[] = [
   widgetOptions.cropsTable,
   widgetOptions.cropsMap,
 ];
 
-let colsBedTable: string[] = [
-  //"id",
+let visibleColsBedTable: string[] = [
   "plant",
   "location",
   "variety",
@@ -71,17 +71,14 @@ let colsBedTable: string[] = [
   "3d",
 ];
 
-let colsCropsTable: string[] = [
-  //"id",
+let visibleColsCropsTable: string[] = [
   "plant",
-  // "location",
   "variety",
   "soil_humidity",
   "health",
   "status",
   "harvest",
   "yield",
-  // "3d",
 ];
 
 const beds: Ref<Beds> = storeToRefs(bedStore()).getBeds;
@@ -115,4 +112,58 @@ function mapCropsClick(bedId: number): void {
 // function tableCropsClick(cropsId: number): void {
 //   cropsMapRef.value?.setPolygonClicked(cropsId);
 // }
+
+const columns: QTableProps["columns"] = [
+  {
+    name: "location",
+    align: "left",
+    label: "Location",
+    field: "id",
+    sortable: true,
+  },
+  {
+    name: "plant",
+    align: "left",
+    label: "Plant",
+    field: "plant",
+    sortable: true,
+  },
+  {
+    name: "variety",
+    align: "left",
+    label: "Variety",
+    field: "variety",
+    sortable: true,
+  },
+  {
+    name: "soil_humidity",
+    align: "left",
+    label: "Humidity",
+    field: "soil_humidity",
+    sortable: true,
+  },
+  {
+    name: "health",
+    align: "left",
+    label: "Health",
+    field: "health",
+    sortable: false,
+  },
+  {
+    name: "harvest",
+    align: "left",
+    label: "Harvest",
+    field: "harvest",
+    sortable: true,
+    sort: (a: any, b: any) => parseInt(a, 10) - parseInt(b, 10),
+  },
+  {
+    name: "yield",
+    align: "left",
+    label: "Yield",
+    field: "yield",
+    sortable: true,
+  },
+  { name: "3d", align: "left", label: "3D", field: "3d", sortable: false },
+];
 </script>
