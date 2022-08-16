@@ -1,5 +1,8 @@
 <template>
   <div class="inline-flex space-x-3 pl-2 items-center q-pa-md">
+    <div v-if="gardenImage.image">
+      <q-btn rounded color="primary" label="Replace Image" @click="replace" />
+    </div>
     <div class="q-gutter-y-md column" style="max-width: 300px">
       <q-file
         clearable
@@ -12,7 +15,6 @@
         @update:model-value="setBase64($event)"
       />
     </div>
-
     <div v-if="base64">
       <q-btn rounded color="primary" label="Crop Image" @click="crop" />
     </div>
@@ -40,7 +42,10 @@ import { Cropper } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
 import { useRouter, type Router } from "vue-router";
 import { useQuasar, type QVueGlobals } from "quasar";
+import { gardenStore } from "@/stores/gardenStore";
 import { ref, type Ref } from "vue";
+import type { GardenImage } from "@/types/gardenImage";
+import { storeToRefs } from "pinia";
 
 const router: Router = useRouter();
 const $q: QVueGlobals = useQuasar();
@@ -51,6 +56,21 @@ const cropperChild = ref<InstanceType<typeof Cropper>>();
 const model: Ref<File | undefined> = ref<File>();
 const base64: Ref<string | undefined> = ref<string>();
 const base64Cropped: Ref<string | undefined> = ref<string>();
+const gardenImage: Ref<{ image: GardenImage | undefined }> = storeToRefs(
+  gardenStore()
+).getGardenImage;
+
+function replace(): void {
+  if (gardenImage.value.image) {
+    router.push({
+      name: "imageupload",
+      params: {
+        src: gardenImage.value.image.image,
+        coordinates: JSON.stringify(gardenImage.value.image.coordinates),
+      },
+    });
+  }
+}
 
 function crop(): void {
   base64Cropped.value = cropperChild.value
@@ -60,7 +80,10 @@ function crop(): void {
 
 function place(): void {
   if (base64Cropped.value && base64Cropped.value.length > 0) {
-    router.push({ name: "imageupload", params: { src: base64Cropped.value } });
+    router.push({
+      name: "imageupload",
+      params: { src: base64Cropped.value, coordinates: undefined },
+    });
   }
 }
 

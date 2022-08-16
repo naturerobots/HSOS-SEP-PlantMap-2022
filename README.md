@@ -33,195 +33,121 @@ SOFTWARE.
     <img src="docs/imgs/plant-map-logo.png" alt="Logo">
   </a>
 
-  <h3 align="center">Project PlantMap</h3>
+  <h3 align="center">PlantMap digital logbook</h3>
 
   <p align="center">
     A tool to support sustainable farming
     <br />
     <a href="https://naturerobots.github.io/HSOS-SEP-PlantMap-2022/"><strong>Documentation»</strong></a>
     <br />
-    ·
-    <a href="https://github.com/naturerobots/HSOS-SEP-PlantMap-2022/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/naturerobots/HSOS-SEP-PlantMap-2022/issues">Request Feature</a>
   </p>
 </div>
 
 ## Table of Contents
 
-- [About the project](#about-the-project)
-- [Getting Started](#getting-started)
-  - [Preequisites](#preequisites)
-  - [Running the Application](#running-the-application)
-  - [Development Container](#vs-code-development-container)
-  - [GitHub Container Registry](#github-container-registry)
-- [Architecture](#architecture-overview)
-- [Contributing](#contributing)
-  - [Pre-Commit Checks](#pre-commit-formatting-checks)
-  - [Conventional Commit Messages](#conventional-commit-messages)
-- [License](#license)
+- [README](#readme)
+  - [Table of Contents](#table-of-contents)
+  - [General](#general)
+  - [Quick Start](#quick-start)
+  - [Documentation](#documentation)
+  - [Contributing](#contributing)
+  - [License](#license)
 
-## About The Project
+## General
 
-The goal of this project is to develop a platform to support sustainable
-([biointensive]()) vegetable gardeners. This involves the creation of a digital
-twin of the vegetable gardens to monitor various aspects like the growth and the
-health of the plants. The necessary data is gathered by autonomous robots
-driving around in the gardens, which are currently in development. This allows for
-an early detection and treatment of diseases, as well as optimizations of yield
-estimates and bed planning.
+This project was developed in the software engineering course of the [University
+of Applied Sciences Osnabrück](https://www.hs-osnabrueck.de/en/) in cooperation
+with [Nature Robots](https://naturerobots.de/) and the [DFKI PBR
+Osnabrück](https://www.dfki.de/web/forschung/forschungsbereiche/planbasierte-robotersteuerung).
+The goal was to create a platform to support sustainable micro farming
+gardeners. Mirco farming focus on the preservation and regeneration of the
+entire ecosystem, as well as on soil fertility. In this process, up to fifty
+different types of vegetables are cultivated close to each other in narrow
+culture strips.  
 
-## Getting started
+However, the entry into the cultivation concept is associated with numerous
+hurdles. A great deal of expertise is required for cultivation, making access
+difficult for newcomers and those switching from conventional agriculture.
 
-### Preequisites
+To overcome the obstacles, the **PlantMap Digital Logbook** creates a digital
+twin of the garden. Thereby various aspects like the growth and the health of
+the plants can be monitored. This allows for an early detection and treatment of
+diseases, as well as optimizations on bed planning and yield estimates.
+Furthermore, instructions can be passed to the gardener or his staff. The data is
+gathered by the autonomous driving robot
+[Lero](https://naturerobots.de/blog/lero-robot-prototype/) and is stored in the
+semantical environment representation
+[SEEREP](https://github.com/agri-gaia/seerep).
 
-In order to use the application you need to install:
+## Quick Start
 
-- docker >= 20.10.16
-- docker compose >= 2.5.0
-- vs-code
+For running the application, we assume that you have a current version of
+[Visual Studio Code](https://code.visualstudio.com/) and
+[Docker](https://www.docker.com/). Further, Visual Studio Code **needs** to have
+the **docker and the remote container extensions installed**. If you didn't
+understand the requirements,  please visit the [installation
+guide](https://naturerobots.github.io/HSOS-SEP-PlantMap-2022/getting-started/installation/)
+in the documentation for more detailed steps.
 
-### Running the application
-
-If you just want to have a look at the running PlantMap application, you can run
-`docker compose` in the root folder. For that use, the following steps:
+To get started, clone the repository and open it in Visual Studio Code:
 
 ```sh
-git clone https://github.com/naturerobots/HSOS-SEP-PlantMap-2022.git
-cd HSOS-SEP-PlantMap-2022
-docker-compose run (Windows, Mac)
-docker compose run (Linux)
+  git clone https://github.com/naturerobots/HSOS-SEP-PlantMap-2022.git
+  cd HSOS-SEP-PlantMap-2022
+  code .
 ```
 
-The web-page should now be available at
-[http://localhost:80](http://localhost:80) and the REST-API at
-[http://localhost:8000](http://localhost:8000)
+Next, we need to mount the current workspace into the projects docker container
+to use it as a preconfigured development environment. For that, you can press
+`F1` or `CTRL+SHIFT+P` and enter `Remote-Containers: Reopen Folder in Container`
+and confirm with `ENTER`. Visual Studio Code additionally shows a notification
+after opening the project in the bottom right corner with the same option. Now
+the [docker
+image](https://github.com/naturerobots/HSOS-SEP-PlantMap-2022/pkgs/container/plant-map-digital-logbook)
+of the project along with the images for the
+ [PostgreSQL](https://www.postgresql.org/) database and the
+ [RabbitMQ](https://www.rabbitmq.com/) message broker are downloaded.
+ Additionally, the set-up of all required packages and extensions is handled.
 
-### VS-Code Development Container
+The default user for the container is:
 
-1. Clone this repository and open it in VS Code.
+```shell
+user: docker
+password: docker
+  ```
 
-   ```sh
-   git clone https://github.com/naturerobots/HSOS-SEP-PlantMap-2022.git
-   cd HSOS-SEP-PlantMap-2022
-   code .
-   ```
+## Documentation  
 
-2. Install the `ms-vscode-remote.remote-containers` and
-   `ms-azuretools.vscode-docker` extensions.
-
-   ```sh
-   code --install-extension ms-vscode-remote.remote-containers
-   code --install-extension ms-azuretools.vscode-docker
-   ```
-
-3. Press `F1` or `CTRL+SHIFT+P` and enter `Remote-Containers: Reopen Folder in Container`
-4. This creates a docker container for the development of the PlantMap application and
-   starts the needed [PostgreSQL](ttps://www.postgresql.org/) database. Additionally
-   all necessary VS Code extensions and npm packages from the `package.json` are
-   installed. Further git pre-commit hooks are set up.
-5. The default user for the container is:
-
-   ```
-   user: `docker`
-   password: `docker`
-   ```
-
-### GitHub Container Registry
-
-The docker images for _vue_ and _django_ are published to the
-GitHub Container Registry. In order to download them, you first need to log in:
-
-If you have enabled 2-factor authentication, please create an access token:
-[https://github.com/settings/tokens](https://github.com/settings/tokens)
-
-Use your password or generated token and the `ghcr.io` container registry as
-follows:
-
-```bash
-docker login ghcr.io -u USERNAME --password PASSWORD/TOKEN
-```
-
-Now you call pull the images with `docker pull`.
-
-## Architecture Overview
-
-The frontend of the PlantMap project is build with [Vue.js](https://vuejs.org/),
-[Quasar](https://quasar.dev/) and [Leaflet](https://leafletjs.com/) for the
-integration of maps. The [Django](https://www.djangoproject.com/) server is used
-as a backend for data management. It provides a REST-API to retrieve data
-from a [PostgreSQL](https://www.postgresql.org/download/) database and SEEREP.
-PostgreSQL is used to store general user specific information. SEEREP provides a
-semantic environment representation of the gardens and can accept
-spatio-temporal-semantic queries. SEEREP is currently in development and will also
-be open-sourced soon. [gRPC](https://grpc.io/) is used to query and retrieve
-data from SEEREP, currently [Protocol
-Buffers](https://developers.google.com/protocol-buffers) are used as the
-messaging format. The data for SEEREP is recorded by an autonomous driving robot which is also developed by [naturerobots](https://naturerobots.de/).
-
-![](docs/imgs/plant-map-architecture.png)
+The full documentation of the project can be found on [GitHub
+Pages](https://naturerobots.github.io/HSOS-SEP-PlantMap-2022/). It provides
+detailed information on the architecture, the REST-API interface as well as
+general topics.
 
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to
-learn and inspire. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and
-create a pull request. You can also simply open an issue with the tag
-"enhancement". Don't forget to give the project a star!
-
-### Pre-Commit Formatting Checks
+learn and inspire. Any contributions are **greatly appreciated**.
 
 This repository uses [pre-commit](https://pre-commit.com/) checks to verify the
 code style before committing. Since the pre-commit checks are automatically
-installed in the development container, commits from inside the container are
-only possible if the checks succeed.
-
-To run over all the files in the repo manually, use:
+installed in the development container, they are run before each commit you
+make. The checks can also be run manually with:
 
 ```bash
 pre-commit run -a
 ```
 
-If you want to set up the pre-commit checks locally, use pip:
+We also **enforce commit conventions** via the pre-commit checks to add semantic
+meaning to the git history. A quick summary of the convention is provided here,
+for more details, visit the
+[documentation](https://naturerobots.github.io/HSOS-SEP-PlantMap-2022/getting-started/installation/).
 
-```bash
-pip3 install --user pre-commit
-```
-
-To run pre-commit automatically before committing localy, install the git hooks
-(run it in the root folder of the repository:
-
-```bash
-pre-commit install
-```
-
-### Conventional Commit Messages
-
-This repository uses [Conventional
-Commits](https://www.conventionalcommits.org/en/v1.0.0/) for a more readable and
-explicit commit history. A quick summary is provided here, for more details,
-visit their [website](https://www.conventionalcommits.org/en/v1.0.0/).
-
-Conventional Commits consists of an easy set of rules, which basically state
-that each commit should have the following structure:
-
-```
-<type>(optional scope): <description>
-
-[optional body]
-
-[optional footer(s)]
-```
-
-Some accepted types are `feat`, `fix`, `build`, `docs`, `refactor`, `test`, if
-their intended use cases are not obvious to you, look into the
-[documentation](https://www.conventionalcommits.org/en/v1.0.0/). An example for
-a conventional commit would be:
-
-```
-feat(api): create bed information endpoint
-```
+Each commit should therefore have the following structure: `<type>(optional
+scope): <description>`. Example types could be `feat`, `fix`, `build`, `docs`,
+`refactor`, `test`. The [conventional commit
+specification](https://www.conventionalcommits.org/en/v1.0.0/#specification)
+provides concise information on when to use which type and how scopes can be
+used.
 
 ## License
 

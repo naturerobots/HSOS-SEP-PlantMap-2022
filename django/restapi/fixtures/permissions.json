@@ -3,7 +3,7 @@
     "model": "restapi.companypermission",
     "pk": 1,
     "fields": {
-      "permission": "u",
+      "permission": "a",
       "company": 1,
       "user": 1
     }
@@ -13,6 +13,15 @@
     "pk": 2,
     "fields": {
       "permission": "a",
+      "company": 2,
+      "user": 1
+    }
+  },
+  {
+    "model": "restapi.companypermission",
+    "pk": 3,
+    "fields": {
+      "permission": "u",
       "company": 1,
       "user": 2
     }
@@ -21,18 +30,18 @@
     "model": "restapi.gardenpermission",
     "pk": 1,
     "fields": {
-      "permission": "u",
-      "garden": 1,
-      "user": 2
+      "permission": "a",
+      "garden": 3,
+      "user": 3
     }
   },
   {
     "model": "restapi.gardenpermission",
-    "pk": 1,
+    "pk": 2,
     "fields": {
-      "permission": "a",
-      "garden": 1,
-      "user": 1
+      "permission": "u",
+      "garden": 4,
+      "user": 4
     }
   }
 ]

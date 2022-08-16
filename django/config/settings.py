@@ -91,6 +91,18 @@ DATABASES = {
     }
 }
 
+if os.environ.get('GITHUB_WORKFLOW'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'github_actions',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': 'postgres',
+            'PORT': '5432',
+        }
+    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -142,40 +154,41 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
 }
 
-# LOGGING Configuration
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'loggers': {
-        'django': {
-            'handlers': ['debugFile', 'infoFile', 'console'],
-            'level': 'DEBUG',
-            'propagate': True,
+if not os.environ.get('GITHUB_WORKFLOW'):
+    # LOGGING Configuration
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'loggers': {
+            'django': {
+                'handlers': ['debugFile', 'infoFile', 'console'],
+                'level': 'DEBUG',
+                'propagate': True,
+            },
         },
-    },
-    'handlers': {
-        'debugFile': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': './storage/logs/django/debug.log',
-            'formatter': 'extended',
+        'handlers': {
+            'debugFile': {
+                'level': 'DEBUG',
+                'class': 'logging.FileHandler',
+                'filename': './storage/logs/debug.log',
+                'formatter': 'extended',
+            },
+            'infoFile': {
+                'level': 'INFO',
+                'class': 'logging.FileHandler',
+                'filename': './storage/logs/info.log',
+                'formatter': 'extended',
+            },
+            'console': {'level': 'INFO', 'class': 'logging.StreamHandler', 'formatter': 'simple'},
         },
-        'infoFile': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': './storage/logs/django/info.log',
-            'formatter': 'extended',
+        'formatters': {
+            'simple': {
+                'format': '{levelname} {asctime} {message}',
+                'style': '{',
+            },
+            'extended': {
+                'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+                'style': '{',
+            },
         },
-        'console': {'level': 'INFO', 'class': 'logging.StreamHandler', 'formatter': 'simple'},
-    },
-    'formatters': {
-        'simple': {
-            'format': '{levelname} {asctime} {message}',
-            'style': '{',
-        },
-        'extended': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
-            'style': '{',
-        },
-    },
-}
+    }
