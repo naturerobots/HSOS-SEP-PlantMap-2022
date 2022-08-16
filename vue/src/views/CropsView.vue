@@ -23,9 +23,11 @@
           ref="cropsMapRef"
           :beds="beds"
           :plants="plants"
-          @bed-click="mapCropsClick"
-          @bed-enter="mapCropsEnter"
-          @bed-leave="mapCropsLeave"
+          @bed-click="mapBedClick"
+          @bed-enter="mapBedEnter"
+          @bed-leave="mapBedLeave"
+          @plant-enter="mapPlantEnter"
+          @plant-leave="mapPlantLeave"
         >
         </crops-map>
       </div>
@@ -85,27 +87,26 @@ const cropsMapRef = ref<InstanceType<typeof CropsMap> | null>(null);
 const cropsTableRef = ref<InstanceType<typeof CropsTable> | null>(null);
 
 // Table - Map interaction
-function mapCropsEnter(bedId: number): void {
-  cropsTableRef.value?.setRowActive(bedId);
+function mapBedEnter(bedId: number): void {
+  cropsTableRef.value?.setRowActiveBed(bedId);
 }
 
-function mapCropsLeave(bedId: number): void {
-  cropsTableRef.value?.setRowInactive(bedId);
+function mapBedLeave(bedId: number): void {
+  cropsTableRef.value?.setRowInactiveBed(bedId);
 }
 
-function mapCropsClick(bedId: number): void {
+function mapBedClick(bedId: number): void {
   //cropsStore().loadDataFromApi(bedId);
   cropsTableRef.value?.setRowClicked(bedId);
 }
 
-// function mapCropsEnter1(plantId: string): void {
-//   console.log("mapsCropsEnter1: " + plantId);
-//   cropsTableRef.value?.setRowActive2(plantId);
-// }
+function mapPlantEnter(plantId: string): void {
+  cropsTableRef.value?.setRowActivePlant(plantId);
+}
 
-// function mapCropsLeave1(plantId: string): void {
-//   console.log("mapsCropsLeave1: " + plantId);
-// }
+function mapPlantLeave(plantId: string): void {
+  cropsTableRef.value?.setRowInactivePlant(plantId);
+}
 
 // function tableCropsEnter(cropsId: number): void {
 //   cropsMapRef.value?.setPolygonActive(cropsId);

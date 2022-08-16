@@ -28,7 +28,7 @@
               @mouseleave="rowLeave(props.row.id)"
               @click="
                 (cropstable = !cropstable),
-                  rowclicked(props.row.id),
+                  rowClicked(props.row.id),
                   (activeRow = props.row)
               "
             >
@@ -169,6 +169,7 @@
       </div>
       <div v-else>
         <q-table
+          ref="table"
           :rows="plantsPlants.plants"
           :columns="columns"
           row-key="name"
@@ -260,7 +261,7 @@
                       :health="h"
                       :plant="props.row.plant"
                       :props="props"
-                      @remove-clicked="rowclicked(props.row.id)"
+                      @remove-clicked="rowClicked(props.row.id)"
                     ></status-popup>
                   </div>
                 </div>
@@ -329,10 +330,11 @@ const emit = defineEmits<{
 }>();
 
 defineExpose({
-  setRowActive,
-  setRowInactive,
+  setRowActiveBed,
+  setRowInactiveBed,
   setRowClicked,
-  // setRowActive2,
+  setRowActivePlant,
+  setRowInactivePlant,
 });
 
 function roundTwoDec(num: number): number {
@@ -360,28 +362,24 @@ function getRowByBedId(bedId: number): HTMLTableRowElement | undefined {
   }
 }
 
-// function getRowByPlantId(plantId: string): HTMLTableRowElement | undefined {
-//   console.log("getRowByPlantId");
-//   const tableValue: any = table.value;
-//   console.log("getRowByPlantId " + tableValue);
-//   if (tableValue) {
-//     const filteredSortedRows = tableValue.filteredSortedRows;
-//     if (table.value?.rows?.length) {
-//       for (let i = 0; i < table.value.rows.length; i++) {
-//         console.log("RowID: " + table.value.rows[i].id);
-//         if (plantId == table.value.rows[i].id) {
-//           const rowIndex = filteredSortedRows.indexOf(table.value.rows[i]);
-//           return document
-//             .getElementsByClassName("q-table")[0]
-//             .getElementsByTagName("tr")[rowIndex + 2];
-//         }
-//       }
-//     }
-//   }
-// }
+function getRowByPlantId(plantId: string): HTMLTableRowElement | undefined {
+  const tableValue: any = table.value;
+  if (tableValue) {
+    const filteredSortedRows = tableValue.filteredSortedRows;
+    if (table.value?.rows?.length) {
+      for (let i = 0; i < table.value.rows.length; i++) {
+        if (plantId === table.value.rows[i].id) {
+          const rowIndex = filteredSortedRows.indexOf(table.value.rows[i]);
+          return document
+            .getElementsByClassName("q-table")[0]
+            .getElementsByTagName("tr")[rowIndex + 2];
+        }
+      }
+    }
+  }
+}
 
 function removeClickedRow(): void {
-  //console.log("removeClickedRow");
   const tableValue: any = table.value;
   if (tableValue) {
     const filteredSortedRows = tableValue.filteredSortedRows;
@@ -401,21 +399,21 @@ function removeClickedRow(): void {
   }
 }
 
-function setRowActive(cropsId: number): void {
+function setRowActiveBed(cropsId: number): void {
   const row: HTMLTableRowElement | undefined = getRowByBedId(cropsId);
   if (row) {
     row.classList.add("crops-row-active");
   }
 }
 
-// function setRowActive2(plantId: string): void {
-//   console.log("setRowActive2");
-//   const row: HTMLTableRowElement | undefined = getRowByPlantId(plantId);
-//   console.log("row: " + row);
-//   if (row) {
-//     row.classList.add("crops-row-active");
-//   }
-// }
+function setRowActivePlant(plantId: string): void {
+  console.log("setRowActive2");
+  const row: HTMLTableRowElement | undefined = getRowByPlantId(plantId);
+  console.log("row: " + row);
+  if (row) {
+    row.classList.add("crops-row-active");
+  }
+}
 
 function setRowClicked(cropsId: number): void {
   //("setRowClicked");
@@ -439,8 +437,15 @@ function setRowClicked(cropsId: number): void {
   }
 }
 
-function setRowInactive(cropsId: number): void {
+function setRowInactiveBed(cropsId: number): void {
   const row: HTMLTableRowElement | undefined = getRowByBedId(cropsId);
+  if (row) {
+    row.classList.remove("crops-row-active");
+  }
+}
+
+function setRowInactivePlant(bedId: string): void {
+  const row: HTMLTableRowElement | undefined = getRowByPlantId(bedId);
   if (row) {
     row.classList.remove("crops-row-active");
   }
@@ -454,15 +459,11 @@ function rowLeave(cropsId: number): void {
   emit("rowLeave", cropsId);
 }
 
-function rowclicked(bedId: number): void {
-  //console.log("rowClicked " + bedId);
+function rowClicked(bedId: number): void {
   bedStore().setSelectedBedId(bedId);
   const num = storeToRefs(bedStore()).getSelectedBedId;
-  // console.log("PlantsId: " + beds.value.beds[cropsId-1].plants)
   const bed = storeToRefs(bedStore()).getSelectedBed;
-  //console.log(bed.value);
   if (bed.value) {
-    //console.log("BedId: " + bed.value.id);
     cropsStore().loadDataFromApi(bed.value.plants);
   }
 
