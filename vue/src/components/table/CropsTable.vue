@@ -66,7 +66,7 @@
                       :health="h"
                       :plant="props.row.plant"
                       :props="props"
-                      @remove-clicked="rowclicked(props.row.id)"
+                      @remove-clicked="rowClicked(props.row.id)"
                     ></status-popup>
                   </div>
                 </div>
