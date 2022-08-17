@@ -33,10 +33,10 @@ SOFTWARE.
     <img src="docs/imgs/plant-map-logo.png" alt="Logo">
   </a>
 
-  <h3 align="center">PlantMap digital logbook</h3>
+  <h3 align="center">PlantMap Digital Logbook</h3>
 
   <p align="center">
-    A tool to support sustainable farming
+    A tool to support sustainable micro farming
     <br />
     <a href="https://naturerobots.github.io/HSOS-SEP-PlantMap-2022/"><strong>Documentation»</strong></a>
     <br />
@@ -46,7 +46,6 @@ SOFTWARE.
 ## Table of Contents
 
 - [README](#readme)
-  - [Table of Contents](#table-of-contents)
   - [General](#general)
   - [Quick Start](#quick-start)
   - [Documentation](#documentation)
