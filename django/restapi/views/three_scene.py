@@ -112,7 +112,7 @@ def get3dPlants(request, company_id: int, garden_id: int, bed_id: int):
         measurementUUID = measurementMeta.uuid
         plantUrl = url + file
         name = geometryMeta.name
-        locationDescription = ""
+        locationDescription = bed_id
         plantType = "Error"
         health = []
         plantYield = ""
@@ -138,7 +138,7 @@ def get3dPlants(request, company_id: int, garden_id: int, bed_id: int):
             if all(key in measurement.data for key in (f"health_{i}_type", f"health_{i}_level")):
                 htype = measurement.data[f"health_{i}_type"].string_data
                 hlevel = measurement.data[f"health_{i}_level"].int64_data
-                health.append({"type": htype, "loglevel": hlevel})
+                health.append({"type": htype, "loglevel": hlevel, "shortcut": htype[0]})
 
         instance = stubLabel.GetInstance(InstanceQuery(projectuuid=bed.uuid, instanceuuid=geometryMeta.labels[0]))
 
@@ -161,7 +161,7 @@ def get3dPlants(request, company_id: int, garden_id: int, bed_id: int):
             "measurementUUID": measurementUUID,
             "url": plantUrl,
             "name": name,
-            "locationDescription": "Row 12",
+            "locationDescription": locationDescription,
             "type": plantType,
             "position": {
                 "x": str(locationOffset[0]),

@@ -342,7 +342,7 @@ import type { Ref } from "vue";
 import type { Crop } from "@/types/crop";
 import { storeToRefs } from "pinia";
 import { cropsStore } from "@/stores/cropsStore";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import type { QTable, QTableProps } from "quasar";
 import StatusPopup from "@/components/StatusPopup.vue";
 import type { Plants } from "@/types/plants";
@@ -398,6 +398,11 @@ defineExpose({
   setRowClicked,
   setRowActivePlant,
   setRowInactivePlant,
+});
+
+onMounted(() => {
+  // Reset selected Crop to empty string when table is loaded
+  setCropId("");
 });
 
 function roundTwoDec(num: number): number {

@@ -23,17 +23,28 @@
             <tr>
               <th class="table-entry">Health:</th>
               <th class="table-entry">
-                <span
-                  v-for="health in highlightedCrop3d?.health"
-                  :key="health.type"
-                >
-                  {{ health.shortcut }}
-                </span>
+                <div class="flex flex-row w-24 text-center">
+                  <div
+                    class="round-badge mx-1 text-black text-bold transition hover:scale-125 w-1"
+                    v-for="health in highlightedCrop3d?.health"
+                    :key="health.type"
+                    :class="{
+                      'bg-n/a': health.loglevel === 0,
+                      'bg-ok': health.loglevel === 1,
+                      'bg-warning-custom': health.loglevel === 2,
+                      'bg-danger': health.loglevel === 3,
+                    }"
+                  >
+                    {{ health.shortcut }}
+                  </div>
+                </div>
               </th>
             </tr>
             <tr>
               <th class="table-entry">Yield:</th>
-              <th class="table-entry">{{ highlightedCrop3d?.yield }}</th>
+              <th class="table-entry">
+                {{ Math.round(highlightedCrop3d?.yield * 100) / 100 }}
+              </th>
             </tr>
             <tr>
               <th class="table-entry">Status:</th>
@@ -242,7 +253,7 @@ onMounted(() => {
   axios
     .post(url, payload, header)
     .then(function (response): void {
-      console.log("then", response);
+      //console.log("then", response);
 
       crop3dArray = response["data"]["plants"];
       globalPosition = response["data"]["global"]["position"];
@@ -250,9 +261,7 @@ onMounted(() => {
 
       let resetToGloabal = true;
       if (plantId != undefined) {
-        console.log("plantId", plantId.value);
         let crop3d: Crop3d | null = getCrop3dById(plantId.value);
-        console.log("crop3d", crop3d);
         if (crop3d != undefined) {
           setInfoCard(crop3d);
           setCameraToPosition(crop3d.position);
@@ -280,16 +289,6 @@ onMounted(() => {
 let getCrop3dById = (id: string): Crop3d | undefined => {
   //id = "a671dab73f9844b280ac4d36f0314ad5";
   let crops: Crop3dArray = crop3dArray.filter((element) => {
-    console.log(
-      "element.geometryUUID",
-      element.measurementUUID,
-      "id",
-      id,
-      "check",
-      element.measurementUUID == id
-    );
-    //console.log("element.geometryUUID", element.geometryUUID, "element.name", element.name)
-    console.log("element.name", element.name);
     return element.measurementUUID == id;
   });
   if (crops.length == 0) {
@@ -370,12 +369,7 @@ let loadPlants = (plants: Crop3dArray): void => {
 
 let loadPly = (url: string): void => {
   loader.load(url, function (geometry: any) {
-    //geometry.computeVertexNormals();
-
-    //console.log("geometry", geometry);
-
     let nanCollection = [];
-
     for (let i = 0; i < geometry.attributes.position.array.length; i++) {
       // check if geometry array has false or NaN values
       if (Number.isNaN(geometry.attributes.position.array[i])) {
