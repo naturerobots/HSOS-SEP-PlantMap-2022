@@ -8,14 +8,11 @@
       <div v-if="storeOptions.indexOf('3d-table') > -1" class="col-4">
         <crops-table
           ref="cropsTableRef"
-          title="Plants"
+          title="Beds"
           :visibleColumnsBeds="visibleColsBedsTable"
           :visibleColumnsCrops="visibleColsCropsTable"
           :columns="columns"
           :beds="beds"
-          @row-enter="tableCropsEnter"
-          @row-leave="tableCropsLeave"
-          @row-click="tableCropsClick"
         ></crops-table>
       </div>
       <div
@@ -25,9 +22,12 @@
         <crops-map
           ref="cropsMapRef"
           :beds="beds"
-          @polygon-enter="mapCropsEnter"
-          @polygon-leave="mapCropsLeave"
-          @polygon-click="mapCropsClick"
+          :plants="plants"
+          @bed-click="mapBedClick"
+          @bed-enter="mapBedEnter"
+          @bed-leave="mapBedLeave"
+          @plant-enter="mapPlantEnter"
+          @plant-leave="mapPlantLeave"
         ></crops-map>
       </div>
     </div>
@@ -49,6 +49,8 @@ import BaseLayout from "@/components/layout/BaseLayout.vue";
 import { bedStore } from "@/stores/bedStore";
 import type { Beds } from "@/types/beds";
 import type { QTableProps } from "quasar";
+import type { Plants } from "@/types/plants";
+import { cropsStore } from "@/stores/cropsStore";
 
 const storeOptions: Ref<StoreOption[]> = storeToRefs(userStore()).getOptions;
 const widgetOptions3D: WidgetOption[] = [
@@ -56,37 +58,46 @@ const widgetOptions3D: WidgetOption[] = [
   widgetOptions.crops3dMap,
 ];
 
-let visibleColsBedsTable: string[] = ["health", "plant", "location"];
-let visibleColsCropsTable: string[] = ["health", "plant"];
+let visibleColsBedsTable: string[] = ["health", "plant", "location", "3d"];
+let visibleColsCropsTable: string[] = ["health", "plant", "3d"];
 
 const beds: Ref<Beds> = storeToRefs(bedStore()).getBeds;
+const plants: Ref<Plants> = storeToRefs(cropsStore()).getCrops;
 const cropsMapRef = ref<InstanceType<typeof CropsMap> | null>(null);
 const cropsTableRef = ref<InstanceType<typeof CropsTable> | null>(null);
 
 // Table - Map interaction
-function mapCropsEnter(cropsId: number): void {
-  cropsTableRef.value?.setRowActive(cropsId);
+function mapBedEnter(bedId: number): void {
+  cropsTableRef.value?.setRowActiveBed(bedId);
 }
 
-function mapCropsLeave(cropsId: number): void {
-  cropsTableRef.value?.setRowInactive(cropsId);
+function mapBedLeave(bedId: number): void {
+  cropsTableRef.value?.setRowInactiveBed(bedId);
 }
 
-function mapCropsClick(cropsId: number): void {
-  cropsTableRef.value?.setRowClicked(cropsId);
+function mapBedClick(bedId: number): void {
+  cropsTableRef.value?.setRowClicked(bedId);
 }
 
-function tableCropsEnter(cropsId: number): void {
-  cropsMapRef.value?.setPolygonActive(cropsId);
+function mapPlantEnter(plantId: string): void {
+  cropsTableRef.value?.setRowActivePlant(plantId);
 }
 
-function tableCropsLeave(cropsId: number): void {
-  cropsMapRef.value?.setPolygonInactive(cropsId);
+function mapPlantLeave(plantId: string): void {
+  cropsTableRef.value?.setRowInactivePlant(plantId);
 }
 
-function tableCropsClick(cropsId: number): void {
-  cropsMapRef.value?.setPolygonClicked(cropsId);
-}
+// function tableCropsEnter(cropsId: number): void {
+//   cropsMapRef.value?.setPolygonActive(cropsId);
+// }
+
+// function tableCropsLeave(cropsId: number): void {
+//   cropsMapRef.value?.setPolygonInactive(cropsId);
+// }
+
+// function tableCropsClick(cropsId: number): void {
+//   cropsMapRef.value?.setPolygonClicked(cropsId);
+// }
 
 const columns: QTableProps["columns"] = [
   {
@@ -139,5 +150,6 @@ const columns: QTableProps["columns"] = [
     field: "yield",
     sortable: true,
   },
+  { name: "3d", align: "left", label: "3D", field: "3d", sortable: false },
 ];
 </script>
