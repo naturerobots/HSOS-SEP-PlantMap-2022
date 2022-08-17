@@ -282,15 +282,15 @@ let getCrop3dById = (id: string): Crop3d | undefined => {
   let crops: Crop3dArray = crop3dArray.filter((element) => {
     console.log(
       "element.geometryUUID",
-      element.geometryUUID,
+      element.measurementUUID,
       "id",
       id,
       "check",
-      element.geometryUUID == id
+      element.measurementUUID == id
     );
     //console.log("element.geometryUUID", element.geometryUUID, "element.name", element.name)
     console.log("element.name", element.name);
-    return element.geometryUUID == id;
+    return element.measurementUUID == id;
   });
   if (crops.length == 0) {
     return undefined;
