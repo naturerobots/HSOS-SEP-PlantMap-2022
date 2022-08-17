@@ -135,8 +135,6 @@
 <script setup lang="ts">
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-//import { PLYLoader } from "three/examples/jsm/loaders/PLYLoader.js";
-//import { CustomPLYLoader } from "@/components/three-scenes/CustomPlyLoader.js";
 import { CustomPLYLoader } from "./CustomPlyLoader.ts";
 import { onMounted, ref, Ref, computed } from "vue";
 import axios from "axios";
@@ -152,9 +150,7 @@ import { companyStore } from "@/stores/companyStore";
 import { gardenStore } from "@/stores/gardenStore";
 import { bedStore } from "@/stores/bedStore";
 
-import type { Company } from "@/types/company";
-import type { Garden } from "@/types/garden";
-import type { Bed } from "@/types/bed";
+// https://stemkoski.github.io/Three.js/Mouse-Over.html
 
 const size = {
   width: window.innerWidth - 200,
@@ -186,10 +182,6 @@ const plantId = null;
 console.log("companyId", companyId);
 console.log("gardenId", gardenId);
 console.log("bedId", bedId);
-
-// const beds: Ref<Beds> = storeToRefs(bedStore()).getBeds;
-// const plants: Ref<Plants> = storeToRefs(cropsStore()).getCrops;
-// const beds: Ref<Company> = storeToRefs(companyStore()).getBeds;
 
 const showInfoCard = computed(() => {
   return highlightedCrop3d.value != undefined ? true : false;
@@ -332,20 +324,6 @@ let updateInfoCardPosition = (): void => {
     var infoCard: Element | null = document.querySelector("#info-card");
     if (infoCard != null) {
       infoCard.style.transform = `translate(-50%, -50%) translate(${x2}px,${y2}px)`;
-      //infoCard.style.transform = `translate(-50%, -50%) translate(${x2}px,${y2}px)`;
-      //infoCard.style.transform = `translateX(-50%) translateY(calc(-50% - 0.5px)) translateX(${x2}px) translateY(calc(${y2}px - 0.5px)`;
-
-      /*
-      translateX(-50%)
-      translateY(calc(-50% - 0.5px))
-      translateX(378px)
-      translateY(calc(135px))
-      */
-
-      /*
-      translate(-50%, -50%)
-      translate(378px, 135.5px)
-      */
     }
   }
 };
