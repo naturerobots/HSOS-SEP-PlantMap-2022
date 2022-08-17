@@ -191,7 +191,7 @@
                 <q-icon name="arrow_back_ios" style="font-size: 20px" />
               </button>
               <div class="ml-3 text-xl">
-                {{ activeRow?.id }} - {{ activeRow?.plant }}
+                {{ activeRow?.id }}
               </div>
             </div>
           </template>
