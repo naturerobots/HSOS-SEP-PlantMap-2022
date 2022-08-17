@@ -9,10 +9,14 @@ export const cropsStore = defineStore({
     crops: {
       plants: [] as Crop[],
     } as Plants,
+    selectedCropId: {} as number,
     isLoading: false,
   }),
   getters: {
     getCrops: (state) => state.crops,
+    getSelectedCropId(state): string | undefined {
+      return state.selectedCropId;
+    },
     getIsLoading(state): boolean | undefined {
       return state.isLoading;
     },
@@ -27,6 +31,9 @@ export const cropsStore = defineStore({
     },
     setCrops(crops: Crop[]) {
       this.crops.plants = crops;
+    },
+    setSelectedCropId(cropId: string) {
+      this.selectedCropId = cropId;
     },
     resetCrops() {
       this.crops.plants.length = 0;

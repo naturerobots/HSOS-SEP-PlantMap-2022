@@ -15,6 +15,7 @@ export interface Crop3d {
   */
 
   geometryUUID: string;
+  measurementUUID: string;
   url: string;
   name: string;
   type: string;
@@ -24,5 +25,5 @@ export interface Crop3d {
   yield: string;
   status: string;
   harvest: string;
-  progress: 0.6;
+  progress: string;
 }

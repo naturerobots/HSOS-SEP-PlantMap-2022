@@ -78,6 +78,7 @@ let visibleColsCropsTable: string[] = [
   "status",
   "harvest",
   "yield",
+  "3d",
 ];
 
 const beds: Ref<Beds> = storeToRefs(bedStore()).getBeds;

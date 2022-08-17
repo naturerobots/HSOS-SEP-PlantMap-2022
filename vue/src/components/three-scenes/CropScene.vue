@@ -23,17 +23,28 @@
             <tr>
               <th class="table-entry">Health:</th>
               <th class="table-entry">
-                <span
-                  v-for="health in highlightedCrop3d?.health"
-                  :key="health.type"
-                >
-                  {{ health.shortcut }}
-                </span>
+                <div class="flex flex-row w-24 text-center">
+                  <div
+                    class="round-badge mx-1 text-black text-bold transition hover:scale-125 w-1"
+                    v-for="health in highlightedCrop3d?.health"
+                    :key="health.type"
+                    :class="{
+                      'bg-n/a': health.loglevel === 0,
+                      'bg-ok': health.loglevel === 1,
+                      'bg-warning-custom': health.loglevel === 2,
+                      'bg-danger': health.loglevel === 3,
+                    }"
+                  >
+                    {{ health.shortcut }}
+                  </div>
+                </div>
               </th>
             </tr>
             <tr>
               <th class="table-entry">Yield:</th>
-              <th class="table-entry">{{ highlightedCrop3d?.yield }}</th>
+              <th class="table-entry">
+                {{ Math.round(highlightedCrop3d?.yield * 100) / 100 }}
+              </th>
             </tr>
             <tr>
               <th class="table-entry">Status:</th>
@@ -135,8 +146,6 @@
 <script setup lang="ts">
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-//import { PLYLoader } from "three/examples/jsm/loaders/PLYLoader.js";
-//import { CustomPLYLoader } from "@/components/three-scenes/CustomPlyLoader.js";
 import { CustomPLYLoader } from "./CustomPlyLoader.ts";
 import { onMounted, ref, Ref, computed } from "vue";
 import axios from "axios";
@@ -151,10 +160,9 @@ import { userStore } from "@/stores/userStore";
 import { companyStore } from "@/stores/companyStore";
 import { gardenStore } from "@/stores/gardenStore";
 import { bedStore } from "@/stores/bedStore";
+import { cropsStore } from "@/stores/cropsStore";
 
-import type { Company } from "@/types/company";
-import type { Garden } from "@/types/garden";
-import type { Bed } from "@/types/bed";
+// https://stemkoski.github.io/Three.js/Mouse-Over.html
 
 const size = {
   width: window.innerWidth - 200,
@@ -181,15 +189,16 @@ const gardenId: Ref<number | undefined> = storeToRefs(
   gardenStore()
 ).getSelectedGarden;
 const bedId: Ref<number | undefined> = storeToRefs(bedStore()).getSelectedBedId;
-const plantId = null;
+const plantId: Ref<string | undefined> = storeToRefs(
+  cropsStore()
+).getSelectedCropId;
 
+/*
 console.log("companyId", companyId);
 console.log("gardenId", gardenId);
 console.log("bedId", bedId);
-
-// const beds: Ref<Beds> = storeToRefs(bedStore()).getBeds;
-// const plants: Ref<Plants> = storeToRefs(cropsStore()).getCrops;
-// const beds: Ref<Company> = storeToRefs(companyStore()).getBeds;
+console.log("plantId", plantId);
+*/
 
 const showInfoCard = computed(() => {
   return highlightedCrop3d.value != undefined ? true : false;
@@ -244,34 +253,49 @@ onMounted(() => {
   axios
     .post(url, payload, header)
     .then(function (response): void {
-      console.log("then", response);
+      //console.log("then", response);
 
       crop3dArray = response["data"]["plants"];
       globalPosition = response["data"]["global"]["position"];
       loadPlants(crop3dArray);
 
-      //setInfoCard(crop3dArray[2]);
-      //resetInfoCard();
-
-      setCameraToPosition(globalPosition);
+      let resetToGloabal = true;
+      if (plantId != undefined) {
+        let crop3d: Crop3d | null = getCrop3dById(plantId.value);
+        if (crop3d != undefined) {
+          setInfoCard(crop3d);
+          setCameraToPosition(crop3d.position);
+          resetToGloabal = false;
+        }
+      }
+      if (resetToGloabal) {
+        resetInfoCard();
+        setCameraToPosition(globalPosition);
+      }
     })
     .catch(function (): undefined {
       return undefined;
     });
 
-  //var geometry: THREE.BoxGeometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
-  //var material: THREE.MeshNormalMaterial = new THREE.MeshNormalMaterial();
-
-  //var mesh = new THREE.Mesh(geometry, material);
-  //scene.add(mesh);
-
   renderer.setSize(size.width, size.height);
   renderer.setAnimationLoop(animationCallback);
   canvasScene?.appendChild(renderer.domElement);
 
-  // set backgroud color white
+  // set background color white
   renderer.setClearColor(0xffffff, 1);
 });
+
+// eather get the first crop3d with the given id or null
+let getCrop3dById = (id: string): Crop3d | undefined => {
+  //id = "a671dab73f9844b280ac4d36f0314ad5";
+  let crops: Crop3dArray = crop3dArray.filter((element) => {
+    return element.measurementUUID == id;
+  });
+  if (crops.length == 0) {
+    return undefined;
+  }
+  return crops[0];
+};
 
 let setInfoCard = (crop: Crop3d): void => {
   highlightedCrop3d.value = crop;
@@ -332,20 +356,6 @@ let updateInfoCardPosition = (): void => {
     var infoCard: Element | null = document.querySelector("#info-card");
     if (infoCard != null) {
       infoCard.style.transform = `translate(-50%, -50%) translate(${x2}px,${y2}px)`;
-      //infoCard.style.transform = `translate(-50%, -50%) translate(${x2}px,${y2}px)`;
-      //infoCard.style.transform = `translateX(-50%) translateY(calc(-50% - 0.5px)) translateX(${x2}px) translateY(calc(${y2}px - 0.5px)`;
-
-      /*
-      translateX(-50%)
-      translateY(calc(-50% - 0.5px))
-      translateX(378px)
-      translateY(calc(135px))
-      */
-
-      /*
-      translate(-50%, -50%)
-      translate(378px, 135.5px)
-      */
     }
   }
 };
@@ -359,12 +369,7 @@ let loadPlants = (plants: Crop3dArray): void => {
 
 let loadPly = (url: string): void => {
   loader.load(url, function (geometry: any) {
-    //geometry.computeVertexNormals();
-
-    //console.log("geometry", geometry);
-
     let nanCollection = [];
-
     for (let i = 0; i < geometry.attributes.position.array.length; i++) {
       // check if geometry array has false or NaN values
       if (Number.isNaN(geometry.attributes.position.array[i])) {
