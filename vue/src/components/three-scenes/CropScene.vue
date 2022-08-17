@@ -149,6 +149,7 @@ import { userStore } from "@/stores/userStore";
 import { companyStore } from "@/stores/companyStore";
 import { gardenStore } from "@/stores/gardenStore";
 import { bedStore } from "@/stores/bedStore";
+import { cropsStore } from "@/stores/cropsStore";
 
 // https://stemkoski.github.io/Three.js/Mouse-Over.html
 
@@ -177,11 +178,16 @@ const gardenId: Ref<number | undefined> = storeToRefs(
   gardenStore()
 ).getSelectedGarden;
 const bedId: Ref<number | undefined> = storeToRefs(bedStore()).getSelectedBedId;
-const plantId = null;
+const plantId: Ref<string | undefined> = storeToRefs(
+  cropsStore()
+).getSelectedCropId;
 
+/*
 console.log("companyId", companyId);
 console.log("gardenId", gardenId);
 console.log("bedId", bedId);
+console.log("plantId", plantId);
+*/
 
 const showInfoCard = computed(() => {
   return highlightedCrop3d.value != undefined ? true : false;
@@ -242,28 +248,55 @@ onMounted(() => {
       globalPosition = response["data"]["global"]["position"];
       loadPlants(crop3dArray);
 
-      //setInfoCard(crop3dArray[2]);
-      //resetInfoCard();
-
-      setCameraToPosition(globalPosition);
+      let resetToGloabal = true;
+      if (plantId != undefined) {
+        console.log("plantId", plantId.value);
+        let crop3d: Crop3d | null = getCrop3dById(plantId.value);
+        console.log("crop3d", crop3d);
+        if (crop3d != undefined) {
+          setInfoCard(crop3d);
+          setCameraToPosition(crop3d.position);
+          resetToGloabal = false;
+        }
+      }
+      if (resetToGloabal) {
+        resetInfoCard();
+        setCameraToPosition(globalPosition);
+      }
     })
     .catch(function (): undefined {
       return undefined;
     });
 
-  //var geometry: THREE.BoxGeometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
-  //var material: THREE.MeshNormalMaterial = new THREE.MeshNormalMaterial();
-
-  //var mesh = new THREE.Mesh(geometry, material);
-  //scene.add(mesh);
-
   renderer.setSize(size.width, size.height);
   renderer.setAnimationLoop(animationCallback);
   canvasScene?.appendChild(renderer.domElement);
 
-  // set backgroud color white
+  // set background color white
   renderer.setClearColor(0xffffff, 1);
 });
+
+// eather get the first crop3d with the given id or null
+let getCrop3dById = (id: string): Crop3d | undefined => {
+  //id = "a671dab73f9844b280ac4d36f0314ad5";
+  let crops: Crop3dArray = crop3dArray.filter((element) => {
+    console.log(
+      "element.geometryUUID",
+      element.geometryUUID,
+      "id",
+      id,
+      "check",
+      element.geometryUUID == id
+    );
+    //console.log("element.geometryUUID", element.geometryUUID, "element.name", element.name)
+    console.log("element.name", element.name);
+    return element.geometryUUID == id;
+  });
+  if (crops.length == 0) {
+    return undefined;
+  }
+  return crops[0];
+};
 
 let setInfoCard = (crop: Crop3d): void => {
   highlightedCrop3d.value = crop;
