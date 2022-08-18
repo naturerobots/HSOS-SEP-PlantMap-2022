@@ -76,6 +76,7 @@ import { companyStore } from "@/stores/companyStore";
 import { sensorStore } from "@/stores/sensorStore";
 import { userStore } from "@/stores/userStore";
 import { gardenStore } from "@/stores/gardenStore";
+import { bedStore } from "@/stores/bedStore";
 import type { Company } from "@/types/company";
 import type { Garden } from "@/types/garden";
 import { storeToRefs } from "pinia";
@@ -146,6 +147,7 @@ async function setCompanyAndGarden(): Promise<void> {
     gardenStore().setSelectedGarden(selectedGarden.value);
     if (selectedCompany.value) {
       gardenStore().loadDataFromApi(selectedCompany.value);
+      bedStore().loadDataFromApi();
     }
   }
 }
