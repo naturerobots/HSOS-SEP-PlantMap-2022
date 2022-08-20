@@ -32,7 +32,7 @@ const bedMarkers = L.layerGroup();
 const cropMarkers = L.layerGroup();
 
 const greenIcon: L.Icon = new L.Icon({
-  iconUrl: "src/assets/marker/marker_green.svg",
+  iconUrl: "assets/marker/marker_green.svg",
   shadowUrl:
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
   iconSize: [25, 41],
