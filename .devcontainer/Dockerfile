@@ -54,16 +54,18 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - \
 RUN pip3 install mkdocs mkdocs-material
 
 # Add non root user
-RUN useradd -u 1001 --create-home --shell /bin/bash docker && echo "docker:docker" | chpasswd && adduser docker sudo
+RUN useradd -u 1000 --create-home --shell /bin/bash docker && echo "docker:docker" | chpasswd && adduser docker sudo
 
 RUN mkdir -p /home/docker/.vscode-server/extensions \
     && chown -R docker /home/docker/.vscode-server \
-    && mkdir -p /PlantMap \
-    && chown -R docker /PlantMap
+    && mkdir -p /workdir \
+    && chown -R docker /workdir
 
 # Run as user 'docker' after here
 USER docker
 
-RUN echo 'export PYTHONPATH="${PYTHONPATH}:/workdir/build/gRPC"' >> /home/docker/.bashrc
+# RUN echo 'export PYTHONPATH="${PYTHONPATH}:/workdir/build/gRPC"' >> /home/docker/.bashrc
+ENV PYTHONPATH="/workdir/build/gRPC"
 
-ENTRYPOINT [ "/bin/sh", "-c", "while sleep 1000; do :; done" ]
+# ENTRYPOINT [ "/bin/sh", "-c", "while sleep 1000; do :; done" ]
+CMD while sleep 1000; do :; done
