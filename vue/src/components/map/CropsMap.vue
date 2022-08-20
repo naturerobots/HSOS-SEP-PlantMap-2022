@@ -31,6 +31,16 @@ const cropMarkerMap: Map<string, L.Marker> = new Map();
 const bedMarkers = L.layerGroup();
 const cropMarkers = L.layerGroup();
 
+const greenIcon: L.Icon = new L.Icon({
+  iconUrl: "src/assets/marker/marker_green.svg",
+  shadowUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
 var gardenImage: Ref<{ image: GardenImage | undefined }> = storeToRefs(
   gardenStore()
 ).getGardenImage;
@@ -102,7 +112,9 @@ function addBedMarker(bed: Bed): L.Marker | undefined {
   if (bedMarkerMap.has(bed.id)) return undefined;
 
   const coords = new L.LatLng(bed.avg_plant_lat, bed.avg_plant_lon);
-  const marker = L.marker(coords);
+  const marker = L.marker(coords, {
+    icon: greenIcon,
+  });
   bedMarkerMap.set(bed.id, marker);
   bedMarkers.addLayer(marker);
 
@@ -113,7 +125,9 @@ function addCropMarker(crop: Crop): L.Marker | undefined {
   if (cropMarkerMap.has(crop.id)) return undefined;
 
   const coords = new L.LatLng(crop.plant_coords.lat, crop.plant_coords.lon);
-  const marker = L.marker(coords);
+  const marker = L.marker(coords, {
+    icon: greenIcon,
+  });
 
   cropMarkerMap.set(crop.id, marker);
   cropMarkers.addLayer(marker);

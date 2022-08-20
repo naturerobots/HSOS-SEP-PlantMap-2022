@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import DashboardView from "@/views/DashboardView.vue";
 import CropsView from "@/views/CropsView.vue";
 import Crops3dView from "@/views/Crops3dView.vue";
+import Crops3dViewScene from "@/views/Crops3dViewScene.vue";
 import LoginView from "@/views/LoginView.vue";
 import OnboardingCompany from "@/views/onboarding/OnboardingCompany.vue";
 import OnboardingGarden from "@/views/onboarding/OnboardingGarden.vue";
@@ -34,6 +35,12 @@ const router = createRouter({
       path: "/3d",
       name: "3d",
       component: Crops3dView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/3d/Scene",
+      name: "3dscene",
+      component: Crops3dViewScene,
       meta: { requiresAuth: true },
     },
     {

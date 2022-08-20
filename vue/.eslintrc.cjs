@@ -12,4 +12,15 @@ module.exports = {
   env: {
     "vue/setup-compiler-macros": true,
   },
+
+  rules: {
+    "@typescript-eslint/no-this-alias": [
+      "error",
+      {
+        allowDestructuring: true,
+        // Allow `const { props, state } = this`; false by default
+        allowedNames: ["self"], // Allow `const self = this`; `[]` by default
+      },
+    ],
+  },
 };
