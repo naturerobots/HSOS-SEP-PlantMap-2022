@@ -6,7 +6,7 @@
           ref="table"
           class="crops-table no-shadow crops-table-hover"
           :title="title"
-          :rows="beds.beds"
+          :rows="beds.bedList"
           :columns="columns"
           no-data-label="I didn't find anything for you"
           row-key="id"
@@ -71,10 +71,6 @@
                   </div>
                 </div>
               </q-td>
-
-              <!-- <q-td key="status" :props="props">
-                {{ props.row.status }}
-              </q-td> -->
 
               <q-td key="harvest" :props="props">
                 {{ props.row.harvest }}
@@ -170,7 +166,7 @@
       <div v-else>
         <q-table
           ref="table"
-          :rows="plantsPlants.plants"
+          :rows="crops.plants"
           :columns="columns"
           row-key="name"
           class="crops-table no-shadow crops-table-hover"
@@ -179,12 +175,11 @@
           :visible-columns="visColsCropsTable"
           :rows-per-page-options="[0]"
           hide-bottom
-          :loading="isLoadingPlants"
+          :loading="isLoadingCrops"
           color="primary"
         >
           <template v-slot:top-left>
             <div class="row">
-              <!--<button @click="(cropstable = !cropstable), $emit('removePolygon')">-->
               <button
                 @click="(cropstable = !cropstable), cropsStore().resetCrops()"
               >
@@ -267,10 +262,6 @@
                 </div>
               </q-td>
 
-              <!-- <q-td key="status" :props="props">
-                {{ props.row.status }}
-              </q-td> -->
-
               <q-td key="harvest" :props="props">
                 {{ props.row.harvest }}
               </q-td>
@@ -345,29 +336,25 @@ import { cropsStore } from "@/stores/cropsStore";
 import { ref, onMounted } from "vue";
 import type { QTable, QTableProps } from "quasar";
 import StatusPopup from "@/components/StatusPopup.vue";
-import type { Plants } from "@/types/plants";
+import type { Crops } from "@/types/crops";
 import type { Beds } from "@/types/beds";
 import { bedStore } from "@/stores/bedStore";
 
-let plantsPlants: Ref<Plants> = storeToRefs(cropsStore()).getCrops;
+let crops: Ref<Crops> = storeToRefs(cropsStore()).getCrops;
 const isLoadingBeds: Ref<boolean | undefined> = storeToRefs(
   bedStore()
 ).getIsLoading;
 
-const isLoadingPlants: Ref<boolean | undefined> = storeToRefs(
+const isLoadingCrops: Ref<boolean | undefined> = storeToRefs(
   cropsStore()
 ).getIsLoading;
 
 function setBedId(bedId: number) {
-  console.log("bedId", bedId);
   bedStore().setSelectedBedId(bedId);
-  console.log(bedStore().getSelectedBedId);
 }
 
 function setCropId(cropId: string) {
-  console.log("cropId", cropId);
   cropsStore().setSelectedCropId(cropId);
-  console.log(cropsStore().getSelectedCropId);
 }
 
 const table = ref<null | InstanceType<typeof QTable>>(null);
@@ -387,17 +374,15 @@ let visColsCropsTable = ref(props.visibleColumnsCrops);
 let input = ref<string>("");
 
 const emit = defineEmits<{
-  (event: "rowEnter", cropsId: number): void;
-  (event: "rowLeave", cropsId: number): void;
-  (event: "rowClick", cropsId: number): void;
+  (event: "rowEnter", cropId: number): void;
+  (event: "rowLeave", cropId: number): void;
 }>();
 
 defineExpose({
   setRowActiveBed,
   setRowInactiveBed,
-  setRowClicked,
-  setRowActivePlant,
-  setRowInactivePlant,
+  setRowActivePlant: setRowActiveCrop,
+  setRowInactivePlant: setRowInactiveCrop,
 });
 
 onMounted(() => {
@@ -430,13 +415,13 @@ function getRowByBedId(bedId: number): HTMLTableRowElement | undefined {
   }
 }
 
-function getRowByPlantId(plantId: string): HTMLTableRowElement | undefined {
+function getRowByCropId(cropId: string): HTMLTableRowElement | undefined {
   const tableValue: any = table.value;
   if (tableValue) {
     const filteredSortedRows = tableValue.filteredSortedRows;
     if (table.value?.rows?.length) {
       for (let i = 0; i < table.value.rows.length; i++) {
-        if (plantId === table.value.rows[i].id) {
+        if (cropId === table.value.rows[i].id) {
           const rowIndex = filteredSortedRows.indexOf(table.value.rows[i]);
           return document
             .getElementsByClassName("q-table")[0]
@@ -447,82 +432,40 @@ function getRowByPlantId(plantId: string): HTMLTableRowElement | undefined {
   }
 }
 
-function removeClickedRow(): void {
-  const tableValue: any = table.value;
-  if (tableValue) {
-    const filteredSortedRows = tableValue.filteredSortedRows;
-    if (table.value?.rows?.length) {
-      for (let i = 0; i < table.value.rows.length; i++) {
-        const rowIndex = filteredSortedRows.indexOf(table.value.rows[i]);
-        const row: HTMLTableRowElement = document
-          .getElementsByClassName("q-table")[0]
-          .getElementsByTagName("tr")[rowIndex + 1];
-        if (row.classList != null) {
-          if (row.classList.contains("crops-row-clicked")) {
-            row.classList.remove("crops-row-clicked");
-          }
-        }
-      }
-    }
-  }
-}
-
-function setRowActiveBed(cropsId: number): void {
-  const row: HTMLTableRowElement | undefined = getRowByBedId(cropsId);
+function setRowActiveBed(bedId: number): void {
+  const row: HTMLTableRowElement | undefined = getRowByBedId(bedId);
   if (row) {
     row.classList.add("crops-row-active");
   }
 }
 
-function setRowActivePlant(plantId: string): void {
-  const row: HTMLTableRowElement | undefined = getRowByPlantId(plantId);
+function setRowActiveCrop(cropId: string): void {
+  const row: HTMLTableRowElement | undefined = getRowByCropId(cropId);
   if (row) {
     row.classList.add("crops-row-active");
   }
 }
 
-function setRowClicked(cropsId: number): void {
-  //("setRowClicked");
-  const row: HTMLTableRowElement | undefined = getRowByBedId(cropsId);
-
-  if (row) {
-    if (row.classList.contains("crops-row-clicked")) {
-      removeClickedRow();
-      //console.log("remove");
-      row.classList.remove("crops-row-clicked");
-      emit("rowClick", cropsId);
-    } else {
-      removeClickedRow();
-      //console.log("add");
-      // row.classList.add("crops-row-clicked");
-      let element: HTMLElement = document.getElementsByClassName(
-        "crops-row-active"
-      )[0] as HTMLElement;
-      element.click();
-    }
-  }
-}
-
-function setRowInactiveBed(cropsId: number): void {
-  const row: HTMLTableRowElement | undefined = getRowByBedId(cropsId);
+function setRowInactiveBed(bedId: number): void {
+  const row: HTMLTableRowElement | undefined = getRowByBedId(bedId);
   if (row) {
     row.classList.remove("crops-row-active");
   }
 }
 
-function setRowInactivePlant(bedId: string): void {
-  const row: HTMLTableRowElement | undefined = getRowByPlantId(bedId);
+function setRowInactiveCrop(cropId: string): void {
+  const row: HTMLTableRowElement | undefined = getRowByCropId(cropId);
   if (row) {
     row.classList.remove("crops-row-active");
   }
 }
 
-function rowEnter(cropsId: number): void {
-  emit("rowEnter", cropsId);
+function rowEnter(id: number): void {
+  emit("rowEnter", id);
 }
 
-function rowLeave(cropsId: number): void {
-  emit("rowLeave", cropsId);
+function rowLeave(id: number): void {
+  emit("rowLeave", id);
 }
 
 function rowClicked(bedId: number): void {
@@ -530,21 +473,6 @@ function rowClicked(bedId: number): void {
   const bed = storeToRefs(bedStore()).getSelectedBed;
   if (bed.value) {
     cropsStore().loadDataFromApi(bed.value.plants);
-  }
-
-  // removeClickedRow();
-  emit("rowClick", bedId);
-  const row: HTMLTableRowElement | undefined = getRowByBedId(bedId);
-  if (row) {
-    if (row.classList.contains("crops-row-clicked")) {
-      removeClickedRow();
-      //console.log("remove");
-      row.classList.remove("crops-row-clicked");
-    } else {
-      removeClickedRow();
-      //console.log("add");
-      row.classList.add("crops-row-clicked");
-    }
   }
 }
 
@@ -554,67 +482,4 @@ function pagination(): { sortBy: string; rowsPerPage: number } {
     rowsPerPage: 0,
   };
 }
-
-// const columns: QTableProps["columns"] = [
-//   {
-//     name: "location",
-//     align: "left",
-//     label: "Location",
-//     field: "id",
-//     sortable: true,
-//   },
-//   {
-//     name: "plant",
-//     align: "left",
-//     label: "Plant",
-//     field: "plant",
-//     sortable: true,
-//   },
-//   {
-//     name: "variety",
-//     align: "left",
-//     label: "Variety",
-//     field: "variety",
-//     sortable: true,
-//   },
-
-//   {
-//     name: "soil_humidity",
-//     align: "left",
-//     label: "Humidity",
-//     field: "soil_humidity",
-//     sortable: true,
-//     // sort: (a: any, b: any) => parseInt(a, 10) - parseInt(b, 10),
-//   },
-//   {
-//     name: "health",
-//     align: "left",
-//     label: "Health",
-//     field: "health",
-//     sortable: false,
-//   },
-//   // {
-//   //   name: "status",
-//   //   align: "left",
-//   //   label: "Status",
-//   //   field: "status",
-//   //   sortable: true,
-//   // },
-//   {
-//     name: "harvest",
-//     align: "left",
-//     label: "Harvest",
-//     field: "harvest",
-//     sortable: true,
-//     sort: (a: any, b: any) => parseInt(a, 10) - parseInt(b, 10),
-//   },
-//   {
-//     name: "yield",
-//     align: "left",
-//     label: "Yield",
-//     field: "yield",
-//     sortable: true,
-//   },
-//   { name: "3d", align: "left", label: "3D", field: "3d", sortable: false },
-// ];
 </script>

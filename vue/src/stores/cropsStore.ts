@@ -1,15 +1,15 @@
 import { defineStore } from "pinia";
 import type { Crop } from "@/types/crop";
 import { getCrops } from "@/services/cropsApi";
-import type { Plants } from "@/types/plants";
+import type { Crops } from "@/types/crops";
 
 export const cropsStore = defineStore({
   id: "cropsStore",
   state: () => ({
     crops: {
       plants: [] as Crop[],
-    } as Plants,
-    selectedCropId: {} as number,
+    } as Crops,
+    selectedCropId: {} as string,
     isLoading: false,
   }),
   getters: {
@@ -22,9 +22,9 @@ export const cropsStore = defineStore({
     },
   },
   actions: {
-    async loadDataFromApi(plantsUrl: string): Promise<void> {
+    async loadDataFromApi(url: string): Promise<void> {
       this.isLoading = true;
-      this.crops.plants = (await getCrops(plantsUrl)).plants;
+      this.crops.plants = (await getCrops(url)).plants;
       if (this.crops.plants.length > 0) {
         this.isLoading = false;
       }

@@ -16,18 +16,17 @@
         ></crops-table>
       </div>
       <div
-        v-if="beds.beds && storeOptions.indexOf('crops-map') > -1"
+        v-if="beds.bedList && storeOptions.indexOf('crops-map') > -1"
         class="col-4 pl-2"
       >
         <crops-map
           ref="cropsMapRef"
           :beds="beds"
-          :plants="plants"
-          @bed-click="mapBedClick"
+          :crops="crops"
           @bed-enter="mapBedEnter"
           @bed-leave="mapBedLeave"
-          @plant-enter="mapPlantEnter"
-          @plant-leave="mapPlantLeave"
+          @crop-enter="mapCropEnter"
+          @crop-leave="mapCropLeave"
         >
         </crops-map>
       </div>
@@ -50,8 +49,9 @@ import BaseLayout from "@/components/layout/BaseLayout.vue";
 import { bedStore } from "@/stores/bedStore";
 import type { Beds } from "@/types/beds";
 import { cropsStore } from "@/stores/cropsStore";
-import type { Plants } from "@/types/plants";
+import type { Crops } from "@/types/crops";
 import type { QTableProps } from "quasar";
+
 const storeOptions: Ref<StoreOption[]> = storeToRefs(userStore()).getOptions;
 const widgetOptionsCrops: WidgetOption[] = [
   widgetOptions.cropsTable,
@@ -82,7 +82,7 @@ let visibleColsCropsTable: string[] = [
 ];
 
 const beds: Ref<Beds> = storeToRefs(bedStore()).getBeds;
-const plants: Ref<Plants> = storeToRefs(cropsStore()).getCrops;
+const crops: Ref<Crops> = storeToRefs(cropsStore()).getCrops;
 
 const cropsMapRef = ref<InstanceType<typeof CropsMap> | null>(null);
 const cropsTableRef = ref<InstanceType<typeof CropsTable> | null>(null);
@@ -96,30 +96,13 @@ function mapBedLeave(bedId: number): void {
   cropsTableRef.value?.setRowInactiveBed(bedId);
 }
 
-function mapBedClick(bedId: number): void {
-  //cropsStore().loadDataFromApi(bedId);
-  cropsTableRef.value?.setRowClicked(bedId);
+function mapCropEnter(cropId: string): void {
+  cropsTableRef.value?.setRowActivePlant(cropId);
 }
 
-function mapPlantEnter(plantId: string): void {
-  cropsTableRef.value?.setRowActivePlant(plantId);
+function mapCropLeave(cropId: string): void {
+  cropsTableRef.value?.setRowInactivePlant(cropId);
 }
-
-function mapPlantLeave(plantId: string): void {
-  cropsTableRef.value?.setRowInactivePlant(plantId);
-}
-
-// function tableCropsEnter(cropsId: number): void {
-//   cropsMapRef.value?.setPolygonActive(cropsId);
-// }
-
-// function tableCropsLeave(cropsId: number): void {
-//   cropsMapRef.value?.setPolygonInactive(cropsId);
-// }
-
-// function tableCropsClick(cropsId: number): void {
-//   cropsMapRef.value?.setPolygonClicked(cropsId);
-// }
 
 const columns: QTableProps["columns"] = [
   {
