@@ -25,7 +25,7 @@ docker compose -f .devcontainer/docker-compose.preview.yml up
 ```
 
 To access it, open [http://localhost:5050](http://localhost:5050) in your browser.
-The REST api will be available on port 8000.
+The REST API will be available on port 8000.
 
 If you have trouble downloading the container see the [GitHub Container Registry](#github-container-registry) section.
 
@@ -33,7 +33,7 @@ If you have trouble downloading the container see the [GitHub Container Registry
 
 ### VSCode Development Container
 
-To develop the application you need to setup the VSCode development container.
+To develop the application you need to set up the VSCode development container.
 
 1. Install the `ms-vscode-remote.remote-containers` and
    `ms-azuretools.vscode-docker` extensions in VSCode.
@@ -52,7 +52,7 @@ To develop the application you need to setup the VSCode development container.
 3. Press `F1` or `CTRL+SHIFT+P` and enter `Remote-Containers: Reopen Folder in Container`
 
    This downloads a docker container for the development of the PlantMap application and
-   starts the needed [PostgreSQL](https://www.postgresql.org/) and RabbitMQ. Additionally
+   starts the needed [PostgreSQL](https://www.postgresql.org/) and RabbitMQ. Additionally,
    all necessary VS Code extensions and npm packages from the `package.json` are
    installed. Further git pre-commit hooks are set up.
 
@@ -76,7 +76,7 @@ To start the backend server run:
 make run-backend
 ```
 
-Once it's running, the backend's REST-Api will by available on port 8000.
+Once it's running, the backend's REST-Api will be available on port 8000.
 
 To start the frontend website run:
 
@@ -97,11 +97,11 @@ with your GitHub credentials.
 
 If you have enabled 2-factor authentication, please create an access token [here](https://github.com/settings/tokens).
 
-Use your password or generated token and username to login to the `ghcr.io` container registry as
+Use your password or generated token and username to log in to the `ghcr.io` container registry as
 follows:
 
 ```bash
 docker login ghcr.io -u USERNAME --password PASSWORD/TOKEN
 ```
 
-Now you call pull the image with `docker pull` or by simply simply following the steps in the [previous section](#vscode-development-container).
+Now you call pull the image with `docker pull` or by simply following the steps in the [previous section](#vscode-development-container).
