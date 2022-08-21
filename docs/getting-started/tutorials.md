@@ -34,11 +34,21 @@ Select the company and garden you want and click on `save`.
 
 ### Dashboard :bar_chart:
 
+<figure markdown>
+  ![Dashboard](../imgs/dashboard.png){width=700px}
+  <figcaption> Dashboard </figcaption>
+</figure>
+
 The dashboard contains a widget showing the current and forecasted weather and a map showing the current garden.
 Additionally, you can see a list titled `Soil Parameter`, which displays soil data.
 Hovering over a row highlights the location of the corresponding sensor on the map.
 
 ### Crops :seedling:
+
+<figure markdown>
+  ![Crops tab](../imgs/crops-tab.png){width=700px}
+  <figcaption> Crops tab </figcaption>
+</figure>
 
 The crops tab consists of a table showing the beds of the current garden.
 Clicking on one of the beds shows the crops of the clicked bed in the table instead.
@@ -57,6 +67,11 @@ For more information, see [3D](#3d).
 
 ### 3D
 
+<figure markdown>
+  ![3D tab](../imgs/3d-tab.png){width=700px}
+  <figcaption> 3D tab </figcaption>
+</figure>
+
 The 3D tab has the same table and map as the [Crops](#crops) tab, the map is just larger.
 Just like the Crops tab, beds and crops each have buttons in the `3D` column of the table.
 
@@ -68,6 +83,11 @@ If you clicked on the `3D` button for a crop, an overlay will be shown,
 framing the crop and providing additional information about it.
 
 ### Settings :gear:
+
+<figure markdown>
+  ![Settings](../imgs/settings.png){width=700px}
+  <figcaption> Settings </figcaption>
+</figure>
 
 Once you are logged in, click on the profile picture in the top right corner, and then on `Settings`.
 
