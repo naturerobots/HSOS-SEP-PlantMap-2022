@@ -64,7 +64,7 @@ The application requires the ports 5672 (for RabbitMQ), 5432 (for the PostgreSQL
 
 If one of these ports is already in use, the launch may fail with an error like the one shown above.
 
-Running docker containers for example may be using one or more of the required ports.
+Already running docker containers may use the required ports.
 To check, run the following command:
 
 ```sh
