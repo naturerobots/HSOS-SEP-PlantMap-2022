@@ -189,6 +189,8 @@ def getBeds(request, company_id: int, garden_id: int):
                 'plants-resource', kwargs={'company_id': company_id, 'garden_id': garden_id, 'bed_id': bed.id}
             )
 
+            avg_plant_lat = None
+            avg_plant_lon = None
             if len(plant_coords) > 0:
                 avg_plant_lat = float(sum(i['lat'] for i in plant_coords)) / len(plant_coords)
                 avg_plant_lon = float(sum(i['lon'] for i in plant_coords)) / len(plant_coords)
