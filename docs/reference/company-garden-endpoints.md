@@ -2,16 +2,17 @@
 
 ## Overview
 
-| Name                                                              | HTTP | URL                                                       |
-| ----------------------------------------------------------------- | ---- | --------------------------------------------------------- |
-| [Create company](#create-company)                                 | POST | /companies                                                |
-| [Query companies](#query-companies)                               | GET  | /companies                                                |
-| [Query specific company](#query-specific-company)                 | GET  | /companies/{company_id:int}                               |
-| [Create garden of company](#create-garden-of-company)             | POST | /companies/{company_id:int}/gardens                       |
-| [Query gardens of company](#query-gardens-of-company)             | GET  | /companies/{company_id:int}/gardens                       |
-| [Query specific garden](#query-specific-garden)                   | GET  | /companies/{company_id:int}/gardens/{garden_id:int}       |
-| [Upload image and coordinates](#upload-image-and-coordinates)     | POST | /companies/{company_id:int}/gardens/{garden_id:int}/image |
-| [Download image and coordinates](#download-image-and-coordinates) | GET  | /companies/{company_id:int}/gardens/{garden_id:int}/image |
+| Name                                                                    | HTTP | URL                                                       |
+| ----------------------------------------------------------------------- | ---- | --------------------------------------------------------- |
+| [Create company](#create-company)                                       | POST | /companies                                                |
+| [Query companies](#query-companies)                                     | GET  | /companies                                                |
+| [Query gardens the user can access](#query-gardens-the-user-can-access) | GET  | /gardens                                                  |
+| [Query specific company](#query-specific-company)                       | GET  | /companies/{company_id:int}                               |
+| [Create garden of company](#create-garden-of-company)                   | POST | /companies/{company_id:int}/gardens                       |
+| [Query gardens of company](#query-gardens-of-company)                   | GET  | /companies/{company_id:int}/gardens                       |
+| [Query specific garden](#query-specific-garden)                         | GET  | /companies/{company_id:int}/gardens/{garden_id:int}       |
+| [Upload image and coordinates](#upload-image-and-coordinates)           | POST | /companies/{company_id:int}/gardens/{garden_id:int}/image |
+| [Download image and coordinates](#download-image-and-coordinates)       | GET  | /companies/{company_id:int}/gardens/{garden_id:int}/image |
 
 ## Create company
 
@@ -38,6 +39,24 @@ Example response:
  {
   "id": 1,
   "name": "Demo-Company"
+ }
+]
+```
+
+## Query gardens the user can access
+
+**Request**:  `GET /gardens`  
+**Response**: `200 Ok`, `400 Bad Request`
+
+Example response:
+
+```json
+[
+ {
+  "id": 1,
+  "name": "Garden-1",
+  "image_path": "/workdir/django/storage/images/goeoentueuegs_ibbenbueren.png",
+  "company": 1
  }
 ]
 ```

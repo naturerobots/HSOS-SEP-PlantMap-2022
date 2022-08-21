@@ -4,12 +4,15 @@
 
 ### Overview
 
-| Name                                              | HTTP | URL                  |
-| ------------------------------------------------- | ---- | -------------------- |
-| [Login existing account](#login-existing-account) | POST | /login               |
-| [Register new account](#register-new-account)     | POST | /register            |
-| [Logout current user](#logout-current-user)       | POST | /logout & /logoutall |
-| [Query current user](#query-current-user)         | GET  | /user                |
+| Name                                                      | HTTP | URL                  |
+| --------------------------------------------------------- | ---- | -------------------- |
+| [Login existing account](#login-existing-account)         | POST | /login               |
+| [Register new account](#register-new-account)             | POST | /register            |
+| [Logout current user](#logout-current-user)               | POST | /logout & /logoutall |
+| [Query current user](#query-current-user)                 | GET  | /user                |
+| [Edit current user](#edit-current-user)                   | PUT  | /user                |
+| [Save current user widgets](#save-current-user-widgets)   | POST | /user/widgets        |
+| [Query current user widgets](#query-current-user-widgets) | GET  | /user/widgets        |
 
 ### Login existing account
 
@@ -72,7 +75,7 @@ with `/logoutall` from all sessions.
 
 An empty GET request returns information about the currently logged in user.
 
-**Request**:  `POST /user`  
+**Request**:  `GET /user`  
 **Response**: `200 Ok`
 
 Example response:
@@ -84,6 +87,75 @@ Example response:
  "last_name": "last",
  "date_joined": "2022-07-12T12:49:31.010300Z",
  "last_login": "2022-07-19T11:35:55.158069Z"
+}
+```
+
+### Edit current user
+
+Send a PUT request to change information of the current user.
+All fields are optional.
+
+**Request**:  `PUT /user`  
+**Response**: `200 Ok`
+
+Example request:
+
+```json
+{
+ "username": "testuser1234",
+ "first_name": "first",
+ "last_name": "last",
+ "password": "supersecurepasswordTM",
+ "email": "testuser1234@example.com"
+}
+```
+
+### Save current user widgets
+
+A POST request with an arbitrary JSON payload can be sent
+to this endpoint to save it for later retrieval.
+
+**Request**:  `POST /user/widgets`  
+**Response**: `201 Created`, `400 Bad Request`
+
+Example request:
+
+```json
+{
+ "widgets": [
+  "3d-table",
+  "3d-map",
+  "weather",
+  "soil-parameter",
+  "garden-map",
+  "notifications",
+  "crops-map",
+  "crops-table"
+ ]
+}
+```
+
+### Query current user widgets
+
+An empty GET request returns the arbitrary JSON config that was previously saved.
+
+**Request**:  `GET /user/widgets`  
+**Response**: `200 Ok`, `400 Bad Request`
+
+Example response:
+
+```json
+{
+ "widgets": [
+  "3d-table",
+  "3d-map",
+  "weather",
+  "soil-parameter",
+  "garden-map",
+  "notifications",
+  "crops-map",
+  "crops-table"
+ ]
 }
 ```
 
