@@ -17,7 +17,7 @@
 ### Login existing account
 
 Send a POST request to this endpoint to login.
-The request needs to contain a `username` and a `password` field either as form or json.
+The request needs to contain a `username` and a `password` field either as a form or json.
 
 **Request**:  `POST /login`  
 **Response**: `200 Ok`, `400 Bad Request`
