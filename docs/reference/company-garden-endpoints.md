@@ -107,7 +107,7 @@ Example response:
 
 Uploading of an image from a garden, e.g. taken by drone, can be done via this
 endpoint. In order to properly display it on a map, georeferencing is needed.
-For this, at least 3 coordinates with the names `topLeft`, `topRight` and `bottomLeft` **must** be provided.
+For this, at least 3 coordinates with the names `top_left`, `top_right` and `bottom_left` **must** be provided.
 
 !!! info
 
@@ -123,17 +123,17 @@ Example Request:
  "image":"data:image/png;base64,iVBORw0KGg ...",
  "coordinates":[
     {
-       "name":"topLeft",
+       "name":"top_left",
        "latitude":52.31703822683545,
        "longitude":7.630155086517335
     },
     {
-       "name":"topRight",
+       "name":"top_right",
        "latitude":52.31703822683545,
        "longitude":7.630155086517335
     },
     {
-       "name":"bottomLeft",
+       "name":"bottom_left",
        "latitude":52.31703822683545,
        "longitude":7.630155086517335
     }
@@ -153,17 +153,17 @@ Example Request:
  "image":"data:image/png;base64,iVBORw0KGg ...",
  "coordinates":[
     {
-       "name":"topLeft",
+       "name":"top_left",
        "latitude":52.31703822683545,
        "longitude":7.630155086517335
     },
     {
-       "name":"topRight",
+       "name":"top_right",
        "latitude":52.31703822683545,
        "longitude":7.630155086517335
     },
     {
-       "name":"bottomLeft",
+       "name":"bottom_left",
        "latitude":52.31703822683545,
        "longitude":7.630155086517335
     }

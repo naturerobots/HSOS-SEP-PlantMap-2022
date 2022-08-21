@@ -5,6 +5,7 @@
     :storeOptions="storeOptions"
   >
     <div
+      v-if="storeToRefs(gardenStore()).getGardens.value.length > 0"
       class="grow grid grid-cols-3 gap-4 place-items-stretch p-6 w-full h-fit"
     >
       <div v-if="storeOptions.indexOf('weather') > -1">
@@ -23,7 +24,9 @@
           ></garden-map>
         </div>
       </div>
-      <div v-if="storeOptions.indexOf('soil-parameter') > -1">
+      <div
+        v-if="sensors.length > 0 && storeOptions.indexOf('soil-parameter') > -1"
+      >
         <sensor-comp
           ref="sensorCompRef"
           :sensors="sensors"
@@ -33,6 +36,9 @@
         </sensor-comp>
       </div>
     </div>
+    <div v-else>
+      <h6>You don't have any gardens.</h6>
+    </div>
   </base-layout>
 </template>
 
@@ -41,7 +47,6 @@ import { onMounted, ref, type Ref } from "vue";
 import { storeToRefs } from "pinia";
 import { sensorStore } from "@/stores/sensorStore";
 import { userStore } from "@/stores/userStore";
-import { companyStore } from "@/stores/companyStore";
 import { gardenStore } from "@/stores/gardenStore";
 import type { Sensor } from "@/types/sensor";
 import {
@@ -53,11 +58,10 @@ import WeatherComp from "@/components/weather/WeatherComp.vue";
 import SensorComp from "@/components/sensor/SensorComp.vue";
 import GardenMap from "@/components/map/GardenMap.vue";
 import BaseLayout from "@/components/layout/BaseLayout.vue";
-import type { Company } from "@/types/company";
+import { weatherDataStore } from "@/stores/weatherDataStore";
 
 const sensors: Ref<Sensor[]> = storeToRefs(sensorStore()).getSensors;
 const storeOptions: Ref<StoreOption[]> = storeToRefs(userStore()).getOptions;
-const companies: Ref<Company[]> = storeToRefs(companyStore()).getCompanies;
 const gardenMapRef = ref<InstanceType<typeof GardenMap> | null>(null);
 const sensorCompRef = ref<InstanceType<typeof SensorComp> | null>(null);
 const widgetOptionsDashboard: WidgetOption[] = [
@@ -67,12 +71,8 @@ const widgetOptionsDashboard: WidgetOption[] = [
   widgetOptions.notification,
 ];
 
-onMounted(async () => {
-  //TODO: which company do we load
-  await companyStore().loadDataFromApi();
-  if (companies.value[0]) {
-    await gardenStore().loadDataFromApi(companies.value[0].id);
-  }
+onMounted(() => {
+  weatherDataStore().loadWeatherData();
 });
 
 // Sensor - Map interaction

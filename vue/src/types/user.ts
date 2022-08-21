@@ -1,10 +1,10 @@
-import type { StoreOption } from "@/types/WidgetOption";
+import type { StoreOption } from "@/types/widgetOption";
 
 export interface User {
-  settings: Settings;
-  token: Token;
+  username: string;
+  first_name: string;
+  last_name: string;
 }
-
 export interface Settings {
   widgetOptions: StoreOption[];
 }

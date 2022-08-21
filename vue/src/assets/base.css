@@ -128,7 +128,7 @@ body,
 }
 
 .widget span {
-  @apply font-bold text-[#707070] px-4;
+  @apply font-bold text-[#707070] px-4 py-1;
 }
 
 .widget-content.q-position-engine {
@@ -139,6 +139,10 @@ body,
 .widget .q-field__control,
 .widget-content .q-item {
   @apply min-h-min !important;
+}
+
+.widget .q-field__native.row {
+  @apply p-0 !important;
 }
 
 .widget-content .q-item {
@@ -234,7 +238,7 @@ body,
 /* CROPS TABLE */
 
 .crops-table {
-  /* height: 400px; */
+  height: 80vh;
   /* TODO: specify height */
 }
 

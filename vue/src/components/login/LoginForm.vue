@@ -21,7 +21,7 @@
         <input
           v-model="password"
           class="w-full content-center text-base px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-          type="text"
+          type="password"
           placeholder="Password"
         />
       </div>
@@ -46,8 +46,13 @@
 
 <script setup lang="ts">
 import { ref, type Ref } from "vue";
+import { storeToRefs } from "pinia";
 import { useRouter, type Router } from "vue-router";
 import { userStore } from "@/stores/userStore";
+import { companyStore } from "@/stores/companyStore";
+import { gardenStore } from "@/stores/gardenStore";
+import { bedStore } from "@/stores/bedStore";
+import { weatherDataStore } from "@/stores/weatherDataStore";
 
 const router: Router = useRouter();
 const email: Ref<string | undefined> = ref<string>();
@@ -59,6 +64,33 @@ async function login(): Promise<void> {
     password.value
   );
   if (isLoggedIn) {
+    await companyStore().loadDataFromApi();
+    const companyId = storeToRefs(companyStore()).getCompanies?.value[0]?.id;
+
+    if (companyId) {
+      companyStore().setSelectedCompany(companyId);
+      await gardenStore().loadDataFromApi(companyId);
+      const gardenId = storeToRefs(gardenStore()).getGardens?.value[0]?.id;
+      if (gardenId) {
+        gardenStore().setSelectedGarden(gardenId);
+        bedStore().loadDataFromApi();
+        await gardenStore().loadSelectedGardenImg(companyId);
+      }
+      await weatherDataStore().loadWeatherData();
+    } else {
+      companyStore().setSelectedCompany(undefined);
+      await gardenStore().loadUserGardens();
+      const gardenId = storeToRefs(gardenStore()).getGardens?.value[0]?.id;
+      if (gardenId) {
+        gardenStore().setSelectedGarden(gardenId);
+        bedStore().loadDataFromApi();
+        await gardenStore().loadSelectedGardenImg(companyId);
+      } else {
+        gardenStore().setSelectedGarden(undefined);
+      }
+    }
+    await weatherDataStore().loadWeatherData();
+
     router.push({ path: "/" });
   } else {
     console.log("User Feedback: Login failed");

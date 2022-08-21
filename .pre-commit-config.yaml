@@ -18,8 +18,6 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.2.0
     hooks:
-      - id: check-added-large-files
-        args: ["--maxkb=3000"]
       - id: check-case-conflict
       #- id: check-executables-have-shebangs
       - id: check-merge-conflict
@@ -28,6 +26,7 @@ repos:
       - id: check-vcs-permalinks
       - id: check-xml
       - id: check-yaml
+        args: ["--unsafe"]
       - id: check-json
       - id: debug-statements
       - id: end-of-file-fixer
@@ -75,7 +74,7 @@ repos:
       - id: clang-format
         name: clang-format
         description: Format files with ClangFormat.
-        entry: clang-format-10
+        entry: clang-format-11
         language: system
         files: \.(c|cc|cxx|cpp|frag|glsl|h|hpp|hxx|ih|ispc|ipp|java|js|m|proto|vert)$
         args: ["-fallback-style=none", "-i"]

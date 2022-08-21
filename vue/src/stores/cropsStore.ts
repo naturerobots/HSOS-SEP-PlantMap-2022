@@ -1,27 +1,43 @@
 import { defineStore } from "pinia";
-import type { Bed } from "@/types/crop";
+import type { Crop } from "@/types/crop";
 import { getCrops } from "@/services/cropsApi";
+import type { Plants } from "@/types/plants";
 
 export const cropsStore = defineStore({
   id: "cropsStore",
   state: () => ({
-    crops: [] as Bed[],
+    crops: {
+      plants: [] as Crop[],
+    } as Plants,
+    selectedCropId: {} as number,
+    isLoading: false,
   }),
   getters: {
     getCrops: (state) => state.crops,
+    getSelectedCropId(state): string | undefined {
+      return state.selectedCropId;
+    },
+    getIsLoading(state): boolean | undefined {
+      return state.isLoading;
+    },
   },
   actions: {
-    async loadDataFromApi(): Promise<void> {
-      const cropsData = localStorage.getItem("crops");
-
-      //The data is loaded from the local memory if it exists there.
-      //To refresh the data, the local memory must be deleted.
-      if (cropsData) {
-        this.crops = JSON.parse(cropsData);
-      } else {
-        this.crops = await getCrops();
-        localStorage.setItem("crops", JSON.stringify(this.crops));
+    async loadDataFromApi(plantsUrl: string): Promise<void> {
+      this.isLoading = true;
+      this.crops.plants = (await getCrops(plantsUrl)).plants;
+      if (this.crops.plants.length > 0) {
+        this.isLoading = false;
       }
+    },
+    setCrops(crops: Crop[]) {
+      this.crops.plants = crops;
+    },
+    setSelectedCropId(cropId: string) {
+      this.selectedCropId = cropId;
+    },
+    resetCrops() {
+      this.crops.plants.length = 0;
+      this.crops.plants = [];
     },
   },
 });

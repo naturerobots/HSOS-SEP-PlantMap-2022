@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  plant-map-dev:
+    image: ghcr.io/naturerobots/plant-map-digital-logbook:latest
+    volumes:
+      - ..:/workdir:cached
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3.10.7
+    ports:
+      - 5672:5672
+
+  postgres:
+    image: postgres:14
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
+volumes:
+  postgres-data:

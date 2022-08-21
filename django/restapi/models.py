@@ -12,9 +12,10 @@ from django.db import models
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'password', 'first_name', 'last_name', 'date_joined', 'last_login']
+        fields = ['id', 'username', 'email', 'password', 'first_name', 'last_name', 'date_joined', 'last_login']
         # fields = '__all__'
         extra_kwargs = {
+            'id': {'read_only': True},
             'password': {'write_only': True},
             'first_name': {'required': True},
             'last_name': {'required': True},
@@ -82,8 +83,23 @@ class Garden(models.Model):
         return self.name
 
 
+class Widget(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    data = models.JSONField()
+
+    class Meta:
+        app_label = 'restapi'
+        db_table = 'Widget'
+        managed = True
+
+    def __str__(self):
+        return self.user
+
+
 class Coordinate(models.Model):
-    name = models.CharField(max_length=32, primary_key=True)
+    id = models.BigAutoField(primary_key=True)
+    name = models.CharField(max_length=32)
     latitude = models.FloatField()
     longitude = models.FloatField()
     garden = models.ForeignKey(Garden, related_name='garden_coordinates', on_delete=models.CASCADE)

@@ -14,5 +14,77 @@
       "uuid": "18f89a2118d24d19b1c66345ec499f43",
       "garden": 1
     }
+  },
+  {
+    "model": "restapi.bed",
+    "pk": 3,
+    "fields": {
+      "uuid": "4cc5a79a245c41578beaeffe68cb5289",
+      "garden": 1
+    }
+  },
+  {
+    "model": "restapi.bed",
+    "pk": 4,
+    "fields": {
+      "uuid": "05717c979b0d4bd790d31ce218cd58ee",
+      "garden": 1
+    }
+  },
+  {
+    "model": "restapi.bed",
+    "pk": 5,
+    "fields": {
+      "uuid": "941b9dec6a834536a87f18f082b0613e",
+      "garden": 1
+    }
+  },
+  {
+    "model": "restapi.bed",
+    "pk": 6,
+    "fields": {
+      "uuid": "18f89a2118d24d19b1c66345ec499f43",
+      "garden": 2
+    }
+  },
+  {
+    "model": "restapi.bed",
+    "pk": 7,
+    "fields": {
+      "uuid": "e1ef73b1258b475a996d2b72924c27ac",
+      "garden": 2
+    }
+  },
+  {
+    "model": "restapi.bed",
+    "pk": 8,
+    "fields": {
+      "uuid": "05717c979b0d4bd790d31ce218cd58ee",
+      "garden": 2
+    }
+  },
+  {
+    "model": "restapi.bed",
+    "pk": 9,
+    "fields": {
+      "uuid": "4cc5a79a245c41578beaeffe68cb5289",
+      "garden": 3
+    }
+  },
+  {
+    "model": "restapi.bed",
+    "pk": 10,
+    "fields": {
+      "uuid": "18f89a2118d24d19b1c66345ec499f43",
+      "garden": 3
+    }
+  },
+  {
+    "model": "restapi.bed",
+    "pk": 11,
+    "fields": {
+      "uuid": "05717c979b0d4bd790d31ce218cd58ee",
+      "garden": 4
+    }
   }
 ]
