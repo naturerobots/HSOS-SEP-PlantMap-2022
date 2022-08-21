@@ -52,13 +52,12 @@ Hovering over a row highlights the location of the corresponding sensor on the m
 </figure>
 
 The crops tab consists of a table showing the beds of the current garden.
-Clicking on one of the beds shows the crops of the clicked bed in the table instead.
+Clicking on one of the beds shows it's crops.
 
 To the right side of the table is a map of the current garden.
 Green markers show the location of all the beds listed in the table and
 hovering over one of them highlights the corresponding row.
-Clicking on one of the bed markers has the same effect as clicking on a bed in the table and
-shows the crops of the clicked bed.
+Clicking on one of the bed markers has the same effect as clicking on a bed in the table, the crops are shown.
 
 When crops are shown in the table, their locations are marked on the map in the same way as the beds locations.
 Like with the beds, hovering over them on the map highlights the associated row in the table.
@@ -80,8 +79,7 @@ Clicking the button brings you to a 3D model of the bed.
 The model can be rotated with the left and moved with the right mouse button.
 The scroll wheel can be used to zoom.
 
-If you clicked on the `3D` button for a crop, an overlay will be shown,
-framing the crop and providing additional information about it.
+If you clicked on the `3D` button for a crop, an overlay with information will be shown. 
 
 ### Settings :gear:
 

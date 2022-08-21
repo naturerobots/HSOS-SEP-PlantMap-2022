@@ -52,7 +52,7 @@ To develop the application you need to set up the VSCode development container.
 3. Press `F1` or `CTRL+SHIFT+P` and enter `Remote-Containers: Reopen Folder in Container`
 
    This downloads a docker container for the development of the PlantMap application and
-   starts the needed [PostgreSQL](https://www.postgresql.org/) and RabbitMQ. Additionally,
+   starts the needed [PostgreSQL](https://www.postgresql.org/) and [RabbitMQ](https://www.rabbitmq.com/). Additionally,
    all necessary VS Code extensions and npm packages from the `package.json` are
    installed. Further git pre-commit hooks are set up.
 
