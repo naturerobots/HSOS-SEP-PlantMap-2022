@@ -1,13 +1,12 @@
 version: "3.8"
 services:
   plant-map-dev:
-    image: ghcr.io/naturerobots/plant-map-digital-logbook:latest
-    volumes:
-      - ..:/workdir:cached
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile.preview
     ports:
       - 8000:8000
       - 5050:5050
-    command: bash -c "cd /workdir; make run-preview"
     depends_on:
       - postgres
       - rabbitmq

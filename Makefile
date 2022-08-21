@@ -26,6 +26,4 @@ run-frontend-prod:
 	@cd vue && npm run build && npm run preview
 
 run-preview:
-	@mkdir -p build/gRPC
-	@python3 -m grpc_tools.protoc -I=protobuf-msgs --python_out=build/gRPC --grpc_python_out=build/gRPC protobuf-msgs/*
 	@make run-backend & make run-frontend-prod

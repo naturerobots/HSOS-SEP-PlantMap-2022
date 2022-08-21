@@ -13,3 +13,5 @@ venv/
 
 # Local PostgreSQL data
 data/
+
+vue/node_modules/

@@ -1,2 +1,3 @@
 rules:
   sudo_usage: off
+  latest_tag: off
