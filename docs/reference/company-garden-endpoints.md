@@ -8,9 +8,9 @@
 | [Query companies](#query-companies)                                     | GET  | /companies                                                |
 | [Query gardens the user can access](#query-gardens-the-user-can-access) | GET  | /gardens                                                  |
 | [Query specific company](#query-specific-company)                       | GET  | /companies/{company_id:int}                               |
-| [Create garden of company](#create-garden-of-company)                   | POST | /companies/{company_id:int}/gardens                       |
+| [Create a garden of company](#create-garden-of-company)                   | POST | /companies/{company_id:int}/gardens                       |
 | [Query gardens of company](#query-gardens-of-company)                   | GET  | /companies/{company_id:int}/gardens                       |
-| [Query specific garden](#query-specific-garden)                         | GET  | /companies/{company_id:int}/gardens/{garden_id:int}       |
+| [Query a specific garden](#query-specific-garden)                         | GET  | /companies/{company_id:int}/gardens/{garden_id:int}       |
 | [Upload image and coordinates](#upload-image-and-coordinates)           | POST | /companies/{company_id:int}/gardens/{garden_id:int}/image |
 | [Download image and coordinates](#download-image-and-coordinates)       | GET  | /companies/{company_id:int}/gardens/{garden_id:int}/image |
 

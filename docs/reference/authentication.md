@@ -92,7 +92,7 @@ Example response:
 
 ### Edit current user
 
-Send a PUT request to change information of the current user.
+Send a PUT request to change the information of the current user.
 All fields are optional.
 
 **Request**:  `PUT /user`  
@@ -161,7 +161,7 @@ Example response:
 
 ## Token
 
-The token returned from `/login` & `/register` needs to be send with every api-request
+The token returned from `/login` & `/register` **needs to be send with every api-request**
 in the [Authorization](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization) header
 with `Token` as a prefix.
 
