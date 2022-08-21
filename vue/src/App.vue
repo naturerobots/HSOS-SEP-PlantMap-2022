@@ -9,8 +9,6 @@ import { sensorStore } from "@/stores/sensorStore";
 import { cropsStore } from "./stores/cropsStore";
 
 onMounted(() => {
-  weatherDataStore().initWeatherData();
   sensorStore().loadDataFromApi();
-  // cropsStore().loadDataFromApi();
 });
 </script>
