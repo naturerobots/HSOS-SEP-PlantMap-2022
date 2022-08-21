@@ -1,7 +1,8 @@
 # Tutorials
 
 After following [the steps to install and launch the application](installation.md), you can now start using it.
-Begin by opening [http://localhost:3000](http://localhost:3000) in a browser.
+Begin by opening [http://localhost:3000](http://localhost:3000)
+(or [http://localhost:5050](http://localhost:5050) if you are using preview mode) in a browser.
 
 ## Login :inbox_tray:
 
