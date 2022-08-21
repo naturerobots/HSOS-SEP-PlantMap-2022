@@ -32,16 +32,12 @@ export async function loadBeds(): Promise<boolean> {
     // response.body is a ReadableStream
     const reader = response.body?.getReader();
     const beds: Beds = {
-      beds: [],
+      bedList: [],
     };
     for await (const chunk of readChunks(reader)) {
-      //console.log(`received chunk of size ${chunk?.length}`);
       if (chunk) {
-        //console.log(Utf8ArrayToStr(chunk));
         const json = JSON.parse(Utf8ArrayToStr(chunk));
-        //console.log(json);
-        beds.beds.push(json);
-        //console.log(beds);
+        beds.bedList.push(json);
         bedStore().setBed(json);
       }
     }

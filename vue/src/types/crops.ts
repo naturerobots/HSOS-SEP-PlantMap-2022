@@ -1,5 +1,5 @@
 import type { Crop } from "./crop";
 
-export interface Plants {
+export interface Crops {
   plants: Crop[];
 }

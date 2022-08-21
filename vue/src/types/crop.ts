@@ -6,9 +6,7 @@ export interface Crop {
   bed_id: number;
   plant: string;
   variety: string;
-  // location: number;
   soil_humidity: string;
-  // status: string;
   harvest: string;
   yield: string;
   health: Health[];

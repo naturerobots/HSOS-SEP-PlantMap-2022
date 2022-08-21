@@ -19,7 +19,7 @@ import type { Bed } from "@/types/bed";
 import type { Beds } from "@/types/beds";
 import type { Crop } from "@/types/crop";
 import type { GardenImage } from "@/types/gardenImage";
-import type { Plants } from "@/types/plants";
+import type { Crops } from "@/types/crops";
 import L from "leaflet";
 import { storeToRefs } from "pinia";
 import { ref, onMounted, type Ref, watch } from "vue";
@@ -47,7 +47,7 @@ var gardenImage: Ref<{ image: GardenImage | undefined }> = storeToRefs(
 
 const props = defineProps<{
   beds: Beds;
-  plants: Plants;
+  crops: Crops;
 }>();
 
 const emit = defineEmits<{
@@ -55,19 +55,19 @@ const emit = defineEmits<{
   (event: "bedEnter", bedId: number): void;
   (event: "bedLeave", bedId: number): void;
 
-  (event: "plantEnter", plantId: string): void;
-  (event: "plantLeave", plantId: string): void;
+  (event: "cropEnter", cropId: string): void;
+  (event: "cropLeave", cropId: string): void;
 }>();
 
-let showPlants = false;
+let showCrops = false;
 
 onMounted(() => {
   if (gardenImage.value.image) {
     baseMapRef.value?.addGardenImage(gardenImage.value.image);
   }
 
-  if (props.beds.beds.length > 0) {
-    props.beds.beds.forEach((bed) => {
+  if (props.beds.bedList.length > 0) {
+    props.beds.bedList.forEach((bed) => {
       addBedMarker(bed);
     });
   }
@@ -76,34 +76,34 @@ onMounted(() => {
 });
 
 watch(props.beds, () => {
-  if (props.beds.beds.length === 0) return;
+  if (props.beds.bedList.length === 0) return;
 
-  const bed = props.beds.beds[props.beds.beds.length - 1];
+  const bed = props.beds.bedList[props.beds.bedList.length - 1];
 
   let marker = addBedMarker(bed);
   if (marker) baseMapRef.value?.addEventsToMarker(marker);
 });
 
-watch(props.plants, () => {
-  if (props.plants.plants.length === 0) {
+watch(props.crops, () => {
+  if (props.crops.plants.length === 0) {
     baseMapRef.value?.removeLayerGroup(cropMarkers);
     baseMapRef.value?.addLayerGroup(bedMarkers, undefined, undefined);
 
     cropMarkers.clearLayers();
     cropMarkerMap.clear();
 
-    showPlants = false;
+    showCrops = false;
 
     return;
   }
 
   baseMapRef.value?.removeLayerGroup(bedMarkers);
 
-  props.plants.plants.forEach((crop: Crop) => {
+  props.crops.plants.forEach((crop: Crop) => {
     addCropMarker(crop);
   });
 
-  showPlants = true;
+  showCrops = true;
 
   baseMapRef.value?.addLayerGroup(cropMarkers, undefined, undefined);
 });
@@ -136,49 +136,41 @@ function addCropMarker(crop: Crop): L.Marker | undefined {
 }
 
 function markerClick(marker: L.Marker): void {
-  const bedId: number | undefined = getIdByMarker(marker);
+  const bedId: number | undefined = getBedIdByMarker(marker);
   if (bedId) {
     emit("bedClick", bedId);
   }
 }
 
 function markerEnter(marker: L.Marker): void {
-  if (showPlants) {
-    const id: string | undefined = getPlantIdByMarker(marker);
+  if (showCrops) {
+    const id: string | undefined = getCropIdByMarker(marker);
     if (id) {
-      emit("plantEnter", id);
+      emit("cropEnter", id);
     }
   } else {
-    const id: number | undefined = getIdByMarker(marker);
+    const id: number | undefined = getBedIdByMarker(marker);
     if (id) {
       emit("bedEnter", id);
     }
   }
-  //
 }
 
-// function markerLeave(marker: L.Marker): void {
-//   const bedId: number | undefined = getIdByMarker(marker);
-//   if (bedId) {
-//     emit("bedLeave", bedId);
-//   }
-// }
-
 function markerLeave(marker: L.Marker): void {
-  if (showPlants) {
-    const id: string | undefined = getPlantIdByMarker(marker);
+  if (showCrops) {
+    const id: string | undefined = getCropIdByMarker(marker);
     if (id) {
-      emit("plantLeave", id);
+      emit("cropLeave", id);
     }
   } else {
-    const id: number | undefined = getIdByMarker(marker);
+    const id: number | undefined = getBedIdByMarker(marker);
     if (id) {
       emit("bedLeave", id);
     }
   }
 }
 
-function getIdByMarker(marker: L.Marker): number | undefined {
+function getBedIdByMarker(marker: L.Marker): number | undefined {
   for (let [key, value] of bedMarkerMap.entries()) {
     if (value === marker) {
       console.log(key);
@@ -188,7 +180,7 @@ function getIdByMarker(marker: L.Marker): number | undefined {
   return undefined;
 }
 
-function getPlantIdByMarker(marker: L.Marker): string | undefined {
+function getCropIdByMarker(marker: L.Marker): string | undefined {
   for (let [key, value] of cropMarkerMap.entries()) {
     if (value === marker) {
       console.log(key);
