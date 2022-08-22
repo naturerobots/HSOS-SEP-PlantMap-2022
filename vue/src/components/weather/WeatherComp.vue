@@ -11,9 +11,7 @@ the component should be extended to include a message indicating that no weather
         <div class="flex items-center justify-center">
           <img
             class="weather-icon"
-            :src="
-              '/src/assets/icons/weather/' + current.weather[0].icon + '.svg'
-            "
+            :src="'/assets/icons/weather/' + current.weather[0].icon + '.svg'"
           />
         </div>
         <div>

@@ -1,8 +1,8 @@
 run-django:
 	@cd django && python3 manage.py makemigrations \
 		&& python3 manage.py migrate \
-		&& python3 manage.py loaddata user company garden bed permissions coordinate \
-		&& python3 manage.py runserver
+		&& python3 manage.py loaddata user company garden bed permissions coordinate widget \
+		&& python3 manage.py runserver 0.0.0.0:8000
 
 run-celery:
 	@cd django && celery -A restapi.tasks worker --loglevel=info
@@ -24,3 +24,6 @@ run-frontend-prod:
 	@echo "# Build and run vite for production #"
 	@echo "#####################################"
 	@cd vue && npm run build && npm run preview
+
+run-preview:
+	@make run-backend & make run-frontend-prod

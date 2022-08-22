@@ -1,0 +1,41 @@
+version: "3.8"
+services:
+  plant-map-dev:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile.preview
+    ports:
+      - 8000:8000
+      - 5050:5050
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3.10.7
+    ports:
+      - 5672:5672
+  #    healthcheck:
+  #      interval: 10s
+  #      timeout: 5s
+  #      retries: 5
+  #      test: [ "CMD", "rabbitmqctl", "status" ]
+
+  postgres:
+    image: postgres:14
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+volumes:
+  postgres-data:
