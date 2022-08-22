@@ -30,7 +30,16 @@ The following roles exist:
 
 ## Endpoints
 
-### `/companies/{company_id}/createPermission`
+### Overview
+
+| Name                                                    | HTTP | URL                                                                  |
+| ------------------------------------------------------- | ---- | -------------------------------------------------------------------- |
+| [Create company permission](#create-company-permission) | POST | /companies/{company_id:int}/createPermission                         |
+| [Remove company permission](#remove-company-permission) | POST | /companies/{company_id:int}/removePermission                         |
+| [Create garden permission](#create-garden-permission)   | POST | /companies/{company_id:int}/gardens/{garden_id:int}/createPermission |
+| [Remove garden permission](#remove-garden-permission)   | POST | /companies/{company_id:int}/gardens/{garden_id:int}/removePermission |
+
+### Create company permission
 
 Send a POST request to this endpoint to give a user permissions on the company specified in the URL.
 The request body needs to contain a `user_id` and a `permission` field as json.
@@ -50,14 +59,15 @@ gives the user with id '42' admin permissions on the company with id '2':
 If a permission for this user and company already existed before, it will be deleted and a new one is created.
 Own permissions cannot be overwritten.
 
-Responses:
+**Request**:  `POST /companies/{company_id:int}/createPermission`  
+**Responses**:
 
 - HTTP-201 (Created), if the permission was created successfully.
 - HTTP-400 (Bad Request), if for example the permission was not sent with the request.
 - HTTP-403 (Forbidden), if the requesting user is not admin of the company and thus cannot set permissions or
   if the user tries to overwrite own permissions.
 
-### `/companies/{company_id}/removePermission`
+### Remove company permission
 
 Send a POST request to this endpoint to remove the permissions of a user to the company specified in the URL.
 The request body needs to contain a `user_id` field as json.
@@ -74,23 +84,30 @@ removes the permissions for the user with id '42' on the company with id '2':
 }
 ```
 
-Responses:
+**Request**:  `POST /companies/{company_id:int}/removePermission`  
+**Responses**:
 
 - HTTP-200 (Ok), if the permission was deleted successfully or does not exist.
 - HTTP-400 (Bad Request), if for example user_id was not sent with the request.
 - HTTP-403 (Forbidden), if the requesting user is not admin of the company and thus cannot set permissions or
   if the user tries to remove own permissions.
 
-### `/companies/{company_id}/gardens/{garden_id}/createPermission`
+### Create garden permission
 
 Endpoint to give a user permissions on the garden specified in the URL.
 Works the same as creating a permission for a company.
 
 Only admins of the corresponding company or garden can access this endpoint.
 
-### `/companies/{company_id}/gardens/{garden_id}/removePermission`
+**Request**:  `POST /companies/{company_id:int}/gardens/{garden_id:int}/createPermission`  
+**Responses**: `201 Created`, `400 Bad Request`, `403 Forbidden`
+
+### Remove garden permission
 
 Endpoint to remove the permissions of a user to the garden specified in the URL.
 Works the same as removing a permission for a company.
 
 Only admins of the corresponding company or garden can access this endpoint.
+
+**Request**:  `POST /companies/{company_id:int}/gardens/{garden_id:int}/removePermission`  
+**Responses**: `200 Ok`, `400 Bad Request`, `403 Forbidden`
