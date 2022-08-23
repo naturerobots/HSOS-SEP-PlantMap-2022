@@ -52,6 +52,7 @@ import { userStore } from "@/stores/userStore";
 import { companyStore } from "@/stores/companyStore";
 import { gardenStore } from "@/stores/gardenStore";
 import { bedStore } from "@/stores/bedStore";
+import { weatherDataStore } from "@/stores/weatherDataStore";
 
 const router: Router = useRouter();
 const email: Ref<string | undefined> = ref<string>();
@@ -75,6 +76,7 @@ async function login(): Promise<void> {
         bedStore().loadDataFromApi();
         await gardenStore().loadSelectedGardenImg(companyId);
       }
+      await weatherDataStore().loadWeatherData();
     } else {
       companyStore().setSelectedCompany(undefined);
       await gardenStore().loadUserGardens();
@@ -87,6 +89,7 @@ async function login(): Promise<void> {
         gardenStore().setSelectedGarden(undefined);
       }
     }
+    await weatherDataStore().loadWeatherData();
 
     router.push({ path: "/" });
   } else {

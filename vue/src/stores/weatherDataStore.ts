@@ -11,25 +11,34 @@ import {
 } from "@/services/weatherDataAPI";
 
 //import { getGeoData } from "@/services/geoDataAPI";
-import type { GeoDataArray } from "@/types/geoData";
+import type { GeoData, GeoDataArray } from "@/types/geoData";
+import { gardenStore } from "./gardenStore";
+import type { Coordinate } from "@/types/gardenImage";
+
+interface weatherDataStore {
+  initialized: boolean;
+  geo: GeoData[];
+  current: WeatherDataCurrent | undefined;
+  forecast: WeatherDataForecast | undefined;
+}
 
 export const weatherDataStore = defineStore({
   id: "weatherDataStore",
   state: () => ({
-    initialised: false,
-    geo: {} as GeoDataArray,
-    current: {} as WeatherDataCurrent,
-    forecast: {} as WeatherDataForecast,
+    initialized: false,
+    geo: [],
+    current: undefined,
+    forecast: undefined,
   }),
   getters: {
     //Getter not necessary
     getWeatherData(state: any) {
       return state;
     },
-    getCurrent(): WeatherDataCurrent {
-      return Object.keys(this.current).length > 0 ? this.current : undefined;
+    getCurrent(state: any): WeatherDataCurrent | undefined {
+      return state.current;
     },
-    getForecast(state: any): WeatherDataForecast {
+    getForecast(state: any): WeatherDataForecast | undefined {
       return state.forecast;
     },
     getHourly(state: any): Hourly {
@@ -68,11 +77,29 @@ export const weatherDataStore = defineStore({
     },
   },
   actions: {
-    async initWeatherData(): Promise<void> {
-      if (this.initialised)
-        throw Error("WeatherDataStore: already initialised");
+    async loadWeatherData(): Promise<void> {
+      const coord = gardenStore().getGardenImage.image?.coordinates[0];
 
-      console.log("WeatherDataStore: initialisation started");
+      if (coord) {
+        this.current = await getWeatherDataCurrent(
+          coord?.latitude as number,
+          coord?.longitude as number
+        );
+        this.forecast = await getWeatherDataForecast(
+          coord?.latitude as number,
+          coord?.longitude as number
+        );
+      } else {
+        this.current = await getWeatherDataCurrent(52.2799, 8.0471788);
+        this.forecast = await getWeatherDataForecast(52.2799, 8.0471788);
+      }
+    },
+
+    async initWeatherData(): Promise<void> {
+      if (this.initialized)
+        throw Error("WeatherDataStore: already initialized");
+
+      console.log("WeatherDataStore: initialization started");
 
       const weatherDataCurrent = localStorage.getItem("WeatherDataCurrent");
       const weatherDataForecast = localStorage.getItem("WeatherDataForecast");

@@ -1,0 +1,97 @@
+[
+  {
+    "model": "restapi.widget",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "data": {
+        "widgets": [
+          "3d-table",
+          "3d-map",
+          "weather",
+          "soil-parameter",
+          "garden-map",
+          "notifications",
+          "crops-map",
+          "crops-table"
+        ]
+      }
+    }
+  },
+  {
+    "model": "restapi.widget",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "data": {
+        "widgets": [
+          "3d-table",
+          "3d-map",
+          "weather",
+          "soil-parameter",
+          "garden-map",
+          "notifications",
+          "crops-map",
+          "crops-table"
+        ]
+      }
+    }
+  },
+  {
+    "model": "restapi.widget",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "data": {
+        "widgets": [
+          "3d-table",
+          "3d-map",
+          "weather",
+          "soil-parameter",
+          "garden-map",
+          "notifications",
+          "crops-map",
+          "crops-table"
+        ]
+      }
+    }
+  },
+  {
+    "model": "restapi.widget",
+    "pk": 4,
+    "fields": {
+      "user": 4,
+      "data": {
+        "widgets": [
+          "3d-table",
+          "3d-map",
+          "weather",
+          "soil-parameter",
+          "garden-map",
+          "notifications",
+          "crops-map",
+          "crops-table"
+        ]
+      }
+    }
+  },
+  {
+    "model": "restapi.widget",
+    "pk": 5,
+    "fields": {
+      "user": 5,
+      "data": {
+        "widgets": [
+          "3d-table",
+          "3d-map",
+          "weather",
+          "soil-parameter",
+          "garden-map",
+          "notifications",
+          "crops-map",
+          "crops-table"
+        ]
+      }
+    }
+  }
+]

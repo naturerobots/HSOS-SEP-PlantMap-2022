@@ -60,7 +60,7 @@ let counter = 0;
 let opacity = ref<number>(0.5);
 
 const greenIcon: L.Icon = new L.Icon({
-  iconUrl: "src/assets/marker/marker_green.svg",
+  iconUrl: "assets/marker/marker_green.svg",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],

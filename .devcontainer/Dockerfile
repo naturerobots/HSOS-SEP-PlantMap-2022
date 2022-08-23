@@ -58,12 +58,12 @@ RUN useradd -u 1001 --create-home --shell /bin/bash docker && echo "docker:docke
 
 RUN mkdir -p /home/docker/.vscode-server/extensions \
     && chown -R docker /home/docker/.vscode-server \
-    && mkdir -p /PlantMap \
-    && chown -R docker /PlantMap
+    && mkdir -p /workdir \
+    && chown -R docker /workdir
 
 # Run as user 'docker' after here
 USER docker
 
-RUN echo 'export PYTHONPATH="${PYTHONPATH}:/workdir/build/gRPC"' >> /home/docker/.bashrc
+ENV PYTHONPATH="/workdir/build/gRPC"
 
-ENTRYPOINT [ "/bin/sh", "-c", "while sleep 1000; do :; done" ]
+CMD while sleep 1000; do :; done

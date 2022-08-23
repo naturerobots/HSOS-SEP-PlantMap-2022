@@ -1,0 +1,20 @@
+FROM ghcr.io/naturerobots/plant-map-digital-logbook:latest
+
+USER docker
+
+WORKDIR /workdir
+
+COPY --chown=docker:docker django django
+COPY --chown=docker:docker vue vue
+COPY --chown=docker:docker protobuf-msgs protobuf-msgs
+COPY --chown=docker:docker Makefile Makefile
+
+RUN cd vue && npm install
+
+RUN mkdir -p build/gRPC
+RUN python3 -m grpc_tools.protoc -I=protobuf-msgs --python_out=build/gRPC --grpc_python_out=build/gRPC protobuf-msgs/*
+
+EXPOSE 8000
+EXPOSE 5050
+
+ENTRYPOINT make run-preview

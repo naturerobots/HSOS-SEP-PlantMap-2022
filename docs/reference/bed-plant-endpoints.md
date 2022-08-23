@@ -1,8 +1,13 @@
 # Beds & Plants Endpoints
 
-## General
+## Overview
 
-### `/companies/<int:company_id>/gardens/<int:garden_id>/beds`
+| Name                                                  | HTTP | URL                                                                          |
+| ----------------------------------------------------- | ---- | ---------------------------------------------------------------------------- |
+| [Query beds of a garden](#query-beds-of-a-garden)     | GET  | /companies/{company_id:int}/gardens/{garden_id:int}/beds                     |
+| [Query plants of a bed](#query-plants-of-a-bed)       | GET  | /companies/{company_id:int}/gardens/{garden_id:int}/beds/{bed_id:int}/plants |
+
+## Query beds of a garden
 
 Accepts an empty GET request and returns a streamed json response as seen below
 with information about the beds in the specified garden.
@@ -18,6 +23,9 @@ and the pointcloud will be scheduled to be downloaded in the background as soon 
 
     For 6 beds with 33 plants each, over 600 gRPC requests need to be send,
     which may take ~20 seconds, during which the response is streamed back.
+
+**Request**:  `GET /companies/{company_id:int}/gardens/{garden_id:int}/beds`  
+**Response**: `200 Ok`, `404 Not Found`
 
 Example response (Beds are streamed one by one):
 
@@ -69,12 +77,15 @@ Example response (Beds are streamed one by one):
 }
 ```
 
-### `/companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/plants`
+## Query plants of a bed
 
 Accepts an empty GET request and returns a json response with information
 about the individual plants in the specified bed.
 As seen below, the response looks similar to the one from the `beds` endpoint above,
 but these values are per plant and not averages.
+
+**Request**:  `GET /companies/{company_id:int}/gardens/{garden_id:int}/beds/{bed_id:int}/plants`  
+**Response**: `200 Ok`, `404 Not Found`
 
 Example response:
 
