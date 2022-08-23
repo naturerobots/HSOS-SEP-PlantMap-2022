@@ -54,7 +54,7 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - \
 RUN pip3 install mkdocs mkdocs-material mkdocs-glightbox
 
 # Add non root user
-RUN useradd -u 1000 --create-home --shell /bin/bash docker && echo "docker:docker" | chpasswd && adduser docker sudo
+RUN useradd -u 1001 --create-home --shell /bin/bash docker && echo "docker:docker" | chpasswd && adduser docker sudo
 
 RUN mkdir -p /home/docker/.vscode-server/extensions \
     && chown -R docker /home/docker/.vscode-server \
