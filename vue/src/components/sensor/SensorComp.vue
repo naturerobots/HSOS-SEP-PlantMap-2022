@@ -73,7 +73,7 @@ function getRowBySensorId(sensorId: number): HTMLTableRowElement | undefined {
       if (sensorId == table.value.rows[i].id) {
         return document
           .getElementsByClassName("q-table")[0]
-          .getElementsByTagName("tr")[i + 1];
+          .getElementsByTagName("tr")[i + 2];
       }
     }
   }
