@@ -13,6 +13,7 @@ nav:
       - License: "getting-started/license.md"
   - Reference:
       - REST-API:
+          - 3D-View: "reference/3d-view.md"
           - Authentication: "reference/authentication.md"
           - Beds & Plants: "reference/bed-plant-endpoints.md"
           - Company & Gardens: "reference/company-garden-endpoints.md"
