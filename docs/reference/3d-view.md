@@ -1,16 +1,23 @@
 # 3D-View
 
-## Endpoint
+## Overview
 
-### `/companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/3d-scene/`
+| Name                                                                | HTTP | URL                                                                               |   |   |
+|---------------------------------------------------------------------|------|-----------------------------------------------------------------------------------|---|---|
+| [Get list of 3d meta plant information](#3d-meta-plant-information-list) | GET  | `/companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/3d-scene/` |   |   |
+
+## 3d meta plant information list
 
 Send a GET request to this endpoint to get the Plant information.
 The response contains two elements.
 Firstly an array called plants, which contains informations about every plant in the bed.
 Secondly an global elements which describes center position of the bed.
 
-The plants array only contains plants for which the pointclouds are in the "django/storage/media/pointclouds/ply" folder.
+The plants array only contains plants for which the pointclouds are in the `django/storage/media/pointclouds/ply` folder.
 The pointcloud of a plant can be loaded by the url given in the plants array.
+
+**Request**: `/companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/3d-scene/`  
+**Response** `200 Ok`, `404 Not Found`, `400 Bad Request`
 
 Example response:
 
