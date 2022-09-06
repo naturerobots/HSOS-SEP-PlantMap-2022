@@ -16,6 +16,8 @@ Secondly an global elements which describes center position of the bed.
 The plants array only contains plants for which the pointclouds are in the `django/storage/media/pointclouds/ply` folder.
 The pointcloud of a plant can be loaded by the url given in the plants array.
 
+for more information on how to access the pointclouds take a look at the [storage system](/reference/storage-system).
+
 **Request**: `/companies/<int:company_id>/gardens/<int:garden_id>/beds/<int:bed_id>/3d-scene/`  
 **Response** `200 Ok`, `404 Not Found`, `400 Bad Request`
 
