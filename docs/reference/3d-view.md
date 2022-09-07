@@ -11,7 +11,7 @@
 Send a GET request to this endpoint to get the Plant information.
 The response contains two elements.
 Firstly an array called plants, which contains informations about every plant in the bed.
-Secondly an global elements which describes center position of the bed.
+Secondly an global element which describes center position of the bed.
 
 The plants array only contains plants for which the pointclouds are in the `django/storage/media/pointclouds/ply` folder.
 The pointcloud of a plant can be loaded by the url given in the plants array.

@@ -3,7 +3,7 @@
 ## Basics
 
 To store files like the garden images, logs or plant pointclouds we use the storage folder.
-images is a common folder, which allows to store files that are not accessible through an url.
+Images is a common folder, which allows to store files that are not accessible through an url.
 The logs folder uses the [django logging system](https://docs.djangoproject.com/en/4.1/topics/logging/).
 It is configured to contain two logs. `debug.log`, which shows all logs but can get kind of messy.
 For a cleaner logging experience we added the second log `info.log`, which shows everything except the logs defined as debug.
