@@ -243,7 +243,7 @@ onMounted(() => {
     "/beds/" +
     bedId.value +
     "/3d-scene/";
-  let payload = {};
+  //let payload = {};
   let header = {
     headers: {
       Authorization: "Token " + storeToRefs(userStore()).getToken.value.token,
@@ -251,9 +251,9 @@ onMounted(() => {
   };
 
   axios
-    .post(url, payload, header)
+    .get(url, header)
     .then(function (response): void {
-      //console.log("then", response);
+      console.log("then", response);
 
       crop3dArray = response["data"]["plants"];
       globalPosition = response["data"]["global"]["position"];
