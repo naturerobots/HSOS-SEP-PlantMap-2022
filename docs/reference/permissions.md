@@ -42,22 +42,22 @@ The following roles exist:
 ### Create company permission
 
 Send a POST request to this endpoint to give a user permissions on the company specified in the URL.
-The request body needs to contain a `user_id` and a `permission` field as json.
+The request body needs to contain a `username` and a `permission` field as json.
 
 Only admins of the corresponding company can access this endpoint.
 
-The following request with URL: ../companies/2/createPermission
-gives the user with id '42' admin permissions on the company with id '2':
+The following request with URL: `../companies/2/createPermission`
+gives the user with username `testuser` admin permissions on the company with id `2`:
 
 ```json
 {
-  "user_id": "42",
+  "username": "testuser",
   "permission": "a"
 }
 ```
 
-If a permission for this user and company already existed before, it will be deleted and a new one is created.
-Own permissions cannot be overwritten.
+If a permission for this user and company already exists, it will be overwritten. Own permissions cannot be overwritten,
+in order to prevent locking yourself out.
 
 **Request**:  `POST /companies/{company_id:int}/createPermission`  
 **Responses**:
@@ -70,17 +70,17 @@ Own permissions cannot be overwritten.
 ### Remove company permission
 
 Send a POST request to this endpoint to remove the permissions of a user to the company specified in the URL.
-The request body needs to contain a `user_id` field as json.
+The request body needs to contain a `username` field as json.
 
 Only admins of the corresponding company can access this endpoint.
 Own permissions or those of the last admin cannot be removed.
 
-The following request with URL: ../companies/2/createPermission
-removes the permissions for the user with id '42' on the company with id '2':
+The following request with URL: `../companies/2/createPermission`
+removes the permissions for the user with username `testuser` on the company with id `2`:
 
 ```json
 {
-  "user_id": "42"
+  "username": "testuser"
 }
 ```
 
