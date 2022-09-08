@@ -9,6 +9,9 @@ COPY --chown=docker:docker vue vue
 COPY --chown=docker:docker protobuf-msgs protobuf-msgs
 COPY --chown=docker:docker Makefile Makefile
 
+RUN mkdir -p django/storage/logs
+RUN mkdir -p django/storage/images
+
 RUN cd vue && npm install
 
 RUN mkdir -p build/gRPC

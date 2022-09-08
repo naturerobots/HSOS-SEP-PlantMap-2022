@@ -17,6 +17,8 @@ nav:
           - Beds & Plants: "reference/bed-plant-endpoints.md"
           - Company & Gardens: "reference/company-garden-endpoints.md"
           - Permission System: "reference/permissions.md"
+          - 3D-View: "reference/3d-view.md"
+          - Storage System: "reference/storage-system.md"
       - Env Variables: "reference/env-vars.md"
       - Architecture: "reference/architecture.md"
       - Terminology: "reference/terminology.md"
