@@ -25,7 +25,7 @@ nav:
 theme:
   name: material
   language: en
-  logo: imgs/logo_small_color.svg
+  logo: imgs/logo_small_white.svg
   favicon: imgs/logo_small_color.svg
   palette:
     - scheme: naturerobots
