@@ -37,13 +37,12 @@ export async function loadBeds(): Promise<boolean> {
     };
     for await (const chunk of readChunks(reader)) {
       if (chunk) {
-        let json; 
+        let json;
         try {
           if (lastChunkFailed) {
             lastChunkFailed += Utf8ArrayToStr(chunk);
             json = JSON.parse(lastChunkFailed);
-          }
-          else {
+          } else {
             json = JSON.parse(Utf8ArrayToStr(chunk));
           }
           beds.bedList.push(json);
