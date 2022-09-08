@@ -2,8 +2,10 @@
 
 ## OpenWeatherMap
 
-The following [APIs](https://openweathermap.org/api) from [OpenWeatherMap](https://openweathermap.org/) were used for the `weather widget`. 
-To use the APIs, an [OpenWeatherMap account](https://home.openweathermap.org/users/sign_up) and a [token](https://home.openweathermap.org/api_keys) must be created. 
+The following [APIs](https://openweathermap.org/api) from [OpenWeatherMap](https://openweathermap.org/)
+were used for the `weather widget`. 
+To use the APIs, an [OpenWeatherMap account](https://home.openweathermap.org/users/sign_up)
+and a [token](https://home.openweathermap.org/api_keys) must be created. 
 The token must then be added as environment variable `VITE_TOKEN_OWM`.
 
 | API                                                                                           | Description                                                                                                                                                       | [Pricing](https://openweathermap.org/price)          |
@@ -14,7 +16,8 @@ The token must then be added as environment variable `VITE_TOKEN_OWM`.
 
 ## Mapbox
 
-The following [APIs](https://www.mapbox.com/product-apis) from [Mapbox](https://www.mapbox.com/) were used for the `garden map`.
+The following [APIs](https://www.mapbox.com/product-apis) from [Mapbox](https://www.mapbox.com/)
+were used for the `garden map`.
 To use the APIs, an [Mapbox account](https://account.mapbox.com/auth/signup/) and a `token` must be created.
 The token must then be added as environment variable `VITE_TOKEN_MAPBOX`.
 
