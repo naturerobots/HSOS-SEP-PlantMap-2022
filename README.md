@@ -95,16 +95,22 @@ understand the requirements,  please visit the [installation
 guide](https://naturerobots.github.io/HSOS-SEP-PlantMap-2022/getting-started/installation/)
 in the documentation for more detailed steps.
 
-If you just want the get the application running, clone the repository and run the docker compose command. 
+If you just want to get the application running, clone the repository and run the docker compose command.
 
 ```sh
 git clone https://github.com/naturerobots/HSOS-SEP-PlantMap-2022.git
 cd HSOS-SEP-PlantMap-2022
-docker compose -f .devcontainer/docker-compose.preview.yml up
+docker compose -f .devcontainer/docker-compose.preview.yml up -d
 ```
 
 Now the application should be available under
 [localhost:5000](http://localhost:5050),  the REST API is runs on port 8000.
+
+To stop the application use :
+
+```sh
+docker compose -f .devcontainer/docker-compose.preview.yml stop
+```
 
 ## Documentation  
 
