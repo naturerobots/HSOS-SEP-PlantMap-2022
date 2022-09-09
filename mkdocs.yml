@@ -19,9 +19,10 @@ nav:
           - Permission System: "reference/permissions.md"
           - 3D-View: "reference/3d-view.md"
           - Storage System: "reference/storage-system.md"
-      - Env Variables: "reference/env-vars.md"
       - Architecture: "reference/architecture.md"
+      - External APIs: "reference/external-apis.md"
       - Terminology: "reference/terminology.md"
+      - Env Variables: "reference/env-vars.md"
 theme:
   name: material
   language: en
