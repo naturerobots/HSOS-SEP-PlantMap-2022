@@ -1,0 +1,635 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="../../imgs/logo_small_color.svg" rel="icon"/>
+<meta content="mkdocs-1.3.1, mkdocs-material-8.4.3" name="generator"/>
+<title>Authentication - PlantMap Digital Logbook</title>
+<link href="../../assets/stylesheets/main.6b80c2a2.min.css" rel="stylesheet"/>
+<link href="../../assets/stylesheets/palette.cbb835fc.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../../stylesheets/extra.css" rel="stylesheet"/>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>html.glightbox-open { overflow: initial; height: 100%; }</style><script src="../../assets/javascripts/glightbox.min.js"></script></head>
+<body data-md-color-accent="" data-md-color-primary="" data-md-color-scheme="naturerobots" dir="ltr">
+<script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#authentication">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="PlantMap Digital Logbook" class="md-header__button md-logo" data-md-component="logo" href="../.." title="PlantMap Digital Logbook">
+<img alt="logo" src="../../imgs/logo_small_white.svg"/>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            PlantMap Digital Logbook
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Authentication
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-hidden="true" class="md-option" data-md-color-accent="" data-md-color-media="" data-md-color-primary="" data-md-color-scheme="naturerobots" id="__palette_1" name="__palette" type="radio"/>
+</form>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/naturerobots/HSOS-SEP-PlantMap-2022" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<nav aria-label="Tabs" class="md-tabs" data-md-component="tabs">
+<div class="md-tabs__inner md-grid">
+<ul class="md-tabs__list">
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../..">
+        Home
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link" href="../../getting-started/installation/">
+        Getting started
+      </a>
+</li>
+<li class="md-tabs__item">
+<a class="md-tabs__link md-tabs__link--active" href="./">
+        Reference
+      </a>
+</li>
+</ul>
+</div>
+</nav>
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="PlantMap Digital Logbook" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="PlantMap Digital Logbook">
+<img alt="logo" src="../../imgs/logo_small_white.svg"/>
+</a>
+    PlantMap Digital Logbook
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/naturerobots/HSOS-SEP-PlantMap-2022" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg>
+</div>
+<div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" id="__nav_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_1">
+          Home
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Home" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_1">
+<span class="md-nav__icon md-icon"></span>
+          Home
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+        Introduction
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../data-flow/">
+        Data Flow
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2">
+          Getting started
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Getting started" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+          Getting started
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../getting-started/installation/">
+        Installation
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../getting-started/tutorials/">
+        Tutorials
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../getting-started/errors/">
+        Common errors
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../getting-started/improvements/">
+        Improvements
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../getting-started/license/">
+        License
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3">
+          Reference
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="Reference" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+          Reference
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1" id="__nav_3_1" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3_1">
+          REST-API
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-label="REST-API" class="md-nav" data-md-level="2">
+<label class="md-nav__title" for="__nav_3_1">
+<span class="md-nav__icon md-icon"></span>
+          REST-API
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          Authentication
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+        Authentication
+      </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#endpoints">
+    Endpoints
+  </a>
+<nav aria-label="Endpoints" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+    Overview
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#login-existing-account">
+    Login existing account
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#register-new-account">
+    Register new account
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#logout-current-user">
+    Logout current user
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#query-current-user">
+    Query current user
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#edit-current-user">
+    Edit current user
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#save-current-user-widgets">
+    Save current user widgets
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#query-current-user-widgets">
+    Query current user widgets
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#token">
+    Token
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#backend">
+    Backend
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../bed-plant-endpoints/">
+        Beds &amp; Plants
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../company-garden-endpoints/">
+        Company &amp; Gardens
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../permissions/">
+        Permission System
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../3d-view/">
+        3D-View
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../storage-system/">
+        Storage System
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../architecture/">
+        Architecture
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../external-apis/">
+        External APIs
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../terminology/">
+        Terminology
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../env-vars/">
+        Env Variables
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#endpoints">
+    Endpoints
+  </a>
+<nav aria-label="Endpoints" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+    Overview
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#login-existing-account">
+    Login existing account
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#register-new-account">
+    Register new account
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#logout-current-user">
+    Logout current user
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#query-current-user">
+    Query current user
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#edit-current-user">
+    Edit current user
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#save-current-user-widgets">
+    Save current user widgets
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#query-current-user-widgets">
+    Query current user widgets
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#token">
+    Token
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#backend">
+    Backend
+  </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<a class="md-content__button md-icon" href="https://github.com/naturerobots/HSOS-SEP-PlantMap-2022/edit/main/docs/reference/authentication.md" title="Edit this page">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"></path></svg>
+</a>
+<h1 id="authentication">Authentication<a class="headerlink" href="#authentication" title="Permanent link">#</a></h1>
+<h2 id="endpoints">Endpoints<a class="headerlink" href="#endpoints" title="Permanent link">#</a></h2>
+<h3 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">#</a></h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>HTTP</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#login-existing-account">Login existing account</a></td>
+<td>POST</td>
+<td>/login</td>
+</tr>
+<tr>
+<td><a href="#register-new-account">Register new account</a></td>
+<td>POST</td>
+<td>/register</td>
+</tr>
+<tr>
+<td><a href="#logout-current-user">Logout current user</a></td>
+<td>POST</td>
+<td>/logout &amp; /logoutall</td>
+</tr>
+<tr>
+<td><a href="#query-current-user">Query current user</a></td>
+<td>GET</td>
+<td>/user</td>
+</tr>
+<tr>
+<td><a href="#edit-current-user">Edit current user</a></td>
+<td>PUT</td>
+<td>/user</td>
+</tr>
+<tr>
+<td><a href="#save-current-user-widgets">Save current user widgets</a></td>
+<td>POST</td>
+<td>/user/widgets</td>
+</tr>
+<tr>
+<td><a href="#query-current-user-widgets">Query current user widgets</a></td>
+<td>GET</td>
+<td>/user/widgets</td>
+</tr>
+</tbody>
+</table>
+<h3 id="login-existing-account">Login existing account<a class="headerlink" href="#login-existing-account" title="Permanent link">#</a></h3>
+<p>Send a POST request to this endpoint to login.
+The request needs to contain a <code>username</code> and a <code>password</code> field either as a form or json.</p>
+<p><strong>Request</strong>:  <code>POST /login</code><br/>
+<strong>Response</strong>: <code>200 Ok</code>, <code>400 Bad Request</code></p>
+<p>Example request:</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="p">{</span><span class="w"></span>
+<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="w">  </span><span class="nt">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"testuser123"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="w">  </span><span class="nt">"password"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7Gq^7Mjwgi%#DcHj22$C"</span><span class="w"></span>
+<a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<p>Example response:</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="p">{</span><span class="w"></span>
+<a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="w">  </span><span class="nt">"expiry"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2022-06-28T21:20:47.530747Z"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="w">  </span><span class="nt">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"83a386188e12a075682c86ae9a760a6f9e7402c468ac29a33f898663c69897d5"</span><span class="w"></span>
+<a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<h3 id="register-new-account">Register new account<a class="headerlink" href="#register-new-account" title="Permanent link">#</a></h3>
+<p>Responses are the same as for <code>/login</code>,
+but requests need to supply a <code>first_name</code> and a <code>last_name</code> as well.
+A new user is created with the provided information
+and an error is returned if the username is already taken.</p>
+<p><strong>Request</strong>:  <code>POST /register</code><br/>
+<strong>Response</strong>: <code>201 Created</code>, <code>400 Bad Request</code></p>
+<p>Example request:</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="p">{</span><span class="w"></span>
+<a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="w"> </span><span class="nt">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"testuser1234"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="w"> </span><span class="nt">"password"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7Gq^7Mjwgi%#DcHj22$C"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="w"> </span><span class="nt">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"first"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="w"> </span><span class="nt">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"last"</span><span class="w"></span>
+<a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<h3 id="logout-current-user">Logout current user<a class="headerlink" href="#logout-current-user" title="Permanent link">#</a></h3>
+<p>These endpoints take an empty POST request.
+With <code>/logout</code> the logged in user is logged out from the current session,
+with <code>/logoutall</code> from all sessions.</p>
+<p><strong>Request 1</strong>:  <code>POST /logout</code><br/>
+<strong>Request 2</strong>:  <code>POST /logoutall</code><br/>
+<strong>Response</strong>: <code>200 Ok</code>, <code>400 Bad Request</code></p>
+<h3 id="query-current-user">Query current user<a class="headerlink" href="#query-current-user" title="Permanent link">#</a></h3>
+<p>An empty GET request returns information about the currently logged in user.</p>
+<p><strong>Request</strong>:  <code>GET /user</code><br/>
+<strong>Response</strong>: <code>200 Ok</code></p>
+<p>Example response:</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="p">{</span><span class="w"></span>
+<a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="w"> </span><span class="nt">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"testuser1234"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="w"> </span><span class="nt">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"first"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="w"> </span><span class="nt">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"last"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="w"> </span><span class="nt">"date_joined"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2022-07-12T12:49:31.010300Z"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-3-6" id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="w"> </span><span class="nt">"last_login"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2022-07-19T11:35:55.158069Z"</span><span class="w"></span>
+<a href="#__codelineno-3-7" id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<h3 id="edit-current-user">Edit current user<a class="headerlink" href="#edit-current-user" title="Permanent link">#</a></h3>
+<p>Send a PUT request to change the information of the current user.
+All fields are optional.</p>
+<p><strong>Request</strong>:  <code>PUT /user</code><br/>
+<strong>Response</strong>: <code>200 Ok</code></p>
+<p>Example request:</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="p">{</span><span class="w"></span>
+<a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w"> </span><span class="nt">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"testuser1234"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w"> </span><span class="nt">"first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"first"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w"> </span><span class="nt">"last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"last"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-4-5" id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w"> </span><span class="nt">"password"</span><span class="p">:</span><span class="w"> </span><span class="s2">"supersecurepasswordTM"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-4-6" id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w"> </span><span class="nt">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"testuser1234@example.com"</span><span class="w"></span>
+<a href="#__codelineno-4-7" id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<h3 id="save-current-user-widgets">Save current user widgets<a class="headerlink" href="#save-current-user-widgets" title="Permanent link">#</a></h3>
+<p>A POST request with an arbitrary JSON payload can be sent
+to this endpoint to save it for later retrieval.</p>
+<p><strong>Request</strong>:  <code>POST /user/widgets</code><br/>
+<strong>Response</strong>: <code>201 Created</code>, <code>400 Bad Request</code></p>
+<p>Example request:</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="p">{</span><span class="w"></span>
+<a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="w"> </span><span class="nt">"widgets"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="w">  </span><span class="s2">"3d-table"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-5-4" id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="w">  </span><span class="s2">"3d-map"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-5-5" id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="w">  </span><span class="s2">"weather"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-5-6" id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="w">  </span><span class="s2">"soil-parameter"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-5-7" id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="w">  </span><span class="s2">"garden-map"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-5-8" id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="w">  </span><span class="s2">"notifications"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-5-9" id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="w">  </span><span class="s2">"crops-map"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-5-10" id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="w">  </span><span class="s2">"crops-table"</span><span class="w"></span>
+<a href="#__codelineno-5-11" id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<a href="#__codelineno-5-12" id="__codelineno-5-12" name="__codelineno-5-12"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<h3 id="query-current-user-widgets">Query current user widgets<a class="headerlink" href="#query-current-user-widgets" title="Permanent link">#</a></h3>
+<p>An empty GET request returns the arbitrary JSON config that was previously saved.</p>
+<p><strong>Request</strong>:  <code>GET /user/widgets</code><br/>
+<strong>Response</strong>: <code>200 Ok</code>, <code>400 Bad Request</code></p>
+<p>Example response:</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="p">{</span><span class="w"></span>
+<a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="w"> </span><span class="nt">"widgets"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
+<a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="w">  </span><span class="s2">"3d-table"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="w">  </span><span class="s2">"3d-map"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-6-5" id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="w">  </span><span class="s2">"weather"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-6-6" id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="w">  </span><span class="s2">"soil-parameter"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-6-7" id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="w">  </span><span class="s2">"garden-map"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-6-8" id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="w">  </span><span class="s2">"notifications"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-6-9" id="__codelineno-6-9" name="__codelineno-6-9"></a><span class="w">  </span><span class="s2">"crops-map"</span><span class="p">,</span><span class="w"></span>
+<a href="#__codelineno-6-10" id="__codelineno-6-10" name="__codelineno-6-10"></a><span class="w">  </span><span class="s2">"crops-table"</span><span class="w"></span>
+<a href="#__codelineno-6-11" id="__codelineno-6-11" name="__codelineno-6-11"></a><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<a href="#__codelineno-6-12" id="__codelineno-6-12" name="__codelineno-6-12"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<h2 id="token">Token<a class="headerlink" href="#token" title="Permanent link">#</a></h2>
+<p>The token returned from <code>/login</code> &amp; <code>/register</code> <strong>needs to be send with every api-request</strong>
+in the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization">Authorization</a> header
+with <code>Token</code> as a prefix.</p>
+<p>Example Authorization header:</p>
+<div class="highlight"><pre><span></span><code><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a>Authorization: Token 83a386188e12a075682c86ae9a760a6f9e7402c468ac29a33f898663c69897d5
+</code></pre></div>
+<h2 id="backend">Backend<a class="headerlink" href="#backend" title="Permanent link">#</a></h2>
+<p>Authorization can be disabled for an endpoint for testing in the views.py by annotating the function with <code>@permission_classes([AllowAny])</code>
+(<a href="https://github.com/naturerobots/HSOS-SEP-PlantMap-2022/blob/2d73e5f4360c42e71dcbb0cb546c3fd9a6d2dd05/django/restapi/views.py#L42">Example here, uncomment the line</a>).</p>
+<p>The logged-in user is accessible in the backend via <code>request.user</code>.</p>
+</article>
+</div>
+</div>
+<a class="md-top md-icon" data-md-component="top" hidden="" href="#">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"></path></svg>
+            Back to top
+          </a>
+</main>
+<footer class="md-footer">
+<nav aria-label="Footer" class="md-footer__inner md-grid">
+<a aria-label="Previous: License" class="md-footer__link md-footer__link--prev" href="../../getting-started/license/" rel="prev">
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</div>
+<div class="md-footer__title">
+<div class="md-ellipsis">
+<span class="md-footer__direction">
+                Previous
+              </span>
+              License
+            </div>
+</div>
+</a>
+<a aria-label="Next: Beds &amp; Plants" class="md-footer__link md-footer__link--next" href="../bed-plant-endpoints/" rel="next">
+<div class="md-footer__title">
+<div class="md-ellipsis">
+<span class="md-footer__direction">
+                Next
+              </span>
+              Beds &amp; Plants
+            </div>
+</div>
+<div class="md-footer__button md-icon">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"></path></svg>
+</div>
+</a>
+</nav>
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tracking", "navigation.sections", "navigation.tabs", "navigation.top", "navigation.instant"], "search": "../../assets/javascripts/workers/search.ecf98df9.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+<script src="../../assets/javascripts/bundle.2ab50757.min.js"></script>
+<script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "width": "100%", "height": "auto", "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom"});})</script></body>
+</html>
