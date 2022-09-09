@@ -41,6 +41,7 @@ export const bedStore = defineStore({
       this.selectedBed = bedId;
     },
     setBed(bed: Bed) {
+      console.log(bed);
       this.beds.bedList.push(bed);
     },
   },

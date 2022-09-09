@@ -43,14 +43,21 @@ SOFTWARE.
   </p>
 </div>
 
+Environmental friendly micro framing requires a lot of knowledge for the
+cultivation of a garden. As a consequence, a lot of newcomers and people
+switching from convention agriculture have trouble managing their garden. To
+resolve this problem, the **PlantMap Digital Logbook** was created, a digital
+representation of a garden, which monitors the plants and helps with
+instructions if problems like water deficiency or diseases are detected.
+
+![crops-view](docs/imgs/crops-tab.png)
 ## Table of Contents
 
-- [README](#readme)
-  - [General](#general)
-  - [Quick Start](#quick-start)
-  - [Documentation](#documentation)
-  - [Contributing](#contributing)
-  - [License](#license)
+- [General](#general)
+- [Quick Start](#quick-start)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## General
 
@@ -82,38 +89,28 @@ semantical environment representation
 
 For running the application, we assume that you have a current version of
 [Visual Studio Code](https://code.visualstudio.com/) and
-[Docker](https://www.docker.com/). Further, Visual Studio Code **needs** to have
+[Docker](https://www.docker.com/) installed. Further, Visual Studio Code **needs** to have
 the **docker and the remote container extensions installed**. If you didn't
 understand the requirements,  please visit the [installation
 guide](https://naturerobots.github.io/HSOS-SEP-PlantMap-2022/getting-started/installation/)
 in the documentation for more detailed steps.
 
-To get started, clone the repository and open it in Visual Studio Code:
+If you just want to get the application running, clone the repository and run the docker compose command.
 
 ```sh
-  git clone https://github.com/naturerobots/HSOS-SEP-PlantMap-2022.git
-  cd HSOS-SEP-PlantMap-2022
-  code .
+git clone https://github.com/naturerobots/HSOS-SEP-PlantMap-2022.git
+cd HSOS-SEP-PlantMap-2022
+docker compose -f .devcontainer/docker-compose.preview.yml up -d
 ```
 
-Next, we need to mount the current workspace into the projects docker container
-to use it as a preconfigured development environment. For that, you can press
-`F1` or `CTRL+SHIFT+P` and enter `Remote-Containers: Reopen Folder in Container`
-and confirm with `ENTER`. Visual Studio Code additionally shows a notification
-after opening the project in the bottom right corner with the same option. Now
-the [docker
-image](https://github.com/naturerobots/HSOS-SEP-PlantMap-2022/pkgs/container/plant-map-digital-logbook)
-of the project along with the images for the
- [PostgreSQL](https://www.postgresql.org/) database and the
- [RabbitMQ](https://www.rabbitmq.com/) message broker are downloaded.
- Additionally, the set-up of all required packages and extensions is handled.
+Now the application should be available under
+[localhost:5000](http://localhost:5050),  the REST API is runs on port 8000.
 
-The default user for the container is:
+To stop the application use :
 
-```shell
-user: docker
-password: docker
-  ```
+```sh
+docker compose -f .devcontainer/docker-compose.preview.yml stop
+```
 
 ## Documentation  
 
@@ -129,8 +126,7 @@ learn and inspire. Any contributions are **greatly appreciated**.
 
 This repository uses [pre-commit](https://pre-commit.com/) checks to verify the
 code style before committing. Since the pre-commit checks are automatically
-installed in the development container, they are run before each commit you
-make. The checks can also be run manually with:
+installed, they are run before each commit. The checks can also be run manually with:
 
 ```bash
 pre-commit run -a

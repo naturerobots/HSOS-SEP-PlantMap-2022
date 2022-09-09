@@ -17,13 +17,16 @@ nav:
           - Beds & Plants: "reference/bed-plant-endpoints.md"
           - Company & Gardens: "reference/company-garden-endpoints.md"
           - Permission System: "reference/permissions.md"
-      - Env Variables: "reference/env-vars.md"
+          - 3D-View: "reference/3d-view.md"
+          - Storage System: "reference/storage-system.md"
       - Architecture: "reference/architecture.md"
+      - External APIs: "reference/external-apis.md"
       - Terminology: "reference/terminology.md"
+      - Env Variables: "reference/env-vars.md"
 theme:
   name: material
   language: en
-  logo: imgs/logo_small_color.svg
+  logo: imgs/logo_small_white.svg
   favicon: imgs/logo_small_color.svg
   palette:
     - scheme: naturerobots

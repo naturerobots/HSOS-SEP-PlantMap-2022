@@ -8,6 +8,8 @@ import type { Ref } from "vue";
 
 const baseURL = "http://127.0.0.1:8000";
 
+let lastChunkFailed;
+
 export async function loadBeds(): Promise<boolean> {
   const companyId: Ref<number | undefined> = storeToRefs(
     companyStore()
@@ -29,16 +31,27 @@ export async function loadBeds(): Promise<boolean> {
       },
     }
   ).then(async (response) => {
-    // response.body is a ReadableStream
     const reader = response.body?.getReader();
     const beds: Beds = {
       bedList: [],
     };
     for await (const chunk of readChunks(reader)) {
       if (chunk) {
-        const json = JSON.parse(Utf8ArrayToStr(chunk));
-        beds.bedList.push(json);
-        bedStore().setBed(json);
+        let json;
+        try {
+          if (lastChunkFailed) {
+            lastChunkFailed += Utf8ArrayToStr(chunk);
+            json = JSON.parse(lastChunkFailed);
+          } else {
+            json = JSON.parse(Utf8ArrayToStr(chunk));
+          }
+          beds.bedList.push(json);
+          bedStore().setBed(json);
+          lastChunkFailed = null;
+        } catch (error) {
+          console.log(error);
+          lastChunkFailed = Utf8ArrayToStr(chunk);
+        }
       }
     }
     return false;

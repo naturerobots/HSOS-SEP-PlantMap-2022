@@ -82,7 +82,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           file: .devcontainer/Dockerfile
-          push: ${{ GitHub.event_name != 'pull_request'}}
+          # build on dev branch, only push on main branch
+          push: ${{ (GitHub.event_name != 'pull_request') && (github.ref == 'refs/heads/main') }}
           tags: ${{ needs.create-ids.outputs.image_id }}:${{ needs.create-ids.outputs.version }}
           cache-from: type=registry,ref=${{ needs.create-ids.outputs.image_id }}:${{ needs.create-ids.outputs.version }}
           cache-to: type=inline
